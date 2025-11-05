@@ -1,0 +1,293 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Windows Server — System Files</title>
+<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="32x32"/>
+<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="192x192"/>
+<link rel="apple-touch-icon" href="../../Image/Logo.png"/>
+<meta name="theme-color" content="#111"/>
+<style>
+:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--line:rgba(255,255,255,.10);--blue:#2196f3}
+*{box-sizing:border-box}
+html,body{height:100%}
+html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.55 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111}
+.bg{position:fixed;inset:0;background:url("../../Image/Logo.png") center/cover no-repeat;z-index:-2}
+.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.80) 100%);z-index:-1}
+.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
+.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
+.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
+.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
+.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
+.homepill span{font-weight:700;letter-spacing:.15px}
+.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);cursor:pointer;user-select:none;flex:0 0 auto}
+.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
+.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0;max-width:none}
+.tabs.overflow{overflow:auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
+.tab:hover{opacity:1}
+.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
+.tab.active{color:var(--blue)}
+.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
+.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
+.shell .h,.shell .sub{text-align:center}
+.page{position:relative;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:96px 20px 28px}
+.shell{width:min(1200px,96%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
+.h{margin:0 0 2px;font-size:28px;font-weight:800;letter-spacing:.2px}
+.sub{margin:0 0 12px;color:var(--muted)}
+.quicknav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 18px}
+.qbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-weight:700}
+.qbtn:hover{background:rgba(255,255,255,.1)}
+.section{margin:22px 0 0;scroll-margin-top:90px}
+.section .title{margin:0 0 10px;font-size:20px;font-weight:800}
+.card{border:1px solid var(--tileBorder);background:var(--tile);border-radius:18px;box-shadow:0 12px 28px rgba(0,0,0,.3);overflow:hidden}
+.codewrap{padding:0;margin:0;border-top-left-radius:18px;border-top-right-radius:18px}
+pre{margin:0;max-height:480px;overflow:auto;padding:18px;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;background:rgba(0,0,0,.35);border-top-left-radius:18px;border-top-right-radius:18px;border-bottom:1px solid var(--line);white-space:pre}
+pre code{color:#e6eaff}
+.tablewrap{width:100%;overflow:auto}
+table{width:100%;border-collapse:separate;border-spacing:0}
+thead th{position:sticky;top:0;background:rgba(20,24,44,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);text-align:left;padding:12px 14px;font-size:14px}
+tbody td{border-bottom:1px solid var(--line);padding:12px 14px;vertical-align:top}
+tbody tr:hover{background:rgba(255,255,255,.04)}
+th:first-child,td:first-child{border-left:none}
+th:last-child,td:last-child{border-right:none}
+th,td{word-break:break-word;overflow-wrap:anywhere}
+caption{caption-side:bottom;color:var(--muted);padding:10px 4px 0}
+.kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.06);font:12px/1.2 ui-monospace,monospace}
+.bycat caption{caption-side:top;padding:10px 4px 6px;font-weight:800}
+.bycat .card+.card{margin-top:14px}
+.bycat thead th{background:linear-gradient(180deg,rgba(33,150,243,.18),rgba(33,150,243,.14));backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid rgba(33,150,243,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);color:var(--text)}
+.bycat table{table-layout:fixed;width:100%}
+.bycat th:nth-child(1),.bycat td:nth-child(1){width:220px}
+.bycat th:nth-child(2),.bycat td:nth-child(2){width:420px}
+.bycat th:nth-child(3),.bycat td:nth-child(3){width:auto}
+@media(max-width:900px){.bycat th:nth-child(1),.bycat td:nth-child(1){width:180px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:300px}}
+@media(max-width:640px){.tab{padding:6px 10px}.shell{width:98%}.bycat th:nth-child(1),.bycat td:nth-child(1){width:150px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:240px}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<nav class="topbar" id="topbar">
+  <div class="nav">
+    <a class="homepill" href="../../Home.html" title="Home" aria-label="Home"><img src="../../Image/Home.png" alt="Home"/><span>Home</span></a>
+    <div class="tabswrap">
+      <button class="navbtn" id="leftbtn" aria-label="Prev"><span>&lt;</span></button>
+      <div class="tabs" id="tabs">
+        <a class="tab" href="../System_Files_Info.html"><img src="../../Image/Nav.png" alt="System Files"/>System Files</a>
+        <a class="tab" href="Kali_Linux.html"><img src="../../Image/KaliLinux.png" alt="Kali"/>Kali</a>
+        <a class="tab" href="Ubuntu_Server.html"><img src="../../Image/UbuntuServer.png" alt="Ubuntu Server"/>Ubuntu Server</a>
+        <a class="tab" href="Windows_11.html"><img src="../../Image/Win11.png" alt="Windows 11"/>Windows 11</a>
+        <a class="tab" href="Windows_Server.html"><img src="../../Image/WinServer.png" alt="Windows Server"/>Windows Server</a>
+        <a class="tab" href="macOS.html"><img src="../../Image/MacOS.png" alt="macOS"/>macOS</a>
+        <a class="tab" href="IOS.html"><img src="../../Image/IOS.png" alt="iOS"/>iOS</a>
+        <a class="tab" href="Android.html"><img src="../../Image/Android.png" alt="Android"/>Android</a>
+      </div>
+      <button class="navbtn" id="rightbtn" aria-label="Next"><span>&gt;</span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+  <main class="shell">
+    <h1 class="h">Windows Server — System Files</h1>
+    <p class="sub">Click to navigate to a section</p>
+    <div class="quicknav">
+      <a class="qbtn" href="#fsmap">High-Value Paths</a>
+      <a class="qbtn" href="#bycat">Important Files</a>
+    </div>
+
+    <section class="section" id="fsmap">
+      <h2 class="title">Filesystem map and high-value paths for threats/defense</h2>
+
+      <h3 class="title">Critical paths</h3>
+      <div class="card"><div class="codewrap">
+<pre><code>C:\Windows\System32\config\SAM                         # Local account hashes; offline crack ⇒ escalation
+C:\Windows\System32\config\SYSTEM                      # Boot/system keys; with SAM enables hash extraction
+C:\Windows\System32\config\SECURITY                    # LSA policy/secrets context
+HKLM\SECURITY\Policy\Secrets\*                         # LSA secrets (service creds, cached secrets)
+HKLM\SECURITY\Policy\Secrets\DPAPI_SYSTEM              # System DPAPI master key
+HKLM\SOFTWARE\Microsoft\Cryptography\Protect\System    # DPAPI machine key material
+C:\Windows\NTDS\NTDS.dit (DCs)                         # AD database; domain creds/KRBTGT (crown jewels)
+%ProgramData%\ssh\ssh_host_*_key                       # OpenSSH host keys; impersonation risk
+C:\Windows\System32\drivers\*.sys                      # Kernel drivers; unsigned/malicious ⇒ ring0 control
+</code></pre>
+      </div></div>
+
+      <h3 class="title">High-risk paths</h3>
+      <div class="card"><div class="codewrap">
+<pre><code>HKLM\SYSTEM\CurrentControlSet\Services\*               # Service persistence; ImagePath/Start
+C:\Windows\System32\Tasks\*                            # Scheduled Tasks; beacon/persistence
+HKLM\Software\Microsoft\Windows\CurrentVersion\Run*    # Autoruns (machine)
+HKCU\Software\Microsoft\Windows\CurrentVersion\Run*    # Autoruns (user)
+C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\    # All-users startup
+%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\         # Per-user startup
+C:\Windows\System32\wbem\Repository\*                  # WMI repo; subscription persistence
+C:\Windows\System32\drivers\etc\hosts                  # Hostname overrides; redirection
+C:\Windows\System32\dns\* (DNS role)                   # Zone files/logs; hijack ⇒ traffic redirection
+C:\Windows\System32\dhcp\* (DHCP role)                 # dhcp.mdb, backups, logs; rogue options risk
+C:\inetpub\wwwroot\* (IIS)                             # Webshell landing/integrity
+C:\inetpub\logs\LogFiles\W3SVC*\                       # IIS access logs; attack visibility
+</code></pre>
+      </div></div>
+
+      <h3 class="title">Medium-risk paths</h3>
+      <div class="card"><div class="codewrap">
+<pre><code>C:\Windows\System32\winevt\Logs\*.evtx                 # Event logs; primary telemetry
+C:\ProgramData\Microsoft\Windows Defender\Support\*    # Defender telemetry; bypass attempts
+C:\Windows\SoftwareDistribution\*                      # Windows Update cache DB; change timeline
+C:\Windows\Prefetch\*.pf                               # Execution traces; triage
+C:\Windows\AppCompat\Programs\Amcache.hve              # Program inventory/execution history
+HKLM\...\Session Manager\AppCompatCache                # ShimCache artifacts
+C:\Windows\System32\sru\SRUDB.dat                      # SRUM network/app patterns
+C:\$Recycle.Bin\*                                      # Deleted tools/data
+C:\System Volume Information\*                         # VSS snapshots; recover/deleted hives
+C:\Users\&lt;User&gt;\AppData\Local\Temp\*                  # User temp staging
+C:\Windows\Temp\*                                      # OS temp staging
+</code></pre>
+      </div></div>
+    </section>
+
+    <section class="section bycat" id="bycat">
+      <h2 class="title">Important files — by Category</h2>
+
+      <div class="card tablewrap"><table>
+        <caption>Accounts, Secrets & DPAPI (Critical first)</caption>
+        <thead><tr><th>Category</th><th>Path / File</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>OS account DB</td><td><span class="kbd">C:\Windows\System32\config\SAM</span></td><td>Local hashes; offline crack ⇒ escalation.</td></tr>
+          <tr><td>System config</td><td><span class="kbd">C:\Windows\System32\config\SYSTEM</span></td><td>With SAM enables hash extraction.</td></tr>
+          <tr><td>Security hive</td><td><span class="kbd">C:\Windows\System32\config\SECURITY</span></td><td>LSA secrets context.</td></tr>
+          <tr><td>LSA secrets</td><td><span class="kbd">HKLM\SECURITY\Policy\Secrets\*</span></td><td>Service creds, cached secrets.</td></tr>
+          <tr><td>DPAPI (system)</td><td><span class="kbd">HKLM\SECURITY\Policy\Secrets\DPAPI_SYSTEM</span></td><td>Decrypt machine-protected secrets.</td></tr>
+          <tr><td>DPAPI keys</td><td><span class="kbd">HKLM\SOFTWARE\Microsoft\Cryptography\Protect\System</span></td><td>DPAPI material.</td></tr>
+          <tr><td>AD database (DC)</td><td><span class="kbd">C:\Windows\NTDS\NTDS.dit</span></td><td>Domain creds/KRBTGT; crown jewels.</td></tr>
+          <tr><td>User registry</td><td><span class="kbd">C:\Users\&lt;User&gt;\NTUSER.DAT</span></td><td>Per-user settings; autoruns/traces.</td></tr>
+          <tr><td>User classes</td><td><span class="kbd">C:\Users\&lt;User&gt;\AppData\Local\Microsoft\Windows\USRCLASS.DAT</span></td><td>Shellbags/jumplists mapping.</td></tr>
+          <tr><td>Cred Manager</td><td><span class="kbd">%APPDATA%\Microsoft\Credentials\*</span> ; <span class="kbd">%LOCALAPPDATA%\Microsoft\Credentials\*</span></td><td>Saved creds/tokens.</td></tr>
+          <tr><td>Windows Vault</td><td><span class="kbd">%LOCALAPPDATA%\Microsoft\Vault\*</span></td><td>Web/enterprise creds (DPAPI).</td></tr>
+          <tr><td>OpenSSH (host)</td><td><span class="kbd">%ProgramData%\ssh\ssh_host_*_key</span></td><td>Host private keys; impersonation risk.</td></tr>
+          <tr><td>OpenSSH (user)</td><td><span class="kbd">C:\Users\&lt;User&gt;\.ssh\*</span></td><td>User keys/configs; lateral movement.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="card tablewrap"><table>
+        <caption>Autoruns & Persistence</caption>
+        <thead><tr><th>Category</th><th>Path / File</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Run keys (HKLM)</td><td><span class="kbd">HKLM\Software\Microsoft\Windows\CurrentVersion\Run(Once)</span></td><td>Machine autoruns.</td></tr>
+          <tr><td>Run keys (HKCU)</td><td><span class="kbd">HKCU\Software\Microsoft\Windows\CurrentVersion\Run(Once)</span></td><td>User autoruns.</td></tr>
+          <tr><td>Startup (all)</td><td><span class="kbd">C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\</span></td><td>Shortcut persistence.</td></tr>
+          <tr><td>Startup (user)</td><td><span class="kbd">%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\</span></td><td>Per-user autoruns.</td></tr>
+          <tr><td>Services</td><td><span class="kbd">HKLM\SYSTEM\CurrentControlSet\Services\*</span></td><td>ImagePath, autostart.</td></tr>
+          <tr><td>Scheduled Tasks</td><td><span class="kbd">C:\Windows\System32\Tasks\*</span></td><td>Task-based beacons.</td></tr>
+          <tr><td>WMI</td><td><span class="kbd">C:\Windows\System32\wbem\Repository\*</span></td><td>Subscription persistence.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="card tablewrap"><table>
+        <caption>Network, Remote & VPN</caption>
+        <thead><tr><th>Category</th><th>Path / File</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Hosts</td><td><span class="kbd">C:\Windows\System32\drivers\etc\hosts</span></td><td>Traffic redirection.</td></tr>
+          <tr><td>Wi-Fi</td><td><span class="kbd">%ProgramData%\Microsoft\Wlansvc\Profiles\Interfaces\*</span></td><td>Saved WLAN keys.</td></tr>
+          <tr><td>VPN (machine)</td><td><span class="kbd">%ProgramData%\Microsoft\Network\Connections\Pbk\rasphone.pbk</span></td><td>Endpoints/auth methods.</td></tr>
+          <tr><td>VPN (user)</td><td><span class="kbd">%APPDATA%\Microsoft\Network\Connections\Pbk\rasphone.pbk</span></td><td>User VPNs.</td></tr>
+          <tr><td>RDP history</td><td><span class="kbd">HKCU\Software\Microsoft\Terminal Server Client\Servers</span></td><td>Targets list.</td></tr>
+          <tr><td>Default RDP</td><td><span class="kbd">C:\Users\&lt;User&gt;\Documents\Default.rdp</span></td><td>Settings, hints.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="card tablewrap"><table>
+        <caption>Logs & Forensics</caption>
+        <thead><tr><th>Category</th><th>Path / File</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Event Logs</td><td><span class="kbd">C:\Windows\System32\winevt\Logs\*.evtx</span></td><td>Auth, Sysmon, PS logs.</td></tr>
+          <tr><td>Defender</td><td><span class="kbd">C:\ProgramData\Microsoft\Windows Defender\Support\*</span></td><td>Detections/telemetry.</td></tr>
+          <tr><td>Windows Update</td><td><span class="kbd">C:\Windows\SoftwareDistribution\*</span></td><td>Change timeline.</td></tr>
+          <tr><td>Prefetch</td><td><span class="kbd">C:\Windows\Prefetch\*.pf</span></td><td>Execution traces.</td></tr>
+          <tr><td>Amcache</td><td><span class="kbd">C:\Windows\AppCompat\Programs\Amcache.hve</span></td><td>Program inventory.</td></tr>
+          <tr><td>ShimCache</td><td><span class="kbd">HKLM\...\Session Manager\AppCompatCache</span></td><td>Historical execution.</td></tr>
+          <tr><td>SRUM</td><td><span class="kbd">C:\Windows\System32\sru\SRUDB.dat</span></td><td>App/network patterns.</td></tr>
+          <tr><td>Jump Lists</td><td><span class="kbd">%APPDATA%\Microsoft\Windows\Recent\AutomaticDestinations\*</span></td><td>File/app usage.</td></tr>
+          <tr><td>Recent</td><td><span class="kbd">%APPDATA%\Microsoft\Windows\Recent\*</span></td><td>LNK artifacts.</td></tr>
+          <tr><td>Perf Logs</td><td><span class="kbd">C:\PerfLogs\*</span></td><td>Performance traces.</td></tr>
+          <tr><td>VSS</td><td><span class="kbd">C:\System Volume Information\*</span></td><td>Snapshots; recover tampered hives/logs.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="card tablewrap"><table>
+        <caption>Web & IIS</caption>
+        <thead><tr><th>Category</th><th>Path / File</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>IIS webroot</td><td><span class="kbd">C:\inetpub\wwwroot\*</span></td><td>Webshell landing; integrity.</td></tr>
+          <tr><td>IIS logs</td><td><span class="kbd">C:\inetpub\logs\LogFiles\W3SVC*</span></td><td>Requests; attack visibility.</td></tr>
+          <tr><td>IIS config</td><td><span class="kbd">%windir%\System32\inetsrv\config\applicationHost.config</span></td><td>Sites, modules, creds.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="card tablewrap"><table>
+        <caption>System, Drivers & Stores</caption>
+        <thead><tr><th>Category</th><th>Path / File</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Drivers</td><td><span class="kbd">C:\Windows\System32\drivers\*.sys</span></td><td>Rootkits/unsigned binaries.</td></tr>
+          <tr><td>DriverStore</td><td><span class="kbd">C:\Windows\System32\DriverStore\*</span></td><td>Driver packages.</td></tr>
+          <tr><td>WinSxS</td><td><span class="kbd">C:\Windows\WinSxS\*</span></td><td>DLL versions; hijack checks.</td></tr>
+          <tr><td>ProgramData</td><td><span class="kbd">C:\ProgramData\&lt;Vendor&gt;\&lt;App&gt;\*</span></td><td>App configs/caches; creds.</td></tr>
+          <tr><td>Program Files</td><td><span class="kbd">C:\Program Files\*</span> ; <span class="kbd">C:\Program Files (x86)\*</span></td><td>Installed apps; LOLBins.</td></tr>
+          <tr><td>Temp</td><td><span class="kbd">C:\Windows\Temp\*</span> ; <span class="kbd">%LOCALAPPDATA%\Temp\*</span></td><td>Payload staging.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="card tablewrap"><table>
+        <caption>Role-Specific (AD, DNS, DHCP, WSUS, Hyper-V, etc.)</caption>
+        <thead><tr><th>Role</th><th>Path / File</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>AD DS</td><td><span class="kbd">C:\Windows\NTDS\NTDS.dit</span> ; <span class="kbd">EDB*.log</span></td><td>Directory DB & logs; creds history/timeline.</td></tr>
+          <tr><td>AD DS</td><td><span class="kbd">C:\Windows\SYSVOL\sysvol\&lt;domain&gt;\Policies\</span> ; <span class="kbd">Scripts\</span></td><td>GPOs & logon scripts; persistence targets.</td></tr>
+          <tr><td>AD DS</td><td><span class="kbd">%SystemRoot%\debug\netlogon.log</span></td><td>Secure channel/auth issues.</td></tr>
+          <tr><td>DNS</td><td><span class="kbd">C:\Windows\System32\dns\*</span></td><td>Zone files/logs; hijack ⇒ redirect.</td></tr>
+          <tr><td>DHCP</td><td><span class="kbd">C:\Windows\System32\dhcp\dhcp.mdb</span> ; <span class="kbd">backup\*</span></td><td>Leases/scopes; rogue options.</td></tr>
+          <tr><td>IIS</td><td><span class="kbd">C:\inetpub\wwwroot\*</span> ; <span class="kbd">logs\LogFiles\W3SVC*</span></td><td>Web content & logs.</td></tr>
+          <tr><td>File Server</td><td><span class="kbd">D:\Shares\*</span> (varies)</td><td>Exfil targets; perms paths.</td></tr>
+          <tr><td>DFSR</td><td><span class="kbd">C:\System Volume Information\DFSR\*</span></td><td>Replication state; tamper/diagnose.</td></tr>
+          <tr><td>AD CS</td><td><span class="kbd">%windir%\System32\CertSrv\CertEnroll\*</span> ; <span class="kbd">%windir%\System32\CertLog\*.log</span></td><td>Issued certs/CRLs & CA DB logs.</td></tr>
+          <tr><td>WSUS</td><td><span class="kbd">C:\WSUS\WSUSContent\*</span> ; <span class="kbd">SUSDB</span> (WID/SQL)</td><td>Patch binaries & metadata DB.</td></tr>
+          <tr><td>Hyper-V</td><td><span class="kbd">C:\ProgramData\Microsoft\Windows\Hyper-V\*</span> ; <span class="kbd">E:\VMs\*.vhdx</span></td><td>VM configs/registrations & disks.</td></tr>
+          <tr><td>Failover Cluster</td><td><span class="kbd">C:\Windows\Cluster\*</span></td><td>Cluster config/logs; failover vectors.</td></tr>
+          <tr><td>RDS</td><td><span class="kbd">C:\ProgramData\Microsoft\RDWeb\*</span></td><td>RD Web content/config; webshell risk.</td></tr>
+          <tr><td>Print Server</td><td><span class="kbd">C:\Windows\System32\spool\PRINTERS\*</span></td><td>Queued jobs; doc remnants.</td></tr>
+          <tr><td>SQL Server</td><td><span class="kbd">C:\Program Files\Microsoft SQL Server\...</span> ; <span class="kbd">*.mdf/*.ldf</span></td><td>Binaries & DB files; creds/data.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="card tablewrap"><table>
+        <caption>Common Data Locations off C:\ (Best Practice)</caption>
+        <thead><tr><th>Category</th><th>Path</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>SMB Shares</td><td><span class="kbd">D:\Shares\*</span></td><td>User data; access control focus.</td></tr>
+          <tr><td>Hyper-V</td><td><span class="kbd">E:\VMs\*.vhdx</span></td><td>Guest disks; offline mining.</td></tr>
+          <tr><td>SQL Data</td><td><span class="kbd">E:\SQLData\*.mdf / *.ldf</span></td><td>DB and logs; backups/permissions.</td></tr>
+          <tr><td>WSUS Content</td><td><span class="kbd">D:\WSUS\WSUSContent\*</span></td><td>Patch binaries; storage integrity.</td></tr>
+        </tbody>
+      </table></div>
+
+    </section>
+  </main>
+</div>
+
+<script>
+let lastY=scrollY,hidden=false;
+addEventListener('scroll',()=>{const y=scrollY,tb=document.getElementById('topbar');if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
+const p=location.pathname.replace(/\/+$/,'');document.querySelectorAll('.tabs .tab').forEach(a=>{const h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');if(p.endsWith(h))a.classList.add('active')});
+const tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
+function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
+function updateArrows(){const o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;tabs.classList.toggle('overflow',o);leftbtn.style.display=o&&s>0?'inline-flex':'none';rightbtn.style.display=o&&s<max-1?'inline-flex':'none'}
+function scrollByStep(d){const step=Math.max(120,Math.floor(tabs.clientWidth*.6));tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})}
+leftbtn.addEventListener('click',()=>scrollByStep(-1));rightbtn.addEventListener('click',()=>scrollByStep(1));
+tabs.addEventListener('scroll',updateArrows,{passive:true});new ResizeObserver(updateArrows).observe(tabs);
+addEventListener('resize',updateArrows);
+tabs.addEventListener('wheel',e=>{if(!hasOverflow())return;const dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}});
+updateArrows();
+</script>
+</body></html>
