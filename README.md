@@ -41,6 +41,7 @@ python -m http.server 8080
 ## 📂 Project Structure
 
 ```
+Cyber Epistemology
 │   Home.html
 │
 ├───Data
@@ -120,5 +121,6 @@ python -m http.server 8080
 * **Language**: English
 * **Assets**: all icons in `Image/` (use relative paths)
 * **Keep it simple**: short pages, scannable sections, practical content
+
 
 
