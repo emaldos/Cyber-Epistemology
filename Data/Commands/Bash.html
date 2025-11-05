@@ -1,0 +1,483 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Bash — Commands</title>
+<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="32x32"/>
+<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="192x192"/>
+<link rel="apple-touch-icon" href="../../Image/Logo.png"/>
+<meta name="theme-color" content="#111"/>
+<style>
+:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--line:rgba(255,255,255,.10);--blue:#2196f3}
+*{box-sizing:border-box}
+html,body{height:100%}
+html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.55 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111}
+.bg{position:fixed;inset:0;background:url("../../Image/Logo.png") center/cover no-repeat;z-index:-2}
+.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.80) 100%);z-index:-1}
+.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
+.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
+.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
+.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
+.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
+.homepill span{font-weight:700;letter-spacing:.15px}
+.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);cursor:pointer;user-select:none;flex:0 0 auto}
+.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
+.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0;max-width:none}
+.tabs.overflow{overflow:auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
+.tab:hover{opacity:1}
+.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
+.tab.active{color:var(--blue)}
+.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
+.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
+.shell .h,.shell .sub{text-align:center}
+.page{position:relative;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:96px 20px 28px}
+.shell{width:min(1200px,96%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
+.h{margin:0 0 2px;font-size:28px;font-weight:800;letter-spacing:.2px}
+.sub{margin:0 0 12px;color:var(--muted)}
+.quicknav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 6px}
+.qbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-weight:700;user-select:none}
+.qbtn:hover{background:rgba(255,255,255,.1)}
+.quicknav .hidden{display:none}
+.togglewrap{display:flex;justify-content:center;margin:8px 0 18px}
+.toggle{cursor:pointer}
+.section{margin:22px 0 0;scroll-margin-top:90px}
+.section .title{margin:0 0 10px;font-size:20px;font-weight:800}
+.card{border:1px solid var(--tileBorder);background:var(--tile);border-radius:18px;box-shadow:0 12px 28px rgba(0,0,0,.3);overflow:hidden}
+.tablewrap{width:100%;overflow:auto}
+table{width:100%;border-collapse:separate;border-spacing:0}
+thead th{position:sticky;top:0;background:linear-gradient(180deg,rgba(33,150,243,.18),rgba(33,150,243,.14));backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid rgba(33,150,243,.35);text-align:left;padding:12px 14px;font-size:14px;color:var(--text);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+tbody td{border-bottom:1px solid var(--line);padding:12px 14px;vertical-align:top}
+tbody tr:hover{background:rgba(255,255,255,.04)}
+th:first-child,td:first-child{border-left:none}
+th:last-child,td:last-child{border-right:none}
+th,td{word-break:break-word;overflow-wrap:anywhere}
+caption{caption-side:top;color:var(--text);padding:10px 4px 6px;font-weight:800}
+.bycat caption{caption-side:top;padding:10px 4px 6px;font-weight:800}
+.bycat .card+.card{margin-top:14px}
+.bycat thead th{background:linear-gradient(180deg,rgba(33,150,243,.18),rgba(33,150,243,.14));backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid rgba(33,150,243,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);color:var(--text)}
+.bycat table{table-layout:fixed;width:100%}
+.bycat th:nth-child(1),.bycat td:nth-child(1){width:220px}
+.bycat th:nth-child(2),.bycat td:nth-child(2){width:420px}
+.bycat th:nth-child(3),.bycat td:nth-child(3){width:auto}
+@media(max-width:900px){.bycat th:nth-child(1),.bycat td:nth-child(1){width:180px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:300px}}
+@media(max-width:640px){.bycat th:nth-child(1),.bycat td:nth-child(1){width:150px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:240px}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<nav class="topbar" id="topbar">
+  <div class="nav">
+    <a class="homepill" href="../../Home.html" aria-label="Home"><img src="../../Image/Home.png" alt="Home"/><span>Home</span></a>
+    <div class="tabswrap">
+      <button class="navbtn" id="leftbtn" aria-label="Prev"><span>&lt;</span></button>
+      <div class="tabs" id="tabs">
+        <a class="tab" href="../Commands.html"><img src="../../Image/Command.png" alt="Commands"/>Commands</a>
+        <a class="tab" href="Bash.html"><img src="../../Image/Bash.png" alt="Bash"/>Bash</a>
+        <a class="tab" href="CMD.html"><img src="../../Image/CMD.png" alt="CMD"/>CMD</a>
+        <a class="tab" href="PS.html"><img src="../../Image/PS.png" alt="PowerShell"/>PowerShell</a>
+      </div>
+      <button class="navbtn" id="rightbtn" aria-label="Next"><span>&gt;</span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+  <main class="shell bycat">
+    <h1 class="h">Bash — Commands</h1>
+    <p class="sub">Click a section to jump</p>
+
+    <div class="quicknav" id="quicknav">
+      <a class="qbtn" href="#basics">Basics</a>
+      <a class="qbtn" href="#navfiles">Navigation & Files</a>
+      <a class="qbtn" href="#viewedit">Quick View & Editing</a>
+      <a class="qbtn" href="#search">Search & Discovery</a>
+      <a class="qbtn" href="#textfiles">Text / Files Analysis</a>
+      <a class="qbtn" href="#perms">Permissions</a>
+      <a class="qbtn hidden" href="#users">Users & Sessions</a>
+      <a class="qbtn hidden" href="#proc">Processes & Services</a>
+      <a class="qbtn hidden" href="#net">Networking</a>
+      <a class="qbtn hidden" href="#pkg">Packages & Binaries</a>
+      <a class="qbtn hidden" href="#arch">Archives & Transfer</a>
+      <a class="qbtn hidden" href="#sysinfo">System & Hardware</a>
+      <a class="qbtn hidden" href="#script">Scripting Essentials</a>
+      <a class="qbtn hidden" href="#pipe">Piping & Redirection</a>
+      <a class="qbtn hidden" href="#compare">Comparing Files</a>
+      <a class="qbtn hidden" href="#export">Exporting to File</a>
+      <a class="qbtn hidden" href="#jobs">Process & Job Mgmt</a>
+      <a class="qbtn hidden" href="#svc">Services & Logs</a>
+      <a class="qbtn hidden" href="#firewall">Net & Firewall</a>
+      <a class="qbtn hidden" href="#storage">Storage & FS</a>
+      <a class="qbtn hidden" href="#auth">Users & Auth</a>
+      <a class="qbtn hidden" href="#ssh">SSH & Remote</a>
+      <a class="qbtn hidden" href="#perf">Performance</a>
+      <a class="qbtn hidden" href="#time">Time & Scheduling</a>
+      <a class="qbtn hidden" href="#apt">Packages/Updates</a>
+      <a class="qbtn hidden" href="#webtls">Web, TLS & DB</a>
+      <a class="qbtn hidden" href="#kernel">Kernel & Boot</a>
+      <a class="qbtn hidden" href="#backup">Backup & Sync</a>
+      <a class="qbtn hidden" href="#hardening">Security Hardening</a>
+    </div>
+    <div class="togglewrap"><button class="qbtn toggle" id="toggleMore">… Show more</button></div>
+    <h3>if you want to check any command explain in details : <a href="https://explainshell.com/">explainshell</a></h3>
+    <section class="section" id="basics"><h2 class="title">Basics</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>pwd</code></td><td>Show current directory</td><td><code>pwd</code></td></tr>
+        <tr><td><code>cd</code></td><td>Change directory</td><td><code>cd /etc</code></td></tr>
+        <tr><td><code>ls -la</code></td><td>List (long, hidden)</td><td><code>ls -la</code></td></tr>
+        <tr><td><code>tree</code></td><td>Directory tree</td><td><code>tree -L 2</code></td></tr>
+        <tr><td><code>clear</code></td><td>Clear screen</td><td><code>clear</code></td></tr>
+        <tr><td><code>history</code></td><td>Show command history</td><td><code>history | tail -20</code></td></tr>
+        <tr><td><code>!!</code> / <code>!n</code></td><td>Re-run last / nth cmd</td><td><code>sudo !!</code></td></tr>
+        <tr><td><code>alias</code></td><td>Define shortcuts</td><td><code>alias ll='ls -la'</code></td></tr>
+        <tr><td><code>echo</code> / <code>printf</code></td><td>Print text</td><td><code>printf "%s\n" "hi"</code></td></tr>
+        <tr><td><code>read</code></td><td>Prompt input</td><td><code>read -p "Name: " n</code></td></tr>
+        <tr><td><code>man [options] [section] [cmd]</code></td><td>Read manual pages</td><td><code>man 2 open</code>, <code>man -k socket</code></td></tr>
+        <tr><td><code>whatis &lt;name&gt;</code></td><td>One-line description of a command</td><td><code>whatis chmod</code></td></tr>
+        <tr><td><code>apropos &lt;keywords&gt;</code></td><td>Find a command by what it does</td><td><code>apropos "compare files"</code></td></tr>
+        <tr><td><code>cmd --help</code></td><td>Built-in help for many tools</td><td><code>tar --help</code></td></tr>
+        <tr><td><code>echo $PATH</code></td><td>Directories searched for executables</td><td><code>echo $PATH</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="navfiles"><h2 class="title">Navigation & Files</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>touch</code></td><td>Create/refresh file</td><td><code>touch notes.txt</code></td></tr>
+        <tr><td><code>mkdir -p</code></td><td>Create dirs (parents)</td><td><code>mkdir -p a/b/c</code></td></tr>
+        <tr><td><code>rm -rf</code></td><td>Remove recursively</td><td><code>rm -rf build/</code></td></tr>
+        <tr><td><code>cp -a</code></td><td>Copy (preserve)</td><td><code>cp -a src/ dst/</code></td></tr>
+        <tr><td><code>mv</code></td><td>Move/rename</td><td><code>mv a b</code></td></tr>
+        <tr><td><code>ln -s</code></td><td>Symlink</td><td><code>ln -s /opt/app app</code></td></tr>
+        <tr><td><code>stat</code></td><td>File metadata</td><td><code>stat file</code></td></tr>
+        <tr><td><code>file</code></td><td>Detect file type</td><td><code>file dump.bin</code></td></tr>
+        <tr><td><code>du -sh *</code></td><td>Size of items</td><td><code>du -sh *</code></td></tr>
+        <tr><td><code>df -h</code></td><td>Disk free</td><td><code>df -h</code></td></tr>
+        <tr><td><code>mount</code> / <code>umount</code></td><td>Mount/umount FS</td><td><code>mount /dev/sdb1 /mnt</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="viewedit"><h2 class="title">Quick View & Editing</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>cat</code> / <code>nl</code></td><td>Print file / with line nums</td><td><code>nl script.sh</code></td></tr>
+        <tr><td><code>less</code></td><td>Pager</td><td><code>less /var/log/syslog</code></td></tr>
+        <tr><td><code>head</code> / <code>tail -f</code></td><td>First/last lines / follow</td><td><code>tail -f app.log</code></td></tr>
+        <tr><td><code>xxd</code> / <code>hexdump -C</code></td><td>Hex dump</td><td><code>hexdump -C bin</code></td></tr>
+        <tr><td><code>strings</code></td><td>Extract ASCII</td><td><code>strings core</code></td></tr>
+        <tr><td><code>nano</code> / <code>vim</code> / <code>micro</code></td><td>Terminal editors</td><td><code>nano conf</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="search"><h2 class="title">Search & Discovery</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>grep -Rin</code></td><td>Recursive text search</td><td><code>grep -Rin "token" .</code></td></tr>
+        <tr><td><code>egrep</code></td><td>Extended regex</td><td><code>egrep -i "(pass|secret)" *</code></td></tr>
+        <tr><td><code>find</code></td><td>Find by name/time/type</td><td><code>find . -type f -name "*.conf"</code></td></tr>
+        <tr><td><code>locate</code> / <code>updatedb</code></td><td>Fast filename search</td><td><code>locate sshd_config</code></td></tr>
+        <tr><td><code>which</code> / <code>whereis</code></td><td>Binary/man page location</td><td><code>which python3</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="textfiles"><h2 class="title">Text / Files Analysis</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>wc -lwm</code></td><td>Count lines/words/chars</td><td><code>wc -l access.log</code></td></tr>
+        <tr><td><code>sort</code> / <code>uniq -c</code></td><td>Sort & count uniques</td><td><code>sort ips.txt | uniq -c</code></td></tr>
+        <tr><td><code>cut</code> / <code>tr</code></td><td>Column/select & translate</td><td><code>cut -d: -f1 /etc/passwd</code></td></tr>
+        <tr><td><code>awk</code></td><td>Parse/transform</td><td><code>awk '{print $1}' file</code></td></tr>
+        <tr><td><code>sed</code></td><td>Stream edit</td><td><code>sed 's/old/new/g' file</code></td></tr>
+        <tr><td><code>paste</code> / <code>join</code> / <code>comm</code></td><td>Merge & set ops</td><td><code>comm -12 a b</code></td></tr>
+        <tr><td><code>iconv</code></td><td>Charset convert</td><td><code>iconv -f ISO-8859-1 -t UTF-8 in > out</code></td></tr>
+        <tr><td><code>base64 -d</code> / <code>xxd -r -p</code></td><td>Decode/hex→bin</td><td><code>base64 -d f.b64 > f</code></td></tr>
+        <tr><td><code>md5sum</code> / <code>sha256sum</code> / <code>b2sum</code></td><td>Hash files</td><td><code>sha256sum iso</code></td></tr>
+        <tr><td><code>zipinfo</code> / <code>tar tvf</code> / <code>7z l</code></td><td>List archive contents</td><td><code>tar tvf backup.tgz</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="perms"><h2 class="title">Permissions, Ownership & Attributes</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>chmod 640</code></td><td>Change mode</td><td><code>chmod -R 755 bin/</code></td></tr>
+        <tr><td><code>chown user:group</code></td><td>Change owner</td><td><code>chown root:root file</code></td></tr>
+        <tr><td><code>umask</code></td><td>Default perms mask</td><td><code>umask 027</code></td></tr>
+        <tr><td><code>getfacl</code> / <code>setfacl</code></td><td>POSIX ACLs</td><td><code>setfacl -m u:alice:r file</code></td></tr>
+        <tr><td><code>lsattr</code> / <code>chattr +i</code></td><td>FS attrs (ext)</td><td><code>chattr +i config</code></td></tr>
+        <tr><td><code>getcap</code> / <code>setcap</code></td><td>File caps</td><td><code>getcap /usr/bin/ping</code></td></tr>
+        <tr><td><code>sudo -l</code></td><td>List sudo rights</td><td><code>sudo -l</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="users"><h2 class="title">Users & Sessions</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>id</code> / <code>whoami</code></td><td>Identity info</td><td><code>id</code></td></tr>
+        <tr><td><code>groups</code></td><td>Group membership</td><td><code>groups alice</code></td></tr>
+        <tr><td><code>who</code> / <code>w</code></td><td>Logged-in users</td><td><code>w</code></td></tr>
+        <tr><td><code>last</code> / <code>lastlog</code></td><td>Login history</td><td><code>last -n 10</code></td></tr>
+        <tr><td><code>passwd</code></td><td>Change password</td><td><code>passwd</code></td></tr>
+        <tr><td><code>su - user</code></td><td>Switch user</td><td><code>su - postgres</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="proc"><h2 class="title">Processes, Jobs & Services</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>ps aux</code> / <code>ps -ef --forest</code></td><td>Process list/tree</td><td><code>ps -ef --forest</code></td></tr>
+        <tr><td><code>top</code> / <code>htop</code></td><td>Live monitor</td><td><code>htop</code></td></tr>
+        <tr><td><code>pgrep -a</code> / <code>pkill -f</code></td><td>Find/kill by name</td><td><code>pkill -f gunicorn</code></td></tr>
+        <tr><td><code>kill -9 PID</code></td><td>Force kill</td><td><code>kill -9 1234</code></td></tr>
+        <tr><td><code>lsof -i</code> / <code>lsof file</code></td><td>Open sockets/files</td><td><code>lsof -i :80</code></td></tr>
+        <tr><td><code>systemctl</code></td><td>Manage services</td><td><code>systemctl status ssh</code></td></tr>
+        <tr><td><code>journalctl -xeu</code></td><td>Service logs</td><td><code>journalctl -xeu ssh</code></td></tr>
+        <tr><td><code>crontab -e</code> / <code>-l</code></td><td>Cron jobs</td><td><code>crontab -l</code></td></tr>
+        <tr><td><code>at now+5min</code></td><td>One-off task</td><td><code>echo "touch /tmp/x" | at now+5min</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="net"><h2 class="title">Networking (core utilities)</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>ip a</code> / <code>ip r</code> / <code>ip -br a</code></td><td>IPs & routes</td><td><code>ip -br a</code></td></tr>
+        <tr><td><code>ss -tulnp</code></td><td>Listening sockets</td><td><code>ss -tulnp</code></td></tr>
+        <tr><td><code>ping</code> / <code>traceroute</code> / <code>mtr</code></td><td>Reachability/path</td><td><code>mtr -rw target</code></td></tr>
+        <tr><td><code>dig +short</code> / <code>host</code></td><td>DNS queries</td><td><code>dig +short A example.com</code></td></tr>
+        <tr><td><code>curl</code></td><td>HTTP(S) requests</td><td><code>curl -I https://example.com</code></td></tr>
+        <tr><td><code>wget</code></td><td>Download files</td><td><code>wget -c URL</code></td></tr>
+        <tr><td><code>scp</code> / <code>sftp</code> / <code>rsync -avzP</code></td><td>Remote copy/sync</td><td><code>rsync -avzP dir host:/dst</code></td></tr>
+        <tr><td><code>ssh -L/-R/-D</code></td><td>Tunnels/forwarding</td><td><code>ssh -L 8080:127.0.0.1:80 host</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="pkg"><h2 class="title">Packages & Binaries</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>apt update && apt full-upgrade</code></td><td>Update/upgrade</td><td><code>sudo apt full-upgrade</code></td></tr>
+        <tr><td><code>apt search</code> / <code>install</code> / <code>purge</code></td><td>Manage packages</td><td><code>sudo apt install jq</code></td></tr>
+        <tr><td><code>dpkg -i/-L/-S</code></td><td>Deb ops & lookup</td><td><code>dpkg -S /bin/ls</code></td></tr>
+        <tr><td><code>update-alternatives</code></td><td>Pick default tool</td><td><code>update-alternatives --config editor</code></td></tr>
+        <tr><td><code>ldd</code> / <code>readelf -h</code> / <code>strings</code></td><td>Inspect binaries</td><td><code>ldd /bin/ls</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="arch"><h2 class="title">Archives & Transfer</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>tar -czf</code> / <code>tar -xvf</code></td><td>Create/extract tar</td><td><code>tar -czf out.tgz dir/</code></td></tr>
+        <tr><td><code>zip -r</code> / <code>unzip</code></td><td>Zip ops</td><td><code>zip -r site.zip public/</code></td></tr>
+        <tr><td><code>7z a</code> / <code>7z x</code></td><td>7-Zip ops</td><td><code>7z a backup.7z dir/</code></td></tr>
+        <tr><td><code>scp</code> / <code>rsync</code></td><td>Copy/sync</td><td><code>scp file host:/tmp/</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="sysinfo"><h2 class="title">System & Hardware Info</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>uname -a</code></td><td>Kernel/arch</td><td><code>uname -a</code></td></tr>
+        <tr><td><code>lsb_release -a</code></td><td>Distro info</td><td><code>lsb_release -a</code></td></tr>
+        <tr><td><code>hostnamectl</code></td><td>Host settings</td><td><code>hostnamectl</code></td></tr>
+        <tr><td><code>lsusb</code> / <code>lspci</code> / <code>lscpu</code></td><td>HW inventory</td><td><code>lspci | grep -i net</code></td></tr>
+        <tr><td><code>free -h</code> / <code>lsmem</code></td><td>Memory stats</td><td><code>free -h</code></td></tr>
+        <tr><td><code>journalctl -p err -b</code></td><td>Boot error logs</td><td><code>journalctl -p err -b</code></td></tr>
+        <tr><td><code>dmesg -T</code></td><td>Kernel ring buffer</td><td><code>dmesg -T | tail</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="script"><h2 class="title">Scripting Essentials</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Item</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td>Shebang</td><td>Select interpreter</td><td><code>#!/usr/bin/env bash</code></td></tr>
+        <tr><td><code>set -euo pipefail</code></td><td>Safer scripts</td><td>In script top</td></tr>
+        <tr><td><code>for</code>/<code>while</code>/<code>case</code>/<code>if</code></td><td>Control flow</td><td><code>for f in *.log; do echo "$f"; done</code></td></tr>
+        <tr><td><code>trap 'cmd' EXIT</code></td><td>Cleanup hook</td><td><code>trap 'rm -f /tmp/x' EXIT</code></td></tr>
+        <tr><td><code>$(cmd)</code></td><td>Command substitution</td><td><code>hash=$(sha256sum f | cut -d' ' -f1)</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="pipe"><h2 class="title">Piping & Redirection</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td>Pipe <code>|</code></td><td>Pipe stdout to next cmd</td><td><code>cat access.log | grep 500 | wc -l</code></td></tr>
+        <tr><td><code>&gt;</code> / <code>&gt;&gt;</code></td><td>Write / append to file</td><td><code>echo ok &gt; out.txt; echo again &gt;&gt; out.txt</code></td></tr>
+        <tr><td><code>&lt;</code></td><td>Read file as stdin</td><td><code>sort &lt; unsorted.txt</code></td></tr>
+        <tr><td><code>2&gt;</code> / <code>2&gt;&gt;</code></td><td>Redirect stderr</td><td><code>cmd 2&gt; errors.log</code></td></tr>
+        <tr><td><code>&amp;&gt;</code> / <code>2&gt;&amp;1</code></td><td>stdout+stderr together</td><td><code>cmd &amp;&gt; all.log</code></td></tr>
+        <tr><td><code>tee</code> / <code>tee -a</code></td><td>Write file and pass through</td><td><code>grep ERR app.log | tee -a errs.log</code></td></tr>
+        <tr><td><code>xargs</code></td><td>Build args from stdin</td><td><code>cat list.txt | xargs -I{} cp {} /dst/</code></td></tr>
+        <tr><td>Process substitution</td><td>Treat pipe as file</td><td><code>diff &lt;(sort a) &lt;(sort b)</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="compare"><h2 class="title">Comparing Files</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>diff -u a b</code></td><td>Unified diff (text)</td><td><code>diff -u conf.old conf.new</code></td></tr>
+        <tr><td><code>sdiff -s a b</code></td><td>Side-by-side</td><td><code>sdiff -s a b</code></td></tr>
+        <tr><td><code>cmp -l a b</code></td><td>Binary compare</td><td><code>cmp -l a.bin b.bin</code></td></tr>
+        <tr><td><code>md5sum</code>/<code>sha256sum</code></td><td>Hash compare</td><td><code>sha256sum file1 file2</code></td></tr>
+        <tr><td><code>comm</code></td><td>Line-wise set ops</td><td><code>comm -12 &lt;(sort a) &lt;(sort b)</code></td></tr>
+        <tr><td><code>git diff --no-index</code></td><td>Git-style diff outside repo</td><td><code>git diff --no-index a b</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="export"><h2 class="title">Exporting to File</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>&gt;</code> / <code>&gt;&gt;</code></td><td>Save/append output</td><td><code>date &gt; run.txt; env &gt;&gt; run.txt</code></td></tr>
+        <tr><td><code>tee</code></td><td>Save while seeing output</td><td><code>ls -la | tee listing.txt</code></td></tr>
+        <tr><td><code>printf</code></td><td>Structured text export</td><td><code>printf "%s,%s\n" "$u" "$id" &gt;&gt; users.csv</code></td></tr>
+        <tr><td><code>tar -czf</code></td><td>Export dir to archive</td><td><code>tar -czf proj_$(date +%F).tgz proj/</code></td></tr>
+        <tr><td><code>zip -r</code></td><td>Zip export</td><td><code>zip -r logs.zip /var/log/app/</code></td></tr>
+        <tr><td><code>jq -r</code></td><td>Export filtered JSON</td><td><code>curl -s api | jq -r '.items[].id' &gt; ids.txt</code></td></tr>
+        <tr><td><code>sqlite3 -header -csv</code></td><td>Dump DB query</td><td><code>sqlite3 db.sqlite 'select * from t;' &gt; t.csv</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="jobs"><h2 class="title">Process & Job Management</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command / Key</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td>Prompt <code>$</code>/<code>#</code></td><td>User/root markers</td><td><code>sleep 300 &amp;</code></td></tr>
+        <tr><td><code>&amp;</code></td><td>Run in background</td><td><code>long_task &amp;</code></td></tr>
+        <tr><td><code>jobs -l</code></td><td>List background jobs</td><td><code>jobs -l</code></td></tr>
+        <tr><td><code>fg %N</code></td><td>Bring job to foreground</td><td><code>fg %1</code></td></tr>
+        <tr><td><code>bg %N</code></td><td>Resume stopped job in background</td><td><code>bg %1</code></td></tr>
+        <tr><td><code>CTRL+Z</code></td><td>Suspend current job</td><td><code>CTRL+Z</code> then <code>bg</code></td></tr>
+        <tr><td><code>disown [-h] %N</code></td><td>Detach job from shell</td><td><code>disown -h %1</code></td></tr>
+        <tr><td><code>nohup cmd &amp;</code></td><td>Immune to hangups</td><td><code>nohup python app.py &amp;</code></td></tr>
+        <tr><td><code>setsid cmd &amp;</code></td><td>New session</td><td><code>setsid mysvc &amp;</code></td></tr>
+        <tr><td><code>wait %N|PID</code></td><td>Wait for job/PID</td><td><code>wait %1; echo $?</code></td></tr>
+        <tr><td><code>echo $?</code></td><td>Exit code of last cmd</td><td><code>echo $?</code></td></tr>
+        <tr><td><code>kill -SIG PID</code></td><td>Send signal</td><td><code>kill -TERM 1234</code></td></tr>
+        <tr><td><code>pkill -f pat</code> / <code>pgrep -a pat</code></td><td>Kill / find by pattern</td><td><code>pgrep -a nginx</code></td></tr>
+        <tr><td><code>nice -n N cmd</code></td><td>Start with CPU priority</td><td><code>nice -n 10 ffmpeg …</code></td></tr>
+        <tr><td><code>renice -n N -p PID</code></td><td>Change proc priority</td><td><code>renice -n -5 -p 1234</code></td></tr>
+        <tr><td><code>ionice -c2 -n5 -p PID</code></td><td>Set I/O priority</td><td><code>ionice -c2 -n5 -p 1234</code></td></tr>
+        <tr><td><code>ps -eo cols --sort=…</code></td><td>Custom process list</td><td><code>ps -eo pid,ppid,stat,ni,%cpu,%mem,cmd --sort=-%cpu</code></td></tr>
+        <tr><td><code>top</code> / <code>htop</code></td><td>Live CPU/mem</td><td><code>htop</code></td></tr>
+        <tr><td><code>lsof -p PID</code></td><td>Open files of a process</td><td><code>lsof -p 1234</code></td></tr>
+        <tr><td><code>fuser -v -n tcp 80</code></td><td>Who uses a port</td><td><code>fuser -v -n tcp 80</code></td></tr>
+        <tr><td><code>timeout 30s cmd</code></td><td>Kill if exceeds duration</td><td><code>timeout 2m curl URL</code></td></tr>
+        <tr><td><code>watch -n1 'cmd'</code></td><td>Re-run on interval</td><td><code>watch -n1 'ps -C sshd -o pid,cmd'</code></td></tr>
+        <tr><td><code>pstree -p</code></td><td>Tree view</td><td><code>pstree -p</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="svc"><h2 class="title">Services & Logs (systemd/journal)</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>systemctl status|start|stop|restart &lt;svc&gt;</code></td><td>Manage service</td><td><code>systemctl restart ssh</code></td></tr>
+        <tr><td><code>systemctl enable|disable &lt;svc&gt;</code></td><td>Auto-start on boot</td><td><code>systemctl enable nginx</code></td></tr>
+        <tr><td><code>systemctl is-active|is-enabled &lt;svc&gt;</code></td><td>Quick state check</td><td><code>systemctl is-enabled docker</code></td></tr>
+        <tr><td><code>systemctl list-units --type=service</code></td><td>List running services</td><td><code>systemctl list-units --type=service</code></td></tr>
+        <tr><td><code>journalctl -u &lt;svc&gt;</code></td><td>Service logs</td><td><code>journalctl -u nginx -f</code></td></tr>
+        <tr><td><code>journalctl -p err -b</code></td><td>Errors since boot</td><td><code>journalctl -p warning -b</code></td></tr>
+        <tr><td><code>loginctl list-sessions|users</code></td><td>Active sessions/users</td><td><code>loginctl list-users</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="firewall"><h2 class="title">Networking & Firewall</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>ip a|r|neigh</code></td><td>IPs/routes/ARP</td><td><code>ip -br a</code></td></tr>
+        <tr><td><code>ss -tulnp</code></td><td>Listening sockets</td><td><code>ss -tulnp</code></td></tr>
+        <tr><td><code>hostnamectl</code></td><td>Set/get hostname</td><td><code>hostnamectl set-hostname web01</code></td></tr>
+        <tr><td><code>nmcli con show|up</code></td><td>NetworkManager connections</td><td><code>nmcli con up "Wired connection 1"</code></td></tr>
+        <tr><td><code>resolvectl status</code></td><td>DNS resolver status</td><td><code>resolvectl status</code></td></tr>
+        <tr><td><code>ufw enable|allow|deny</code></td><td>Simple firewall</td><td><code>ufw allow 22/tcp</code></td></tr>
+        <tr><td><code>nft list ruleset</code></td><td>nftables ruleset</td><td><code>nft list ruleset</code></td></tr>
+        <tr><td><code>iptables -L -n -v</code></td><td>Legacy firewall view</td><td><code>iptables -S</code></td></tr>
+        <tr><td><code>tcpdump -i eth0 port 443</code></td><td>Packet capture</td><td><code>tcpdump -nn -i any port 22</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="storage"><h2 class="title">Storage, RAID, LVM & Filesystems</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>lsblk -f</code></td><td>Block layout & FS</td><td><code>lsblk -f</code></td></tr>
+        <tr><td><code>blkid</code></td><td>UUID/label info</td><td><code>blkid /dev/sdb1</code></td></tr>
+        <tr><td><code>mount</code>/<code>umount</code></td><td>Mount/unmount</td><td><code>mount -o noatime /dev/sdb1 /data</code></td></tr>
+        <tr><td><code>df -h</code> / <code>du -sh *</code></td><td>Space usage</td><td><code>du -sh /var/*</code></td></tr>
+        <tr><td><code>mkfs.ext4</code>/<code>xfs</code></td><td>Make filesystem</td><td><code>mkfs.ext4 /dev/sdb1</code></td></tr>
+        <tr><td><code>tune2fs -l</code></td><td>ext* params</td><td><code>tune2fs -l /dev/sda1</code></td></tr>
+        <tr><td><code>mdadm --detail /dev/md0</code></td><td>Software RAID</td><td><code>mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc</code></td></tr>
+        <tr><td><code>pvcreate</code>/<code>vgcreate</code>/<code>lvcreate</code></td><td>LVM setup</td><td><code>lvcreate -L 50G -n data vg0</code></td></tr>
+        <tr><td><code>lvextend -r -L +10G /dev/vg0/data</code></td><td>Grow LV (+resize FS)</td><td><code>lvextend -r -l +100%FREE /dev/vg0/data</code></td></tr>
+        <tr><td><code>fsck -f /dev/sdXn</code></td><td>FS check (unmounted)</td><td><code>fsck -f /dev/sdb1</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="auth"><h2 class="title">Users, Auth & Access</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>adduser</code>/<code>deluser</code></td><td>Create/remove user</td><td><code>adduser ops</code></td></tr>
+        <tr><td><code>usermod -aG &lt;group&gt; &lt;user&gt;</code></td><td>Add to group</td><td><code>usermod -aG sudo ops</code></td></tr>
+        <tr><td><code>chage -l &lt;user&gt;</code></td><td>Password aging</td><td><code>chage -l ops</code></td></tr>
+        <tr><td><code>passwd &lt;user&gt;</code></td><td>Set/reset password</td><td><code>passwd ops</code></td></tr>
+        <tr><td><code>visudo</code></td><td>Edit sudoers safely</td><td><code>visudo</code></td></tr>
+        <tr><td><code>faillock --user &lt;u&gt;</code></td><td>Lockout info</td><td><code>faillock --user ops</code></td></tr>
+        <tr><td><code>getent passwd|group</code></td><td>NSS user/group view</td><td><code>getent group sudo</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="ssh"><h2 class="title">SSH & Remote</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>ssh-keygen -t ed25519</code></td><td>Create keypair</td><td><code>ssh-keygen -t ed25519 -C "ops@host"</code></td></tr>
+        <tr><td><code>ssh-copy-id user@host</code></td><td>Install pubkey</td><td><code>ssh-copy-id ops@server</code></td></tr>
+        <tr><td><code>sshd -t</code></td><td>Test sshd config</td><td><code>sshd -t</code></td></tr>
+        <tr><td><code>systemctl reload ssh</code></td><td>Apply sshd changes</td><td><code>systemctl reload ssh</code></td></tr>
+        <tr><td><code>scp</code>/<code>rsync -avzP</code></td><td>Copy/sync</td><td><code>rsync -avzP /data ops@host:/backup</code></td></tr>
+        <tr><td><code>ssh -L/-R/-D</code></td><td>Tunnels</td><td><code>ssh -L 8443:127.0.0.1:443 ops@bastion</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="perf"><h2 class="title">Performance & Monitoring</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>top</code>/<code>htop</code></td><td>Live CPU/mem</td><td><code>htop</code></td></tr>
+        <tr><td><code>vmstat 1</code></td><td>CPU/mem/IO overview</td><td><code>vmstat 1 10</code></td></tr>
+        <tr><td><code>iostat -x 1</code></td><td>Disk IO detail</td><td><code>iostat -x 1</code></td></tr>
+        <tr><td><code>dstat -tcmndry</code></td><td>All-in-one glance</td><td><code>dstat -tcmndry --top-io</code></td></tr>
+        <tr><td><code>free -h</code></td><td>RAM usage</td><td><code>free -h</code></td></tr>
+        <tr><td><code>sar -u 1 5</code></td><td>Historic perf</td><td><code>sar -n DEV 1 5</code></td></tr>
+        <tr><td><code>pidstat -p PID 1</code></td><td>Per-PID stats</td><td><code>pidstat -p 1234 1</code></td></tr>
+        <tr><td><code>lsof -p PID</code></td><td>Handles of proc</td><td><code>lsof -p 1234</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="time"><h2 class="title">Time & Scheduling</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>timedatectl</code></td><td>Timezone/NTP status</td><td><code>timedatectl set-timezone Asia/Dubai</code></td></tr>
+        <tr><td><code>chronyc sources|tracking</code></td><td>Chrony NTP</td><td><code>chronyc tracking</code></td></tr>
+        <tr><td><code>crontab -e|-l</code></td><td>User cron</td><td><code>crontab -e</code></td></tr>
+        <tr><td><code>/etc/cron.hourly,daily</code></td><td>System cron dirs</td><td><code>ls /etc/cron.daily</code></td></tr>
+        <tr><td><code>at now+10min</code></td><td>One-off job</td><td><code>echo "systemctl restart nginx" | at now+10min</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="apt"><h2 class="title">Packages, Repos & Updates (Debian/Ubuntu)</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>apt update && apt full-upgrade</code></td><td>Refresh & upgrade</td><td><code>apt update && apt full-upgrade</code></td></tr>
+        <tr><td><code>apt install|purge pkg</code></td><td>Install/remove</td><td><code>apt install fail2ban</code></td></tr>
+        <tr><td><code>apt-cache policy pkg</code></td><td>See versions/pin</td><td><code>apt-cache policy openssl</code></td></tr>
+        <tr><td><code>dpkg -i|-L|-S file</code></td><td>Deb ops/lookup</td><td><code>dpkg -S /usr/bin/ssh</code></td></tr>
+        <tr><td><code>apt-mark hold|unhold</code></td><td>Freeze package</td><td><code>apt-mark hold nginx</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="webtls"><h2 class="title">Web, TLS & DB (ops quickies)</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>nginx -t</code> / <code>apachectl configtest</code></td><td>Test config</td><td><code>nginx -t</code></td></tr>
+        <tr><td><code>systemctl reload nginx|apache2</code></td><td>Reload w/o drop</td><td><code>systemctl reload nginx</code></td></tr>
+        <tr><td><code>certbot --nginx -d domain</code></td><td>Get/renew certs</td><td><code>certbot renew --dry-run</code></td></tr>
+        <tr><td><code>openssl s_client -connect host:443 -servername host</code></td><td>TLS inspect</td><td><code>openssl s_client -connect ex.com:443 -servername ex.com</code></td></tr>
+        <tr><td><code>mysql -u root -p</code> / <code>psql -U postgres</code></td><td>DB shells</td><td><code>psql -U postgres</code></td></tr>
+        <tr><td><code>pg_isready</code> / <code>mysqladmin ping</code></td><td>DB liveness</td><td><code>pg_isready -h 127.0.0.1</code></td></tr>
+        <tr><td><code>systemctl status postgresql|mariadb</code></td><td>DB service</td><td><code>systemctl status postgresql</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="kernel"><h2 class="title">Kernel, Boot & Sysctl</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>uname -a</code></td><td>Kernel info</td><td><code>uname -a</code></td></tr>
+        <tr><td><code>sysctl -a</code> / <code>-w key=val</code></td><td>Kernel params live</td><td><code>sysctl -w net.ipv4.ip_forward=1</code></td></tr>
+        <tr><td><code>/etc/sysctl.d/*.conf</code></td><td>Persist sysctl</td><td><code>echo 'vm.swappiness=10' &gt; /etc/sysctl.d/99-tuning.conf</code></td></tr>
+        <tr><td><code>grub-mkconfig -o /boot/grub/grub.cfg</code></td><td>Rebuild GRUB</td><td><code>update-grub</code></td></tr>
+        <tr><td><code>dracut -f</code> / <code>update-initramfs -u</code></td><td>Initramfs build</td><td><code>update-initramfs -u -k all</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="backup"><h2 class="title">Backup, Snapshots & Sync</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>rsync -aHAX --delete</code></td><td>Mirror with attrs</td><td><code>rsync -aHAX --delete /data /bk/</code></td></tr>
+        <tr><td><code>tar --xattrs --acls -czf</code></td><td>Preserve meta</td><td><code>tar --xattrs --acls -czf etc_$(date +%F).tgz /etc</code></td></tr>
+        <tr><td><code>cp --reflink=auto</code></td><td>CoW copy</td><td><code>cp --reflink=auto big.img big.bak</code></td></tr>
+        <tr><td><code>btrfs subvolume snapshot</code></td><td>FS snapshots</td><td><code>btrfs subvolume snapshot /data /snap/data-$(date +%F)</code></td></tr>
+        <tr><td><code>sqlite3 .dump</code></td><td>DB export</td><td><code>sqlite3 app.db .dump &gt; app.sql</code></td></tr>
+      </tbody></table></div></section>
+
+    <section class="section" id="hardening"><h2 class="title">Security Hardening</h2><div class="card tablewrap"><table>
+      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
+        <tr><td><code>sshd -t</code> + key-only auth</td><td>Verify sshd & disable password login</td><td>Edit <span class="kbd">/etc/ssh/sshd_config</span>: <code>PasswordAuthentication no</code></td></tr>
+        <tr><td><code>fail2ban-client status</code></td><td>Ban abusive IPs</td><td><code>fail2ban-client status sshd</code></td></tr>
+        <tr><td><code>chmod</code>/<code>chown</code> + <code>umask</code></td><td>Tighten perms</td><td><code>umask 027</code></td></tr>
+        <tr><td><code>setfacl</code>/<code>getfacl</code></td><td>Granular access</td><td><code>setfacl -m u:ops:r /secure</code></td></tr>
+        <tr><td><code>auditctl -w &lt;path&gt; -p wa -k tag</code></td><td>Audit critical files</td><td><code>auditctl -w /etc/passwd -p wa -k auth</code></td></tr>
+      </tbody></table></div></section>
+
+  </main>
+</div>
+
+<script>
+let lastY=scrollY,hidden=false;
+addEventListener('scroll',()=>{const y=scrollY,tb=document.getElementById('topbar');if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
+const p=location.pathname.replace(/\/+$/,'');document.querySelectorAll('.tabs .tab').forEach(a=>{const h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');if(p.endsWith(h))a.classList.add('active')});
+const tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
+function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
+function updateArrows(){const o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;tabs.classList.toggle('overflow',o);leftbtn.style.display=o&&s>0?'inline-flex':'none';rightbtn.style.display=o&&s<max-1?'inline-flex':'none'}
+function scrollByStep(d){const step=Math.max(120,Math.floor(tabs.clientWidth*.6));tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})}
+leftbtn.addEventListener('click',()=>scrollByStep(-1));rightbtn.addEventListener('click',()=>scrollByStep(1));
+tabs.addEventListener('scroll',updateArrows,{passive:true});new ResizeObserver(updateArrows).observe(tabs);
+addEventListener('resize',updateArrows);
+tabs.addEventListener('wheel',e=>{if(!hasOverflow())return;const dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}});
+updateArrows();
+
+const quicknav=document.getElementById('quicknav'),toggle=document.getElementById('toggleMore');
+function setCollapsed(collapsed){const items=[...quicknav.querySelectorAll('.qbtn')];items.slice(6).forEach(el=>el.classList.toggle('hidden',collapsed));toggle.textContent=collapsed?'… Show more':'… Show less';}
+let collapsed=true;setCollapsed(true);
+toggle.addEventListener('click',()=>{collapsed=!collapsed;setCollapsed(collapsed);});
+</script>
+</body></html>
