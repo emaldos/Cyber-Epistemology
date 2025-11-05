@@ -1,33 +1,44 @@
-# Cyber-Epistemology
+---
 
-A minimalist, dark-themed static site that organizes practical cyber/IT knowledge into quick, focused pages. Pure HTML/CSS, no build step, no frameworks.
+# 🔐 CYBER-EPISTEMOLOGY
 
-## Quick Start
+A minimalist, dark-themed static site that organizes practical cyber/IT knowledge into focused, fast pages. Pure HTML/CSS. No build. No frameworks.
 
-**Windows (recommended)**
+---
 
-1. Download the ZIP from GitHub.
-2. Unzip it anywhere.
-3. Double-click `Home.html`.
+## 🪟 Quick Start (Windows)
 
-**macOS / Linux (or optional local server)**
+1. **Download** the repository ZIP from GitHub.
+2. **Unzip** anywhere (e.g., `Desktop\Cyber-Epistemology\`).
+3. **Double-click** `Home.html` → you’re in.
+
+---
+
+## 🐧 Optional Local Server (macOS/Linux)
 
 ```bash
 git clone https://github.com/emaldos/Cyber-Epistemology.git
 cd Cyber-Epistemology
 python -m http.server 8080
-# Visit: http://localhost:8080/Home.html
+# Open: http://localhost:8080/Home.html
 ```
 
-## What’s Inside
+*(You can also just open `Home.html` directly in your browser.)*
 
-* **Home**: entry page linking to the main knowledge areas.
-* **Commands**: Bash, PowerShell, and Windows CMD quick references.
-* **Operating Systems**: focused pages for common OS flavors (Windows/macOS/Linux/Android/iOS).
-* **Kali Tools**: curated links and categories for Kali Linux tooling.
-* **About**: short mission and back-to-Home.
+---
 
-## Project Structure
+## 🧭 What You Get
+
+* **Home** → entry hub to all sections
+* **Commands** → quick refs for **Bash**, **PowerShell**, **CMD**
+* **Operating Systems** → Windows 11/Server, macOS, Ubuntu Server, Kali Linux, Android, iOS
+* **Kali Tools** → start page + categorized tools
+* **System Files Info** → OS paths and artifacts
+* **About** → project mission and back-to-Home
+
+---
+
+## 📂 Project Structure
 
 ```
 │   Home.html
@@ -71,7 +82,9 @@ python -m http.server 8080
         WinServer.png
 ```
 
-## Key Pages (relative links)
+---
+
+## ▶️ Open the Main Pages
 
 * `Home.html`
 * `Data/Commands.html`
@@ -91,23 +104,19 @@ python -m http.server 8080
 * `Data/OS/IOS.html`
 * `Data/About.html`
 
-## Design & Accessibility
+---
 
-* Dark mode by default; high-contrast text and large hit targets.
-* Glassy UI elements with subtle blur; focus outlines for keyboard users.
-* Responsive layout; works well on desktop and mobile.
-* Lightweight: no JS required for core navigation.
+## 🎨 Design
 
-## Conventions
+* Dark mode by default
+* Glassy tiles, soft borders, high-contrast text
+* Responsive layout, keyboard-friendly focus outlines
+* Zero JS required for navigation
 
-* **Language**: English only.
-* **Style**: keep pages short, scannable, and practical.
-* **Assets**: icons live under `Image/`; reference with relative paths.
-* **File names**: prefer consistent casing and underscores; avoid spaces where possible (e.g., consider renaming `Kali Tools Start Page.html` → `Kali_Tools_Start_Page.html` in a future commit).
+---
 
-## Contributing
+## 📌 Conventions
 
-* Keep content concise and actionable.
-* Preserve the minimal, dark, glassy aesthetic.
-* Avoid adding dependencies or build tools.
-
+* **Language**: English
+* **Assets**: all icons in `Image/` (use relative paths)
+* **Keep it simple**: short pages, scannable sections, practical content
