@@ -121,3 +121,4 @@ python -m http.server 8080
 * **Assets**: all icons in `Image/` (use relative paths)
 * **Keep it simple**: short pages, scannable sections, practical content
 
+
