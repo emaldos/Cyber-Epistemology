@@ -1,0 +1,210 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Cyber Websites</title>
+<link rel="icon" href="../Image/Logo.png" type="image/png" sizes="32x32"/><link rel="icon" href="../Image/Logo.png" type="image/png" sizes="192x192"/><link rel="apple-touch-icon" href="../Image/Logo.png"/><meta name="theme-color" content="#111"/>
+<style>
+:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--blue:#2196f3;--line:rgba(255,255,255,.10)}
+*{box-sizing:border-box}html,body{height:100%}
+body{margin:0;font:16px/1.5 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111}
+.bg{position:fixed;inset:0;background:url("../Image/Logo.png") center/cover no-repeat;z-index:-2}
+.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.78) 100%);z-index:-1}
+.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
+.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
+.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
+.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
+.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
+.homepill span{font-weight:700;letter-spacing:.15px}
+.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);cursor:pointer;user-select:none;flex:0 0 auto}
+.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
+.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0}
+.tabs.overflow{overflow:auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
+.tab:hover{opacity:1}
+.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
+.tab.active{color:var(--blue)}
+.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
+.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
+.page{position:relative;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:96px 28px 28px}
+.shell{width:min(1200px,94%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
+.h{margin:0 0 8px;font-size:28px;font-weight:800;letter-spacing:.2px}
+.p{margin:0 0 18px;color:var(--muted)}
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 18px}
+.search{flex:1;min-width:260px;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--ring)}
+.search input{flex:1;border:0;outline:0;background:transparent;color:var(--text);font:inherit}
+.count{margin-left:auto;color:var(--muted);font-size:13px;white-space:nowrap}
+.section{margin:22px 0 12px}
+.section h2{margin:0 0 8px;font-size:18px;letter-spacing:.2px}
+.tablewrap{overflow:auto;border-radius:14px;border:1px solid var(--tileBorder);background:rgba(255,255,255,.04)}
+table{width:100%;border-collapse:separate;border-spacing:0;min-width:720px}
+thead th{position:sticky;top:0;background:rgba(255,255,255,.06);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);text-align:left;padding:12px;border-bottom:1px solid var(--tileBorder);font-weight:800}
+tbody td{padding:12px;border-bottom:1px solid var(--tileBorder);vertical-align:top}
+tbody tr:hover{background:rgba(255,255,255,.04)}
+.tag{display:inline-block;margin-right:6px;margin-bottom:4px;padding:2px 8px;border-radius:999px;border:1px solid rgba(160,190,255,.28);background:rgba(255,255,255,.05);font-size:12px;color:#cfe0ff}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:12px;text-decoration:none;color:#cfe0ff;background:rgba(255,255,255,.06);border:1px solid rgba(160,190,255,.28);font-weight:800}
+.btn:hover{transform:translateY(-1px)}
+</style></head><body>
+<div class="bg"></div>
+<nav class="topbar" id="topbar">
+  <div class="nav">
+    <a class="homepill" href="../Home.html" aria-label="Home"><img src="../Image/Home.png" alt="Home"/><span>Home</span></a>
+    <div class="tabswrap">
+      <button class="navbtn" id="leftbtn"><span>&lt;</span></button>
+      <div class="tabs" id="tabs">
+        <a class="tab" href="System_Files_Info.html"><img src="../Image/Nav.png" alt="System Files"/>System Files</a>
+        <a class="tab" href="Commands.html"><img src="../Image/Command.png" alt="Commands"/>Commands</a>
+        <a class="tab" href="Kali_Tools.html"><img src="../Image/KaliLinux.png" alt="Kali Tools"/>Kali Tools</a>
+        <a class="tab" href="cyber_roadmap.html"><img src="../Image/roadmap.png" alt="RoadMap"/>RoadMap</a>
+        <a class="tab active" href="Cyber_Websites.html"><img src="../Image/Awareness.png" alt="Websites"/>Cyber Websites</a>
+      </div>
+      <button class="navbtn" id="rightbtn"><span>&gt;</span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+<main class="shell">
+  <h1 class="h">Cyber Websites — Curated Resources</h1>
+  <p class="p">Search by any keyword across all categories. Columns: Website Name | Targetation | Small Description | Open.</p>
+  <div class="controls">
+    <div class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.2-4.2M10.8 18a7.2 7.2 0 1 1 0-14.4 7.2 7.2 0 0 1 0 14.4Z" stroke="#cfe0ff" stroke-width="2" stroke-linecap="round"/></svg><input id="q" type="text" placeholder="Search websites, tags, descriptions..."></div>
+    <div class="count" id="count">0 results</div>
+  </div>
+
+  <section class="section" data-section="pentest"><h2>Pentest</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
+    <tr data-name="HackTricks" data-tags="pentest cheatsheets"><td>HackTricks</td><td><span class="tag">Cheatsheets</span></td><td>Massive handbook for pentest, cloud, mobile, AD, and more.</td><td><a class="btn" target="_blank" rel="noopener" href="https://book.hacktricks.xyz/">Open</a></td></tr>
+    <tr data-name="PayloadsAllTheThings" data-tags="payloads bypass web cloud"><td>PayloadsAllTheThings</td><td><span class="tag">Web</span><span class="tag">Cloud</span></td><td>Curated payloads and bypass techniques.</td><td><a class="btn" target="_blank" rel="noopener" href="https://payloadsallthethings.gitbook.io/">Open</a></td></tr>
+    <tr data-name="SecLists" data-tags="wordlists fuzz credentials discovery"><td>SecLists</td><td><span class="tag">Wordlists</span></td><td>Comprehensive wordlists for discovery, fuzzing, creds.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/danielmiessler/SecLists">Open</a></td></tr>
+    <tr data-name="Exploit-DB" data-tags="exploits cve poc"><td>Exploit-DB</td><td><span class="tag">Exploits</span></td><td>Public exploits and PoCs database.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.exploit-db.com/">Open</a></td></tr>
+    <tr data-name="ProjectDiscovery" data-tags="recon nuclei subfinder httpx"><td>ProjectDiscovery</td><td><span class="tag">Recon</span><span class="tag">Automation</span></td><td>Modern offensive tooling (Nuclei, Subfinder, httpx).</td><td><a class="btn" target="_blank" rel="noopener" href="https://projectdiscovery.io/">Open</a></td></tr>
+    <tr data-name="Nmap" data-tags="scanner network"><td>Nmap</td><td><span class="tag">Network</span></td><td>Network scanner and NSE scripts reference.</td><td><a class="btn" target="_blank" rel="noopener" href="https://nmap.org/">Open</a></td></tr>
+    <tr data-name="Burp Suite Docs" data-tags="web proxy burp"><td>Burp Suite Docs</td><td><span class="tag">Web</span></td><td>Burp tooling, extensions, and web testing guidance.</td><td><a class="btn" target="_blank" rel="noopener" href="https://portswigger.net/burp/documentation">Open</a></td></tr>
+    <tr data-name="Feroxbuster" data-tags="content discovery dir busting"><td>Feroxbuster</td><td><span class="tag">Discovery</span></td><td>Fast content discovery tool documentation.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/epi052/feroxbuster">Open</a></td></tr>
+    <tr data-name="FFUF" data-tags="fuzz web discovery"><td>ffuf</td><td><span class="tag">Fuzz</span></td><td>Fast web fuzzer usage and examples.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/ffuf/ffuf">Open</a></td></tr>
+    <tr data-name="Wordlists OPSEC" data-tags="wordlists hygiene"><td>Wordlists OPSEC</td><td><span class="tag">OPSEC</span></td><td>Advice on safe use of wordlists and scopes.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/insidetrust/statistically-likely-usernames">Open</a></td></tr>
+  </tbody></table></div></section>
+
+  <section class="section" data-section="red"><h2>Red Team</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
+    <tr data-name="Atomic Red Team" data-tags="ttp tests purple"><td>Atomic Red Team</td><td><span class="tag">ATT&CK</span></td><td>Atomic tests to emulate MITRE ATT&CK techniques.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/redcanaryco/atomic-red-team">Open</a></td></tr>
+    <tr data-name="MITRE Caldera" data-tags="adversary emulation"><td>MITRE Caldera</td><td><span class="tag">Emulation</span></td><td>Automated adversary emulation platform.</td><td><a class="btn" target="_blank" rel="noopener" href="https://caldera.mitre.org/">Open</a></td></tr>
+    <tr data-name="BloodHound" data-tags="active directory attack paths"><td>BloodHound</td><td><span class="tag">Active Directory</span></td><td>AD attack paths discovery and docs.</td><td><a class="btn" target="_blank" rel="noopener" href="https://bloodhound.readthedocs.io/">Open</a></td></tr>
+    <tr data-name="SharpHound" data-tags="collection ad"><td>SharpHound</td><td><span class="tag">Collection</span></td><td>BloodHound data collection tooling.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/BloodHoundAD/SharpHound">Open</a></td></tr>
+    <tr data-name="C2 Matrix" data-tags="command and control"><td>The C2 Matrix</td><td><span class="tag">C2</span></td><td>Comparison matrix of C2 frameworks.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.thec2matrix.com/">Open</a></td></tr>
+    <tr data-name="LOLDriver" data-tags="drivers edr bypass"><td>LOLBL Driver</td><td><span class="tag">Drivers</span></td><td>Living-off-the-land drivers for offensive tradecraft.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.loldrivers.io/">Open</a></td></tr>
+    <tr data-name="Red Team Notes" data-tags="tradecraft opsec"><td>Red Team Notes</td><td><span class="tag">OPSEC</span></td><td>Tradecraft notes and TTP references.</td><td><a class="btn" target="_blank" rel="noopener" href="https://twitter.com/mrd0x">Open</a></td></tr>
+  </tbody></table></div></section>
+
+  <section class="section" data-section="blue"><h2>Blue Team</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
+    <tr data-name="MITRE ATT&CK" data-tags="tactics techniques mapping"><td>MITRE ATT&CK</td><td><span class="tag">Knowledge Base</span></td><td>Global knowledge base of adversary behaviors.</td><td><a class="btn" target="_blank" rel="noopener" href="https://attack.mitre.org/">Open</a></td></tr>
+    <tr data-name="NVD" data-tags="cve vulnerabilities nist"><td>NVD (NIST)</td><td><span class="tag">CVE</span></td><td>Vulnerability catalog with scoring feeds.</td><td><a class="btn" target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln">Open</a></td></tr>
+    <tr data-name="CVE.org" data-tags="identifiers cve"><td>CVE.org</td><td><span class="tag">CVE</span></td><td>Official CVE registry.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.cve.org/">Open</a></td></tr>
+    <tr data-name="SigmaHQ" data-tags="siem detection rules"><td>Sigma Rules</td><td><span class="tag">SIEM</span></td><td>Generic detection rules and tooling.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/SigmaHQ/sigma">Open</a></td></tr>
+    <tr data-name="Elastic Security" data-tags="detections rules endpoint"><td>Elastic Detections</td><td><span class="tag">Rules</span></td><td>Open detections and endpoint content.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/elastic/detection-rules">Open</a></td></tr>
+    <tr data-name="Wazuh" data-tags="edr siem"><td>Wazuh</td><td><span class="tag">EDR</span><span class="tag">SIEM</span></td><td>Open-source endpoint and SIEM platform.</td><td><a class="btn" target="_blank" rel="noopener" href="https://wazuh.com/">Open</a></td></tr>
+    <tr data-name="Velociraptor" data-tags="dfir endpoint hunting"><td>Velociraptor</td><td><span class="tag">DFIR</span></td><td>Endpoint visibility and hunting queries.</td><td><a class="btn" target="_blank" rel="noopener" href="https://docs.velociraptor.app/">Open</a></td></tr>
+    <tr data-name="Sysmon" data-tags="windows logging"><td>Sysmon</td><td><span class="tag">Windows</span></td><td>Sysinternals system monitor and config schemas.</td><td><a class="btn" target="_blank" rel="noopener" href="https://learn.microsoft.com/sysinternals/downloads/sysmon">Open</a></td></tr>
+    <tr data-name="Zeek" data-tags="nsm detection"><td>Zeek Docs</td><td><span class="tag">NSM</span></td><td>Network Security Monitoring scripting platform.</td><td><a class="btn" target="_blank" rel="noopener" href="https://docs.zeek.org/en/current/">Open</a></td></tr>
+    <tr data-name="Suricata" data-tags="ids ips nids rules"><td>Suricata Docs</td><td><span class="tag">IDS/IPS</span></td><td>Rule language and tuning guides.</td><td><a class="btn" target="_blank" rel="noopener" href="https://docs.suricata.io/">Open</a></td></tr>
+    <tr data-name="Wireshark" data-tags="pcap analysis"><td>Wireshark Docs</td><td><span class="tag">Network</span></td><td>Packet analysis documentation.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.wireshark.org/docs/">Open</a></td></tr>
+  </tbody></table></div></section>
+
+  <section class="section" data-section="purple"><h2>Purple</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
+    <tr data-name="OWASP" data-tags="web appsec top10"><td>OWASP</td><td><span class="tag">AppSec</span></td><td>Community projects and secure development guidance.</td><td><a class="btn" target="_blank" rel="noopener" href="https://owasp.org/">Open</a></td></tr>
+    <tr data-name="CyberChef" data-tags="encode decode forensics"><td>CyberChef</td><td><span class="tag">Utilities</span></td><td>Data transforms, encoding, hashing, parsers.</td><td><a class="btn" target="_blank" rel="noopener" href="https://gchq.github.io/CyberChef/">Open</a></td></tr>
+    <tr data-name="ATT&CK Navigator" data-tags="matrix heatmap mapping"><td>ATT&CK Navigator</td><td><span class="tag">Mapping</span></td><td>Visualize and map TTP coverage.</td><td><a class="btn" target="_blank" rel="noopener" href="https://mitre-attack.github.io/attack-navigator/">Open</a></td></tr>
+  </tbody></table></div></section>
+
+  <section class="section" data-section="offensive"><h2>Offensive</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
+    <tr data-name="Hashcat" data-tags="password crack gpu"><td>Hashcat</td><td><span class="tag">Passwords</span></td><td>GPU-accelerated password cracking framework.</td><td><a class="btn" target="_blank" rel="noopener" href="https://hashcat.net/hashcat/">Open</a></td></tr>
+    <tr data-name="John the Ripper" data-tags="password cracking"><td>John the Ripper</td><td><span class="tag">Passwords</span></td><td>Popular CPU password cracker and rules.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.openwall.com/john/">Open</a></td></tr>
+    <tr data-name="CrackStation" data-tags="hash lookup"><td>CrackStation</td><td><span class="tag">Hashes</span></td><td>Online hash lookup using precomputed tables.</td><td><a class="btn" target="_blank" rel="noopener" href="https://crackstation.net/">Open</a></td></tr>
+    <tr data-name="Impacket" data-tags="ad protocols"><td>Impacket</td><td><span class="tag">AD</span></td><td>Python collection for network protocols and AD ops.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/fortra/impacket">Open</a></td></tr>
+    <tr data-name="Responder" data-tags="lldp ntlm relay"><td>Responder</td><td><span class="tag">Lateral</span></td><td>LLMNR/NBT-NS/MDNS poisoner with rogue services.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/lgandx/Responder">Open</a></td></tr>
+    <tr data-name="Rubeus" data-tags="kerberos ad"><td>Rubeus</td><td><span class="tag">Kerberos</span></td><td>Kerberos abuse toolkit for AD.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/GhostPack/Rubeus">Open</a></td></tr>
+  </tbody></table></div></section>
+
+  <section class="section" data-section="defensive"><h2>Defensive</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
+    <tr data-name="GreyNoise" data-tags="ip reputation internet noise"><td>GreyNoise</td><td><span class="tag">IP Intel</span></td><td>Classifies Internet background noise to reduce false positives.</td><td><a class="btn" target="_blank" rel="noopener" href="https://viz.greynoise.io/">Open</a></td></tr>
+    <tr data-name="AbuseIPDB" data-tags="ip reputation"><td>AbuseIPDB</td><td><span class="tag">Reputation</span></td><td>IP abuse reports and reputation checks.</td><td><a class="btn" target="_blank" rel="noopener" href="https://abuseipdb.com/">Open</a></td></tr>
+    <tr data-name="urlscan.io" data-tags="url screenshots verdicts"><td>urlscan.io</td><td><span class="tag">URLs</span></td><td>Analyze URLs with screenshots and indicators.</td><td><a class="btn" target="_blank" rel="noopener" href="https://urlscan.io/">Open</a></td></tr>
+    <tr data-name="VirusTotal" data-tags="multiav url file hash"><td>VirusTotal</td><td><span class="tag">Multi-AV</span></td><td>Scan files, URLs, and hashes with multiple engines.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.virustotal.com/">Open</a></td></tr>
+    <tr data-name="AlienVault OTX" data-tags="threat intel pulses"><td>AlienVault OTX</td><td><span class="tag">Intel</span></td><td>Community threat intelligence pulses and indicators.</td><td><a class="btn" target="_blank" rel="noopener" href="https://otx.alienvault.com/">Open</a></td></tr>
+  </tbody></table></div></section>
+
+  <section class="section" data-section="osint"><h2>OSINT</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
+    <tr data-name="Shodan" data-tags="internet scan devices"><td>Shodan</td><td><span class="tag">Assets</span></td><td>Search engine for Internet-connected devices.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.shodan.io/">Open</a></td></tr>
+    <tr data-name="Censys" data-tags="certificates assets"><td>Censys</td><td><span class="tag">Assets</span></td><td>Discover Internet assets, hosts, and certificates.</td><td><a class="btn" target="_blank" rel="noopener" href="https://search.censys.io/">Open</a></td></tr>
+    <tr data-name="BinaryEdge" data-tags="internet scan"><td>BinaryEdge</td><td><span class="tag">Scan</span></td><td>Asset discovery, ports, and exposures.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.binaryedge.io/">Open</a></td></tr>
+    <tr data-name="crt.sh" data-tags="cert transparency subdomains"><td>crt.sh</td><td><span class="tag">Certificates</span></td><td>Certificate transparency search (subdomain discovery).</td><td><a class="btn" target="_blank" rel="noopener" href="https://crt.sh/">Open</a></td></tr>
+    <tr data-name="Hunter.io" data-tags="emails discovery"><td>Hunter.io</td><td><span class="tag">Emails</span></td><td>Find emails by domain and verify formats.</td><td><a class="btn" target="_blank" rel="noopener" href="https://hunter.io/">Open</a></td></tr>
+    <tr data-name="Have I Been Pwned" data-tags="breach exposure email phone"><td>Have I Been Pwned</td><td><span class="tag">Breaches</span></td><td>Check email/phone exposure in known breaches.</td><td><a class="btn" target="_blank" rel="noopener" href="https://haveibeenpwned.com/">Open</a></td></tr>
+    <tr data-name="Wayback Machine" data-tags="archives recon"><td>Wayback Machine</td><td><span class="tag">Archive</span></td><td>Historical snapshots of websites for recon.</td><td><a class="btn" target="_blank" rel="noopener" href="https://web.archive.org/">Open</a></td></tr>
+  </tbody></table></div></section>
+
+  <section class="section" data-section="malware"><h2>Malware / DFIR</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
+    <tr data-name="Hybrid Analysis" data-tags="sandbox detonation"><td>Hybrid Analysis</td><td><span class="tag">Sandbox</span></td><td>Automated malware analysis with community submissions.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.hybrid-analysis.com/">Open</a></td></tr>
+    <tr data-name="ANY.RUN" data-tags="interactive sandbox"><td>ANY.RUN</td><td><span class="tag">Interactive</span></td><td>Interactive malware analysis sandbox for dynamic behavior.</td><td><a class="btn" target="_blank" rel="noopener" href="https://any.run/">Open</a></td></tr>
+    <tr data-name="Triage" data-tags="sandbox triage hatching"><td>Triage</td><td><span class="tag">Sandbox</span></td><td>Hatching triage cloud sandbox and reports.</td><td><a class="btn" target="_blank" rel="noopener" href="https://tria.ge/">Open</a></td></tr>
+    <tr data-name="Intezer Analyze" data-tags="genetic code reuse"><td>Intezer Analyze</td><td><span class="tag">Attribution</span></td><td>Code reuse and family attribution analysis.</td><td><a class="btn" target="_blank" rel="noopener" href="https://analyze.intezer.com/">Open</a></td></tr>
+    <tr data-name="MalwareBazaar" data-tags="samples yara"><td>MalwareBazaar</td><td><span class="tag">Samples</span></td><td>Sample repository and YARA rules by abuse.ch.</td><td><a class="btn" target="_blank" rel="noopener" href="https://bazaar.abuse.ch/">Open</a></td></tr>
+    <tr data-name="Unpac.me" data-tags="unpacker pe"><td>Unpac.me</td><td><span class="tag">Unpack</span></td><td>Automated unpacking of packed malware samples.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.unpac.me/">Open</a></td></tr>
+    <tr data-name="YARA Docs" data-tags="signatures detection"><td>YARA Docs</td><td><span class="tag">Detection</span></td><td>Authoring signatures to classify malware.</td><td><a class="btn" target="_blank" rel="noopener" href="https://yara.readthedocs.io/">Open</a></td></tr>
+    <tr data-name="The DFIR Report" data-tags="case studies intrusions"><td>The DFIR Report</td><td><span class="tag">Cases</span></td><td>Detailed real-world intrusion write-ups and TTPs.</td><td><a class="btn" target="_blank" rel="noopener" href="https://thedfirreport.com/">Open</a></td></tr>
+  </tbody></table></div></section>
+
+  <section class="section" data-section="reverse"><h2>Reverse Engineering</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
+    <tr data-name="Ghidra" data-tags="disassembler decompiler"><td>Ghidra</td><td><span class="tag">RE</span></td><td>NSA's free reverse engineering suite.</td><td><a class="btn" target="_blank" rel="noopener" href="https://ghidra-sre.org/">Open</a></td></tr>
+    <tr data-name="radare2" data-tags="framework re"><td>radare2</td><td><span class="tag">RE</span></td><td>Open-source reverse engineering framework.</td><td><a class="btn" target="_blank" rel="noopener" href="https://rada.re/n/">Open</a></td></tr>
+    <tr data-name="RetDec" data-tags="decompiler"><td>RetDec</td><td><span class="tag">Decompiler</span></td><td>Open-source machine-code decompiler.</td><td><a class="btn" target="_blank" rel="noopener" href="https://retdec.com/">Open</a></td></tr>
+    <tr data-name="Capstone" data-tags="disassembly"><td>Capstone</td><td><span class="tag">Library</span></td><td>Lightweight multi-arch disassembly framework.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.capstone-engine.org/">Open</a></td></tr>
+  </tbody></table></div></section>
+
+  <section class="section" data-section="cloud"><h2>Cloud & Containers</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
+    <tr data-name="CloudMapper" data-tags="aws visualize attack paths"><td>CloudMapper</td><td><span class="tag">AWS</span></td><td>Visualize AWS environments and identify risks.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/duo-labs/cloudmapper">Open</a></td></tr>
+    <tr data-name="PMapper" data-tags="aws iam privesc"><td>PMapper</td><td><span class="tag">AWS</span></td><td>Analyze IAM policies for privilege escalation.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/nccgroup/PMapper">Open</a></td></tr>
+    <tr data-name="kube-hunter" data-tags="kubernetes security"><td>kube-hunter</td><td><span class="tag">Kubernetes</span></td><td>Hunt for Kubernetes security issues.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/aquasecurity/kube-hunter">Open</a></td></tr>
+    <tr data-name="trivy" data-tags="scanner container iac"><td>Trivy</td><td><span class="tag">Containers</span></td><td>Vulnerability scanner for containers and IaC.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/aquasecurity/trivy">Open</a></td></tr>
+  </tbody></table></div></section>
+
+  <section class="section" data-section="bugbounty"><h2>Bug Bounty</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
+    <tr data-name="HackerOne" data-tags="bounty programs disclosure"><td>HackerOne</td><td><span class="tag">Platform</span></td><td>Bug bounty programs and vulnerability disclosure.</td><td><a class="btn" target="_blank" rel="noopener" href="https://hackerone.com/">Open</a></td></tr>
+    <tr data-name="Bugcrowd" data-tags="bounty programs"><td>Bugcrowd</td><td><span class="tag">Platform</span></td><td>Crowdsourced security platform and programs.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.bugcrowd.com/">Open</a></td></tr>
+    <tr data-name="Intigriti" data-tags="bounty programs europe"><td>Intigriti</td><td><span class="tag">Platform</span></td><td>EU-focused bug bounty platform.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.intigriti.com/">Open</a></td></tr>
+    <tr data-name="PortSwigger Academy" data-tags="web training labs"><td>Web Security Academy</td><td><span class="tag">Web</span></td><td>Free interactive labs for web vulns.</td><td><a class="btn" target="_blank" rel="noopener" href="https://portswigger.net/web-security">Open</a></td></tr>
+  </tbody></table></div></section>
+
+  <section class="section" data-section="training"><h2>Training & CTF</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
+    <tr data-name="Hack The Box" data-tags="labs pro ctf challenges"><td>Hack The Box</td><td><span class="tag">Labs</span><span class="tag">CTF</span></td><td>Hands-on offensive labs and challenges.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.hackthebox.com/">Open</a></td></tr>
+    <tr data-name="TryHackMe" data-tags="labs beginner rooms"><td>TryHackMe</td><td><span class="tag">Labs</span></td><td>Guided, beginner-friendly threat and pentest rooms.</td><td><a class="btn" target="_blank" rel="noopener" href="https://tryhackme.com/">Open</a></td></tr>
+    <tr data-name="picoCTF" data-tags="ctf learning beginner"><td>picoCTF</td><td><span class="tag">CTF</span></td><td>Beginner CTF by Carnegie Mellon.</td><td><a class="btn" target="_blank" rel="noopener" href="https://picoctf.org/">Open</a></td></tr>
+    <tr data-name="OverTheWire" data-tags="wargames linux basics"><td>OverTheWire</td><td><span class="tag">Wargames</span></td><td>Progressive wargames for core skills.</td><td><a class="btn" target="_blank" rel="noopener" href="https://overthewire.org/wargames/">Open</a></td></tr>
+    <tr data-name="Root-Me" data-tags="challenges ctf"><td>Root-Me</td><td><span class="tag">Challenges</span></td><td>Large challenge library across many domains.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.root-me.org/">Open</a></td></tr>
+    <tr data-name="VulnHub" data-tags="vms practice offline"><td>VulnHub</td><td><span class="tag">VMs</span></td><td>Downloadable vulnerable machines for offline practice.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.vulnhub.com/">Open</a></td></tr>
+    <tr data-name="CyberDefenders" data-tags="dfir blue challenges"><td>CyberDefenders</td><td><span class="tag">DFIR</span></td><td>Blue-team labs and challenges.</td><td><a class="btn" target="_blank" rel="noopener" href="https://cyberdefenders.org/">Open</a></td></tr>
+    <tr data-name="Blue Team Labs Online" data-tags="blue detections labs"><td>BTLO</td><td><span class="tag">Blue</span></td><td>SOC-style blue-team labs and incidents.</td><td><a class="btn" target="_blank" rel="noopener" href="https://blueteamlabs.online/">Open</a></td></tr>
+    <tr data-name="CTFtime" data-tags="events scoreboard"><td>CTFtime</td><td><span class="tag">Events</span></td><td>Calendar and ranking for global CTFs.</td><td><a class="btn" target="_blank" rel="noopener" href="https://ctftime.org/">Open</a></td></tr>
+    <tr data-name="Pwnable.kr" data-tags="pwn reversing"><td>Pwnable.kr</td><td><span class="tag">Pwn</span></td><td>Classic pwnable challenges.</td><td><a class="btn" target="_blank" rel="noopener" href="http://pwnable.kr/">Open</a></td></tr>
+  </tbody></table></div></section>
+
+</main>
+</div>
+
+<script>
+(function(){
+  var tb=document.getElementById('topbar'),lastY=window.scrollY||0,hidden=false;
+  window.addEventListener('scroll',function(){if(!tb)return;var y=window.scrollY||0;if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
+  var p=location.pathname.replace(/\/+$/,'');document.querySelectorAll('.tabs .tab').forEach(function(a){var h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');if(p.endsWith(h))a.classList.add('active')});
+  var tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
+  function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
+  function updateArrows(){var o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;tabs.classList.toggle('overflow',o);leftbtn.style.display=o&&s>0?'inline-flex':'none';rightbtn.style.display=o&&s<max-1?'inline-flex':'none'}
+  function scrollByStep(d){var step=Math.max(120,Math.floor(tabs.clientWidth*.6));tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})}
+  leftbtn.addEventListener('click',function(){scrollByStep(-1)});rightbtn.addEventListener('click',function(){scrollByStep(1)});
+  tabs.addEventListener('scroll',updateArrows,{passive:true});new ResizeObserver(updateArrows).observe(tabs);window.addEventListener('resize',updateArrows);tabs.addEventListener('wheel',function(e){if(!hasOverflow())return;var dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}});
+  updateArrows();
+  var q=document.getElementById('q'),count=document.getElementById('count');
+  function norm(s){return (s||'').toLowerCase().trim()}
+  function rowMatches(r,term){if(!term)return true;var txt=(r.getAttribute('data-name')||'')+' '+(r.getAttribute('data-tags')||'')+' '+r.innerText;return norm(txt).indexOf(term)>-1}
+  function apply(){var term=norm(q&&q.value),rows=[].slice.call(document.querySelectorAll('tbody tr')),shown=0;rows.forEach(function(r){var show=rowMatches(r,term);r.style.display=show?'table-row':'none';if(show)shown++});if(count)count.textContent=shown+' results';[].slice.call(document.querySelectorAll('section.section')).forEach(function(sec){var any=[].slice.call(sec.querySelectorAll('tbody tr')).some(function(r){return r.style.display!=='none'});sec.style.display=any?'block':'none'})}
+  if(q)q.addEventListener('input',apply);apply();
+})();
+</script>
+</body></html>

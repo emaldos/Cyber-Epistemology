@@ -1,0 +1,346 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PowerShell — Commands</title>
+<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="32x32"/>
+<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="192x192"/>
+<link rel="apple-touch-icon" href="../../Image/Logo.png"/>
+<meta name="theme-color" content="#111"/>
+<style>
+:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--line:rgba(255,255,255,.10);--blue:#2196f3}
+*{box-sizing:border-box}
+html,body{height:100%}
+html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.55 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111}
+.bg{position:fixed;inset:0;background:url("../../Image/Logo.png") center/cover no-repeat;z-index:-2}
+.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.80) 100%);z-index:-1}
+.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
+.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
+.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
+.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
+.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
+.homepill span{font-weight:700;letter-spacing:.15px}
+.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);cursor:pointer;user-select:none;flex:0 0 auto}
+.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
+.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0;max-width:none}
+.tabs.overflow{overflow:auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
+.tab:hover{opacity:1}
+.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
+.tab.active{color:var(--blue)}
+.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
+.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
+.shell .h,.shell .sub{text-align:center}
+.page{position:relative;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:96px 20px 28px}
+.shell{width:min(1200px,96%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
+.h{margin:0 0 6px;font-size:28px;font-weight:800;letter-spacing:.2px}
+.sub{margin:0 0 14px;color:var(--muted)}
+.refs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0 18px}
+.ref{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-weight:700}
+.ref img{width:16px;height:16px;object-fit:contain}
+.quicknav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 8px}
+.qbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-weight:700}
+.qbtn:hover{background:rgba(255,255,255,.1)}
+.morewrap{display:flex;gap:10px;justify-content:center;margin-top:10px}
+.more{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px dashed var(--ring);background:rgba(255,255,255,.04);color:var(--text);text-decoration:none;font-weight:700;cursor:pointer}
+.section{margin:22px 0 0;scroll-margin-top:90px}
+.section .title{margin:0 0 10px;font-size:20px;font-weight:800}
+.card{border:1px solid var(--tileBorder);background:var(--tile);border-radius:18px;box-shadow:0 12px 28px rgba(0,0,0,.3);overflow:hidden}
+.tablewrap{width:100%;overflow:auto}
+table{width:100%;border-collapse:separate;border-spacing:0}
+thead th{position:sticky;top:0;background:linear-gradient(180deg,rgba(33,150,243,.18),rgba(33,150,243,.14));backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid rgba(33,150,243,.35);text-align:left;padding:12px 14px;font-size:14px;color:var(--text);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
+tbody td{border-bottom:1px solid var(--line);padding:12px 14px;vertical-align:top}
+tbody tr:hover{background:rgba(255,255,255,.04)}
+th:first-child,td:first-child{border-left:none}
+th:last-child,td:last-child{border-right:none}
+th,td{word-break:break-word;overflow-wrap:anywhere}
+caption{caption-side:top;color:var(--text);padding:10px 4px 6px;font-weight:800}
+.kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.06);font:12px/1.2 ui-monospace,monospace}
+pre{margin:0;max-height:480px;overflow:auto;padding:18px;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;background:rgba(0,0,0,.35);border-bottom:1px solid var(--line);white-space:pre}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<nav class="topbar" id="topbar">
+  <div class="nav">
+    <a class="homepill" href="../../Home.html" title="Home" aria-label="Home"><img src="../../Image/Home.png" alt="Home"/><span>Home</span></a>
+    <div class="tabswrap">
+      <button class="navbtn" id="leftbtn" aria-label="Prev"><span>&lt;</span></button>
+      <div class="tabs" id="tabs">
+        <a class="tab" href="../Commands.html"><img src="../../Image/Command.png" alt="Commands"/>Commands</a>
+        <a class="tab" href="Bash.html"><img src="../../Image/Bash.png" alt="Bash"/>Bash</a>
+        <a class="tab" href="CMD.html"><img src="../../Image/CMD.png" alt="CMD"/>CMD</a>
+        <a class="tab active" href="PS.html"><img src="../../Image/PS.png" alt="PowerShell"/>PowerShell</a>
+      </div>
+      <button class="navbtn" id="rightbtn" aria-label="Next"><span>&gt;</span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+  <main class="shell">
+    <h1 class="h">PowerShell — Cheat Sheet</h1>
+    <p class="sub">Focused on Windows and Windows Server administration.</p>
+
+    <div class="refs">
+      <a class="ref" href="https://learn.microsoft.com/powershell/" target="_blank" rel="noopener"><img src="../../Image/PS.png" alt="PS"/>PowerShell Docs</a>
+      <a class="ref" href="https://learn.microsoft.com/windows-server/" target="_blank" rel="noopener"><img src="../../Image/WinServer.png" alt="WS"/>Windows Server Docs</a>
+      <a class="ref" href="https://learn.microsoft.com/powershell/module/" target="_blank" rel="noopener"><img src="../../Image/PS.png" alt="PSM"/>Module Browser</a>
+      <a class="ref" href="https://learn.microsoft.com/windows/package-manager/winget/" target="_blank" rel="noopener"><img src="../../Image/Win11.png" alt="Win"/>WinGet</a>
+    </div>
+
+    <div class="quicknav" id="quicknav">
+      <a class="qbtn" href="#basics">Basics</a>
+      <a class="qbtn" href="#files">Files & Text</a>
+      <a class="qbtn" href="#objects">Pipelines & Objects</a>
+      <a class="qbtn" href="#process">Processes & Services</a>
+      <a class="qbtn" href="#network">Networking</a>
+      <a class="qbtn" href="#package">Packages</a>
+      <a class="qbtn extra" href="#servermgr">Server Manager</a>
+      <a class="qbtn extra" href="#ad">Active Directory</a>
+      <a class="qbtn extra" href="#dns">DNS Server</a>
+      <a class="qbtn extra" href="#gpo">Group Policy</a>
+      <a class="qbtn extra" href="#hyperv">Hyper-V</a>
+      <a class="qbtn extra" href="#storage">Storage</a>
+      <a class="qbtn extra" href="#print">Print</a>
+      <a class="qbtn extra" href="#security">Security</a>
+      <a class="qbtn extra" href="#remoting">Remoting</a>
+      <a class="qbtn extra" href="#scheduled">Scheduled Tasks</a>
+    </div>
+    <div class="morewrap"><button class="more" id="morebtn">..show more</button></div>
+
+    <section class="section" id="basics">
+      <h2 class="title">Basics</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Get-Help</span></td><td>Show help; update help</td><td><span class="kbd">Update-Help; Get-Help Get-Process -Full</span></td></tr>
+          <tr><td><span class="kbd">Get-Command</span></td><td>Discover commands</td><td><span class="kbd">Get-Command -Noun Service</span></td></tr>
+          <tr><td><span class="kbd">Get-Alias</span></td><td>List aliases</td><td><span class="kbd">Get-Alias ls</span></td></tr>
+          <tr><td><span class="kbd">$PSVersionTable</span></td><td>Engine version</td><td><span class="kbd">$PSVersionTable.PSVersion</span></td></tr>
+          <tr><td><span class="kbd">Set-ExecutionPolicy</span></td><td>Script policy</td><td><span class="kbd">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="section" id="files">
+      <h2 class="title">Files & Text</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Get-ChildItem</span></td><td>List directory</td><td><span class="kbd">Get-ChildItem -Force -Recurse</span></td></tr>
+          <tr><td><span class="kbd">Set-Location</span></td><td>Change directory</td><td><span class="kbd">Set-Location C:\Windows</span></td></tr>
+          <tr><td><span class="kbd">Copy-Item</span></td><td>Copy</td><td><span class="kbd">Copy-Item .\a.txt .\b.txt</span></td></tr>
+          <tr><td><span class="kbd">Move-Item</span></td><td>Move/rename</td><td><span class="kbd">Move-Item a.txt D:\tmp\</span></td></tr>
+          <tr><td><span class="kbd">Remove-Item</span></td><td>Delete</td><td><span class="kbd">Remove-Item .\logs\* -Recurse -Force</span></td></tr>
+          <tr><td><span class="kbd">Get-Content</span></td><td>Read text</td><td><span class="kbd">Get-Content .\app.log -Tail 50 -Wait</span></td></tr>
+          <tr><td><span class="kbd">Set-Content / Add-Content</span></td><td>Write/append</td><td><span class="kbd">'ok' | Set-Content out.txt</span></td></tr>
+          <tr><td><span class="kbd">Select-String</span></td><td>Search text (regex)</td><td><span class="kbd">Select-String -Path *.log -Pattern 'error|fail' -AllMatches</span></td></tr>
+          <tr><td><span class="kbd">Compress-Archive</span></td><td>Zip</td><td><span class="kbd">Compress-Archive .\site .\site.zip</span></td></tr>
+          <tr><td><span class="kbd">Expand-Archive</span></td><td>Unzip</td><td><span class="kbd">Expand-Archive .\site.zip -DestinationPath .\out</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="section" id="objects">
+      <h2 class="title">Pipelines & Objects</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Syntax</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">|</span></td><td>Pipe objects</td><td><span class="kbd">Get-Process | Where-Object CPU -gt 100 | Sort-Object CPU -Desc</span></td></tr>
+          <tr><td><span class="kbd">Select-Object</span></td><td>Pick properties</td><td><span class="kbd">Get-Service | Select-Object Name,Status</span></td></tr>
+          <tr><td><span class="kbd">Where-Object</span></td><td>Filter</td><td><span class="kbd">Get-LocalUser | Where-Object Enabled</span></td></tr>
+          <tr><td><span class="kbd">ForEach-Object</span></td><td>Loop</td><td><span class="kbd">Get-Item *.txt | ForEach-Object { $_.Name }</span></td></tr>
+          <tr><td><span class="kbd">Export-Csv / ConvertTo-Json</span></td><td>Export</td><td><span class="kbd">Get-Process | Export-Csv procs.csv -NoTypeInformation</span></td></tr>
+          <tr><td><span class="kbd">Measure-Object</span></td><td>Stats</td><td><span class="kbd">Get-Content a.txt | Measure-Object -Line</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="section" id="process">
+      <h2 class="title">Processes & Services</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Get-Process / Stop-Process</span></td><td>List/kill process</td><td><span class="kbd">Stop-Process -Name notepad -Force</span></td></tr>
+          <tr><td><span class="kbd">Get-Service</span></td><td>List services</td><td><span class="kbd">Get-Service | Where Status -ne 'Running'</span></td></tr>
+          <tr><td><span class="kbd">Start/Stop/Restart-Service</span></td><td>Control service</td><td><span class="kbd">Restart-Service -Name dnscache</span></td></tr>
+          <tr><td><span class="kbd">Get-EventLog</span></td><td>Legacy event logs</td><td><span class="kbd">Get-EventLog -LogName System -Newest 50</span></td></tr>
+          <tr><td><span class="kbd">Get-WinEvent</span></td><td>New event logs</td><td><span class="kbd">Get-WinEvent -LogName Security -MaxEvents 50</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="section" id="network">
+      <h2 class="title">Networking</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Get-NetIPConfiguration</span></td><td>IPs/DNS</td><td><span class="kbd">Get-NetIPConfiguration</span></td></tr>
+          <tr><td><span class="kbd">Test-NetConnection</span></td><td>Ping/port test</td><td><span class="kbd">Test-NetConnection 8.8.8.8 -Port 53</span></td></tr>
+          <tr><td><span class="kbd">Get-NetTCPConnection</span></td><td>Sockets</td><td><span class="kbd">Get-NetTCPConnection | Where State -eq 'Listen'</span></td></tr>
+          <tr><td><span class="kbd">Get-DnsClientCache</span></td><td>DNS cache</td><td><span class="kbd">Get-DnsClientCache | Select-Object -First 10</span></td></tr>
+          <tr><td><span class="kbd">Get-NetAdapter</span></td><td>NICs</td><td><span class="kbd">Get-NetAdapter | Format-Table -Auto</span></td></tr>
+          <tr><td><span class="kbd">New-NetFirewallRule</span></td><td>Firewall rule</td><td><span class="kbd">New-NetFirewallRule -DisplayName Web -Dir Inbound -Action Allow -Protocol TCP -LocalPort 80</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="section" id="package">
+      <h2 class="title">Packages</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Get-Package / Uninstall-Package</span></td><td>List/remove packages</td><td><span class="kbd">Get-Package | Select Name,Version</span></td></tr>
+          <tr><td><span class="kbd">winget</span></td><td>Install apps (Win 10/11)</td><td><span class="kbd">winget install --id=Microsoft.VisualStudioCode</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="section" id="servermgr">
+      <h2 class="title">Windows Server — ServerManager</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Cmdlet (ServerManager)</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Get-WindowsFeature</span></td><td>List roles/features</td><td><span class="kbd">Get-WindowsFeature | Where InstallState -eq Installed</span></td></tr>
+          <tr><td><span class="kbd">Install-WindowsFeature</span></td><td>Install role/feature</td><td><span class="kbd">Install-WindowsFeature -Name Web-Server -IncludeManagementTools</span></td></tr>
+          <tr><td><span class="kbd">Uninstall-WindowsFeature</span></td><td>Remove feature</td><td><span class="kbd">Uninstall-WindowsFeature -Name Web-Server</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="section" id="ad">
+      <h2 class="title">Windows Server — Active Directory</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Cmdlet (ActiveDirectory)</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Get-ADUser</span></td><td>Query users</td><td><span class="kbd">Get-ADUser -Filter "Enabled -eq 'True'" -Properties LastLogonDate</span></td></tr>
+          <tr><td><span class="kbd">New-ADUser</span></td><td>Create user</td><td><span class="kbd">New-ADUser -Name "Ops One" -SamAccountName ops1 -AccountPassword (Read-Host -AsSecureString) -Enabled $true</span></td></tr>
+          <tr><td><span class="kbd">Set-ADUser</span></td><td>Modify user</td><td><span class="kbd">Set-ADUser ops1 -Title "SysAdmin"</span></td></tr>
+          <tr><td><span class="kbd">Get-ADGroup / Add-ADGroupMember</span></td><td>Groups</td><td><span class="kbd">Add-ADGroupMember "Domain Admins" ops1</span></td></tr>
+          <tr><td><span class="kbd">Get-ADComputer</span></td><td>Computers</td><td><span class="kbd">Get-ADComputer -Filter * -SearchBase "OU=Servers,DC=corp,DC=local"</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="section" id="dns">
+      <h2 class="title">Windows Server — DNS</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Cmdlet (DnsServer)</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Get-DnsServerResourceRecord</span></td><td>Query records</td><td><span class="kbd">Get-DnsServerResourceRecord -ZoneName corp.local -RRType A</span></td></tr>
+          <tr><td><span class="kbd">Add-DnsServerResourceRecordA</span></td><td>Add A record</td><td><span class="kbd">Add-DnsServerResourceRecordA -ZoneName corp.local -Name app -IPv4Address 10.0.1.50</span></td></tr>
+          <tr><td><span class="kbd">Remove-DnsServerResourceRecord</span></td><td>Remove record</td><td><span class="kbd">Remove-DnsServerResourceRecord -ZoneName corp.local -Name oldapp -RRType A -Force</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="section" id="gpo">
+      <h2 class="title">Windows Server — Group Policy</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Cmdlet (GroupPolicy)</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Get-GPO / New-GPO</span></td><td>View/create GPO</td><td><span class="kbd">New-GPO -Name "Hardening-Workstations"</span></td></tr>
+          <tr><td><span class="kbd">New-GPLink</span></td><td>Link GPO to OU</td><td><span class="kbd">New-GPLink -Name "Hardening-Workstations" -Target "OU=Workstations,DC=corp,DC=local" -Enforced Yes</span></td></tr>
+          <tr><td><span class="kbd">Backup-GPO / Restore-GPO</span></td><td>Backup/restore</td><td><span class="kbd">Backup-GPO -Name "Hardening-Workstations" -Path D:\GPOBackups</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="section" id="hyperv">
+      <h2 class="title">Windows Server — Hyper-V</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Cmdlet (Hyper-V)</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Get-VM</span></td><td>List VMs</td><td><span class="kbd">Get-VM | Select Name,State,CPUUsage</span></td></tr>
+          <tr><td><span class="kbd">Start-VM / Stop-VM</span></td><td>Control VM</td><td><span class="kbd">Stop-VM -Name LAB-DC -Force</span></td></tr>
+          <tr><td><span class="kbd">Checkpoint-VM</span></td><td>Snapshot</td><td><span class="kbd">Checkpoint-VM -Name LAB-APP -SnapshotName PreUpdate</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="section" id="storage">
+      <h2 class="title">Windows Server — Storage</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Cmdlet (Storage/FS)</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Get-Disk / Initialize-Disk</span></td><td>Disks</td><td><span class="kbd">Get-Disk; Initialize-Disk -Number 2 -PartitionStyle GPT</span></td></tr>
+          <tr><td><span class="kbd">New-Partition / Format-Volume</span></td><td>Partitions/FS</td><td><span class="kbd">New-Partition -DiskNumber 2 -UseMaximumSize -DriveLetter F | Format-Volume -FileSystem NTFS -NewFileSystemLabel Data</span></td></tr>
+          <tr><td><span class="kbd">Get-SmbShare / New-SmbShare</span></td><td>SMB shares</td><td><span class="kbd">New-SmbShare -Name Data -Path F:\Data -FullAccess "Domain Admins"</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="section" id="print">
+      <h2 class="title">Windows Server — Print</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Cmdlet (PrintManagement)</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Get-Printer</span></td><td>List printers</td><td><span class="kbd">Get-Printer -ComputerName PRN-SRV</span></td></tr>
+          <tr><td><span class="kbd">Add-Printer</span></td><td>Add printer</td><td><span class="kbd">Add-Printer -Name HP01 -DriverName "HP Universal" -PortName "IP_10.0.2.50"</span></td></tr>
+          <tr><td><span class="kbd">Remove-Printer</span></td><td>Remove printer</td><td><span class="kbd">Remove-Printer -Name HP01</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="section" id="security">
+      <h2 class="title">Security & Certificates</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Cmdlet</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Get-LocalUser / Get-LocalGroup</span></td><td>Local accounts</td><td><span class="kbd">Get-LocalGroupMember Administrators</span></td></tr>
+          <tr><td><span class="kbd">Get-FileHash</span></td><td>File hash</td><td><span class="kbd">Get-FileHash .\installer.msi -Algorithm SHA256</span></td></tr>
+          <tr><td><span class="kbd">Get-ChildItem Cert:</span></td><td>Cert store</td><td><span class="kbd">Get-ChildItem Cert:\LocalMachine\My</span></td></tr>
+          <tr><td><span class="kbd">New-SelfSignedCertificate</span></td><td>Create cert</td><td><span class="kbd">New-SelfSignedCertificate -DnsName app.local -CertStoreLocation Cert:\LocalMachine\My</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="section" id="remoting">
+      <h2 class="title">Remoting</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Enable-PSRemoting</span></td><td>Enable WinRM</td><td><span class="kbd">Enable-PSRemoting -Force</span></td></tr>
+          <tr><td><span class="kbd">Enter-PSSession / Invoke-Command</span></td><td>Interactive/remote run</td><td><span class="kbd">Invoke-Command -ComputerName srv1 -ScriptBlock { Get-Service }</span></td></tr>
+          <tr><td><span class="kbd">New-PSSession</span></td><td>Create session</td><td><span class="kbd">$s=New-PSSession srv1; Invoke-Command -Session $s -ScriptBlock { hostname }</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="section" id="scheduled">
+      <h2 class="title">Scheduled Tasks</h2>
+      <div class="card tablewrap"><table>
+        <thead><tr><th>Cmdlet (ScheduledTasks)</th><th>Purpose</th><th>Example</th></tr></thead>
+        <tbody>
+          <tr><td><span class="kbd">Get-ScheduledTask</span></td><td>List tasks</td><td><span class="kbd">Get-ScheduledTask | Where State -eq 'Ready'</span></td></tr>
+          <tr><td><span class="kbd">Register-ScheduledTask</span></td><td>Create task</td><td><span class="kbd">$a=New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-File C:\job.ps1'; $t=New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(5); Register-ScheduledTask -TaskName RunJob -Action $a -Trigger $t</span></td></tr>
+          <tr><td><span class="kbd">Unregister-ScheduledTask</span></td><td>Delete task</td><td><span class="kbd">Unregister-ScheduledTask -TaskName RunJob -Confirm:$false</span></td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+let lastY=scrollY,hidden=false;
+addEventListener('scroll',()=>{const y=scrollY,tb=document.getElementById('topbar');if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
+const p=location.pathname.replace(/\/+$/,'');document.querySelectorAll('.tabs .tab').forEach(a=>{const h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');if(p.endsWith(h))a.classList.add('active')});
+const tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
+function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
+function updateArrows(){const o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;tabs.classList.toggle('overflow',o);leftbtn.style.display=o&&s>0?'inline-flex':'none';rightbtn.style.display=o&&s<max-1?'inline-flex':'none'}
+function scrollByStep(d){const step=Math.max(120,Math.floor(tabs.clientWidth*.6));tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})}
+leftbtn.addEventListener('click',()=>scrollByStep(-1));rightbtn.addEventListener('click',()=>scrollByStep(1));
+tabs.addEventListener('scroll',updateArrows,{passive:true});new ResizeObserver(updateArrows).observe(tabs);
+addEventListener('resize',updateArrows);
+tabs.addEventListener('wheel',e=>{if(!hasOverflow())return;const dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}});
+updateArrows();
+
+const morebtn=document.getElementById('morebtn');const extras=[...document.querySelectorAll('.quicknav .extra')];
+function setCollapsed(c){extras.forEach(el=>{el.style.display=c?'none':''});morebtn.textContent=c?'..show more':'..show less'}
+setCollapsed(true);
+morebtn.addEventListener('click',()=>{const collapsed=extras[0].style.display==='none';setCollapsed(!collapsed)});
+</script>
+</body></html>
