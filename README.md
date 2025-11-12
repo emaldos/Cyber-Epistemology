@@ -1,6 +1,4 @@
----
-
-# 🔐 CYBER-EPISTEMOLOGY
+# 🔐 CYBER-EPISTEMOLOGY — v2
 
 A minimalist, dark-themed static site that organizes practical cyber/IT knowledge into focused, fast pages. Pure HTML/CSS. No build. No frameworks.
 
@@ -21,7 +19,7 @@ git clone https://github.com/emaldos/Cyber-Epistemology.git
 cd Cyber-Epistemology
 python -m http.server 8080
 # Open: http://localhost:8080/Home.html
-```
+````
 
 *(You can also just open `Home.html` directly in your browser.)*
 
@@ -32,8 +30,11 @@ python -m http.server 8080
 * **Home** → entry hub to all sections
 * **Commands** → quick refs for **Bash**, **PowerShell**, **CMD**
 * **Operating Systems** → Windows 11/Server, macOS, Ubuntu Server, Kali Linux, Android, iOS
-* **Kali Tools** → start page + categorized tools
+* **Kali Tools** → categorized tools
 * **System Files Info** → OS paths and artifacts
+* **Awareness** → security best practices & guidance
+* **Cyber Roadmap** → learning path and milestones
+* **Cyber Websites** → curated external resources
 * **About** → project mission and back-to-Home
 
 ---
@@ -41,22 +42,24 @@ python -m http.server 8080
 ## 📂 Project Structure
 
 ```
-Cyber Epistemology
 │   Home.html
+│   README.md
 │
-├───Data
-│   │   About.html
-│   │   Commands.html
-│   │   Kali Tools Start Page.html
-│   │   Kali_Tools.html
-│   │   System_Files_Info.html
-│   │
-│   ├───Commands
-│   │       Bash.html
-│   │       CMD.html
-│   │       PS.html
-│   │
-│   └───OS
+├─── Data
+│    │   About.html
+│    │   Commands.html
+│    │   cyber_roadmap.html
+│    │   Cyber_Websites.html
+│    │   Kali_Tools.html
+│    │   Maximum_Security.html
+│    │   System_Files_Info.html
+│    │
+│    ├─── Commands
+│    │       Bash.html
+│    │       CMD.html
+│    │       PS.html
+│    │
+│    └─── OS
 │           Android.html
 │           IOS.html
 │           Kali_Linux.html
@@ -65,8 +68,9 @@ Cyber Epistemology
 │           Windows_11.html
 │           Windows_Server.html
 │
-└───Image
+└─── Image
         Android.png
+        Awareness.png
         Bash.png
         CMD.png
         Command.png
@@ -78,7 +82,11 @@ Cyber Epistemology
         MacOS.png
         Nav.png
         PS.png
+        roadmap.png
         UbuntuServer.png
+        URL.png
+        Version.png
+        Websites.png
         Win11.png
         WinServer.png
 ```
@@ -94,8 +102,10 @@ Cyber Epistemology
   * `Data/Commands/PS.html`
   * `Data/Commands/CMD.html`
 * `Data/System_Files_Info.html`
-* `Data/Kali Tools Start Page.html`
 * `Data/Kali_Tools.html`
+* `Data/Maximum_Security.html`  ← Awareness
+* `Data/cyber_roadmap.html`     ← Cyber Roadmap
+* `Data/Cyber_Websites.html`    ← Cyber Websites
 * `Data/OS/Windows_11.html`
 * `Data/OS/Windows_Server.html`
 * `Data/OS/macOS.html`
@@ -113,6 +123,9 @@ Cyber Epistemology
 * Glassy tiles, soft borders, high-contrast text
 * Responsive layout, keyboard-friendly focus outlines
 * Zero JS required for navigation
+* Optional top-right version badge image inside the Home glass box: `Image/Version.png`
+
+  * Adjust size via `.versionWrap{width:45px}` (works great on HiDPI if exported @2–3×)
 
 ---
 
@@ -121,6 +134,3 @@ Cyber Epistemology
 * **Language**: English
 * **Assets**: all icons in `Image/` (use relative paths)
 * **Keep it simple**: short pages, scannable sections, practical content
-
-
-
