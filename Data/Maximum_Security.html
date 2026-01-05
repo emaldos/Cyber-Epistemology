@@ -1,0 +1,173 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Maximum Security — Cyber Epistemology</title>
+<link rel="icon" href="../Image/Logo.png" type="image/png" sizes="32x32"/><link rel="icon" href="../Image/Logo.png" type="image/png" sizes="192x192"/><link rel="apple-touch-icon" href="../Image/Logo.png"/><meta name="theme-color" content="#111"/>
+<style>
+:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--accent1:#3a7bfd;--accent2:#1f4fd6;--glow1:rgba(72,132,255,.55);--glow2:rgba(40,100,255,.35)}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;font:16px/1.5 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111;text-align:center}
+.bg{position:fixed;inset:0;background:url("../Image/Logo.png") center/cover no-repeat;z-index:-2}
+.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.78) 100%);z-index:-1}
+.wrap{position:relative;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.box{width:min(960px,92%);padding:28px 26px;border-radius:20px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08);text-align:left}
+.h{margin:0 0 10px;font-size:30px;letter-spacing:.2px;text-align:center}
+.p{margin:10px 0;color:var(--muted);text-align:center}
+.sec{margin:18px 0}
+.hr{height:1px;background:rgba(255,255,255,.12);margin:16px 0;border-radius:1px}
+.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.badge{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid rgba(160,190,255,.28);background:rgba(255,255,255,.05);font-size:12px;margin-left:6px}
+.actions{display:flex;justify-content:center;margin-top:14px}
+.btn{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:16px;text-decoration:none;white-space:nowrap;font-weight:800;letter-spacing:.2px;transition:transform .12s ease,box-shadow .22s ease,filter .22s ease;color:#cfe0ff;background:rgba(255,255,255,.04);border:1px solid rgba(160,190,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+.btn img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
+.btn::before{content:"";position:absolute;inset:-8px;border-radius:inherit;background:radial-gradient(90% 140% at 50% 0%,var(--glow1),transparent 60%),radial-gradient(120% 120% at 50% 100%,var(--glow2),transparent 60%);filter:blur(12px);opacity:.75;z-index:-1;transition:opacity .22s ease,filter .22s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn:hover::before{opacity:.95;filter:blur(14px)}
+.copy{margin-top:14px;font-size:12px;color:var(--muted);opacity:.85;text-align:center}
+a.inline{color:#cfe0ff;text-decoration:none;border-bottom:1px dashed rgba(160,190,255,.5)}a.inline:hover{filter:brightness(1.08)}
+.accordion{border:1px solid var(--ring);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.03)}
+.ac-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;font-weight:700}
+.ac-head span{opacity:.85}
+.ac-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.ac-body-inner{padding:8px 14px 14px}
+.ac-body ul{margin:10px 0 0 18px;padding:0}
+.ac-body li{margin:6px 0}
+.copyrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.copybox{flex:1;min-width:240px;display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(160,190,255,.22);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+.copybtn{padding:8px 12px;border-radius:10px;border:1px solid rgba(160,190,255,.28);background:rgba(255,255,255,.06);color:#cfe0ff;font-weight:700;cursor:pointer;transition:transform .12s ease,filter .22s ease,box-shadow .22s ease}
+.copybtn:hover{transform:translateY(-1px);filter:brightness(1.1);box-shadow:0 6px 18px rgba(40,100,255,.15),inset 0 1px 0 rgba(255,255,255,.18)}
+@media print{.bg{display:none}.wrap{padding:0}.box{box-shadow:none;background:#111;border-color:#333}.actions{display:none}a.inline{border:none}}
+</style></head><body>
+<div class="bg"></div>
+<div class="wrap">
+  <div class="box">
+    <h1 class="h">Maximum Security — Personal Cyber Hygiene</h1>
+    <p class="p"><strong>Simple rules. Strict habits. Fewer breaches.</strong></p>
+
+    <div class="sec accordion"><div class="ac-head" data-ac="pwd"><span>Passwords &amp; Vault</span><span>+</span></div><div class="ac-body" id="ac-pwd"><div class="ac-body-inner">
+      <ul>
+        <li><b>Strength:</b> ≥15 chars; upper/lowercase, numbers, special characters.</li>
+        <li><b>Content:</b> no personal info; no readable words/phrases.</li>
+        <li><b>Uniqueness:</b> different password per platform/account.</li>
+        <li><b>Rotation:</b> change every 1–3 months; never reuse last 5 (prefer never reuse).</li>
+        <li><b>Storage:</b> never in browser autofill, notes, screenshots, or paper.</li>
+        <li><b>Sharing:</b> never share; avoid shoulder-surfing.</li>
+        <li><b>Manager:</b> KeePass 2 (offline DB) with strong master password; add keyfile/2FA if available.</li>
+      </ul>
+    </div></div></div>
+
+    <div class="sec accordion"><div class="ac-head" data-ac="mfa"><span>MFA &amp; Passkeys</span><span>+</span></div><div class="ac-body" id="ac-mfa"><div class="ac-body-inner">
+      <ul><li>Prefer passkeys; otherwise app-based TOTP (no SMS).</li><li>Store recovery codes offline; register two authenticators minimum.</li></ul>
+    </div></div></div>
+
+    <div class="sec accordion"><div class="ac-head" data-ac="sess"><span>Sessions &amp; Devices</span><span>+</span></div><div class="ac-body" id="ac-sess"><div class="ac-body-inner">
+      <ul><li>Auto-logout after 5–10 minutes idle where possible.</li><li>Lock screen when away (Win+L / Ctrl+Cmd+Q).</li><li>Disable Bluetooth/Wi-Fi when not needed on phones and PCs.</li></ul>
+    </div></div></div>
+
+    <div class="sec accordion"><div class="ac-head" data-ac="mail"><span>Email, Links &amp; Attachments</span><span>+</span></div><div class="ac-body" id="ac-mail"><div class="ac-body-inner">
+      <ul>
+        <li>Do not open unsolicited photos, GIFs, PDFs, Office files, ZIPs, installers.</li>
+        <li>If the sender has weak awareness, double-check before opening anything.</li>
+        <li>Scan suspicious URLs with <a class="inline" href="https://www.virustotal.com/gui/home/url" target="_blank" rel="noopener">VirusTotal</a>.</li>
+        <li>Analyze headers: <a class="inline" href="https://mxtoolbox.com/EmailHeaders.aspx" target="_blank" rel="noopener">MXToolbox</a>.</li>
+        <li>Check exposures: <a class="inline" href="https://haveibeenpwned.com/" target="_blank" rel="noopener">Have I Been Pwned</a>.</li>
+      </ul>
+    </div></div></div>
+
+    <div class="sec accordion"><div class="ac-head" data-ac="net"><span>Networks &amp; Connectivity</span><span>+</span></div><div class="ac-body" id="ac-net"><div class="ac-body-inner">
+      <ul><li>Avoid public Wi-Fi; if unavoidable, use a trusted VPN and avoid sensitive accounts.</li><li>Do not use personal accounts on networks you don’t control.</li><li>Avoid free/unknown services; read security and privacy terms.</li></ul>
+    </div></div></div>
+
+    <div class="sec accordion"><div class="ac-head" data-ac="data"><span>Data Handling &amp; Privacy</span><span>+</span></div><div class="ac-body" id="ac-data"><div class="ac-body-inner">
+      <ul><li>Prefer E2E encryption and pre-shared keys for sensitive data.</li><li>Remove metadata (author, GPS, device) before sharing files.</li><li>Verify integrity via SHA-256 hashes when possible.</li></ul>
+    </div></div></div>
+
+    <div class="sec accordion"><div class="ac-head" data-ac="sbx"><span>Sandbox &amp; Monitoring</span><span>+</span></div><div class="ac-body" id="ac-sbx"><div class="ac-body-inner">
+      <ul><li>Use a sandbox or VM to test untrusted files/links first.</li><li>Watch for CPU/network spikes, new services, or autostarts.</li></ul>
+    </div></div></div>
+
+    <div class="sec accordion"><div class="ac-head" data-ac="soc"><span>Social Media Exposure</span><span>+</span></div><div class="ac-body" id="ac-soc"><div class="ac-body-inner">
+      <ul><li>Avoid posting routines, locations, or photos that aid profiling or security-answer guessing.</li></ul>
+    </div></div></div>
+
+    <div class="sec accordion"><div class="ac-head" data-ac="sys"><span>System Update Policy &amp; Platform Guidance</span><span>+</span></div>
+      <div class="ac-body" id="ac-sys"><div class="ac-body-inner">
+        <ul>
+          <li><b>Windows:</b> stay on latest stable release (e.g., <b>Windows 11 25H2</b> when available). Secure Boot and TPM enabled.</li>
+          <li><b>Ubuntu/Linux:</b> stay on the latest LTS or current stable release supported by your apps.</li>
+          <li><b>Android/iPhone:</b> keep OS and apps updated; remove unused apps.</li>
+          <li><b>Programs:</b> keep software on the latest version.</li>
+          <li><b>Update SLA:</b> Normal/Mid: <b>≤7 days</b>; High: <b>≤48 hours</b>; Security/Critical: <b>≤24 hours</b>.</li>
+        </ul>
+      </div></div>
+    </div>
+
+    <div class="sec accordion"><div class="ac-head" data-ac="hard"><span>Device Hardening</span><span>+</span></div><div class="ac-body" id="ac-hard"><div class="ac-body-inner">
+      <ul><li>Full-disk encryption (BitLocker/FileVault/mobile encryption).</li><li>UEFI Secure Boot on; BIOS/UEFI admin password; TPM enabled.</li><li>Separate standard vs admin accounts; least privilege daily use.</li></ul>
+    </div></div></div>
+
+    <div class="sec accordion"><div class="ac-head" data-ac="mobile"><span>Mobile Security</span><span>+</span></div><div class="ac-body" id="ac-mobile"><div class="ac-body-inner">
+      <ul><li>Disable sideloading; verify publishers; revoke unused permissions.</li><li>Long PIN/passcode; Find My Device; auto-wipe after N failures.</li></ul>
+    </div></div></div>
+
+    <div class="sec accordion"><div class="ac-head" data-ac="browser"><span>Browser &amp; Extensions</span><span>+</span></div><div class="ac-body" id="ac-browser"><div class="ac-body-inner">
+      <ul><li>Block third-party cookies; clear site data on close for risky profiles.</li><li>Only necessary, reputable extensions; HTTPS-only; block WebRTC leaks if needed.</li></ul>
+    </div></div></div>
+
+    <div class="sec accordion"><div class="ac-head" data-ac="home"><span>Home/Small Office Network</span><span>+</span></div><div class="ac-body" id="ac-home"><div class="ac-body-inner">
+      <ul><li>Router: change default admin; disable WPS/UPnP; enable WPA3; separate guest SSID.</li><li>Update router firmware; consider DNS filtering.</li></ul>
+    </div></div></div>
+
+    <div class="sec accordion"><div class="ac-head" data-ac="backup"><span>Backups (3-2-1)</span><span>+</span></div><div class="ac-body" id="ac-backup"><div class="ac-body-inner">
+      <ul><li>3 copies, 2 media, 1 offsite; ransomware-resistant snapshots.</li><li>Encrypt backups; test restores quarterly.</li></ul>
+    </div></div></div>
+
+    <div class="sec accordion"><div class="ac-head" data-ac="phish"><span>Phishing Playbook</span><span>+</span></div><div class="ac-body" id="ac-phish"><div class="ac-body-inner">
+      <ul><li>Beware MFA fatigue, QR-phish, homoglyph domains, urgent/CEO lures.</li><li>Flow: Stop → Validate → Report.</li></ul>
+    </div></div></div>
+
+    <div class="hr"></div>
+
+    <div class="sec"><h2>Quick Commands</h2>
+      <div class="copyrow">
+        <div class="copybox" data-copy="Get-FileHash -Algorithm SHA256 <file>">Windows: Get-FileHash -Algorithm SHA256 &lt;file&gt;<button class="copybtn" aria-label="Copy">Copy</button></div>
+        <div class="copybox" data-copy="sha256sum <file>">Linux: sha256sum &lt;file&gt;<button class="copybtn" aria-label="Copy">Copy</button></div>
+        <div class="copybox" data-copy="shasum -a 256 <file>">macOS: shasum -a 256 &lt;file&gt;<button class="copybtn" aria-label="Copy">Copy</button></div>
+        <div class="copybox" data-copy="exiftool -all= <file>">Strip metadata: exiftool -all= &lt;file&gt;<button class="copybtn" aria-label="Copy">Copy</button></div>
+      </div>
+    </div>
+
+    <div class="sec"><h2>Quick Routines</h2>
+      <ul>
+        <li><b>Daily:</b> lock devices; avoid unexpected links/attachments; turn off BT/Wi-Fi when not needed.</li>
+        <li><b>Weekly:</b> install updates; review password vault; remove unused accounts.</li>
+        <li><b>Monthly:</b> run HIBP check; ensure browsers saved no passwords.</li>
+        <li><b>Quarterly:</b> rotate critical passwords; review social privacy; audit startup apps/services.</li>
+      </ul>
+    </div>
+
+    <div class="sec"><h2>If You Clicked Something Suspicious (Mini IR Plan)</h2>
+      <ul>
+        <li><b>Isolate:</b> disconnect Wi-Fi/cable, enable airplane mode; do not power off if you may need volatile evidence.</li>
+        <li><b>Do not authenticate:</b> stop entering passwords or MFA approvals; close any prompts.</li>
+        <li><b>Capture evidence:</b> note time, URL/file, sender, screenshots, and any prompts or downloads.</li>
+        <li><b>Initial triage:</b> run reputable AV/EDR; check new installs, services, startup items, scheduled tasks, browser extensions.</li>
+        <li><b>Credentials hygiene:</b> from a clean device, change email, bank, admin, and vault passwords; invalidate active sessions; verify MFA devices.</li>
+        <li><b>Financial safeguards:</b> if payment data was involved, freeze cards or enable spend limits and alerts; contact bank if needed.</li>
+        <li><b>Containment &amp; rebuild:</b> for confirmed compromise, back up needed user data, then wipe and reinstall OS; restore from known-good backups only.</li>
+        <li><b>Reporting:</b> inform IT/Security; for personal cases, consider relevant authorities if fraud occurred; preserve logs.</li>
+        <li><b>Post-incident:</b> update blockers/filters, patch systems, review user training, and document a timeline and lessons learned.</li>
+      </ul>
+    </div>
+
+    <div class="sec row">
+      <a class="btn" href="https://haveibeenpwned.com/" target="_blank" rel="noopener"><img src="../Image/URL.png" alt="" aria-hidden="true">Open HIBP</a>
+      <a class="btn" href="https://mxtoolbox.com/EmailHeaders.aspx" target="_blank" rel="noopener"><img src="../Image/URL.png" alt="" aria-hidden="true">Email Headers</a>
+      <a class="btn" href="https://www.virustotal.com/gui/home/url" target="_blank" rel="noopener"><img src="../Image/URL.png" alt="" aria-hidden="true">Scan URL</a>
+    </div>
+
+    <div class="actions"><a class="btn" href="../index.html"><img src="../Image/Home.png" alt="" aria-hidden="true">Back Home</a></div>
+    <div class="copy">© Epistemology 2025</div>
+  </div>
+</div>
+<script>
+document.querySelectorAll('.ac-head').forEach(h=>{h.addEventListener('click',()=>{const k=h.dataset.ac;const b=document.getElementById('ac-'+k);const open=b.style.maxHeight;b.style.maxHeight=open&&open!=='0px'?'0':b.scrollHeight+'px';h.lastElementChild.textContent=open&&open!=='0px'?'+':'–'})});
+document.querySelectorAll('.copybox .copybtn').forEach(btn=>btn.addEventListener('click',e=>{const w=e.currentTarget.parentElement;const t=w.getAttribute('data-copy');navigator.clipboard.writeText(t)}));
+</script>
+</body></html>

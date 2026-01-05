@@ -1,0 +1,257 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>macOS — System Files</title>
+<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="32x32"/>
+<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="192x192"/>
+<link rel="apple-touch-icon" href="../../Image/Logo.png"/>
+<meta name="theme-color" content="#111"/>
+<style>
+:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--line:rgba(255,255,255,.10);--blue:#2196f3}
+*{box-sizing:border-box}
+html,body{height:100%}
+html{scroll-behavior:smooth}
+body{margin:0;font:16px/1.55 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111}
+.bg{position:fixed;inset:0;background:url("../../Image/Logo.png") center/cover no-repeat;z-index:-2}
+.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.80) 100%);z-index:-1}
+.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
+.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
+.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
+.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
+.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
+.homepill span{font-weight:700;letter-spacing:.15px}
+.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
+.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);cursor:pointer;user-select:none;flex:0 0 auto}
+.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
+.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0;max-width:none}
+.tabs.overflow{overflow:auto}
+.tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
+.tab:hover{opacity:1}
+.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
+.tab.active{color:var(--blue)}
+.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
+.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
+.shell .h,.shell .sub{text-align:center}
+.page{position:relative;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:96px 20px 28px}
+.shell{width:min(1200px,96%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
+.h{margin:0 0 2px;font-size:28px;font-weight:800;letter-spacing:.2px}
+.sub{margin:0 0 12px;color:var(--muted)}
+.quicknav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 18px}
+.qbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-weight:700}
+.qbtn:hover{background:rgba(255,255,255,.1)}
+.section{margin:22px 0 0;scroll-margin-top:90px}
+.section .title{margin:0 0 10px;font-size:20px;font-weight:800}
+.card{border:1px solid var(--tileBorder);background:var(--tile);border-radius:18px;box-shadow:0 12px 28px rgba(0,0,0,.3);overflow:hidden}
+.codewrap{padding:0;margin:0;border-top-left-radius:18px;border-top-right-radius:18px}
+pre{margin:0;max-height:480px;overflow:auto;padding:18px;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;background:rgba(0,0,0,.35);border-top-left-radius:18px;border-top-right-radius:18px;border-bottom:1px solid var(--line);white-space:pre}
+pre code{color:#e6eaff}
+.tablewrap{width:100%;overflow:auto}
+table{width:100%;border-collapse:separate;border-spacing:0}
+thead th{position:sticky;top:0;background:rgba(20,24,44,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);text-align:left;padding:12px 14px;font-size:14px}
+tbody td{border-bottom:1px solid var(--line);padding:12px 14px;vertical-align:top}
+tbody tr:hover{background:rgba(255,255,255,.04)}
+th:first-child,td:first-child{border-left:none}
+th:last-child,td:last-child{border-right:none}
+th,td{word-break:break-word;overflow-wrap:anywhere}
+caption{caption-side:bottom;color:var(--muted);padding:10px 4px 0}
+.kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.06);font:12px/1.2 ui-monospace,monospace}
+.bycat caption{caption-side:top;padding:10px 4px 6px;font-weight:800}
+.bycat .card+.card{margin-top:14px}
+.bycat thead th{background:linear-gradient(180deg,rgba(33,150,243,.18),rgba(33,150,243,.14));backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid rgba(33,150,243,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);color:var(--text)}
+.bycat table{table-layout:fixed;width:100%}
+.bycat th:nth-child(1),.bycat td:nth-child(1){width:220px}
+.bycat th:nth-child(2),.bycat td:nth-child(2){width:420px}
+.bycat th:nth-child(3),.bycat td:nth-child(3){width:auto}
+@media(max-width:900px){.bycat th:nth-child(1),.bycat td:nth-child(1){width:180px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:300px}}
+@media(max-width:640px){.tab{padding:6px 10px}.shell{width:98%}.bycat th:nth-child(1),.bycat td:nth-child(1){width:150px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:240px}}
+</style>
+</head>
+<body>
+<div class="bg"></div>
+<nav class="topbar" id="topbar">
+  <div class="nav">
+    <a class="homepill" href="../../index.html" title="Home" aria-label="Home"><img src="../../Image/Home.png" alt="Home"/><span>Home</span></a>
+    <div class="tabswrap">
+      <button class="navbtn" id="leftbtn" aria-label="Prev"><span>&lt;</span></button>
+      <div class="tabs" id="tabs">
+        <a class="tab" href="../System_Files_Info.html"><img src="../../Image/Nav.png" alt="System Files"/>System Files</a>
+        <a class="tab" href="Kali_Linux.html"><img src="../../Image/KaliLinux.png" alt="Kali"/>Kali</a>
+        <a class="tab" href="Ubuntu_Server.html"><img src="../../Image/UbuntuServer.png" alt="Ubuntu Server"/>Ubuntu Server</a>
+        <a class="tab" href="Windows_11.html"><img src="../../Image/Win11.png" alt="Windows 11"/>Windows 11</a>
+        <a class="tab" href="Windows_Server.html"><img src="../../Image/WinServer.png" alt="Windows Server"/>Windows Server</a>
+        <a class="tab" href="macOS.html"><img src="../../Image/MacOS.png" alt="macOS"/>macOS</a>
+        <a class="tab" href="IOS.html"><img src="../../Image/IOS.png" alt="iOS"/>iOS</a>
+        <a class="tab" href="Android.html"><img src="../../Image/Android.png" alt="Android"/>Android</a>
+      </div>
+      <button class="navbtn" id="rightbtn" aria-label="Next"><span>&gt;</span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="page">
+  <main class="shell">
+    <h1 class="h">macOS — System Files</h1>
+    <p class="sub">Click to navigate to a section</p>
+    <div class="quicknav">
+      <a class="qbtn" href="#fsmap">High-Value Paths</a>
+      <a class="qbtn" href="#bycat">Important Files</a>
+    </div>
+
+    <section class="section" id="fsmap">
+      <h2 class="title">Filesystem map and high-value paths for threats/defense</h2>
+
+      <h3 class="title">Critical paths</h3>
+      <div class="card"><div class="codewrap">
+<pre><code>/var/db/dslocal/nodes/Default/users/*.plist           # Local accounts; ShadowHashData (password hashes)
+/Library/Keychains/System.keychain                    # System keychain; machine secrets/certs
+~/Library/Keychains/login.keychain-db                 # User login keychain; saved creds/tokens
+/Library/Keychains/SystemRoots.keychain               # Trust store; rogue roots ⇒ interception
+/Library/LaunchDaemons/*.plist                        # System persistence (root); verify owners/paths
+/Library/LaunchAgents/*.plist                         # Global user-session persistence
+/etc/sudoers , /etc/sudoers.d/*                       # NOPASSWD/wildcards ⇒ instant root
+/etc/ssh/sshd_config                                  # Remote entry; weak auth/ciphers/backdoors
+/Library/Application Support/com.apple.TCC/TCC.db     # Privacy (TCC) DB; camera/mic/full disk grants
+</code></pre>
+      </div></div>
+
+      <h3 class="title">High-risk paths</h3>
+      <div class="card"><div class="codewrap">
+<pre><code>~/Library/LaunchAgents/*.plist                        # Per-user persistence at login
+/System/Library/LaunchDaemons/*.plist                 # Apple daemons (read-only, baseline only)
+/System/Library/LaunchAgents/*.plist                  # Apple agents (read-only, baseline only)
+/usr/lib/cron/tabs/*                                  # Per-user crontabs (legacy but present)
+/etc/periodic/daily|weekly|monthly/*                  # Periodic jobs; simple persistence
+/etc/pam.d/*                                          # Auth stack; lax modules ⇒ bypass
+/etc/pf.conf                                          # Packet filter rules; egress/ingress control
+/Library/Preferences/com.apple.alf.plist              # App firewall config (ALF); disabled ⇒ risk
+/Library/Preferences/SystemConfiguration/preferences.plist   # Network services, routes, DNS
+/Library/Preferences/SystemConfiguration/com.apple.airport.preferences.plist  # Known Wi-Fi
+~/Library/Application Support/com.apple.TCC/TCC.db    # Per-user TCC grants; stealth access
+~/Library/Application Support/com.apple.backgroundtaskmanagementagent/backgrounditems.btm  # Login Items
+~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2  # Gatekeeper quarantine DB
+~/.ssh/                                               # User SSH keys/configs; lateral movement
+</code></pre>
+      </div></div>
+
+      <h3 class="title">Medium-risk paths</h3>
+      <div class="card"><div class="codewrap">
+<pre><code>/var/log/* , /Library/Logs/*                          # Legacy logs (some still active); triage
+/var/db/diagnostics/*.tracev3                         # Unified logging store; requires log show
+/Applications/*                                       # Apps; unsigned/bundled tools
+/Library/Application Support/*                         # App data; tokens/configs
+~/Library/Application Support/*                        # Per-user app data; browser/Slack/Discord creds
+/Library/Extensions/*                                  # Third-party kexts (legacy); root code
+~/Library/Safari/ , ~/Library/WebKit/*                # Safari/WebKit data
+~/Library/Application Support/Google/Chrome/*         # Chrome profiles (Login Data, Cookies)
+~/Library/Application Support/Firefox/Profiles/*      # Firefox profiles (logins.json,key4.db)
+/System/Volumes/Data/*                                # Writable data volume (since Catalina)
+/private/tmp , /var/tmp                               # Staging; clean/monitor
+</code></pre>
+      </div></div>
+    </section>
+
+    <section class="section bycat" id="bycat">
+      <h2 class="title">Important files — by Category</h2>
+
+      <div class="card tablewrap"><table>
+        <caption>Accounts, Keys & Trust (Critical first)</caption>
+        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Local accounts</td><td><span class="kbd">/var/db/dslocal/nodes/Default/users/*.plist</span></td><td>ShadowHashData password hashes; local escalation target.</td></tr>
+          <tr><td>System keychain</td><td><span class="kbd">/Library/Keychains/System.keychain</span></td><td>Machine secrets/certs; decrypt service creds.</td></tr>
+          <tr><td>User keychain</td><td><span class="kbd">~/Library/Keychains/login.keychain-db</span></td><td>Saved app/web/VPN creds; DPAPI-like protection via Keychain.</td></tr>
+          <tr><td>Trust roots</td><td><span class="kbd">/Library/Keychains/SystemRoots.keychain</span></td><td>Added roots ⇒ TLS interception; audit additions.</td></tr>
+          <tr><td>SSH keys</td><td><span class="kbd">~/.ssh/*</span></td><td>Private/public keys; lateral movement.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="card tablewrap"><table>
+        <caption>Privacy Controls (TCC) & Gatekeeper</caption>
+        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>TCC (system)</td><td><span class="kbd">/Library/Application Support/com.apple.TCC/TCC.db</span></td><td>Global grants (e.g., Full Disk Access for daemons).</td></tr>
+          <tr><td>TCC (user)</td><td><span class="kbd">~/Library/Application Support/com.apple.TCC/TCC.db</span></td><td>Per-user camera/mic/files grants; audit changes.</td></tr>
+          <tr><td>Quarantine DB</td><td><span class="kbd">~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2</span></td><td>Gatekeeper download provenance; execution tracing.</td></tr>
+          <tr><td>Exec quarantine</td><td><span class="kbd">xattr com.apple.quarantine</span></td><td>Extended attribute on files; policy enforcement artifact.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="card tablewrap"><table>
+        <caption>Persistence & Startup</caption>
+        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>LaunchDaemons</td><td><span class="kbd">/Library/LaunchDaemons/*.plist</span></td><td>Root persistence; check ProgramArguments/RunAtLoad.</td></tr>
+          <tr><td>LaunchAgents (global)</td><td><span class="kbd">/Library/LaunchAgents/*.plist</span></td><td>User-session autostart for all users.</td></tr>
+          <tr><td>LaunchAgents (user)</td><td><span class="kbd">~/Library/LaunchAgents/*.plist</span></td><td>Per-user persistence at login.</td></tr>
+          <tr><td>Login Items</td><td><span class="kbd">~/Library/.../backgrounditems.btm</span></td><td>Modern login items DB; stealthy persistence.</td></tr>
+          <tr><td>Cron</td><td><span class="kbd">/usr/lib/cron/tabs/*</span></td><td>Per-user cron; legacy but effective.</td></tr>
+          <tr><td>Periodic</td><td><span class="kbd">/etc/periodic/*</span></td><td>Daily/weekly/monthly jobs.</td></tr>
+          <tr><td>sudoers</td><td><span class="kbd">/etc/sudoers ; /etc/sudoers.d/*</span></td><td>NOPASSWD/wildcards ⇒ instant root.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="card tablewrap"><table>
+        <caption>Network, Remote & Firewall</caption>
+        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>SSH server</td><td><span class="kbd">/etc/ssh/sshd_config</span></td><td>Remote access policy; weak ciphers/auth risk.</td></tr>
+          <tr><td>PF firewall</td><td><span class="kbd">/etc/pf.conf</span></td><td>Ingress/egress rules; tighten defaults.</td></tr>
+          <tr><td>App firewall</td><td><span class="kbd">/Library/Preferences/com.apple.alf.plist</span></td><td>ALF state; off or permissive = exposure.</td></tr>
+          <tr><td>Network services</td><td><span class="kbd">/Library/Preferences/SystemConfiguration/preferences.plist</span></td><td>Interfaces, proxies, DNS; tamper = redirection.</td></tr>
+          <tr><td>Known Wi-Fi</td><td><span class="kbd">/Library/Preferences/SystemConfiguration/com.apple.airport.preferences.plist</span></td><td>SSIDs & options; pivot to wireless.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="card tablewrap"><table>
+        <caption>Logs & Forensics</caption>
+        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Unified logs</td><td><span class="kbd">/var/db/diagnostics/*.tracev3</span></td><td>System/app telemetry; use <span class="kbd">log show</span>.</td></tr>
+          <tr><td>Legacy logs</td><td><span class="kbd">/var/log/*</span> ; <span class="kbd">/Library/Logs/*</span></td><td>Install/system/app logs.</td></tr>
+          <tr><td>Audit</td><td><span class="kbd">/var/audit/*</span> (if auditd enabled)</td><td>BSM audit trails; file/exec activity.</td></tr>
+          <tr><td>Kexts</td><td><span class="kbd">/Library/Extensions/*</span></td><td>Third-party kernel code; integrity/signing.</td></tr>
+          <tr><td>VSS-like</td><td><span class="kbd">Time Machine backups</span></td><td>Historical copies; recovery/tamper detection.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="card tablewrap"><table>
+        <caption>Browsers & Apps</caption>
+        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Safari</td><td><span class="kbd">~/Library/Safari/</span> ; <span class="kbd">~/Library/WebKit/*</span></td><td>History, tabs, cookies; passwords in Keychain.</td></tr>
+          <tr><td>Chrome</td><td><span class="kbd">~/Library/Application Support/Google/Chrome/User Data/Default/</span></td><td>Login Data (SQLite), Cookies, Web Data.</td></tr>
+          <tr><td>Firefox</td><td><span class="kbd">~/Library/Application Support/Firefox/Profiles/*</span></td><td><span class="kbd">logins.json</span> + <span class="kbd">key4.db</span> for saved creds.</td></tr>
+          <tr><td>App Support</td><td><span class="kbd">/Library/Application Support/*</span> ; <span class="kbd">~/Library/Application Support/*</span></td><td>Tokens/configs/cache for apps.</td></tr>
+          <tr><td>Containers</td><td><span class="kbd">~/Library/Containers/*</span> ; <span class="kbd">~/Library/Group Containers/*</span></td><td>Sandboxed app data; interesting caches.</td></tr>
+        </tbody>
+      </table></div>
+
+      <div class="card tablewrap"><table>
+        <caption>System Layout Notes (Catalina+)</caption>
+        <thead><tr><th>Topic</th><th>Folder/location</th><th>Value</th></tr></thead>
+        <tbody>
+          <tr><td>Read-only System</td><td><span class="kbd">/System</span></td><td>Sealed/immutable; persistence must target writable Data volume.</td></tr>
+          <tr><td>Writable Data</td><td><span class="kbd">/System/Volumes/Data</span></td><td>User/apps/data live here; hunt for implants.</td></tr>
+          <tr><td>SIP</td><td><span class="kbd">csrutil status</span></td><td>System Integrity Protection; disabled ⇒ high-sev risk.</td></tr>
+        </tbody>
+      </table></div>
+
+    </section>
+  </main>
+</div>
+
+<script>
+let lastY=scrollY,hidden=false;
+addEventListener('scroll',()=>{const y=scrollY,tb=document.getElementById('topbar');if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
+const p=location.pathname.replace(/\/+$/,'');document.querySelectorAll('.tabs .tab').forEach(a=>{const h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');if(p.endsWith(h))a.classList.add('active')});
+const tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
+function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
+function updateArrows(){const o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;tabs.classList.toggle('overflow',o);leftbtn.style.display=o&&s>0?'inline-flex':'none';rightbtn.style.display=o&&s<max-1?'inline-flex':'none'}
+function scrollByStep(d){const step=Math.max(120,Math.floor(tabs.clientWidth*.6));tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})}
+leftbtn.addEventListener('click',()=>scrollByStep(-1));rightbtn.addEventListener('click',()=>scrollByStep(1));
+tabs.addEventListener('scroll',updateArrows,{passive:true});new ResizeObserver(updateArrows).observe(tabs);
+addEventListener('resize',updateArrows);
+tabs.addEventListener('wheel',e=>{if(!hasOverflow())return;const dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}});
+updateArrows();
+</script>
+</body></html>

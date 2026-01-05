@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>About — Cyber Epistemology</title>
+<link rel="icon" href="../Image/Logo.png" type="image/png" sizes="32x32"/>
+<link rel="icon" href="../Image/Logo.png" type="image/png" sizes="192x192"/>
+<link rel="apple-touch-icon" href="../Image/Logo.png"/>
+<meta name="theme-color" content="#111"/>
+<style>
+:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--accent1:#3a7bfd;--accent2:#1f4fd6;--glow1:rgba(72,132,255,.55);--glow2:rgba(40,100,255,.35)}
+*{box-sizing:border-box}html,body{height:100%}body{margin:0;font:16px/1.5 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111;text-align:center}
+.bg{position:fixed;inset:0;background:url("../Image/Logo.png") center/cover no-repeat;z-index:-2}
+.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.78) 100%);z-index:-1}
+.wrap{position:relative;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+.box{width:min(720px,92%);padding:28px 26px;border-radius:20px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
+.h{margin:0 0 10px;font-size:30px;letter-spacing:.2px}
+.p{margin:10px 14px;color:var(--muted)}
+.actions{display:flex;justify-content:center;margin-top:14px}
+.btn{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:16px;text-decoration:none;white-space:nowrap;font-weight:800;letter-spacing:.2px;transition:transform .12s ease,box-shadow .22s ease,filter .22s ease;color:#cfe0ff;background:rgba(255,255,255,.04);border:1px solid rgba(160,190,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+.btn img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
+.btn::before{content:"";position:absolute;inset:-8px;border-radius:inherit;background:radial-gradient(90% 140% at 50% 0%,var(--glow1),transparent 60%),radial-gradient(120% 120% at 50% 100%,var(--glow2),transparent 60%);filter:blur(12px);opacity:.75;z-index:-1;transition:opacity .22s ease,filter .22s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn:hover::before{opacity:.95;filter:blur(14px)}
+.copy{margin-top:14px;font-size:12px;color:var(--muted);opacity:.85}
+</style></head><body>
+<div class="bg"></div>
+<div class="wrap">
+  <div class="box">
+    <h1 class="h">About Us</h1>
+    <p class="p"><strong>Learn. Secure. Share.</strong></p>
+    <p class="p">We believe knowledge belongs to everyone.</p>
+    <p class="p">Our mission is to make learning simple, practical, and open so anyone can grow skills and stay secure.</p>
+    <p class="p">Share what you learn, lift others up, and the web gets safer for all. Keep helping one day that help will circle back to you.</p>
+    <div class="actions">
+      <a class="btn" href="../index.html"><img src="../Image/Home.png" alt="" aria-hidden="true">Back Home</a>
+    </div>
+    <div class="copy">© Epistemology 2025</div>
+  </div>
+</div>
+</body></html>
