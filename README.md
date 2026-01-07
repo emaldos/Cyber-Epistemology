@@ -3,6 +3,8 @@
 A minimalist, dark-themed static site that organizes practical cyber/IT knowledge into focused, fast pages. Pure HTML/CSS. No build. No frameworks.
 
 ---
+URL : https://emaldos.github.io/Cyber-Epistemology/
+---
 
 ## 🪟 Quick Start (Windows)
 
@@ -134,3 +136,4 @@ python -m http.server 8080
 * **Language**: English
 * **Assets**: all icons in `Image/` (use relative paths)
 * **Keep it simple**: short pages, scannable sections, practical content
+
