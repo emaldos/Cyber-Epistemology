@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Utilities | Cyber Epistemology</title>
+<meta name="description" content="Offline security utilities: encode and decode, hash generator, hash identifier with hashcat modes, JWT decoder, IPv4 subnet calculator and timestamp converter. Everything runs in your browser.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../Assets/Image/AppleTouchIcon.png">
+<link rel="manifest" href="../Manifest.webmanifest">
+<link rel="stylesheet" href="../Assets/Style/Site.css">
+<link rel="stylesheet" href="../Assets/Style/Utilities.css">
+<script src="../Assets/Script/Site.js" defer></script>
+<script src="../Assets/Script/Utilities.js" defer></script>
+</head>
+<body class="is-content-page" data-root="../" data-section="utilities">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-separator">/</span><span>Tools</span><span class="breadcrumb-separator">/</span><span>Utilities</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../Assets/Icon/Utilities.svg" alt="">
+<div>
+<p class="hero-eyebrow">Tools</p>
+<h1 class="hero-title">Utilities</h1>
+</div>
+</div>
+<p class="hero-lead">Everyday helpers for CTFs, assessments and incident response. Everything runs locally in your browser: nothing you paste here is uploaded, logged or sent anywhere, and the tools keep working offline.</p>
+<div class="hero-meta"><span class="badge">Runs locally</span><span class="badge">No uploads</span><span class="badge">Works offline</span><span class="badge">6 tools</span></div>
+</section>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="encode-decode">
+<h2 class="panel-title">Encode and Decode</h2>
+<p>Convert text to and from Base64, Base64URL, URL encoding, HTML entities, hex and binary. Text is handled as UTF-8, so accents, symbols and emoji survive the round trip.</p>
+<div class="tool-form">
+<div class="tool-field">
+<label class="tool-label" for="codec-input">Input</label>
+<textarea class="tool-textarea" id="codec-input" rows="5" spellcheck="false" autocomplete="off"></textarea>
+</div>
+<div class="tool-grid">
+<div class="tool-field">
+<label class="tool-label" for="codec-format">Format</label>
+<select class="tool-select" id="codec-format">
+<option value="base64">Base64</option>
+<option value="base64url">Base64URL</option>
+<option value="url">URL encoding</option>
+<option value="html">HTML entities</option>
+<option value="hex">Hex</option>
+<option value="binary">Binary</option>
+</select>
+</div>
+</div>
+<div class="button-row"><button class="link-button" type="button" id="codec-encode">Encode</button><button class="link-button" type="button" id="codec-decode">Decode</button><button class="link-button" type="button" id="codec-swap">Swap input and output</button><button class="link-button" type="button" id="codec-clear">Clear</button></div>
+<p class="tool-message" id="codec-message" role="status" hidden></p>
+<div class="tool-field">
+<label class="tool-label" for="codec-output">Output</label>
+<div class="tool-output-row">
+<textarea class="tool-textarea tool-output" id="codec-output" rows="5" spellcheck="false" readonly></textarea>
+<button class="copy-button" type="button" data-copy-target="codec-output" aria-label="Copy output" title="Copy"><img src="../Assets/Icon/Copy.svg" alt="" width="20" height="20"></button>
+</div>
+</div>
+</div>
+</section>
+<section class="panel" id="hash-generator">
+<h2 class="panel-title">Hash Generator</h2>
+<p>Hashes are calculated as you type. Text is hashed as UTF-8 bytes. SHA uses the browser Web Crypto API, MD5 is calculated in plain JavaScript.</p>
+<div class="callout callout-warning"><p>MD5 and SHA-1 are broken for collision resistance. Never use any fast hash on its own to store passwords: use Argon2id, scrypt or bcrypt.</p></div>
+<div class="tool-form">
+<div class="tool-field">
+<label class="tool-label" for="hash-input">Text to hash</label>
+<textarea class="tool-textarea" id="hash-input" rows="4" spellcheck="false" autocomplete="off"></textarea>
+</div>
+<div class="button-row"><button class="link-button" type="button" id="hash-clear">Clear</button></div>
+<p class="tool-message" id="hash-message" role="status" hidden></p>
+<div class="hash-list">
+<div class="hash-row"><label class="tool-label" for="hash-output-md5">MD5</label><input class="tool-input tool-output" id="hash-output-md5" type="text" readonly spellcheck="false"><button class="copy-button" type="button" data-copy-target="hash-output-md5" aria-label="Copy MD5" title="Copy"><img src="../Assets/Icon/Copy.svg" alt="" width="20" height="20"></button></div>
+<div class="hash-row"><label class="tool-label" for="hash-output-sha-1">SHA-1</label><input class="tool-input tool-output" id="hash-output-sha-1" type="text" readonly spellcheck="false"><button class="copy-button" type="button" data-copy-target="hash-output-sha-1" aria-label="Copy SHA-1" title="Copy"><img src="../Assets/Icon/Copy.svg" alt="" width="20" height="20"></button></div>
+<div class="hash-row"><label class="tool-label" for="hash-output-sha-256">SHA-256</label><input class="tool-input tool-output" id="hash-output-sha-256" type="text" readonly spellcheck="false"><button class="copy-button" type="button" data-copy-target="hash-output-sha-256" aria-label="Copy SHA-256" title="Copy"><img src="../Assets/Icon/Copy.svg" alt="" width="20" height="20"></button></div>
+<div class="hash-row"><label class="tool-label" for="hash-output-sha-384">SHA-384</label><input class="tool-input tool-output" id="hash-output-sha-384" type="text" readonly spellcheck="false"><button class="copy-button" type="button" data-copy-target="hash-output-sha-384" aria-label="Copy SHA-384" title="Copy"><img src="../Assets/Icon/Copy.svg" alt="" width="20" height="20"></button></div>
+<div class="hash-row"><label class="tool-label" for="hash-output-sha-512">SHA-512</label><input class="tool-input tool-output" id="hash-output-sha-512" type="text" readonly spellcheck="false"><button class="copy-button" type="button" data-copy-target="hash-output-sha-512" aria-label="Copy SHA-512" title="Copy"><img src="../Assets/Icon/Copy.svg" alt="" width="20" height="20"></button></div>
+</div>
+</div>
+</section>
+<section class="panel" id="hash-identifier">
+<h2 class="panel-title">Hash Identifier</h2>
+<p>Paste a hash to see the likely types based on its length, character set and prefix, with the hashcat mode where one is well known. Identification is a best guess: many types share the same length, so try the most likely candidates first.</p>
+<form class="tool-form" id="identify-form" novalidate>
+<div class="tool-field">
+<label class="tool-label" for="identify-input">Hash</label>
+<input class="tool-input" id="identify-input" type="text" spellcheck="false" autocomplete="off" placeholder="5f4dcc3b5aa765d61d8327deb882cf99">
+</div>
+<div class="button-row"><button class="link-button" type="submit">Identify</button><button class="link-button" type="button" id="identify-clear">Clear</button></div>
+<p class="tool-message" id="identify-message" role="status" hidden></p>
+<div class="tool-output-row">
+<div class="tool-output-box" id="identify-output" aria-live="polite"></div>
+<button class="copy-button" type="button" data-copy-target="identify-output" aria-label="Copy results" title="Copy"><img src="../Assets/Icon/Copy.svg" alt="" width="20" height="20"></button>
+</div>
+</form>
+</section>
+<section class="panel" id="jwt-decoder">
+<h2 class="panel-title">JWT Decoder</h2>
+<p>Paste a JSON Web Token to read its header and payload. Time claims are shown as UTC dates.</p>
+<div class="callout callout-warning"><p>The signature is not verified. Decoding only reads the token, and anyone can create a token with any claims. Never trust a token because it decodes.</p></div>
+<div class="tool-form">
+<div class="tool-field">
+<label class="tool-label" for="jwt-input">Token</label>
+<textarea class="tool-textarea" id="jwt-input" rows="4" spellcheck="false" autocomplete="off" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."></textarea>
+</div>
+<div class="button-row"><button class="link-button" type="button" id="jwt-clear">Clear</button></div>
+<p class="tool-message" id="jwt-message" role="status" hidden></p>
+<div class="jwt-grid">
+<div class="tool-field">
+<span class="tool-label" id="jwt-header-label">Header</span>
+<div class="tool-output-row">
+<pre class="tool-output tool-output-box" id="jwt-header" tabindex="0" aria-labelledby="jwt-header-label"></pre>
+<button class="copy-button" type="button" data-copy-target="jwt-header" aria-label="Copy header" title="Copy"><img src="../Assets/Icon/Copy.svg" alt="" width="20" height="20"></button>
+</div>
+</div>
+<div class="tool-field">
+<span class="tool-label" id="jwt-payload-label">Payload</span>
+<div class="tool-output-row">
+<pre class="tool-output tool-output-box" id="jwt-payload" tabindex="0" aria-labelledby="jwt-payload-label"></pre>
+<button class="copy-button" type="button" data-copy-target="jwt-payload" aria-label="Copy payload" title="Copy"><img src="../Assets/Icon/Copy.svg" alt="" width="20" height="20"></button>
+</div>
+</div>
+</div>
+<div class="tool-output-row">
+<dl class="result-list" id="jwt-claims" aria-label="Token details"></dl>
+<button class="copy-button" type="button" data-copy-target="jwt-claims" aria-label="Copy token details" title="Copy"><img src="../Assets/Icon/Copy.svg" alt="" width="20" height="20"></button>
+</div>
+</div>
+</section>
+<section class="panel" id="subnet-calculator">
+<h2 class="panel-title">Subnet Calculator</h2>
+<p>Enter an IPv4 address in CIDR notation such as <code>10.10.10.0/24</code>, or an address with a netmask such as <code>192.168.1.77 255.255.255.192</code>.</p>
+<form class="tool-form" id="subnet-form" novalidate>
+<div class="tool-grid">
+<div class="tool-field">
+<label class="tool-label" for="subnet-address">IPv4 address or CIDR</label>
+<input class="tool-input" id="subnet-address" type="text" inputmode="decimal" spellcheck="false" autocomplete="off" placeholder="10.10.10.0/24">
+</div>
+<div class="tool-field">
+<label class="tool-label" for="subnet-mask">Netmask or prefix (optional)</label>
+<input class="tool-input" id="subnet-mask" type="text" inputmode="decimal" spellcheck="false" autocomplete="off" placeholder="255.255.255.0 or 24">
+</div>
+</div>
+<div class="button-row"><button class="link-button" type="submit">Calculate</button><button class="link-button" type="button" id="subnet-clear">Clear</button></div>
+<p class="tool-message" id="subnet-message" role="status" hidden></p>
+<div class="tool-output-row">
+<dl class="result-list" id="subnet-output" aria-label="Subnet details"></dl>
+<button class="copy-button" type="button" data-copy-target="subnet-output" aria-label="Copy subnet details" title="Copy"><img src="../Assets/Icon/Copy.svg" alt="" width="20" height="20"></button>
+</div>
+</form>
+</section>
+<section class="panel" id="timestamp-converter">
+<h2 class="panel-title">Timestamp Converter</h2>
+<p>Convert Unix time in seconds or milliseconds and Windows FILETIME (100 nanosecond intervals since 1601-01-01 UTC, used in NTFS, the registry and Active Directory) to dates, and dates back to timestamps.</p>
+<form class="tool-form" id="timestamp-form" novalidate>
+<div class="tool-grid">
+<div class="tool-field">
+<label class="tool-label" for="timestamp-value">Timestamp</label>
+<input class="tool-input" id="timestamp-value" type="text" inputmode="numeric" spellcheck="false" autocomplete="off" placeholder="1795703400">
+</div>
+<div class="tool-field">
+<label class="tool-label" for="timestamp-type">Timestamp type</label>
+<select class="tool-select" id="timestamp-type">
+<option value="auto">Detect automatically</option>
+<option value="seconds">Unix seconds</option>
+<option value="milliseconds">Unix milliseconds</option>
+<option value="filetime">Windows FILETIME</option>
+</select>
+</div>
+</div>
+<div class="button-row"><button class="link-button" type="submit">Convert to date</button><button class="link-button" type="button" id="timestamp-now">Now</button></div>
+</form>
+<form class="tool-form" id="date-form" novalidate>
+<div class="tool-grid">
+<div class="tool-field">
+<label class="tool-label" for="date-value">Date and time (ISO 8601)</label>
+<input class="tool-input" id="date-value" type="text" spellcheck="false" autocomplete="off" placeholder="2026-11-26 14:30:00Z">
+</div>
+<div class="tool-field">
+<label class="tool-label" for="date-zone">Time zone when none is given</label>
+<select class="tool-select" id="date-zone">
+<option value="utc">UTC</option>
+<option value="local">Local time</option>
+</select>
+</div>
+</div>
+<div class="button-row"><button class="link-button" type="submit">Convert to timestamp</button><button class="link-button" type="button" id="timestamp-clear">Clear</button></div>
+<p class="tool-message" id="timestamp-message" role="status" hidden></p>
+<div class="tool-output-row">
+<dl class="result-list" id="timestamp-output" aria-label="Converted times"></dl>
+<button class="copy-button" type="button" data-copy-target="timestamp-output" aria-label="Copy converted times" title="Copy"><img src="../Assets/Icon/Copy.svg" alt="" width="20" height="20"></button>
+</div>
+</form>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

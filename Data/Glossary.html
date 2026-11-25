@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary | Cyber Epistemology</title>
+<meta name="description" content="A plain language cyber security glossary from A to Z: fundamentals, identity, attacks, defense tools, frameworks such as MITRE ATT&amp;CK and NIST CSF, cryptography, forensics and incident response.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../Assets/Image/AppleTouchIcon.png">
+<link rel="manifest" href="../Manifest.webmanifest">
+<link rel="stylesheet" href="../Assets/Style/Site.css">
+<script src="../Assets/Script/Site.js" defer></script>
+</head>
+<body class="is-content-page" data-root="../" data-section="glossary">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-separator">/</span><span>Learn</span><span class="breadcrumb-separator">/</span><span>Glossary</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../Assets/Icon/Glossary.svg" alt="">
+<div>
+<p class="hero-eyebrow">Learn</p>
+<h1 class="hero-title">Glossary</h1>
+</div>
+</div>
+<p class="hero-lead">Common security terms explained in plain language, from access control to zero trust. Use the filter to find a word, or link straight to any term.</p>
+<div class="hero-meta"><span class="badge">172 terms</span><span class="badge">A to Z</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter terms, for example: phishing" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="terms-a-b">
+<h2 class="panel-title">A to B</h2>
+<p class="panel-lead">Access, authentication, backups and the basic building blocks of attacks.</p>
+<div class="definition-grid">
+<div class="definition" id="term-access-control"><span class="definition-term">Access control</span><span class="definition-text">The rules that decide who or what can use a resource and what they are allowed to do with it.</span></div>
+<div class="definition" id="term-account-takeover"><span class="definition-term">Account takeover</span><span class="definition-text">An attacker gains control of a real user's account, usually with a stolen password, a stolen session cookie or a SIM swap.</span></div>
+<div class="definition" id="term-active-directory"><span class="definition-term">Active Directory (AD)</span><span class="definition-text">Microsoft's directory service for Windows domains. It stores users, computers and groups and handles sign in with Kerberos and NTLM, which makes it a top target in internal attacks.</span></div>
+<div class="definition" id="term-apt"><span class="definition-term">Advanced persistent threat (APT)</span><span class="definition-text">A skilled, well funded group, often state backed, that breaks in quietly and stays hidden for months to spy or steal.</span></div>
+<div class="definition" id="term-air-gap"><span class="definition-term">Air gap</span><span class="definition-text">A system kept physically separate from other networks. It raises the bar a lot, but USB drives and insiders can still cross it.</span></div>
+<div class="definition" id="term-allowlist"><span class="definition-term">Allowlist</span><span class="definition-text">A list of things that are explicitly permitted, such as approved apps or IP addresses. Anything not on the list is blocked.</span></div>
+<div class="definition" id="term-antivirus"><span class="definition-term">Antivirus</span><span class="definition-text">Software that finds and removes known malware using signatures and behavior rules. Modern products have grown into EDR.</span></div>
+<div class="definition" id="term-asymmetric-encryption"><span class="definition-term">Asymmetric encryption</span><span class="definition-text">Encryption with a key pair: a public key anyone can have and a private key only the owner keeps. Used for key exchange and digital signatures, for example RSA and elliptic curve cryptography.</span></div>
+<div class="definition" id="term-attack-surface"><span class="definition-term">Attack surface</span><span class="definition-text">Every place an attacker could try to get in: open ports, apps, APIs, accounts and people. Shrinking it is one of the cheapest defenses.</span></div>
+<div class="definition" id="term-attack-vector"><span class="definition-term">Attack vector</span><span class="definition-text">The path or method an attacker uses to get in, such as a phishing email, a stolen password or an exposed remote desktop port.</span></div>
+<div class="definition" id="term-authentication"><span class="definition-term">Authentication</span><span class="definition-text">Proving who you are, with something you know (a password), something you have (a phone or key) or something you are (a fingerprint).</span></div>
+<div class="definition" id="term-authorization"><span class="definition-term">Authorization</span><span class="definition-text">Deciding what an identity is allowed to do after it has been authenticated.</span></div>
+<div class="definition" id="term-backdoor"><span class="definition-term">Backdoor</span><span class="definition-text">A hidden way into a system that skips normal sign in, planted by an attacker or left behind by a developer.</span></div>
+<div class="definition" id="term-backup"><span class="definition-term">Backup</span><span class="definition-text">A copy of data you can restore from. The 3-2-1 rule: three copies, on two kinds of storage, one off site, with at least one offline or immutable so ransomware cannot reach it.</span></div>
+<div class="definition" id="term-blocklist"><span class="definition-term">Blocklist</span><span class="definition-text">A list of things that are explicitly denied, such as known bad domains or file hashes. Everything else is allowed, so it only stops what is already known.</span></div>
+<div class="definition" id="term-blue-team"><span class="definition-term">Blue team</span><span class="definition-text">The defenders who monitor systems, detect attacks and respond to them.</span></div>
+<div class="definition" id="term-botnet"><span class="definition-term">Botnet</span><span class="definition-text">A network of infected computers, routers or cameras controlled by one operator and used for DDoS attacks, spam or credential stuffing.</span></div>
+<div class="definition" id="term-brute-force"><span class="definition-term">Brute force attack</span><span class="definition-text">Trying huge numbers of passwords or keys until one works. Long passwords, rate limits, lockouts and MFA stop it.</span></div>
+<div class="definition" id="term-buffer-overflow"><span class="definition-term">Buffer overflow</span><span class="definition-text">A bug where a program writes more data into a block of memory than it can hold, overwriting what is next to it. It can crash the program or let an attacker run code.</span></div>
+<div class="definition" id="term-bug-bounty"><span class="definition-term">Bug bounty</span><span class="definition-text">A program where an organization pays researchers for finding and responsibly reporting vulnerabilities in its systems.</span></div>
+<div class="definition" id="term-bec"><span class="definition-term">Business email compromise (BEC)</span><span class="definition-text">Fraud where attackers take over or impersonate a business email account to trick staff into paying fake invoices or changing bank details. FBI reports rank it among the costliest cybercrimes.</span></div>
+</div>
+</section>
+<section class="panel" id="terms-c">
+<h2 class="panel-title">C</h2>
+<p class="panel-lead">Certificates, the CIA triad, vulnerability IDs and classic web attacks.</p>
+<div class="definition-grid">
+<div class="definition" id="term-certificate"><span class="definition-term">Certificate</span><span class="definition-text">A digital document that ties a public key to an identity, such as a domain name, and is signed by a certificate authority so others can trust it.</span></div>
+<div class="definition" id="term-certificate-authority"><span class="definition-term">Certificate authority (CA)</span><span class="definition-text">A trusted organization or server that issues and signs certificates. Browsers and operating systems ship with a list of trusted root CAs.</span></div>
+<div class="definition" id="term-chain-of-custody"><span class="definition-term">Chain of custody</span><span class="definition-text">A record of who collected, handled and stored each piece of evidence and when, so it holds up in court or an internal review.</span></div>
+<div class="definition" id="term-cia-triad"><span class="definition-term">CIA triad</span><span class="definition-text">The three goals of security: confidentiality (only the right people see data), integrity (data is not changed without permission) and availability (systems work when they are needed).</span></div>
+<div class="definition" id="term-cis-controls"><span class="definition-term">CIS Controls</span><span class="definition-text">A prioritized set of 18 security safeguards from the Center for Internet Security, split into Implementation Groups 1 to 3. Group 1 is the basic hygiene every organization should have.</span></div>
+<div class="definition" id="term-clickjacking"><span class="definition-term">Clickjacking</span><span class="definition-text">Tricking a user into clicking something hidden under a harmless looking page, usually with an invisible frame. Sites block it with the <code>frame-ancestors</code> policy or the <code>X-Frame-Options</code> header.</span></div>
+<div class="definition" id="term-cspm"><span class="definition-term">Cloud security posture management (CSPM)</span><span class="definition-text">Tools that scan cloud accounts for risky settings, such as public storage buckets, missing logging or overly broad IAM roles.</span></div>
+<div class="definition" id="term-command-and-control"><span class="definition-term">Command and control (C2)</span><span class="definition-text">The channel attackers use to send commands to compromised machines and receive stolen data, often hidden in normal looking HTTPS or DNS traffic.</span></div>
+<div class="definition" id="term-containment"><span class="definition-term">Containment</span><span class="definition-text">The incident response step that stops an attack from spreading, for example isolating a host or disabling an account, while keeping the evidence.</span></div>
+<div class="definition" id="term-credential-stuffing"><span class="definition-term">Credential stuffing</span><span class="definition-text">Logging in with user name and password pairs leaked from another site, betting that people reuse passwords. Unique passwords and MFA stop it.</span></div>
+<div class="definition" id="term-csrf"><span class="definition-term">Cross-site request forgery (CSRF)</span><span class="definition-text">Tricks a signed in user's browser into sending an unwanted request to a site that trusts it, such as changing the account email. Anti CSRF tokens and SameSite cookies prevent it.</span></div>
+<div class="definition" id="term-xss"><span class="definition-term">Cross-site scripting (XSS)</span><span class="definition-text">Injecting a script into a web page so it runs in other visitors' browsers, where it can steal sessions or act as them. Output encoding and a Content Security Policy prevent it.</span></div>
+<div class="definition" id="term-cve"><span class="definition-term">CVE</span><span class="definition-text">Common Vulnerabilities and Exposures: a unique public ID for one specific known vulnerability, for example CVE-2021-44228 (Log4Shell).</span></div>
+<div class="definition" id="term-cvss"><span class="definition-term">CVSS</span><span class="definition-text">Common Vulnerability Scoring System: rates how severe a vulnerability is from 0.0 to 10.0, with version 4.0 current. Severity is not the same as your risk, so also check whether it is exploited and exposed.</span></div>
+<div class="definition" id="term-cwe"><span class="definition-term">CWE</span><span class="definition-text">Common Weakness Enumeration: a catalog of the kinds of mistakes that cause vulnerabilities, such as CWE-79 for XSS. A CVE is one bug, a CWE is the type of bug.</span></div>
+<div class="definition" id="term-cyber-kill-chain"><span class="definition-term">Cyber Kill Chain</span><span class="definition-text">Lockheed Martin's seven stage model of an intrusion, from reconnaissance to actions on objectives. Breaking any link stops the attack.</span></div>
+</div>
+</section>
+<section class="panel" id="terms-d-e">
+<h2 class="panel-title">D to E</h2>
+<p class="panel-lead">Denial of service, email protection, encryption and endpoint defense.</p>
+<div class="definition-grid">
+<div class="definition" id="term-data-breach"><span class="definition-term">Data breach</span><span class="definition-text">An incident where data is accessed or disclosed without permission. Many laws require telling regulators and affected people within a set deadline.</span></div>
+<div class="definition" id="term-dlp"><span class="definition-term">Data loss prevention (DLP)</span><span class="definition-text">Tools and rules that spot sensitive data and block it from leaving through email, uploads, USB drives or cloud apps.</span></div>
+<div class="definition" id="term-ddos"><span class="definition-term">DDoS</span><span class="definition-text">Distributed denial of service: flooding a service from many machines at once, often a botnet, so real users cannot reach it.</span></div>
+<div class="definition" id="term-defense-in-depth"><span class="definition-term">Defense in depth</span><span class="definition-text">Layering several independent controls, such as MFA, EDR, segmentation and backups, so one failure does not mean a breach.</span></div>
+<div class="definition" id="term-denial-of-service"><span class="definition-term">Denial of service (DoS)</span><span class="definition-text">Any attack that makes a system unavailable, either by flooding it or by crashing it with a crafted input.</span></div>
+<div class="definition" id="term-digital-forensics"><span class="definition-term">Digital forensics</span><span class="definition-text">Collecting, preserving and analyzing digital evidence in a way others can trust and repeat. Often paired with incident response as DFIR.</span></div>
+<div class="definition" id="term-digital-signature"><span class="definition-term">Digital signature</span><span class="definition-text">A value made with a private key that proves who signed some data and that it has not changed since. Anyone with the matching public key can check it.</span></div>
+<div class="definition" id="term-disk-image"><span class="definition-term">Disk image</span><span class="definition-text">A bit for bit copy of a storage device, verified with a hash, so investigators work on the copy and never on the original.</span></div>
+<div class="definition" id="term-dmarc"><span class="definition-term">DMARC, SPF and DKIM</span><span class="definition-text">Email checks that work together: SPF lists which servers may send for a domain, DKIM signs each message, and DMARC tells receivers to quarantine or reject mail that fails, which stops direct spoofing of your domain.</span></div>
+<div class="definition" id="term-dmz"><span class="definition-term">DMZ</span><span class="definition-text">A network zone between the internet and the internal network for public facing servers, so a break in there does not lead straight to internal systems.</span></div>
+<div class="definition" id="term-dns"><span class="definition-term">DNS</span><span class="definition-text">Domain Name System: turns names like example.com into IP addresses. Attackers abuse it for lookalike domains, tunneling and C2, so DNS logs are valuable evidence.</span></div>
+<div class="definition" id="term-dns-spoofing"><span class="definition-term">DNS spoofing</span><span class="definition-text">Feeding false DNS answers, also called cache poisoning, so victims are sent to an attacker's server. DNSSEC and encrypted DNS help prevent it.</span></div>
+<div class="definition" id="term-drive-by-download"><span class="definition-term">Drive-by download</span><span class="definition-text">Malware delivered just by visiting a malicious or hacked web page, usually through a browser flaw. Keeping the browser updated is the main defense.</span></div>
+<div class="definition" id="term-edr"><span class="definition-term">EDR</span><span class="definition-text">Endpoint detection and response: an agent on laptops and servers that records activity, detects suspicious behavior and lets responders isolate and investigate hosts.</span></div>
+<div class="definition" id="term-encryption"><span class="definition-term">Encryption</span><span class="definition-text">Turning readable data (plaintext) into scrambled data (ciphertext) that only someone with the right key can turn back.</span></div>
+<div class="definition" id="term-encryption-at-rest-in-transit"><span class="definition-term">Encryption at rest and in transit</span><span class="definition-text">Data at rest is stored, data in transit is moving over a network. Protect both, for example BitLocker or FileVault on disks and TLS on the wire.</span></div>
+<div class="definition" id="term-end-to-end-encryption"><span class="definition-term">End-to-end encryption (E2EE)</span><span class="definition-text">Only the sender and the receiver can read the messages, not the service that carries them. Signal and WhatsApp use it by default.</span></div>
+<div class="definition" id="term-endpoint"><span class="definition-term">Endpoint</span><span class="definition-text">Any device that connects to a network: laptops, phones, servers and virtual machines.</span></div>
+<div class="definition" id="term-eradication"><span class="definition-term">Eradication</span><span class="definition-text">The incident response step that removes the attacker completely: malware, persistence, rogue accounts, and the hole they came in through.</span></div>
+<div class="definition" id="term-exfiltration"><span class="definition-term">Exfiltration</span><span class="definition-text">Moving stolen data out of an organization, often over HTTPS, cloud storage services or DNS so it blends in.</span></div>
+<div class="definition" id="term-exploit"><span class="definition-term">Exploit</span><span class="definition-text">Code or a technique that takes advantage of a vulnerability to make a system do something it should not.</span></div>
+</div>
+</section>
+<section class="panel" id="terms-f-h">
+<h2 class="panel-title">F to H</h2>
+<p class="panel-lead">Detection accuracy, firewalls, hashing and hardening.</p>
+<div class="definition-grid">
+<div class="definition" id="term-false-negative"><span class="definition-term">False negative</span><span class="definition-text">A real attack that security tools missed. More dangerous than a false positive, because nobody goes looking.</span></div>
+<div class="definition" id="term-false-positive"><span class="definition-term">False positive</span><span class="definition-text">An alert for something harmless. Too many of them cause alert fatigue, and real attacks get ignored.</span></div>
+<div class="definition" id="term-fim"><span class="definition-term">File integrity monitoring (FIM)</span><span class="definition-text">Watches important files and settings for unexpected changes, usually by comparing hashes against a known good baseline.</span></div>
+<div class="definition" id="term-fileless-malware"><span class="definition-term">Fileless malware</span><span class="definition-text">Malware that runs mostly in memory or through built-in tools such as PowerShell and WMI, leaving few files on disk to scan.</span></div>
+<div class="definition" id="term-firewall"><span class="definition-term">Firewall</span><span class="definition-text">Filters network traffic with rules about source, destination, port and protocol. Next generation firewalls also understand applications and users.</span></div>
+<div class="definition" id="term-fuzzing"><span class="definition-term">Fuzzing</span><span class="definition-text">Feeding a program huge amounts of random or malformed input to find crashes and hidden bugs.</span></div>
+<div class="definition" id="term-gdpr"><span class="definition-term">GDPR</span><span class="definition-text">The EU General Data Protection Regulation. It sets rules for handling personal data of people in the EU and requires reporting qualifying breaches to the regulator within 72 hours.</span></div>
+<div class="definition" id="term-golden-ticket"><span class="definition-term">Golden ticket</span><span class="definition-text">A forged Kerberos ticket made with the hash of the domain's KRBTGT account, giving access to anything in the domain. Recovery means resetting the KRBTGT password twice.</span></div>
+<div class="definition" id="term-hacktivist"><span class="definition-term">Hacktivist</span><span class="definition-text">An attacker driven by a political or social cause, often using DDoS attacks, defacements and data leaks.</span></div>
+<div class="definition" id="term-hardening"><span class="definition-term">Hardening</span><span class="definition-text">Shrinking the attack surface of a system by removing unneeded software, closing ports, changing defaults and applying secure settings.</span></div>
+<div class="definition" id="term-hash"><span class="definition-term">Hashing</span><span class="definition-text">A one way function that turns any input into a fixed length fingerprint, such as SHA-256. The same input always gives the same hash, and a tiny change gives a completely different one.</span></div>
+<div class="definition" id="term-honeypot"><span class="definition-term">Honeypot</span><span class="definition-text">A decoy system, file or account that has no real use, so any interaction with it is a strong sign of an attacker.</span></div>
+<div class="definition" id="term-https"><span class="definition-term">HTTPS</span><span class="definition-text">HTTP over TLS. It encrypts traffic between the browser and the site and proves the site's name, but the padlock does not mean the site is honest.</span></div>
+</div>
+</section>
+<section class="panel" id="terms-i-k">
+<h2 class="panel-title">I to K</h2>
+<p class="panel-lead">Identity, intrusion detection, incident response and Kerberos.</p>
+<div class="definition-grid">
+<div class="definition" id="term-iam"><span class="definition-term">Identity and access management (IAM)</span><span class="definition-text">The people, processes and tools that create identities, grant them access and remove it when it is no longer needed.</span></div>
+<div class="definition" id="term-incident"><span class="definition-term">Incident</span><span class="definition-text">A security event that harms or threatens the confidentiality, integrity or availability of systems or data and needs a response.</span></div>
+<div class="definition" id="term-incident-response"><span class="definition-term">Incident response (IR)</span><span class="definition-text">The planned way an organization handles incidents. The classic phases are preparation, detection and analysis, containment, eradication and recovery, and lessons learned. NIST SP 800-61 Rev. 3 now maps them to the NIST CSF 2.0 functions.</span></div>
+<div class="definition" id="term-ioa"><span class="definition-term">Indicator of attack (IOA)</span><span class="definition-text">Behavior that shows an attack in progress whatever tool is used, such as Word starting PowerShell or a process reading LSASS memory.</span></div>
+<div class="definition" id="term-ioc"><span class="definition-term">Indicator of compromise (IOC)</span><span class="definition-text">Evidence that a system may be compromised, such as a known malicious file hash, IP address, domain or registry key.</span></div>
+<div class="definition" id="term-infostealer"><span class="definition-term">Infostealer</span><span class="definition-text">Malware that grabs saved passwords, browser cookies, crypto wallets and tokens and sends them to the attacker. A common first step of account takeover.</span></div>
+<div class="definition" id="term-initial-access-broker"><span class="definition-term">Initial access broker</span><span class="definition-text">A criminal who breaks into networks and sells that access to others, such as ransomware gangs.</span></div>
+<div class="definition" id="term-injection"><span class="definition-term">Injection</span><span class="definition-text">A family of attacks where untrusted input is treated as code or a command, such as SQL, OS command or LDAP injection.</span></div>
+<div class="definition" id="term-insider-threat"><span class="definition-term">Insider threat</span><span class="definition-text">Risk from people who already have legitimate access, whether they are malicious, careless or tricked by someone else.</span></div>
+<div class="definition" id="term-ids"><span class="definition-term">Intrusion detection system (IDS)</span><span class="definition-text">Watches network or host activity and raises alerts on suspicious patterns, without blocking anything. Snort and Suricata are well known examples.</span></div>
+<div class="definition" id="term-ips"><span class="definition-term">Intrusion prevention system (IPS)</span><span class="definition-text">Like an IDS, but it sits in the traffic path and can block malicious traffic as well as alert on it.</span></div>
+<div class="definition" id="term-jwt"><span class="definition-term">JSON Web Token (JWT)</span><span class="definition-text">A compact signed token that carries claims such as a user ID, common in APIs and OAuth. Anyone can read its contents, so never put secrets in it, and always verify the signature and algorithm.</span></div>
+<div class="definition" id="term-kerberoasting"><span class="definition-term">Kerberoasting</span><span class="definition-text">Requesting Kerberos service tickets for accounts with a service principal name and cracking them offline to recover service account passwords. Long random passwords and managed service accounts defeat it.</span></div>
+<div class="definition" id="term-kerberos"><span class="definition-term">Kerberos</span><span class="definition-text">The ticket based sign in protocol used by Active Directory. Users get a ticket granting ticket from the domain controller, then service tickets, so passwords never cross the network.</span></div>
+<div class="definition" id="term-kev"><span class="definition-term">KEV</span><span class="definition-text">CISA's Known Exploited Vulnerabilities catalog: CVEs confirmed to be exploited in real attacks. A great list to patch first.</span></div>
+<div class="definition" id="term-keylogger"><span class="definition-term">Keylogger</span><span class="definition-text">Software or a small device that records keystrokes to capture passwords and messages.</span></div>
+</div>
+</section>
+<section class="panel" id="terms-l-n">
+<h2 class="panel-title">L to N</h2>
+<p class="panel-lead">Moving through networks, malware, MFA and the big frameworks.</p>
+<div class="definition-grid">
+<div class="definition" id="term-lateral-movement"><span class="definition-term">Lateral movement</span><span class="definition-text">Moving from the first compromised machine to others in the network, using stolen credentials, remote admin tools or exploits.</span></div>
+<div class="definition" id="term-least-privilege"><span class="definition-term">Least privilege</span><span class="definition-text">Give every user, service and app only the access it needs, and only for as long as it needs it.</span></div>
+<div class="definition" id="term-living-off-the-land"><span class="definition-term">Living off the land (LOTL)</span><span class="definition-text">Attacking with tools that are already on the system, such as PowerShell, certutil or WMI, to blend in with normal admin work. These tools are often called LOLBins.</span></div>
+<div class="definition" id="term-logging"><span class="definition-term">Logging</span><span class="definition-text">Recording events such as sign ins, process starts and configuration changes. Logs sent to a central place like a SIEM survive even if an attacker wipes the host.</span></div>
+<div class="definition" id="term-malware"><span class="definition-term">Malware</span><span class="definition-text">Any software built to cause harm, including viruses, worms, trojans, ransomware, spyware and infostealers.</span></div>
+<div class="definition" id="term-man-in-the-middle"><span class="definition-term">Man in the middle (MITM)</span><span class="definition-text">An attacker secretly sits between two parties to read or change their traffic, also called adversary in the middle. Phishing kits now proxy real login pages to steal session cookies and bypass MFA, which phishing resistant MFA stops.</span></div>
+<div class="definition" id="term-mdr"><span class="definition-term">Managed detection and response (MDR)</span><span class="definition-text">An outside provider that watches your environment around the clock and investigates and responds to threats for you.</span></div>
+<div class="definition" id="term-memory-forensics"><span class="definition-term">Memory forensics</span><span class="definition-text">Analyzing a capture of RAM to find running processes, network connections, injected code and keys that never touch the disk. Volatility is a common tool.</span></div>
+<div class="definition" id="term-mfa"><span class="definition-term">Multi-factor authentication (MFA)</span><span class="definition-text">Signing in with two or more different kinds of proof, such as a password plus an authenticator app or security key. SMS codes beat nothing, but app, hardware key and passkey options are much stronger.</span></div>
+<div class="definition" id="term-mfa-fatigue"><span class="definition-term">MFA fatigue</span><span class="definition-text">Spamming a user with push sign in requests until they approve one just to make it stop. Number matching blocks most of it.</span></div>
+<div class="definition" id="term-mitre-attack"><span class="definition-term">MITRE ATT&amp;CK</span><span class="definition-text">A free knowledge base of real attacker tactics and techniques, each with an ID such as T1059 (Command and Scripting Interpreter). Teams use it to map detections and find gaps.</span></div>
+<div class="definition" id="term-network-segmentation"><span class="definition-term">Network segmentation</span><span class="definition-text">Splitting a network into zones with controlled traffic between them, so an attacker in one zone cannot freely reach the others.</span></div>
+<div class="definition" id="term-nist-csf"><span class="definition-term">NIST CSF</span><span class="definition-text">The NIST Cybersecurity Framework. Version 2.0 (2024) has six functions: Govern, Identify, Protect, Detect, Respond and Recover, used to plan and measure a security program.</span></div>
+<div class="definition" id="term-ntlm"><span class="definition-term">NTLM</span><span class="definition-text">An older Microsoft challenge and response sign in protocol. It is open to relay and pass the hash attacks, and Microsoft has deprecated it in favor of Kerberos.</span></div>
+</div>
+</section>
+<section class="panel" id="terms-o-p">
+<h2 class="panel-title">O to P</h2>
+<p class="panel-lead">Modern sign in standards, passwords, phishing and privilege.</p>
+<div class="definition-grid">
+<div class="definition" id="term-oauth"><span class="definition-term">OAuth 2.0</span><span class="definition-text">A standard that lets an app get limited access to your data on another service with a token, without ever seeing your password. Malicious apps that trick users into granting access (consent phishing) are a growing attack.</span></div>
+<div class="definition" id="term-openid-connect"><span class="definition-term">OpenID Connect (OIDC)</span><span class="definition-text">An identity layer on top of OAuth 2.0 that tells an app who signed in, using an ID token. It powers most "Sign in with" buttons.</span></div>
+<div class="definition" id="term-order-of-volatility"><span class="definition-term">Order of volatility</span><span class="definition-text">Collect the most short lived evidence first: CPU and memory, then network connections and running processes, then disk, then remote logs and backups (RFC 3227).</span></div>
+<div class="definition" id="term-osint"><span class="definition-term">OSINT</span><span class="definition-text">Open source intelligence: information gathered from public sources such as websites, social media, DNS records and leaked data.</span></div>
+<div class="definition" id="term-owasp-top-10"><span class="definition-term">OWASP Top 10</span><span class="definition-text">A list of the most critical web application security risks from the OWASP Foundation. Broken Access Control tops the 2025 edition.</span></div>
+<div class="definition" id="term-pass-the-hash"><span class="definition-term">Pass the hash</span><span class="definition-text">Signing in with a stolen NTLM password hash instead of the password itself. Credential Guard, LAPS and limiting where admins sign in reduce it.</span></div>
+<div class="definition" id="term-passkey"><span class="definition-term">Passkey</span><span class="definition-text">A phishing resistant replacement for passwords built on FIDO2 and WebAuthn. Your device keeps a private key, unlocks it with your face, fingerprint or PIN, and only signs in to the real site it was made for.</span></div>
+<div class="definition" id="term-password-hashing"><span class="definition-term">Password hashing</span><span class="definition-text">Storing passwords as slow, salted hashes so a stolen database is hard to crack. Use Argon2id, scrypt, bcrypt or PBKDF2, never fast hashes like MD5 or plain SHA-256.</span></div>
+<div class="definition" id="term-password-manager"><span class="definition-term">Password manager</span><span class="definition-text">An app that creates and stores a unique strong password for every account, protected by one strong master password and MFA.</span></div>
+<div class="definition" id="term-password-spraying"><span class="definition-term">Password spraying</span><span class="definition-text">Trying a few very common passwords against many accounts, staying under the lockout limit for each one.</span></div>
+<div class="definition" id="term-patch"><span class="definition-term">Patch</span><span class="definition-text">An update that fixes bugs or vulnerabilities. Patch management is the process of testing and rolling patches out quickly, starting with exploited ones.</span></div>
+<div class="definition" id="term-payload"><span class="definition-term">Payload</span><span class="definition-text">The part of an attack that does the real work once delivered, such as a reverse shell, an infostealer or ransomware.</span></div>
+<div class="definition" id="term-penetration-test"><span class="definition-term">Penetration test</span><span class="definition-text">An authorized, scoped attack simulation that finds and proves exploitable weaknesses and ends with a report on how to fix them.</span></div>
+<div class="definition" id="term-persistence"><span class="definition-term">Persistence</span><span class="definition-text">Techniques attackers use to keep access across reboots and password changes, such as scheduled tasks, services, Run keys or extra accounts.</span></div>
+<div class="definition" id="term-phishing"><span class="definition-term">Phishing</span><span class="definition-text">Fake messages that trick people into clicking a link, opening an attachment or typing in their password. It is still the most common way attacks begin.</span></div>
+<div class="definition" id="term-pki"><span class="definition-term">Public key infrastructure (PKI)</span><span class="definition-text">The certificate authorities, certificates, policies and revocation systems that let people and machines trust public keys.</span></div>
+<div class="definition" id="term-playbook"><span class="definition-term">Playbook</span><span class="definition-text">A step by step guide for handling one type of incident, such as phishing or ransomware. SOAR tools can automate parts of it.</span></div>
+<div class="definition" id="term-privilege-escalation"><span class="definition-term">Privilege escalation</span><span class="definition-text">Gaining more permissions than you were given, either vertically (user to admin) or horizontally (one user to another user's data).</span></div>
+<div class="definition" id="term-purple-team"><span class="definition-term">Purple team</span><span class="definition-text">Red and blue teams working side by side, running attacks and tuning detections together in real time.</span></div>
+</div>
+</section>
+<section class="panel" id="terms-q-s">
+<h2 class="panel-title">Q to S</h2>
+<p class="panel-lead">Ransomware, risk, security operations and many common attacks.</p>
+<div class="definition-grid">
+<div class="definition" id="term-quishing"><span class="definition-term">Quishing</span><span class="definition-text">Phishing with QR codes, in emails, letters or stickers, that leads to a fake login page and slips past email link scanners.</span></div>
+<div class="definition" id="term-ransomware"><span class="definition-term">Ransomware</span><span class="definition-text">Malware that encrypts files and demands payment for the key. Most gangs now steal data first and threaten to leak it too (double extortion).</span></div>
+<div class="definition" id="term-recovery"><span class="definition-term">Recovery</span><span class="definition-text">The incident response step that restores systems from clean backups and returns to normal operations while watching closely for the attacker's return.</span></div>
+<div class="definition" id="term-red-team"><span class="definition-term">Red team</span><span class="definition-text">A team that imitates real attackers over a longer engagement to test how well the organization detects and responds, not only to find bugs.</span></div>
+<div class="definition" id="term-remote-code-execution"><span class="definition-term">Remote code execution (RCE)</span><span class="definition-text">A vulnerability that lets an attacker run their own code on a system over the network. Almost always rated critical.</span></div>
+<div class="definition" id="term-reverse-shell"><span class="definition-term">Reverse shell</span><span class="definition-text">A command shell where the compromised machine connects out to the attacker, which gets past firewalls that only block incoming connections.</span></div>
+<div class="definition" id="term-risk"><span class="definition-term">Risk</span><span class="definition-text">The chance that a threat exploits a vulnerability, combined with the damage if it does. Risk can be reduced, transferred (for example with insurance), avoided or accepted.</span></div>
+<div class="definition" id="term-rootkit"><span class="definition-term">Rootkit</span><span class="definition-text">Malware that hides itself and other malicious activity by tampering with the operating system, sometimes at kernel or firmware level.</span></div>
+<div class="definition" id="term-salting"><span class="definition-term">Salting</span><span class="definition-text">Adding a unique random value to each password before hashing, so identical passwords get different hashes and precomputed rainbow tables are useless.</span></div>
+<div class="definition" id="term-saml"><span class="definition-term">SAML</span><span class="definition-text">Security Assertion Markup Language: an XML standard where an identity provider sends signed statements about a user to apps for single sign on. Common in enterprises.</span></div>
+<div class="definition" id="term-sandbox"><span class="definition-term">Sandbox</span><span class="definition-text">An isolated environment for running untrusted code or opening suspicious files safely, also used to watch what malware does.</span></div>
+<div class="definition" id="term-sbom"><span class="definition-term">SBOM</span><span class="definition-text">Software bill of materials: a list of every component and library inside a piece of software, so you can quickly tell whether a new vulnerability affects you.</span></div>
+<div class="definition" id="term-secure-boot"><span class="definition-term">Secure Boot</span><span class="definition-text">A UEFI feature that only lets signed boot loaders and operating systems start, which blocks most bootkits.</span></div>
+<div class="definition" id="term-session-hijacking"><span class="definition-term">Session hijacking</span><span class="definition-text">Stealing a valid session cookie or token to act as a signed in user without needing their password or MFA.</span></div>
+<div class="definition" id="term-siem"><span class="definition-term">SIEM</span><span class="definition-text">Security information and event management: collects logs from across the organization, links related events and raises alerts. Examples are Splunk, Microsoft Sentinel and Elastic Security.</span></div>
+<div class="definition" id="term-sim-swapping"><span class="definition-term">SIM swapping</span><span class="definition-text">Convincing a mobile carrier to move a victim's phone number to an attacker's SIM card to receive their SMS codes and calls.</span></div>
+<div class="definition" id="term-smishing"><span class="definition-term">Smishing</span><span class="definition-text">Phishing over SMS or chat apps, often fake delivery, toll or bank alerts.</span></div>
+<div class="definition" id="term-soar"><span class="definition-term">SOAR</span><span class="definition-text">Security orchestration, automation and response: runs playbooks that enrich alerts and take actions automatically, such as blocking an IP or disabling an account.</span></div>
+<div class="definition" id="term-soc"><span class="definition-term">SOC</span><span class="definition-text">Security operations center: the team, often working around the clock, that monitors alerts, investigates and responds to incidents.</span></div>
+<div class="definition" id="term-social-engineering"><span class="definition-term">Social engineering</span><span class="definition-text">Manipulating people rather than technology, using trust, urgency, fear or curiosity to get them to hand over access.</span></div>
+<div class="definition" id="term-spear-phishing"><span class="definition-term">Spear phishing</span><span class="definition-text">Phishing aimed at a specific person or team, using real details about them to look believable. Aimed at executives, it is called whaling.</span></div>
+<div class="definition" id="term-spoofing"><span class="definition-term">Spoofing</span><span class="definition-text">Faking an identity, such as an email sender, caller ID, IP address or MAC address, to look trusted.</span></div>
+<div class="definition" id="term-sql-injection"><span class="definition-term">SQL injection</span><span class="definition-text">Slipping SQL code into an input that is built into a database query, letting an attacker read or change data. Parameterized queries prevent it.</span></div>
+<div class="definition" id="term-sso"><span class="definition-term">Single sign on (SSO)</span><span class="definition-text">One sign in at an identity provider gives access to many apps. Easier to protect and audit, but that one account becomes very valuable, so guard it with strong MFA.</span></div>
+<div class="definition" id="term-ssrf"><span class="definition-term">Server-side request forgery (SSRF)</span><span class="definition-text">Tricks a server into sending requests to places the attacker chooses, such as internal services or the cloud metadata address <code>169.254.169.254</code>.</span></div>
+<div class="definition" id="term-supply-chain-attack"><span class="definition-term">Supply chain attack</span><span class="definition-text">Breaking into a trusted vendor, software update or open source package to reach its customers, as in SolarWinds or the XZ Utils backdoor.</span></div>
+<div class="definition" id="term-symmetric-encryption"><span class="definition-term">Symmetric encryption</span><span class="definition-text">One shared secret key both encrypts and decrypts, which is fast for large amounts of data, for example AES-256. The hard part is sharing the key safely.</span></div>
+</div>
+</section>
+<section class="panel" id="terms-t-z">
+<h2 class="panel-title">T to Z</h2>
+<p class="panel-lead">Threats, TLS, vulnerabilities and zero trust.</p>
+<div class="definition-grid">
+<div class="definition" id="term-tabletop-exercise"><span class="definition-term">Tabletop exercise</span><span class="definition-text">A discussion based drill where a team talks through a realistic incident to test its plan, roles and decisions before a real one happens.</span></div>
+<div class="definition" id="term-threat"><span class="definition-term">Threat</span><span class="definition-text">Anything that could cause harm by exploiting a vulnerability, such as a criminal group, a careless insider or a power outage.</span></div>
+<div class="definition" id="term-threat-actor"><span class="definition-term">Threat actor</span><span class="definition-text">The person or group behind an attack: cybercriminals, nation states, hacktivists or insiders.</span></div>
+<div class="definition" id="term-threat-hunting"><span class="definition-term">Threat hunting</span><span class="definition-text">Actively searching for attackers that slipped past alerts, starting from a hypothesis and digging through telemetry.</span></div>
+<div class="definition" id="term-threat-intelligence"><span class="definition-term">Threat intelligence</span><span class="definition-text">Analyzed information about threat actors, their methods and their indicators, used to guide decisions and detections.</span></div>
+<div class="definition" id="term-threat-modeling"><span class="definition-term">Threat modeling</span><span class="definition-text">Working out what you are building, what can go wrong and what to do about it, before attackers find out. STRIDE is a popular method.</span></div>
+<div class="definition" id="term-timeline-analysis"><span class="definition-term">Timeline analysis</span><span class="definition-text">Putting events from logs, file system timestamps and other artifacts in time order to rebuild what happened during an incident.</span></div>
+<div class="definition" id="term-tls"><span class="definition-term">TLS</span><span class="definition-text">Transport Layer Security: encrypts and authenticates network connections such as HTTPS. Use TLS 1.3 or 1.2; SSL and TLS 1.0 and 1.1 are retired.</span></div>
+<div class="definition" id="term-token"><span class="definition-term">Token</span><span class="definition-text">Data that proves you are signed in or allowed to do something, such as a session cookie, an OAuth access token or a hardware key. A stolen token can bypass passwords and MFA.</span></div>
+<div class="definition" id="term-triage"><span class="definition-term">Triage</span><span class="definition-text">Quickly sorting alerts or incidents by severity and gathering key facts, so the most important ones get attention first.</span></div>
+<div class="definition" id="term-trojan"><span class="definition-term">Trojan</span><span class="definition-text">Malware disguised as something useful, such as a cracked game, a fake update or a browser extension.</span></div>
+<div class="definition" id="term-ttps"><span class="definition-term">TTPs</span><span class="definition-text">Tactics, techniques and procedures: how an attacker works. They are harder to change than IOCs, so detections built on TTPs last longer.</span></div>
+<div class="definition" id="term-two-factor-authentication"><span class="definition-term">Two-factor authentication (2FA)</span><span class="definition-text">MFA with exactly two factors, usually a password plus a code, push approval or security key.</span></div>
+<div class="definition" id="term-vishing"><span class="definition-term">Vishing</span><span class="definition-text">Voice phishing over phone calls, often posing as the IT help desk or a bank, and sometimes using AI cloned voices.</span></div>
+<div class="definition" id="term-vpn"><span class="definition-term">VPN</span><span class="definition-text">Virtual private network: an encrypted tunnel between a device and a network. Company VPN appliances are a favorite target and need fast patching.</span></div>
+<div class="definition" id="term-vulnerability"><span class="definition-term">Vulnerability</span><span class="definition-text">A weakness in software, hardware, settings or a process that an attacker could exploit.</span></div>
+<div class="definition" id="term-vulnerability-scanning"><span class="definition-term">Vulnerability scanning</span><span class="definition-text">Automatically checking systems for known vulnerabilities and weak settings, for example with Nessus, OpenVAS or Nuclei.</span></div>
+<div class="definition" id="term-waf"><span class="definition-term">Web application firewall (WAF)</span><span class="definition-text">Filters HTTP traffic to block attacks such as SQL injection and XSS before they reach the app. It helps, but it does not replace fixing the code.</span></div>
+<div class="definition" id="term-watering-hole"><span class="definition-term">Watering hole attack</span><span class="definition-text">Hacking a website that a target group often visits, so the visitors get infected.</span></div>
+<div class="definition" id="term-worm"><span class="definition-term">Worm</span><span class="definition-text">Malware that spreads on its own from machine to machine without anyone clicking anything, such as WannaCry.</span></div>
+<div class="definition" id="term-write-blocker"><span class="definition-term">Write blocker</span><span class="definition-text">A hardware or software tool that lets an investigator read a drive without changing a single bit on it.</span></div>
+<div class="definition" id="term-xdr"><span class="definition-term">XDR</span><span class="definition-text">Extended detection and response: combines data from endpoints, email, identity, cloud and network into one place to detect and respond to attacks.</span></div>
+<div class="definition" id="term-zero-click"><span class="definition-term">Zero click exploit</span><span class="definition-text">An exploit that needs no action from the victim at all, often delivered through a message to a phone app. Keep devices updated and consider Lockdown Mode if you are high risk.</span></div>
+<div class="definition" id="term-zero-day"><span class="definition-term">Zero day</span><span class="definition-text">A vulnerability that the vendor does not know about or has not fixed yet, so defenders have had zero days to patch it.</span></div>
+<div class="definition" id="term-zero-trust"><span class="definition-term">Zero trust</span><span class="definition-text">A model that never trusts a request just because it comes from inside the network. Every access is checked against identity, device health and context, and given least privilege (NIST SP 800-207).</span></div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#04070e">
 <link rel="icon" href="../../Assets/Image/Favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="../../Assets/Image/AppleTouchIcon.png">
+<link rel="manifest" href="../../Manifest.webmanifest">
 <link rel="stylesheet" href="../../Assets/Style/Site.css">
 <script src="../../Assets/Script/Site.js" defer></script>
 </head>
@@ -15,13 +16,13 @@
 <a class="skip-link" href="#main-content">Skip to content</a>
 <header id="site-topbar"></header>
 <main class="page" id="main-content">
-<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><a href="../System_Files_Info.html">System Files</a><span class="breadcrumb-separator">/</span><span>iOS</span></nav>
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><a href="../System_Files_Info.html">Operating Systems</a><span class="breadcrumb-separator">/</span><span>iOS</span></nav>
 <section class="hero">
 <div class="hero-header">
-<img class="hero-icon" src="../../Assets/Icon/Ios.png" alt="">
+<img class="hero-icon" src="../../Assets/Icon/Ios.svg" alt="">
 <div>
-<p class="hero-eyebrow">System Files</p>
-<h1 class="hero-title">iOS Security Reference</h1>
+<p class="hero-eyebrow">Operating Systems</p>
+<h1 class="hero-title">iOS Security Paths</h1>
 </div>
 </div>
 <p class="hero-lead">How to get data off an iPhone, which on-device files matter, and how to check a phone for spyware. On a stock iPhone you cannot browse these paths: you work from backups, sysdiagnose archives and full file system extractions.</p>
@@ -29,14 +30,14 @@
 <label class="page-filter"><img src="../../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: sms.db" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
 </section>
 <nav class="sub-nav" aria-label="Operating systems">
-<a class="sub-nav-link" href="../System_Files_Info.html"><img src="../../Assets/Icon/Folder.png" alt="">All systems</a>
-<a class="sub-nav-link" href="Windows_11.html"><img src="../../Assets/Icon/Windows11.png" alt="">Windows 11</a>
-<a class="sub-nav-link" href="Windows_Server.html"><img src="../../Assets/Icon/WindowsServer.png" alt="">Windows Server</a>
-<a class="sub-nav-link" href="macOS.html"><img src="../../Assets/Icon/MacOs.png" alt="">macOS</a>
-<a class="sub-nav-link is-active" href="IOS.html" aria-current="page"><img src="../../Assets/Icon/Ios.png" alt="">iOS</a>
-<a class="sub-nav-link" href="Android.html"><img src="../../Assets/Icon/Android.png" alt="">Android</a>
-<a class="sub-nav-link" href="Ubuntu_Server.html"><img src="../../Assets/Icon/UbuntuServer.png" alt="">Ubuntu Server</a>
-<a class="sub-nav-link" href="Kali_Linux.html"><img src="../../Assets/Icon/KaliLinux.png" alt="">Kali Linux</a>
+<a class="sub-nav-link" href="../System_Files_Info.html"><img src="../../Assets/Icon/Folder.svg" alt="">All systems</a>
+<a class="sub-nav-link" href="Windows_11.html"><img src="../../Assets/Icon/Windows11.svg" alt="">Windows 11</a>
+<a class="sub-nav-link" href="Windows_Server.html"><img src="../../Assets/Icon/WindowsServer.svg" alt="">Windows Server</a>
+<a class="sub-nav-link" href="macOS.html"><img src="../../Assets/Icon/MacOs.svg" alt="">macOS</a>
+<a class="sub-nav-link is-active" href="IOS.html" aria-current="page"><img src="../../Assets/Icon/Ios.svg" alt="">iOS</a>
+<a class="sub-nav-link" href="Android.html"><img src="../../Assets/Icon/Android.svg" alt="">Android</a>
+<a class="sub-nav-link" href="Ubuntu_Server.html"><img src="../../Assets/Icon/UbuntuServer.svg" alt="">Ubuntu Server</a>
+<a class="sub-nav-link" href="Kali_Linux.html"><img src="../../Assets/Icon/KaliLinux.svg" alt="">Kali Linux</a>
 </nav>
 <div class="layout">
 <aside data-toc></aside>
@@ -93,11 +94,11 @@
 <table class="data-table">
 <thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
 <tbody>
-<tr><td><code>/private/var/Keychains/keychain-2.db</code></td><td>Keychain: Wi-Fi, website and app passwords, tokens, passkeys</td><td>Items are wrapped by Secure Enclave keys; extraction tools decrypt what the lock state allows. Encrypted backups carry the items marked as migratable</td><td><span class="tag tag-critical">Critical</span></td></tr>
-<tr><td><code>/private/var/mobile/Library/Accounts/Accounts3.sqlite</code></td><td>Apple Account and third party accounts (mail, calendar, social)</td><td>Lists every account on the device and its identifiers</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/Keychains/keychain-2.db</code></td><td>Keychain: Wi-Fi, website and app passwords, tokens, passkeys</td><td>Items are wrapped by Secure Enclave keys; extraction tools decrypt what the lock state allows. Encrypted backups carry the items marked as migratable</td><td><span class="tag tag-critical">Critical</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1634/001/" title="Credentials from Password Store: Keychain">T1634.001</a></td></tr>
+<tr><td><code>/private/var/mobile/Library/Accounts/Accounts3.sqlite</code></td><td>Apple Account and third party accounts (mail, calendar, social)</td><td>Lists every account on the device and its identifiers</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1636/005/" title="Protected User Data: Accounts">T1636.005</a></td></tr>
 <tr><td><code>/private/var/protected/trustd/private/TrustStore.sqlite3</code></td><td>User installed and trusted root certificates</td><td>A trusted rogue CA allows TLS interception; also check Settings, General, About, Certificate Trust Settings</td><td><span class="tag tag-high">High</span></td></tr>
 <tr><td><code>/private/var/keybags/systembag.kb</code></td><td>System keybag wrapping the Data Protection class keys</td><td>Needed with the passcode to decrypt files in a raw extraction</td><td><span class="tag tag-high">High</span></td></tr>
-<tr><td><code>/private/var/mobile/Containers/Data/Application/&lt;UUID&gt;/Library/Preferences/</code></td><td>App preference plists</td><td>Poorly written apps store API keys and session tokens here instead of the keychain</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/private/var/mobile/Containers/Data/Application/&lt;UUID&gt;/Library/Preferences/</code></td><td>App preference plists</td><td>Poorly written apps store API keys and session tokens here instead of the keychain</td><td><span class="tag tag-medium">Medium</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1409/" title="Stored Application Data">T1409</a></td></tr>
 </tbody>
 </table>
 </div>
@@ -109,12 +110,12 @@
 <table class="data-table">
 <thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
 <tbody>
-<tr><td><code>/private/var/containers/Shared/SystemGroup/systemgroup.com.apple.configurationprofiles/Library/ConfigurationProfiles/</code></td><td>Installed configuration profiles and MDM enrollment</td><td>A profile can add a root CA, VPN, proxy or MDM control; the most common stalkerware foothold on unjailbroken phones</td><td><span class="tag tag-critical">Critical</span></td></tr>
-<tr><td><code>/private/var/containers/Bundle/Application/&lt;UUID&gt;/</code></td><td>Installed app bundles</td><td>Look for enterprise or developer signed apps outside the App Store and apps installed by alternative marketplaces</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/containers/Shared/SystemGroup/systemgroup.com.apple.configurationprofiles/Library/ConfigurationProfiles/</code></td><td>Installed configuration profiles and MDM enrollment</td><td>A profile can add a root CA, VPN, proxy or MDM control; the most common stalkerware foothold on unjailbroken phones</td><td><span class="tag tag-critical">Critical</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1632/001/" title="Subvert Trust Controls: Code Signing Policy Modification">T1632.001</a></td></tr>
+<tr><td><code>/private/var/containers/Bundle/Application/&lt;UUID&gt;/</code></td><td>Installed app bundles</td><td>Look for enterprise or developer signed apps outside the App Store and apps installed by alternative marketplaces</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1632/001/" title="Subvert Trust Controls: Code Signing Policy Modification">T1632.001</a><a class="attack-tag" href="https://attack.mitre.org/techniques/T1476/" title="Deliver Malicious Application via Other Means">T1476</a></td></tr>
 <tr><td><code>/private/var/mobile/Library/FrontBoard/applicationState.db</code></td><td>Installed app inventory with bundle IDs and container paths</td><td>Maps app container UUIDs to apps and reveals hidden or removed apps</td><td><span class="tag tag-medium">Medium</span></td></tr>
 <tr><td><code>/private/var/mobile/Library/Shortcuts/</code></td><td>Shortcuts and personal automations</td><td>Automations run on triggers such as time, location or opening an app</td><td><span class="tag tag-medium">Medium</span></td></tr>
-<tr><td><code>/var/jb/Library/LaunchDaemons/</code></td><td>launchd daemons on rootless jailbreaks (for example Dopamine)</td><td>Jailbreak tools and implants run as root from here; the folder should not exist on a stock phone</td><td><span class="tag tag-critical">Critical</span></td></tr>
-<tr><td><code>/Library/LaunchDaemons/</code></td><td>launchd daemons on older rootful jailbreaks</td><td>On stock iOS the system volume is sealed, so anything here means a compromised device</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/var/jb/Library/LaunchDaemons/</code></td><td>launchd daemons on rootless jailbreaks (for example Dopamine)</td><td>Jailbreak tools and implants run as root from here; the folder should not exist on a stock phone</td><td><span class="tag tag-critical">Critical</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1398/" title="Boot or Logon Initialization Scripts">T1398</a></td></tr>
+<tr><td><code>/Library/LaunchDaemons/</code></td><td>launchd daemons on older rootful jailbreaks</td><td>On stock iOS the system volume is sealed, so anything here means a compromised device</td><td><span class="tag tag-critical">Critical</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1398/" title="Boot or Logon Initialization Scripts">T1398</a></td></tr>
 <tr><td><code>/System/Library/LaunchDaemons/</code></td><td>Apple daemons on the sealed system volume</td><td>Baseline only; cannot change without breaking the seal</td><td><span class="tag tag-low">Low</span></td></tr>
 </tbody>
 </table>
@@ -135,7 +136,7 @@
 <tr><td><code>/private/var/networkd/netusage.sqlite</code></td><td>Network use per process</td><td>Similar to DataUsage; spyware process names have shown up here</td><td><span class="tag tag-high">High</span></td></tr>
 <tr><td><code>/private/var/mobile/Library/Biome/</code></td><td>Biome streams: app usage, screen state, notifications, intents</td><td>Main usage timeline since iOS 16; SEGB format needs dedicated parsers</td><td><span class="tag tag-high">High</span></td></tr>
 <tr><td><code>/private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db</code></td><td>KnowledgeC usage database</td><td>Rich on older versions; many streams moved to Biome</td><td><span class="tag tag-medium">Medium</span></td></tr>
-<tr><td><code>/private/var/mobile/Library/Caches/com.apple.routined/</code></td><td>Significant locations and visit history</td><td>Places the device over time; protected by the strongest Data Protection class</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/Caches/com.apple.routined/</code></td><td>Significant locations and visit history</td><td>Places the device over time; protected by the strongest Data Protection class</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1430/" title="Location Tracking">T1430</a></td></tr>
 <tr><td><code>/private/var/installd/Library/Logs/MobileInstallation/</code></td><td>App install, update and removal log</td><td>Shows when an app appeared, even after it was deleted</td><td><span class="tag tag-medium">Medium</span></td></tr>
 <tr><td><code>/private/var/containers/Shared/SystemGroup/&lt;UUID&gt;/Library/BatteryLife/CurrentPowerlog.PLSQL</code></td><td>PowerLog: app and process activity with battery use</td><td>Timeline of foreground and background activity per process</td><td><span class="tag tag-medium">Medium</span></td></tr>
 </tbody>
@@ -149,8 +150,8 @@
 <table class="data-table">
 <thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
 <tbody>
-<tr><td><code>/private/var/preferences/com.apple.networkextension.plist</code></td><td>VPN, DNS proxy, content filter and per app VPN configurations</td><td>A rogue VPN or DNS profile sees or redirects all traffic</td><td><span class="tag tag-high">High</span></td></tr>
-<tr><td><code>/private/var/preferences/com.apple.wifi.known-networks.plist</code></td><td>Known Wi-Fi networks with join times (passwords stay in the keychain)</td><td>Location history and networks that could be spoofed</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/private/var/preferences/com.apple.networkextension.plist</code></td><td>VPN, DNS proxy, content filter and per app VPN configurations</td><td>A rogue VPN or DNS profile sees or redirects all traffic</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1638/" title="Adversary-in-the-Middle">T1638</a></td></tr>
+<tr><td><code>/private/var/preferences/com.apple.wifi.known-networks.plist</code></td><td>Known Wi-Fi networks with join times (passwords stay in the keychain)</td><td>Location history and networks that could be spoofed</td><td><span class="tag tag-medium">Medium</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1422/002/" title="System Network Configuration Discovery: Wi-Fi Discovery">T1422.002</a></td></tr>
 <tr><td><code>/private/var/preferences/SystemConfiguration/preferences.plist</code></td><td>Network services, device name, proxies</td><td>Global proxy settings redirect traffic</td><td><span class="tag tag-medium">Medium</span></td></tr>
 <tr><td><code>/private/var/root/Library/Lockdown/</code></td><td>Device side pairing records and activation data</td><td>Shows which host computers are trusted; clear with Settings, Reset, Reset Location and Privacy</td><td><span class="tag tag-medium">Medium</span></td></tr>
 <tr><td><code>/var/jb/etc/ssh/</code>, <code>/private/etc/ssh/</code></td><td>OpenSSH server installed by a jailbreak</td><td>Jailbroken phones with default credentials are reachable over Wi-Fi; never present on stock iOS</td><td><span class="tag tag-critical">Critical</span></td></tr>
@@ -165,12 +166,12 @@
 <table class="data-table">
 <thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
 <tbody>
-<tr><td><code>/private/var/mobile/Library/SMS/sms.db</code></td><td>iMessage, SMS and RCS messages, attachments in <code>Attachments/</code></td><td>Zero-click exploits arrive here; MVT checks it for malicious links and senders</td><td><span class="tag tag-critical">Critical</span></td></tr>
-<tr><td><code>/private/var/mobile/Containers/Data/Application/&lt;UUID&gt;/</code></td><td>App sandboxes: <code>Documents</code>, <code>Library</code>, <code>tmp</code></td><td>Per app databases and caches; map UUIDs with <code>.com.apple.mobile_container_manager.metadata.plist</code></td><td><span class="tag tag-high">High</span></td></tr>
-<tr><td><code>/private/var/mobile/Containers/Shared/AppGroup/&lt;UUID&gt;/</code></td><td>Data shared between an app and its extensions</td><td>WhatsApp <code>ChatStorage.sqlite</code> and Notes <code>NoteStore.sqlite</code> live in app groups</td><td><span class="tag tag-high">High</span></td></tr>
-<tr><td><code>/private/var/mobile/Library/CallHistoryDB/CallHistory.storedata</code></td><td>Phone, FaceTime and some VoIP call history</td><td>Contact timeline; only in encrypted backups</td><td><span class="tag tag-high">High</span></td></tr>
-<tr><td><code>/private/var/mobile/Library/AddressBook/AddressBook.sqlitedb</code></td><td>Contacts</td><td>Identifies people and numbers seen in other artifacts</td><td><span class="tag tag-medium">Medium</span></td></tr>
-<tr><td><code>/private/var/mobile/Media/DCIM/</code>, <code>/private/var/mobile/Media/PhotoData/Photos.sqlite</code></td><td>Photos and videos plus the Photos library database</td><td>EXIF location and capture times; Photos.sqlite records imports, edits and deletions</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/SMS/sms.db</code></td><td>iMessage, SMS and RCS messages, attachments in <code>Attachments/</code></td><td>Zero-click exploits arrive here; MVT checks it for malicious links and senders</td><td><span class="tag tag-critical">Critical</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1636/004/" title="Protected User Data: SMS Messages">T1636.004</a></td></tr>
+<tr><td><code>/private/var/mobile/Containers/Data/Application/&lt;UUID&gt;/</code></td><td>App sandboxes: <code>Documents</code>, <code>Library</code>, <code>tmp</code></td><td>Per app databases and caches; map UUIDs with <code>.com.apple.mobile_container_manager.metadata.plist</code></td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1409/" title="Stored Application Data">T1409</a></td></tr>
+<tr><td><code>/private/var/mobile/Containers/Shared/AppGroup/&lt;UUID&gt;/</code></td><td>Data shared between an app and its extensions</td><td>WhatsApp <code>ChatStorage.sqlite</code> and Notes <code>NoteStore.sqlite</code> live in app groups</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1409/" title="Stored Application Data">T1409</a></td></tr>
+<tr><td><code>/private/var/mobile/Library/CallHistoryDB/CallHistory.storedata</code></td><td>Phone, FaceTime and some VoIP call history</td><td>Contact timeline; only in encrypted backups</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1636/002/" title="Protected User Data: Call Log">T1636.002</a></td></tr>
+<tr><td><code>/private/var/mobile/Library/AddressBook/AddressBook.sqlitedb</code></td><td>Contacts</td><td>Identifies people and numbers seen in other artifacts</td><td><span class="tag tag-medium">Medium</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1636/003/" title="Protected User Data: Contact List">T1636.003</a></td></tr>
+<tr><td><code>/private/var/mobile/Media/DCIM/</code>, <code>/private/var/mobile/Media/PhotoData/Photos.sqlite</code></td><td>Photos and videos plus the Photos library database</td><td>EXIF location and capture times; Photos.sqlite records imports, edits and deletions</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1533/" title="Data from Local System">T1533</a></td></tr>
 <tr><td><code>/private/var/mobile/Library/Safari/</code></td><td>Bookmarks and tabs; <code>History.db</code> here or in Safari's data container</td><td>MVT checks Safari history for exploit and spyware domains</td><td><span class="tag tag-high">High</span></td></tr>
 <tr><td><code>/private/var/mobile/Library/Mail/</code></td><td>Mail.app accounts and cached messages</td><td>Email content and password reset links</td><td><span class="tag tag-medium">Medium</span></td></tr>
 <tr><td><code>/private/var/mobile/Library/Health/healthdb_secure.sqlite</code></td><td>Health and fitness data, workouts, steps with times</td><td>Shows when the phone was carried and moving; only in encrypted backups</td><td><span class="tag tag-medium">Medium</span></td></tr>

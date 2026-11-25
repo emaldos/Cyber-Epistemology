@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ports and Protocols | Cyber Epistemology</title>
+<meta name="description" content="Common TCP and UDP ports for defenders: remote access, web, email, file sharing, directory services, databases, network services, containers, industrial and IoT protocols and well documented malware defaults, with what to check and the secure alternative.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../../Assets/Image/AppleTouchIcon.png">
+<link rel="manifest" href="../../Manifest.webmanifest">
+<link rel="stylesheet" href="../../Assets/Style/Site.css">
+<script src="../../Assets/Script/Site.js" defer></script>
+</head>
+<body class="is-content-page" data-root="../../" data-section="guides">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><span>Guides</span><span class="breadcrumb-separator">/</span><span>Ports and Protocols</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../../Assets/Icon/Ports.svg" alt="">
+<div>
+<p class="hero-eyebrow">Guides</p>
+<h1 class="hero-title">Ports and Protocols</h1>
+</div>
+</div>
+<p class="hero-lead">The ports you meet in scans, firewall rules and incident timelines, grouped by job. Each row says what to check and what to use instead when the protocol is weak.</p>
+<div class="hero-meta"><span class="badge">114 ports</span><span class="badge">IANA and vendor defaults</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: 445" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="overview">
+<h2 class="panel-title">Overview</h2>
+<p class="panel-lead">How transport protocols and port ranges work, and why a port number alone proves nothing.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term">TCP</span><span class="definition-text">Connection oriented: a SYN, SYN-ACK, ACK handshake, ordered delivery and retransmission. Easy to scan reliably because closed ports answer with a reset.</span></div>
+<div class="definition"><span class="definition-term">UDP</span><span class="definition-text">Connectionless, no handshake and no delivery guarantee. Scans are slow and unclear, and small requests with large replies make UDP services useful for reflection and amplification attacks.</span></div>
+<div class="definition"><span class="definition-term">Well known ports (0 to 1023)</span><span class="definition-text">IANA system ports for core services. On Linux and macOS, binding below 1024 traditionally needs root or a capability such as <code>CAP_NET_BIND_SERVICE</code>.</span></div>
+<div class="definition"><span class="definition-term">Registered ports (1024 to 49151)</span><span class="definition-text">IANA user ports assigned to applications on request. Many popular defaults in this range are vendor choices that were never registered.</span></div>
+<div class="definition"><span class="definition-term">Dynamic ports (49152 to 65535)</span><span class="definition-text">Private or ephemeral ports for the client side of connections. Windows uses 49152 to 65535 by default, Linux uses 32768 to 60999 (<code>net.ipv4.ip_local_port_range</code>).</span></div>
+<div class="definition"><span class="definition-term">Protocols without ports</span><span class="definition-text">ICMP, GRE (IP protocol 47), ESP (50) and AH (51) sit beside TCP and UDP, so firewall rules for VPNs and tunnels must allow them by protocol number.</span></div>
+</div>
+<div class="callout callout-tip"><p><strong>Tip:</strong> a port is a convention, not proof. Services run on any port and attackers favor 443, 53 and 80 because they are usually allowed out. Confirm the service with a banner grab or <code>nmap -sV</code>, and confirm the process on the host.</p></div>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Task</th><th>Command</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Listening ports on Linux</td><td><code class="copy">sudo ss -tulpn</code></td><td>Shows TCP and UDP listeners with the owning process</td></tr>
+<tr><td>Listening ports on Windows</td><td><code class="copy">Get-NetTCPConnection -State Listen | Sort-Object LocalPort</code></td><td>Add <code>Get-NetUDPEndpoint</code> for UDP, or use <code>netstat -ano</code></td></tr>
+<tr><td>Listening ports on macOS</td><td><code class="copy">sudo lsof -nP -iTCP -sTCP:LISTEN</code></td><td>Use <code>-iUDP</code> for UDP sockets</td></tr>
+<tr><td>Full TCP scan with versions</td><td><code class="copy">sudo nmap -sS -sV -p- 10.10.10.10</code></td><td>Only on hosts you own or are authorized to test</td></tr>
+<tr><td>Top UDP ports</td><td><code class="copy">sudo nmap -sU --top-ports 50 10.10.10.10</code></td><td>Slow; open and filtered often look the same</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="remote-access">
+<h2 class="panel-title">Remote Access and VPN</h2>
+<p class="panel-lead">Shells, desktops and tunnels: the most attacked services on any internet edge.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Port</th><th>Protocol</th><th>Service</th><th>Notes for defenders</th></tr></thead>
+<tbody>
+<tr><td><code>22</code></td><td><span class="tag">TCP</span></td><td>SSH, SFTP, SCP</td><td>Disable password and root login, use keys or SSH certificates, and alert on brute force in auth logs. Moving it to another port only cuts noise.</td></tr>
+<tr><td><code>23</code></td><td><span class="tag">TCP</span></td><td>Telnet</td><td>Cleartext logins and sessions. Replace with SSH. Still found on routers, cameras and IoT, and a top botnet target (Mirai).</td></tr>
+<tr><td><code>512</code></td><td><span class="tag">TCP</span></td><td>rexec</td><td>Legacy remote execution with a cleartext password. Disable and use SSH.</td></tr>
+<tr><td><code>513</code></td><td><span class="tag">TCP</span></td><td>rlogin</td><td>Trusts hosts listed in <code>.rhosts</code> and <code>hosts.equiv</code>, no encryption. Disable and use SSH.</td></tr>
+<tr><td><code>514</code></td><td><span class="tag">TCP</span></td><td>rsh (remote shell)</td><td>Same trust model as rlogin. Do not confuse with 514/UDP, which is syslog.</td></tr>
+<tr><td><code>3389</code></td><td><span class="tag">TCP</span><span class="tag">UDP</span></td><td>RDP</td><td>Never expose to the internet; put it behind a VPN or RD Gateway with MFA and require NLA. A leading ransomware entry point. UDP carries the faster transport since RDP 8.</td></tr>
+<tr><td><code>5900</code></td><td><span class="tag">TCP</span></td><td>VNC (RFB)</td><td>Display N listens on 5900+N. Weak or missing passwords and unencrypted sessions are common; tunnel it over SSH or a VPN.</td></tr>
+<tr><td><code>5985</code></td><td><span class="tag">TCP</span></td><td>WinRM over HTTP</td><td>PowerShell remoting. Kerberos or NTLM encrypts the payload, but allow it only from admin hosts and watch for lateral movement (<code>wsmprovhost.exe</code>).</td></tr>
+<tr><td><code>5986</code></td><td><span class="tag">TCP</span></td><td>WinRM over HTTPS</td><td>TLS listener. Prefer it across untrusted networks and never allow Basic auth over 5985.</td></tr>
+<tr><td><code>5938</code></td><td><span class="tag">TCP</span><span class="tag">UDP</span></td><td>TeamViewer (vendor default)</td><td>Remote tools that IT did not approve are a favorite attacker persistence. Allowlist your RMM tools and alert on the rest, including AnyDesk and ScreenConnect.</td></tr>
+<tr><td><code>1723</code></td><td><span class="tag">TCP</span></td><td>PPTP VPN</td><td>MS-CHAPv2 authentication is broken. Replace with IKEv2, WireGuard or OpenVPN. Also needs GRE (IP protocol 47).</td></tr>
+<tr><td><code>500</code></td><td><span class="tag">UDP</span></td><td>IKE (IPsec key exchange)</td><td>VPN gateways are prime targets, so patch them within days. Disable IKEv1 aggressive mode, which leaks a crackable pre-shared key hash.</td></tr>
+<tr><td><code>4500</code></td><td><span class="tag">UDP</span></td><td>IPsec NAT traversal</td><td>ESP wrapped in UDP when a NAT sits in the path. Allow only to your VPN concentrators.</td></tr>
+<tr><td><code>1194</code></td><td><span class="tag">UDP</span><span class="tag">TCP</span></td><td>OpenVPN</td><td>IANA registered. Use certificate authentication plus MFA, and a <code>tls-crypt</code> key to hide the service from scanners.</td></tr>
+<tr><td><code>51820</code></td><td><span class="tag">UDP</span></td><td>WireGuard (common default)</td><td>Not IANA assigned. Silent to unauthenticated probes, so scans will not find it; inventory peers and keys instead.</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="web">
+<h2 class="panel-title">Web and Proxies</h2>
+<p class="panel-lead">Web servers, admin consoles and proxies. Most command and control traffic hides here too.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Port</th><th>Protocol</th><th>Service</th><th>Notes for defenders</th></tr></thead>
+<tbody>
+<tr><td><code>80</code></td><td><span class="tag">TCP</span></td><td>HTTP</td><td>Cleartext. Redirect to HTTPS and send HSTS. Credentials or session cookies seen on 80 are already exposed.</td></tr>
+<tr><td><code>443</code></td><td><span class="tag">TCP</span><span class="tag">UDP</span></td><td>HTTPS, HTTP/3 over QUIC on UDP</td><td>Where most malware beacons. Inspect SNI, certificates and JA3 or JA4 fingerprints. Blocking UDP 443 makes browsers fall back to TCP, which proxies can inspect. SMB over QUIC also uses UDP 443.</td></tr>
+<tr><td><code>8080</code></td><td><span class="tag">TCP</span></td><td>HTTP alternate (http-alt)</td><td>Tomcat, Jenkins, proxies and admin consoles. Often forgotten, unpatched or left with default credentials.</td></tr>
+<tr><td><code>8443</code></td><td><span class="tag">TCP</span></td><td>HTTPS alternate</td><td>Common for appliance and firewall management (IANA lists it as pcsync-https). Keep management interfaces off the internet.</td></tr>
+<tr><td><code>8000</code></td><td><span class="tag">TCP</span></td><td>Development web servers</td><td>Default for Python <code>http.server</code> and Splunk Web. A quick file share left running on a host is a data leak.</td></tr>
+<tr><td><code>3128</code></td><td><span class="tag">TCP</span></td><td>Squid proxy (vendor default)</td><td>Open proxies are abused for relaying and scanning. Require authentication and restrict source networks.</td></tr>
+<tr><td><code>1080</code></td><td><span class="tag">TCP</span></td><td>SOCKS proxy</td><td>Legitimate in some networks, but also how attackers pivot (SSH <code>-D</code>, Chisel, C2 socks). Unexpected listeners on workstations are suspicious.</td></tr>
+<tr><td><code>9090</code></td><td><span class="tag">TCP</span></td><td>Prometheus, Cockpit (vendor defaults)</td><td>Metrics and server consoles that leak host details. Put them behind authentication or bind to localhost.</td></tr>
+<tr><td><code>10000</code></td><td><span class="tag">TCP</span></td><td>Webmin (vendor default; IANA lists NDMP)</td><td>Root level web admin with a history of remote code execution (CVE-2019-15107). Keep internal and patched.</td></tr>
+<tr><td><code>7001</code></td><td><span class="tag">TCP</span></td><td>Oracle WebLogic (vendor default)</td><td>Frequent target of deserialization exploits. Never expose the admin console and apply Oracle quarterly patches.</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="email">
+<h2 class="panel-title">Email</h2>
+<p class="panel-lead">Mail transfer, submission and retrieval. Prefer the implicit TLS ports.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Port</th><th>Protocol</th><th>Service</th><th>Notes for defenders</th></tr></thead>
+<tbody>
+<tr><td><code>25</code></td><td><span class="tag">TCP</span></td><td>SMTP (server to server)</td><td>Block outbound 25 from clients to stop spam bots. Test for open relay, enforce STARTTLS where possible, and publish SPF, DKIM and DMARC.</td></tr>
+<tr><td><code>465</code></td><td><span class="tag">TCP</span></td><td>SMTP submission over implicit TLS</td><td>Reassigned for client submission by RFC 8314, which recommends it over STARTTLS. Require authentication.</td></tr>
+<tr><td><code>587</code></td><td><span class="tag">TCP</span></td><td>SMTP submission (STARTTLS)</td><td>Require authentication and TLS. Watch for password spraying against mail accounts.</td></tr>
+<tr><td><code>110</code></td><td><span class="tag">TCP</span></td><td>POP3</td><td>Cleartext user name and password. Use 995 or disable POP entirely.</td></tr>
+<tr><td><code>995</code></td><td><span class="tag">TCP</span></td><td>POP3 over TLS</td><td>Legacy protocol without modern auth on many platforms, a common MFA bypass. Disable if unused.</td></tr>
+<tr><td><code>143</code></td><td><span class="tag">TCP</span></td><td>IMAP</td><td>Cleartext unless STARTTLS is enforced. Use 993.</td></tr>
+<tr><td><code>993</code></td><td><span class="tag">TCP</span></td><td>IMAP over TLS</td><td>Block legacy authentication so stolen passwords cannot skip MFA.</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="file-sharing">
+<h2 class="panel-title">File Sharing and Printing</h2>
+<p class="panel-lead">Shares, transfers and print services. Never expose any of these to the internet.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Port</th><th>Protocol</th><th>Service</th><th>Notes for defenders</th></tr></thead>
+<tbody>
+<tr><td><code>20</code></td><td><span class="tag">TCP</span></td><td>FTP data (active mode)</td><td>Server connects back to the client. Hard to firewall; passive mode uses a negotiated high port instead.</td></tr>
+<tr><td><code>21</code></td><td><span class="tag">TCP</span></td><td>FTP control</td><td>Cleartext credentials and often anonymous login. Replace with SFTP (22) or FTPS.</td></tr>
+<tr><td><code>990</code></td><td><span class="tag">TCP</span></td><td>FTPS control (implicit TLS)</td><td>Encrypted FTP, with data on 989 or a passive port. SFTP is simpler to firewall.</td></tr>
+<tr><td><code>69</code></td><td><span class="tag">UDP</span></td><td>TFTP</td><td>No authentication. Used for PXE boot and network device configs, which often hold passwords. Restrict to the management network.</td></tr>
+<tr><td><code>137</code></td><td><span class="tag">UDP</span></td><td>NetBIOS Name Service</td><td>NBT-NS poisoning (Responder) captures NTLM hashes. Disable NetBIOS over TCP/IP where not needed.</td></tr>
+<tr><td><code>138</code></td><td><span class="tag">UDP</span></td><td>NetBIOS Datagram</td><td>Legacy browser announcements. Block between segments.</td></tr>
+<tr><td><code>139</code></td><td><span class="tag">TCP</span></td><td>NetBIOS Session (SMB over NetBIOS)</td><td>Legacy SMB transport. Disable along with NetBIOS; modern SMB needs only 445.</td></tr>
+<tr><td><code>445</code></td><td><span class="tag">TCP</span></td><td>SMB</td><td>Behind WannaCry and EternalBlue. Block at the edge and between workstations, remove SMBv1, and require signing (default since Windows 11 24H2). Watch for access to <code>ADMIN$</code> and <code>C$</code>.</td></tr>
+<tr><td><code>2049</code></td><td><span class="tag">TCP</span><span class="tag">UDP</span></td><td>NFS</td><td>Check <code>/etc/exports</code> for world access and <code>no_root_squash</code>. Use NFSv4 with Kerberos (<code>sec=krb5p</code>) for sensitive data.</td></tr>
+<tr><td><code>111</code></td><td><span class="tag">TCP</span><span class="tag">UDP</span></td><td>rpcbind (portmapper)</td><td>Lists RPC services for attackers (<code>rpcinfo -p</code>) and is abused for UDP amplification. Block at the edge.</td></tr>
+<tr><td><code>873</code></td><td><span class="tag">TCP</span></td><td>rsync daemon</td><td>Anonymous modules leak backups. Require auth or run rsync over SSH.</td></tr>
+<tr><td><code>3260</code></td><td><span class="tag">TCP</span></td><td>iSCSI</td><td>Block storage with full disk access. Keep on an isolated storage network and use CHAP.</td></tr>
+<tr><td><code>515</code></td><td><span class="tag">TCP</span></td><td>LPD printing</td><td>Legacy, unauthenticated. Disable on printers if IPP is available.</td></tr>
+<tr><td><code>631</code></td><td><span class="tag">TCP</span><span class="tag">UDP</span></td><td>IPP and CUPS</td><td>Exposed <code>cups-browsed</code> on UDP 631 allowed remote code execution (CVE-2024-47176). Disable cups-browsed and block 631 at the edge.</td></tr>
+<tr><td><code>9100</code></td><td><span class="tag">TCP</span></td><td>Raw printing (JetDirect)</td><td>Accepts print jobs and PJL commands with no auth, which can read or change printer settings. Restrict to print servers.</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="directory-authentication">
+<h2 class="panel-title">Directory and Authentication</h2>
+<p class="panel-lead">Active Directory, Kerberos, RADIUS and name resolution fallbacks.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Port</th><th>Protocol</th><th>Service</th><th>Notes for defenders</th></tr></thead>
+<tbody>
+<tr><td><code>88</code></td><td><span class="tag">TCP</span><span class="tag">UDP</span></td><td>Kerberos</td><td>Watch for Kerberoasting (many TGS requests with RC4), AS-REP roasting and password spraying (pre-auth failures, event 4771). Disable RC4 where possible.</td></tr>
+<tr><td><code>464</code></td><td><span class="tag">TCP</span><span class="tag">UDP</span></td><td>Kerberos password change (kpasswd)</td><td>Domain controllers only. Traffic to any other host is misrouted or malicious.</td></tr>
+<tr><td><code>389</code></td><td><span class="tag">TCP</span><span class="tag">UDP</span></td><td>LDAP (UDP is CLDAP)</td><td>Require LDAP signing and channel binding. Simple binds send passwords in cleartext. Exposed CLDAP is a large DDoS amplifier.</td></tr>
+<tr><td><code>636</code></td><td><span class="tag">TCP</span></td><td>LDAPS</td><td>LDAP over TLS. Point applications here instead of 389 with simple bind.</td></tr>
+<tr><td><code>3268</code></td><td><span class="tag">TCP</span></td><td>Global Catalog</td><td>Forest wide directory searches. Heavy queries from a workstation suggest BloodHound style collection.</td></tr>
+<tr><td><code>3269</code></td><td><span class="tag">TCP</span></td><td>Global Catalog over TLS</td><td>Same data as 3268, encrypted.</td></tr>
+<tr><td><code>135</code></td><td><span class="tag">TCP</span></td><td>MS RPC endpoint mapper</td><td>Hands out dynamic ports 49152 to 65535 for WMI, DCOM, scheduled tasks and service control. Block workstation to workstation RPC to slow lateral movement.</td></tr>
+<tr><td><code>9389</code></td><td><span class="tag">TCP</span></td><td>AD Web Services</td><td>Used by the ActiveDirectory PowerShell module and some enumeration tools. Expect it only from admin hosts.</td></tr>
+<tr><td><code>1812</code></td><td><span class="tag">UDP</span></td><td>RADIUS authentication (1813 accounting)</td><td>BlastRADIUS (CVE-2024-3596) forges responses: require Message-Authenticator and move to RADIUS over TLS (RadSec, TCP 2083).</td></tr>
+<tr><td><code>49</code></td><td><span class="tag">TCP</span></td><td>TACACS+</td><td>Network device admin auth. The body is only obfuscated with the shared secret, so use long secrets and keep it on the management network.</td></tr>
+<tr><td><code>5355</code></td><td><span class="tag">UDP</span><span class="tag">TCP</span></td><td>LLMNR</td><td>Name resolution fallback that Responder poisons to steal NTLM hashes. Disable by Group Policy (Turn off multicast name resolution).</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="databases">
+<h2 class="panel-title">Databases and Caches</h2>
+<p class="panel-lead">Data stores should only listen to application servers, never to the internet.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Port</th><th>Protocol</th><th>Service</th><th>Notes for defenders</th></tr></thead>
+<tbody>
+<tr><td><code>1433</code></td><td><span class="tag">TCP</span></td><td>Microsoft SQL Server</td><td>Disable or rename <code>sa</code>, keep <code>xp_cmdshell</code> off and alert when it is enabled. Force encrypted connections.</td></tr>
+<tr><td><code>1434</code></td><td><span class="tag">UDP</span></td><td>SQL Server Browser</td><td>Reveals instance names and ports; SQL Slammer spread over it in 2003. Disable if instances use fixed ports.</td></tr>
+<tr><td><code>3306</code></td><td><span class="tag">TCP</span></td><td>MySQL and MariaDB</td><td>Bind to localhost or the app network, remove anonymous users and remote root, require TLS.</td></tr>
+<tr><td><code>5432</code></td><td><span class="tag">TCP</span></td><td>PostgreSQL</td><td>Check <code>pg_hba.conf</code> for <code>trust</code> entries. Superusers can run commands with <code>COPY ... FROM PROGRAM</code>.</td></tr>
+<tr><td><code>1521</code></td><td><span class="tag">TCP</span></td><td>Oracle TNS listener</td><td>Set a listener password or local OS auth, and patch quarterly. Enumerated with tools like odat.</td></tr>
+<tr><td><code>27017</code></td><td><span class="tag">TCP</span></td><td>MongoDB</td><td>Old versions listened on all interfaces with no auth and were mass wiped for ransom. Enable authorization and bind to private addresses.</td></tr>
+<tr><td><code>6379</code></td><td><span class="tag">TCP</span></td><td>Redis</td><td>No password by default (protected mode since 3.2 only limits remote access). Attackers use <code>CONFIG SET</code> to write SSH keys or cron jobs. Set ACLs and rename dangerous commands.</td></tr>
+<tr><td><code>9200</code></td><td><span class="tag">TCP</span></td><td>Elasticsearch and OpenSearch REST API</td><td>Exposed clusters leak huge datasets. Security is on by default since Elasticsearch 8.0; check older clusters. 9300 is node transport.</td></tr>
+<tr><td><code>5984</code></td><td><span class="tag">TCP</span></td><td>CouchDB</td><td>Past privilege escalation flaws (CVE-2017-12635) led to cryptomining. Disable admin party mode and bind to private addresses.</td></tr>
+<tr><td><code>11211</code></td><td><span class="tag">TCP</span><span class="tag">UDP</span></td><td>Memcached</td><td>No auth by default. UDP enabled record amplification DDoS in 2018 and is off by default since 1.5.6. Never expose it.</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="network-services">
+<h2 class="panel-title">Network Services</h2>
+<p class="panel-lead">DNS, DHCP, time, management and routing: quiet services that attackers abuse for tunneling, spoofing and amplification.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Port</th><th>Protocol</th><th>Service</th><th>Notes for defenders</th></tr></thead>
+<tbody>
+<tr><td><code>53</code></td><td><span class="tag">UDP</span><span class="tag">TCP</span></td><td>DNS</td><td>Force clients through internal resolvers and log queries. Long random names or heavy TXT traffic suggest tunneling. Restrict zone transfers (AXFR over TCP).</td></tr>
+<tr><td><code>853</code></td><td><span class="tag">TCP</span><span class="tag">UDP</span></td><td>DNS over TLS (UDP is DNS over QUIC)</td><td>Encrypted DNS that skips your resolver logs. Block unapproved resolvers; DNS over HTTPS hides on 443, so also block known DoH endpoints.</td></tr>
+<tr><td><code>67</code></td><td><span class="tag">UDP</span></td><td>DHCP server</td><td>Rogue DHCP servers hand out a malicious gateway or DNS. Enable DHCP snooping on switches.</td></tr>
+<tr><td><code>68</code></td><td><span class="tag">UDP</span></td><td>DHCP client</td><td>DHCP logs map IP to MAC and hostname, key evidence when tracing a device.</td></tr>
+<tr><td><code>546</code></td><td><span class="tag">UDP</span></td><td>DHCPv6 client</td><td>Windows asks for DHCPv6 even on IPv4 only networks, which mitm6 abuses to become the DNS server.</td></tr>
+<tr><td><code>547</code></td><td><span class="tag">UDP</span></td><td>DHCPv6 server</td><td>Block rogue DHCPv6 and router advertisements with DHCPv6 guard and RA guard, or manage IPv6 properly.</td></tr>
+<tr><td><code>123</code></td><td><span class="tag">UDP</span></td><td>NTP</td><td>Kerberos fails past 5 minutes of skew, and logs need one clock. Disable <code>monlist</code> (amplification) and consider NTS (key exchange on TCP 4460).</td></tr>
+<tr><td><code>161</code></td><td><span class="tag">UDP</span></td><td>SNMP</td><td>v1 and v2c send community strings in cleartext and defaults like <code>public</code> and <code>private</code> are common. Use SNMPv3 with authPriv and read only views.</td></tr>
+<tr><td><code>162</code></td><td><span class="tag">UDP</span></td><td>SNMP traps</td><td>Alerts from devices to the manager. Accept traps only from known devices.</td></tr>
+<tr><td><code>514</code></td><td><span class="tag">UDP</span></td><td>Syslog</td><td>Cleartext, spoofable and lossy. Use TLS on 6514 or a reliable agent for security logs.</td></tr>
+<tr><td><code>6514</code></td><td><span class="tag">TCP</span></td><td>Syslog over TLS</td><td>RFC 5425. Use mutual TLS so attackers cannot inject fake events.</td></tr>
+<tr><td><code>1900</code></td><td><span class="tag">UDP</span></td><td>SSDP (UPnP discovery)</td><td>Reflection amplifier, and UPnP lets malware open router ports. Disable UPnP on edge routers.</td></tr>
+<tr><td><code>5353</code></td><td><span class="tag">UDP</span></td><td>mDNS (Bonjour)</td><td>Local name resolution that leaks hostnames and can be poisoned. Do not route it between segments.</td></tr>
+<tr><td><code>179</code></td><td><span class="tag">TCP</span></td><td>BGP</td><td>Allow only from configured peers, use TCP-AO or MD5 and GTSM, and validate routes with RPKI.</td></tr>
+<tr><td><code>5060</code></td><td><span class="tag">UDP</span><span class="tag">TCP</span></td><td>SIP</td><td>Scanned constantly for toll fraud. Use 5061 with TLS and SRTP, and lock down extensions.</td></tr>
+<tr><td><code>5061</code></td><td><span class="tag">TCP</span></td><td>SIP over TLS</td><td>Encrypted signaling. Pair with SRTP for the media stream.</td></tr>
+<tr><td><code>3478</code></td><td><span class="tag">UDP</span><span class="tag">TCP</span></td><td>STUN and TURN</td><td>Used by WebRTC and video calls. Open TURN relays can be abused to reach internal hosts; require credentials.</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="containers">
+<h2 class="panel-title">Containers and Orchestration</h2>
+<p class="panel-lead">Control plane ports that give full control of hosts or clusters when exposed.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Port</th><th>Protocol</th><th>Service</th><th>Notes for defenders</th></tr></thead>
+<tbody>
+<tr><td><code>2375</code></td><td><span class="tag">TCP</span></td><td>Docker API without TLS</td><td>Unauthenticated root on the host and a cryptominer favorite. Never enable it on a network interface; use the local socket or SSH.</td></tr>
+<tr><td><code>2376</code></td><td><span class="tag">TCP</span></td><td>Docker API with TLS</td><td>Safe only with client certificate verification (<code>--tlsverify</code>).</td></tr>
+<tr><td><code>5000</code></td><td><span class="tag">TCP</span></td><td>Docker registry (common default)</td><td>Anonymous push or pull leaks images and secrets inside them. Also the macOS AirPlay Receiver port.</td></tr>
+<tr><td><code>6443</code></td><td><span class="tag">TCP</span></td><td>Kubernetes API server</td><td>Disable anonymous auth, use RBAC with least privilege, and restrict source ranges for managed clusters.</td></tr>
+<tr><td><code>10250</code></td><td><span class="tag">TCP</span></td><td>Kubelet API</td><td>With anonymous auth on, anyone can run commands in pods. Set <code>--anonymous-auth=false</code> and webhook authorization.</td></tr>
+<tr><td><code>2379</code></td><td><span class="tag">TCP</span></td><td>etcd client API</td><td>Holds every cluster secret. Require mutual TLS and allow only the API servers (2380 is peer traffic).</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="industrial-iot">
+<h2 class="panel-title">Industrial and IoT</h2>
+<p class="panel-lead">OT and device protocols were built for closed networks and most have no authentication. Segment them and monitor writes.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Port</th><th>Protocol</th><th>Service</th><th>Notes for defenders</th></tr></thead>
+<tbody>
+<tr><td><code>502</code></td><td><span class="tag">TCP</span></td><td>Modbus TCP</td><td>No authentication: anyone who can reach it can read and write registers and coils. Isolate per IEC 62443 zones and alert on write function codes.</td></tr>
+<tr><td><code>102</code></td><td><span class="tag">TCP</span></td><td>Siemens S7comm (ISO-TSAP)</td><td>PLC programming and control, targeted by Stuxnet. Enable access protection on the PLC and allow only engineering stations.</td></tr>
+<tr><td><code>20000</code></td><td><span class="tag">TCP</span><span class="tag">UDP</span></td><td>DNP3</td><td>Utility SCADA. Use DNP3 Secure Authentication and filter at the zone boundary.</td></tr>
+<tr><td><code>44818</code></td><td><span class="tag">TCP</span><span class="tag">UDP</span></td><td>EtherNet/IP (CIP explicit messaging)</td><td>Rockwell and other PLCs. Unauthenticated commands can stop a controller; use CIP Security where supported.</td></tr>
+<tr><td><code>2222</code></td><td><span class="tag">UDP</span></td><td>EtherNet/IP implicit I/O</td><td>Real time I/O data. Note that 2222/TCP is often an alternate SSH port.</td></tr>
+<tr><td><code>47808</code></td><td><span class="tag">UDP</span></td><td>BACnet/IP</td><td>Building automation (HVAC, access control). Thousands are exposed online; keep behind a VPN.</td></tr>
+<tr><td><code>4840</code></td><td><span class="tag">TCP</span></td><td>OPC UA</td><td>Supports signing and encryption. Reject the <code>None</code> security policy and anonymous logins.</td></tr>
+<tr><td><code>2404</code></td><td><span class="tag">TCP</span></td><td>IEC 60870-5-104</td><td>Power grid telecontrol, abused by Industroyer. Allow only known control centers.</td></tr>
+<tr><td><code>1911</code></td><td><span class="tag">TCP</span></td><td>Niagara Fox (Tridium)</td><td>Building management. Use the TLS port 4911 and remove internet exposure.</td></tr>
+<tr><td><code>1883</code></td><td><span class="tag">TCP</span></td><td>MQTT</td><td>Anonymous brokers leak telemetry and accept commands. Require auth and use 8883.</td></tr>
+<tr><td><code>8883</code></td><td><span class="tag">TCP</span></td><td>MQTT over TLS</td><td>Use client certificates or strong credentials and topic ACLs.</td></tr>
+<tr><td><code>5683</code></td><td><span class="tag">UDP</span></td><td>CoAP</td><td>Constrained device protocol used for amplification. Use DTLS on 5684.</td></tr>
+<tr><td><code>554</code></td><td><span class="tag">TCP</span><span class="tag">UDP</span></td><td>RTSP (cameras)</td><td>Default credentials expose live video. Change passwords and keep cameras on their own VLAN.</td></tr>
+<tr><td><code>7547</code></td><td><span class="tag">TCP</span></td><td>TR-069 (CWMP)</td><td>ISP router management; a Mirai variant knocked about 900,000 routers offline through it in 2016. Should answer only the ISP.</td></tr>
+<tr><td><code>5555</code></td><td><span class="tag">TCP</span></td><td>Android Debug Bridge over TCP</td><td>Unauthenticated shell on many TV boxes and phones, spread by ADB.Miner. Disable network debugging.</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="malware-defaults">
+<h2 class="panel-title">Common Malware and C2 Defaults</h2>
+<p class="panel-lead">Well documented default ports of attack tools and old malware. Operators change them easily, so treat a match as a lead, not a verdict.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Port</th><th>Protocol</th><th>Service</th><th>Notes for defenders</th></tr></thead>
+<tbody>
+<tr><td><code>4444</code></td><td><span class="tag">TCP</span></td><td>Metasploit default handler</td><td>Default <code>LPORT</code> for Metasploit payloads, and the Blaster worm shell in 2003. Alert on outbound connections to it.</td></tr>
+<tr><td><code>50050</code></td><td><span class="tag">TCP</span></td><td>Cobalt Strike team server</td><td>Default team server port. Should never be reachable from your network; hunt for it in scans of suspected C2 infrastructure.</td></tr>
+<tr><td><code>8888</code></td><td><span class="tag">TCP</span></td><td>Sliver mTLS listener default</td><td>Also the Jupyter Notebook default, so confirm the process before acting.</td></tr>
+<tr><td><code>31337</code></td><td><span class="tag">UDP</span></td><td>Back Orifice (historic)</td><td>The classic "elite" port. Rare today but still a sign of old tooling or a test.</td></tr>
+<tr><td><code>6667</code></td><td><span class="tag">TCP</span></td><td>IRC</td><td>Traditional botnet C2 channel. Almost never legitimate from servers or workstations.</td></tr>
+<tr><td><code>9001</code></td><td><span class="tag">TCP</span></td><td>Tor relay (ORPort common default)</td><td>Hosts relaying Tor break policy and may hide C2. Compare against the public Tor relay list.</td></tr>
+<tr><td><code>9050</code></td><td><span class="tag">TCP</span></td><td>Tor SOCKS client (9150 for Tor Browser)</td><td>Local listener on a host means Tor is running. Malware ships Tor to reach onion C2.</td></tr>
+<tr><td><code>3333</code></td><td><span class="tag">TCP</span></td><td>Stratum mining pools (common, not IANA)</td><td>Cryptominers connect to pools on 3333, 4444, 5555 or 14444. Block known pools and look for <code>mining.subscribe</code> in payloads.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-warning"><p><strong>Warning:</strong> scan only networks you own or have written permission to test. Mature attackers use 443 and 53 rather than these defaults, so pair port rules with TLS fingerprints, DNS logs and process telemetry.</p></div>
+</section>
+<section class="panel" id="hardening">
+<h2 class="panel-title">Exposure Checklist</h2>
+<p class="panel-lead">Quick wins that remove most of the risk in the tables above.</p>
+<ul class="checklist">
+<li>Keep an inventory of internet facing ports and compare it with an external scan every month.</li>
+<li>Default deny inbound and outbound at the edge; allow out only what users and servers need.</li>
+<li>Never expose RDP, SMB, WinRM, databases, Docker, Kubernetes or OT protocols to the internet.</li>
+<li>Replace Telnet, FTP, rsh, POP3, IMAP and SNMPv1 or v2c with SSH, SFTP, TLS variants and SNMPv3.</li>
+<li>Disable LLMNR, NetBIOS over TCP/IP and SMBv1, and require SMB and LDAP signing.</li>
+<li>Force DNS through internal resolvers and block unapproved DNS over TLS and DNS over HTTPS.</li>
+<li>Block workstation to workstation traffic on 135, 445, 3389 and 5985 to slow lateral movement.</li>
+<li>Patch VPN gateways, firewalls and remote access appliances first; they are the most exploited edge devices.</li>
+</ul>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

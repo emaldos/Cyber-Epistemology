@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>macOS Terminal Commands | Cyber Epistemology</title>
+<meta name="description" content="macOS Terminal cheat sheet for zsh: Homebrew, system information, dscl and sysadminctl, launchctl, networksetup and scutil, diskutil, Gatekeeper, SIP, codesign, keychain, unified logs, pmset, softwareupdate, defaults and incident response checks.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../../Assets/Image/AppleTouchIcon.png">
+<link rel="manifest" href="../../Manifest.webmanifest">
+<link rel="stylesheet" href="../../Assets/Style/Site.css">
+<script src="../../Assets/Script/Site.js" defer></script>
+</head>
+<body class="is-content-page" data-root="../../" data-section="commands">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><a href="../Commands.html">Commands</a><span class="breadcrumb-separator">/</span><span>macOS</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../../Assets/Icon/MacOs.svg" alt="">
+<div>
+<p class="hero-eyebrow">Commands</p>
+<h1 class="hero-title">macOS Terminal Commands</h1>
+</div>
+</div>
+<p class="hero-lead">Commands that only exist on a Mac, grouped by task: system information, accounts, launchd services, networking, disks, built in security features, unified logs, power, updates and preferences. Examples target macOS 26 Tahoe and macOS 27 Golden Gate, with notes where older releases differ.</p>
+<div class="hero-meta"><span class="badge">178 commands</span><span class="badge">zsh</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: launchctl" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<nav class="sub-nav" aria-label="Shells">
+<a class="sub-nav-link" href="../Commands.html"><img src="../../Assets/Icon/Terminal.svg" alt="">All shells</a>
+<a class="sub-nav-link" href="Bash.html"><img src="../../Assets/Icon/Bash.svg" alt="">Bash</a>
+<a class="sub-nav-link is-active" href="macOS.html" aria-current="page"><img src="../../Assets/Icon/MacOs.svg" alt="">macOS</a>
+<a class="sub-nav-link" href="PS.html"><img src="../../Assets/Icon/PowerShell.svg" alt="">PowerShell</a>
+<a class="sub-nav-link" href="CMD.html"><img src="../../Assets/Icon/CommandPrompt.svg" alt="">CMD</a>
+</nav>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="shell-basics">
+<h2 class="panel-title">Shell Basics on macOS</h2>
+<p class="panel-lead">zsh, Homebrew and the small Mac only tools that glue the terminal to the desktop.</p>
+<div class="callout callout-tip"><p><strong>Generic Unix commands:</strong> <code>ls</code>, <code>grep</code>, <code>find</code>, <code>ps</code>, <code>ssh</code>, pipes and scripting work the same way on a Mac and are covered on the <a href="Bash.html">Bash and Linux sheet</a>, which also has a table of BSD versus GNU differences (<code>sed -i ''</code>, <code>stat -f</code>, <code>date -v</code>). This page only lists what is specific to macOS.</p></div>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>$SHELL</code></td><td>zsh is the default login shell since macOS 10.15; <code>/bin/bash</code> is still the old Bash 3.2</td><td><code class="copy">echo "$SHELL"; zsh --version</code></td></tr>
+<tr><td><code>~/.zshrc</code> / <code>~/.zprofile</code></td><td>zsh startup files: <code>.zprofile</code> for login settings such as <code>PATH</code>, <code>.zshrc</code> for aliases and prompt</td><td><code class="copy">source ~/.zshrc</code></td></tr>
+<tr><td><code>xcode-select --install</code></td><td>Install the Command Line Tools (git, clang, make) without the full Xcode app</td><td><code class="copy">xcode-select --install</code></td></tr>
+<tr><td><code>brew shellenv</code></td><td>Put Homebrew on the <code>PATH</code>; the prefix is <code>/opt/homebrew</code> on Apple silicon and <code>/usr/local</code> on Intel</td><td><code class="copy">eval "$(/opt/homebrew/bin/brew shellenv)"</code></td></tr>
+<tr><td><code>brew install</code></td><td>Install a command line formula, or a GUI app with <code>--cask</code></td><td><code class="copy">brew install nmap wireshark</code></td></tr>
+<tr><td><code>brew update</code> / <code>upgrade</code></td><td>Refresh Homebrew and upgrade everything that is outdated</td><td><code class="copy">brew update &amp;&amp; brew upgrade</code></td></tr>
+<tr><td><code>open</code></td><td>Open a file, folder or URL with its default app (<code>open .</code> opens Finder here)</td><td><code class="copy">open https://support.apple.com</code></td></tr>
+<tr><td><code>open -a</code></td><td>Open a file or folder in a specific app</td><td><code class="copy">open -a "TextEdit" notes.txt</code></td></tr>
+<tr><td><code>pbcopy</code></td><td>Copy standard input to the clipboard</td><td><code class="copy">shasum -a 256 file.iso | pbcopy</code></td></tr>
+<tr><td><code>pbpaste</code></td><td>Write the clipboard to standard output</td><td><code class="copy">pbpaste &gt; snippet.txt</code></td></tr>
+<tr><td><code>say</code></td><td>Speak text aloud, handy at the end of a long job</td><td><code class="copy">make; say "build finished"</code></td></tr>
+<tr><td><code>caffeinate</code></td><td>Keep the Mac awake while a command runs (<code>-d</code> display, <code>-i</code> idle sleep, <code>-t</code> seconds)</td><td><code class="copy">caffeinate -i rsync -a src/ /Volumes/Backup/src/</code></td></tr>
+<tr><td><code>osascript</code></td><td>Run AppleScript or JavaScript for Automation, for example a notification</td><td><code class="copy">osascript -e 'display notification "Scan done" with title "Terminal"'</code></td></tr>
+<tr><td><code>mdfind</code></td><td>Spotlight search from the terminal, using the index (instant)</td><td><code class="copy">mdfind -name "invoice.pdf"</code></td></tr>
+<tr><td><code>mdls</code></td><td>Show Spotlight metadata of a file, such as where it was downloaded from</td><td><code class="copy">mdls -name kMDItemWhereFroms ~/Downloads/setup.pkg</code></td></tr>
+<tr><td><code>xattr -l</code></td><td>List extended attributes (quarantine, provenance, Finder info)</td><td><code class="copy">xattr -l ~/Downloads/tool.zip</code></td></tr>
+<tr><td><code>xattr -d</code></td><td>Remove the quarantine flag from a file you have verified (bypasses a Gatekeeper prompt)</td><td><code class="copy">xattr -d com.apple.quarantine ./tool</code></td></tr>
+<tr><td><code>plutil -p</code></td><td>Print any property list, binary or XML, in readable form</td><td><code class="copy">plutil -p /Applications/Safari.app/Contents/Info.plist</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="system-information">
+<h2 class="panel-title">System Information</h2>
+<p class="panel-lead">macOS version, hardware, chip, serial number and memory.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>sw_vers</code></td><td>Product name, version and build</td><td><code class="copy">sw_vers</code></td></tr>
+<tr><td><code>system_profiler</code></td><td>Hardware overview: model, chip, memory, serial number</td><td><code class="copy">system_profiler SPHardwareDataType</code></td></tr>
+<tr><td><code>system_profiler SPSoftwareDataType</code></td><td>OS, kernel, boot volume, SIP state and uptime in one report</td><td><code class="copy">system_profiler SPSoftwareDataType</code></td></tr>
+<tr><td><code>system_profiler -json</code></td><td>Machine readable output for inventory scripts</td><td><code class="copy">system_profiler -json SPHardwareDataType SPStorageDataType &gt; inventory.json</code></td></tr>
+<tr><td><code>sysctl machdep.cpu.brand_string</code></td><td>CPU or Apple chip name</td><td><code class="copy">sysctl -n machdep.cpu.brand_string</code></td></tr>
+<tr><td><code>sysctl hw</code></td><td>Memory in bytes and CPU core counts</td><td><code class="copy">sysctl hw.memsize hw.ncpu hw.perflevel0.physicalcpu</code></td></tr>
+<tr><td><code>sysctl kern.boottime</code></td><td>Exact time of the last boot</td><td><code class="copy">sysctl -n kern.boottime</code></td></tr>
+<tr><td><code>sysctl.proc_translated</code></td><td>Returns 1 when the current shell runs under Rosetta 2</td><td><code class="copy">sysctl -n sysctl.proc_translated</code></td></tr>
+<tr><td><code>uname</code> / <code>arch</code></td><td>Darwin kernel version and architecture (<code>arm64</code> or <code>x86_64</code>)</td><td><code class="copy">uname -mrs</code></td></tr>
+<tr><td><code>ioreg</code></td><td>I/O Registry: serial number and hardware UUID</td><td><code class="copy">ioreg -rd1 -c IOPlatformExpertDevice | grep -E 'IOPlatformSerialNumber|IOPlatformUUID'</code></td></tr>
+<tr><td><code>memory_pressure</code></td><td>Current memory pressure and free percentage</td><td><code class="copy">memory_pressure</code></td></tr>
+<tr><td><code>top -o</code></td><td>BSD <code>top</code>: one snapshot sorted by CPU or memory</td><td><code class="copy">top -l 1 -o cpu -n 10</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="users-and-permissions">
+<h2 class="panel-title">Users and Permissions</h2>
+<p class="panel-lead">macOS keeps accounts in Directory Services, not in <code>/etc/passwd</code>, so use <code>dscl</code>, <code>dseditgroup</code> and <code>sysadminctl</code>.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>id</code> / <code>groups</code></td><td>UID and groups; local admins are in group <code>admin</code> (GID 80)</td><td><code class="copy">id -Gn</code></td></tr>
+<tr><td><code>dscl . -list /Users</code></td><td>Local accounts with their UID; human accounts start at 501, hidden service accounts begin with <code>_</code></td><td><code class="copy">dscl . -list /Users UniqueID | awk '$2 &gt; 500'</code></td></tr>
+<tr><td><code>dscl . -read</code></td><td>Read an account record: shell, home, UID and more</td><td><code class="copy">dscl . -read /Users/alice UserShell NFSHomeDirectory UniqueID</code></td></tr>
+<tr><td><code>dscl</code> group members</td><td>Who is a local administrator</td><td><code class="copy">dscl . -read /Groups/admin GroupMembership</code></td></tr>
+<tr><td><code>dseditgroup -o checkmember</code></td><td>Check whether a user is in a group</td><td><code class="copy">dseditgroup -o checkmember -m alice admin</code></td></tr>
+<tr><td><code>dseditgroup -o edit -a</code></td><td>Add a user to a group, here making them an admin (needs sudo)</td><td><code class="copy">sudo dseditgroup -o edit -a alice -t user admin</code></td></tr>
+<tr><td><code>dseditgroup -o edit -d</code></td><td>Remove a user from a group, here taking away admin rights (needs sudo)</td><td><code class="copy">sudo dseditgroup -o edit -d alice -t user admin</code></td></tr>
+<tr><td><code>sysadminctl -addUser</code></td><td>Create a local user; <code>-password -</code> prompts instead of putting the password on the command line (needs sudo)</td><td><code class="copy">sudo sysadminctl -addUser alice -fullName "Alice Doe" -password -</code></td></tr>
+<tr><td><code>sysadminctl -deleteUser</code></td><td>Delete a local user and their home folder (needs sudo)</td><td><code class="copy">sudo sysadminctl -deleteUser olduser</code></td></tr>
+<tr><td><code>sysadminctl -secureTokenStatus</code></td><td>Whether a user has a Secure Token, needed to unlock FileVault</td><td><code class="copy">sysadminctl -secureTokenStatus alice</code></td></tr>
+<tr><td><code>sysadminctl -guestAccount</code></td><td>Check or turn off the Guest account (changes need sudo)</td><td><code class="copy">sudo sysadminctl -guestAccount off</code></td></tr>
+<tr><td><code>pwpolicy</code></td><td>Show password and lockout policies for an account (needs sudo)</td><td><code class="copy">sudo pwpolicy -u alice -getaccountpolicies</code></td></tr>
+<tr><td><code>sudo_local</code></td><td>Allow Touch ID for <code>sudo</code> in a file that survives macOS updates (macOS 14 and later): copy the template, then remove the <code>#</code> before <code>pam_tid.so</code></td><td><code class="copy">sudo cp /etc/pam.d/sudo_local.template /etc/pam.d/sudo_local</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="processes-and-services">
+<h2 class="panel-title">Processes and Services (launchd)</h2>
+<p class="panel-lead">launchd replaces systemd and cron. Daemons run in the <code>system</code> domain, per user agents in <code>gui/UID</code>.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>launchctl print system</code></td><td>Every service loaded in the system domain with its state</td><td><code class="copy">sudo launchctl print system | less</code></td></tr>
+<tr><td><code>launchctl print gui/</code></td><td>Agents loaded for the logged in user</td><td><code class="copy">launchctl print gui/$(id -u)</code></td></tr>
+<tr><td><code>launchctl print</code> service</td><td>Details of one service: program, arguments, PID, last exit code</td><td><code class="copy">sudo launchctl print system/com.openssh.sshd</code></td></tr>
+<tr><td><code>launchctl bootstrap</code></td><td>Load a daemon or agent plist (modern replacement for <code>load</code>)</td><td><code class="copy">sudo launchctl bootstrap system /Library/LaunchDaemons/com.example.agent.plist</code></td></tr>
+<tr><td><code>launchctl bootout</code></td><td>Stop and unload a service (modern replacement for <code>unload</code>)</td><td><code class="copy">launchctl bootout gui/$(id -u)/com.example.agent</code></td></tr>
+<tr><td><code>launchctl kickstart -k</code></td><td>Restart a running service</td><td><code class="copy">sudo launchctl kickstart -k system/com.example.agent</code></td></tr>
+<tr><td><code>launchctl disable</code> / <code>enable</code></td><td>Stop a service from loading at boot (persists across restarts)</td><td><code class="copy">sudo launchctl disable system/com.example.agent</code></td></tr>
+<tr><td><code>launchctl print-disabled</code></td><td>Services that have been disabled in a domain</td><td><code class="copy">sudo launchctl print-disabled system</code></td></tr>
+<tr><td><code>launchctl list</code></td><td>Legacy list of PID, last exit status and label; still handy for a quick look at third party jobs</td><td><code class="copy">launchctl list | grep -v com.apple</code></td></tr>
+<tr><td><code>launchctl load</code> / <code>unload</code></td><td>Deprecated legacy subcommands; use <code>bootstrap</code> and <code>bootout</code> in new scripts</td><td><code class="copy">launchctl unload ~/Library/LaunchAgents/com.example.agent.plist</code></td></tr>
+<tr><td><code>launchctl procinfo</code></td><td>Which launchd job started a PID, with its ports and limits (needs sudo)</td><td><code class="copy">sudo launchctl procinfo 1234</code></td></tr>
+<tr><td><code>ps</code> (BSD)</td><td>BSD style columns; <code>--sort</code> does not exist, use <code>-r</code> (CPU) or <code>-m</code> (memory)</td><td><code class="copy">ps -axo pid,ppid,user,%cpu,%mem,comm -r | head</code></td></tr>
+<tr><td><code>lsof -iTCP -sTCP:LISTEN</code></td><td>Listening TCP ports with the owning process (macOS has no <code>ss</code>)</td><td><code class="copy">sudo lsof -nP -iTCP -sTCP:LISTEN</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>launchd plist locations</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Location</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>~/Library/LaunchAgents</code></td><td>Agents for one user, run at that user's login</td><td><code class="copy">ls -la ~/Library/LaunchAgents</code></td></tr>
+<tr><td><code>/Library/LaunchAgents</code></td><td>Agents installed by third party apps for every user</td><td><code class="copy">ls -la /Library/LaunchAgents</code></td></tr>
+<tr><td><code>/Library/LaunchDaemons</code></td><td>Daemons that run as root at boot, before anyone logs in</td><td><code class="copy">ls -la /Library/LaunchDaemons</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="networking">
+<h2 class="panel-title">Networking</h2>
+<p class="panel-lead">Network services, DNS, Wi-Fi, routes and live traffic per process.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>networksetup -listallhardwareports</code></td><td>Map service names (Wi-Fi, Ethernet) to devices (<code>en0</code>, <code>en1</code>) and MAC addresses</td><td><code class="copy">networksetup -listallhardwareports</code></td></tr>
+<tr><td><code>networksetup -listallnetworkservices</code></td><td>Network services in use; an asterisk marks a disabled one</td><td><code class="copy">networksetup -listallnetworkservices</code></td></tr>
+<tr><td><code>networksetup -getinfo</code></td><td>IP, subnet, router and MAC of a service</td><td><code class="copy">networksetup -getinfo "Wi-Fi"</code></td></tr>
+<tr><td><code>networksetup -getdnsservers</code></td><td>DNS servers set manually on a service</td><td><code class="copy">networksetup -getdnsservers "Wi-Fi"</code></td></tr>
+<tr><td><code>networksetup -setdnsservers</code></td><td>Set DNS servers, or <code>Empty</code> to go back to DHCP (needs admin rights)</td><td><code class="copy">sudo networksetup -setdnsservers "Wi-Fi" 9.9.9.9 1.1.1.1</code></td></tr>
+<tr><td><code>networksetup -getwebproxy</code></td><td>Check for a configured HTTP proxy (also <code>-getsecurewebproxy</code>, <code>-getautoproxyurl</code>)</td><td><code class="copy">networksetup -getsecurewebproxy "Wi-Fi"</code></td></tr>
+<tr><td><code>scutil --dns</code></td><td>The resolver configuration macOS really uses, including per domain and VPN resolvers</td><td><code class="copy">scutil --dns | less</code></td></tr>
+<tr><td><code>scutil --proxy</code></td><td>Effective proxy settings, including PAC files pushed by MDM</td><td><code class="copy">scutil --proxy</code></td></tr>
+<tr><td><code>ifconfig</code></td><td>Interface addresses and state (macOS has no <code>ip</code> command)</td><td><code class="copy">ifconfig en0</code></td></tr>
+<tr><td><code>ipconfig getifaddr</code></td><td>Just the IPv4 address of an interface</td><td><code class="copy">ipconfig getifaddr en0</code></td></tr>
+<tr><td><code>route -n get</code></td><td>Which gateway and interface a destination uses</td><td><code class="copy">route -n get default</code></td></tr>
+<tr><td><code>netstat -anv</code></td><td>All sockets with PID and process name in the verbose columns</td><td><code class="copy">netstat -anv -p tcp</code></td></tr>
+<tr><td><code>nettop</code></td><td>Live network usage per process</td><td><code class="copy">nettop -P -m tcp</code></td></tr>
+<tr><td><code>dns-sd -B</code></td><td>Browse Bonjour services on the local network</td><td><code class="copy">dns-sd -B _ssh._tcp</code></td></tr>
+<tr><td><code>dns-sd -G</code></td><td>Resolve a name through mDNSResponder, the way apps do</td><td><code class="copy">dns-sd -G v4v6 example.com</code></td></tr>
+<tr><td><code>dscacheutil -q host</code></td><td>Look up a host through the system resolver (honours <code>/etc/hosts</code>)</td><td><code class="copy">dscacheutil -q host -a name example.com</code></td></tr>
+<tr><td>Flush DNS</td><td>Clear the DNS cache</td><td><code class="copy">sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder</code></td></tr>
+<tr><td><code>wdutil info</code></td><td>Wi-Fi details, replacing the <code>airport</code> tool removed in macOS 14.4; SSID and BSSID may show as redacted (needs sudo)</td><td><code class="copy">sudo wdutil info</code></td></tr>
+<tr><td><code>system_profiler SPAirPortDataType</code></td><td>Wi-Fi hardware, current network security mode and nearby networks</td><td><code class="copy">system_profiler SPAirPortDataType</code></td></tr>
+<tr><td><code>pfctl</code></td><td>Packet filter status and loaded rules (needs sudo)</td><td><code class="copy">sudo pfctl -s info; sudo pfctl -s rules</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="disks-and-files">
+<h2 class="panel-title">Disks and Files</h2>
+<p class="panel-lead">APFS volumes, disk images, Time Machine, Spotlight and file activity.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>diskutil list</code></td><td>All disks, containers and volumes with identifiers such as <code>disk4s1</code></td><td><code class="copy">diskutil list</code></td></tr>
+<tr><td><code>diskutil info</code></td><td>Details of one volume: file system, encryption, free space</td><td><code class="copy">diskutil info /</code></td></tr>
+<tr><td><code>diskutil apfs list</code></td><td>APFS containers, volume roles and FileVault state</td><td><code class="copy">diskutil apfs list</code></td></tr>
+<tr><td><code>diskutil apfs listSnapshots</code></td><td>APFS snapshots on a volume (Time Machine and update snapshots)</td><td><code class="copy">diskutil apfs listSnapshots /</code></td></tr>
+<tr><td><code>diskutil eraseDisk</code></td><td>Erase and format a whole disk; double check the identifier first</td><td><code class="copy">diskutil eraseDisk APFS USBKEY GPT disk4</code></td></tr>
+<tr><td><code>diskutil image</code></td><td>Disk image subcommands that replace <code>hdiutil</code> in macOS 27; check <code>diskutil image attach --help</code> for flags</td><td><code class="copy">diskutil image attach evidence.dmg</code></td></tr>
+<tr><td><code>hdiutil create</code></td><td>Create an encrypted disk image; prompts for the password. Deprecated in macOS 27 but still works</td><td><code class="copy">hdiutil create -size 2g -fs APFS -encryption AES-256 -volname Vault vault.dmg</code></td></tr>
+<tr><td><code>hdiutil attach</code></td><td>Mount an image read only and hidden from Finder (deprecated in macOS 27)</td><td><code class="copy">hdiutil attach -readonly -nobrowse sample.dmg</code></td></tr>
+<tr><td><code>tmutil destinationinfo</code></td><td>Configured Time Machine destinations</td><td><code class="copy">tmutil destinationinfo</code></td></tr>
+<tr><td><code>tmutil listbackups</code></td><td>Backups on the destination (Terminal may need Full Disk Access)</td><td><code class="copy">tmutil listbackups</code></td></tr>
+<tr><td><code>tmutil localsnapshot</code></td><td>Take a local APFS snapshot before a risky change, list with <code>listlocalsnapshots</code></td><td><code class="copy">tmutil localsnapshot; tmutil listlocalsnapshots /</code></td></tr>
+<tr><td><code>mdutil -s</code></td><td>Spotlight indexing status; <code>-E</code> rebuilds the index (needs sudo)</td><td><code class="copy">sudo mdutil -E /</code></td></tr>
+<tr><td><code>fs_usage</code></td><td>Live file system calls, filtered by process name (needs sudo)</td><td><code class="copy">sudo fs_usage -w -f filesys Finder</code></td></tr>
+<tr><td><code>ditto</code></td><td>Copy keeping extended attributes, ACLs and resource forks</td><td><code class="copy">ditto ~/Projects /Volumes/Backup/Projects</code></td></tr>
+<tr><td><code>ditto -c -k</code></td><td>Zip a folder the same way Finder's Compress does</td><td><code class="copy">ditto -c -k --sequesterRsrc --keepParent MyApp.app MyApp.zip</code></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-danger"><p><strong>Danger:</strong> <code>diskutil eraseDisk</code>, <code>eraseVolume</code> and <code>partitionDisk</code> destroy the disk you name. Run <code>diskutil list</code> first and confirm the identifier; external disks often change number after a reboot.</p></div>
+</section>
+<section class="panel" id="security-features">
+<h2 class="panel-title">Security Features</h2>
+<p class="panel-lead">SIP, Gatekeeper, code signing, FileVault, keychain, privacy permissions, MDM profiles, XProtect and the firewall.</p>
+<h3>Platform protections</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>csrutil status</code></td><td>System Integrity Protection state; it can only be changed from recoveryOS</td><td><code class="copy">csrutil status</code></td></tr>
+<tr><td><code>csrutil authenticated-root</code></td><td>Whether the sealed system volume is enforced</td><td><code class="copy">csrutil authenticated-root status</code></td></tr>
+<tr><td><code>spctl --status</code></td><td>Gatekeeper state: <code>assessments enabled</code> is the safe answer</td><td><code class="copy">spctl --status</code></td></tr>
+<tr><td><code>spctl -a -t exec</code></td><td>Would Gatekeeper allow this app, and why (Notarized Developer ID, App Store, rejected)</td><td><code class="copy">spctl -a -vvv -t exec /Applications/Firefox.app</code></td></tr>
+<tr><td><code>spctl -a -t install</code></td><td>Gatekeeper check for an installer package</td><td><code class="copy">spctl -a -vvv -t install ~/Downloads/setup.pkg</code></td></tr>
+<tr><td><code>spctl --global-disable</code></td><td>No longer supported: since macOS 15 it only unlocks the Anywhere option, which must be confirmed in System Settings, and it does not fully turn Gatekeeper off. Allow single apps in Privacy and Security instead</td><td><code class="copy">sudo spctl --global-enable</code></td></tr>
+<tr><td><code>xprotect version</code></td><td>Installed XProtect definitions version (macOS 15 and later); <code>sudo xprotect check</code> fails on macOS 27</td><td><code class="copy">xprotect version</code></td></tr>
+<tr><td>XProtect history</td><td>When XProtect, XProtect Remediator and other security data were last updated</td><td><code class="copy">system_profiler SPInstallHistoryDataType | grep -A4 -i xprotect | tail -20</code></td></tr>
+<tr><td><code>fdesetup status</code></td><td>FileVault on or off</td><td><code class="copy">fdesetup status</code></td></tr>
+<tr><td><code>fdesetup list</code></td><td>Users allowed to unlock FileVault (needs sudo)</td><td><code class="copy">sudo fdesetup list</code></td></tr>
+<tr><td><code>socketfilterfw --getglobalstate</code></td><td>Application firewall on or off</td><td><code class="copy">/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate</code></td></tr>
+<tr><td><code>socketfilterfw --setglobalstate</code></td><td>Turn the application firewall on (needs sudo)</td><td><code class="copy">sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setglobalstate on</code></td></tr>
+<tr><td><code>socketfilterfw --setstealthmode</code></td><td>Stealth mode: ignore pings and probes to closed ports (needs sudo)</td><td><code class="copy">sudo /usr/libexec/ApplicationFirewall/socketfilterfw --setstealthmode on</code></td></tr>
+<tr><td><code>socketfilterfw --listapps</code></td><td>Apps with an allow or block rule in the firewall</td><td><code class="copy">/usr/libexec/ApplicationFirewall/socketfilterfw --listapps</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Code signing and packages</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>codesign -dv</code></td><td>Signer, Team ID, hardened runtime flags and identifier of an app or binary</td><td><code class="copy">codesign -dv --verbose=4 /Applications/Slack.app</code></td></tr>
+<tr><td><code>codesign --verify</code></td><td>Check that a signature is intact and nothing inside was modified</td><td><code class="copy">codesign --verify --deep --strict --verbose=2 /Applications/Slack.app</code></td></tr>
+<tr><td><code>codesign --entitlements</code></td><td>Entitlements an app requests, such as camera or disabled library validation</td><td><code class="copy">codesign -d --entitlements - --xml /Applications/Slack.app | plutil -p -</code></td></tr>
+<tr><td><code>pkgutil --check-signature</code></td><td>Signer and certificate chain of a <code>.pkg</code> before you install it</td><td><code class="copy">pkgutil --check-signature ~/Downloads/setup.pkg</code></td></tr>
+<tr><td><code>pkgutil --expand</code></td><td>Unpack a <code>.pkg</code> to read its install scripts without running them</td><td><code class="copy">pkgutil --expand-full ~/Downloads/setup.pkg /tmp/setup-pkg</code></td></tr>
+<tr><td><code>pkgutil --pkgs</code> / <code>--files</code></td><td>Installed package receipts, and the files a package installed</td><td><code class="copy">pkgutil --pkgs | grep -v com.apple</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Keychain</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>security list-keychains</code></td><td>Keychains in the search list</td><td><code class="copy">security list-keychains</code></td></tr>
+<tr><td><code>security find-generic-password</code></td><td>Read a saved password; <code>-w</code> prints only the secret after you approve the prompt</td><td><code class="copy">security find-generic-password -s "api-token" -a "$USER" -w</code></td></tr>
+<tr><td><code>security add-generic-password</code></td><td>Store a secret for scripts; <code>-w</code> as the last option prompts for it</td><td><code class="copy">security add-generic-password -a "$USER" -s "api-token" -w</code></td></tr>
+<tr><td><code>security find-identity</code></td><td>Valid certificates with private keys, for example code signing identities</td><td><code class="copy">security find-identity -v -p codesigning</code></td></tr>
+<tr><td><code>security find-certificate</code></td><td>Export certificates from the System keychain as PEM, to spot added root CAs</td><td><code class="copy">security find-certificate -a -p /Library/Keychains/System.keychain &gt; system-certs.pem</code></td></tr>
+<tr><td><code>security dump-trust-settings</code></td><td>Admin level certificate trust overrides; any output deserves a look</td><td><code class="copy">security dump-trust-settings -d</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Privacy and management</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>tccutil reset</code></td><td>Reset privacy permissions (Camera, Microphone, ScreenCapture, All) for every app or one bundle ID</td><td><code class="copy">tccutil reset ScreenCapture com.example.app</code></td></tr>
+<tr><td>TCC database</td><td>Which apps hold which privacy permissions (Terminal needs Full Disk Access)</td><td><code class="copy">sudo sqlite3 "/Library/Application Support/com.apple.TCC/TCC.db" "SELECT client, service, auth_value FROM access"</code></td></tr>
+<tr><td><code>profiles status</code></td><td>Whether the Mac is enrolled in MDM, and through Automated Device Enrollment</td><td><code class="copy">profiles status -type enrollment</code></td></tr>
+<tr><td><code>profiles show</code></td><td>Installed configuration profiles and their payloads (needs sudo)</td><td><code class="copy">sudo profiles show -type configuration</code></td></tr>
+<tr><td><code>system_profiler SPConfigurationProfileDataType</code></td><td>Profile report without sudo, good for a quick audit</td><td><code class="copy">system_profiler SPConfigurationProfileDataType</code></td></tr>
+<tr><td><code>kmutil showloaded</code></td><td>Loaded kernel extensions (replaces the deprecated <code>kextstat</code>)</td><td><code class="copy">kmutil showloaded --list-only | grep -v com.apple</code></td></tr>
+<tr><td><code>systemextensionsctl list</code></td><td>System extensions such as network filters and endpoint security agents</td><td><code class="copy">systemextensionsctl list</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="logs-and-forensics">
+<h2 class="panel-title">Logs and Forensics</h2>
+<p class="panel-lead">The unified log replaces most text logs. Query it with predicates and export archives for offline analysis.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>log show --last</code></td><td>Recent unified log entries in classic syslog style</td><td><code class="copy">log show --last 30m --style syslog</code></td></tr>
+<tr><td><code>log show --predicate</code> process</td><td>Entries from one process, here SSH logins</td><td><code class="copy">log show --last 1d --predicate 'process == "sshd"' --style syslog</code></td></tr>
+<tr><td><code>log show</code> sudo use</td><td>Every <code>sudo</code> command run in the last day</td><td><code class="copy">log show --last 1d --predicate 'process == "sudo"' --style syslog</code></td></tr>
+<tr><td><code>log show</code> by subsystem</td><td>Entries from one subsystem, case insensitive text match with <code>CONTAINS[c]</code></td><td><code class="copy">log show --last 2h --predicate 'subsystem == "com.apple.securityd" AND eventMessage CONTAINS[c] "fail"'</code></td></tr>
+<tr><td><code>log show --start</code></td><td>A fixed time window, including info and debug level messages</td><td><code class="copy">log show --info --debug --start "2026-11-25 08:00:00" --end "2026-11-25 09:00:00"</code></td></tr>
+<tr><td><code>log stream</code></td><td>Follow the log live, filtered by a predicate</td><td><code class="copy">log stream --level info --predicate 'process == "loginwindow"'</code></td></tr>
+<tr><td><code>log collect</code></td><td>Export a <code>.logarchive</code> for analysis on another Mac (needs sudo). Archives from macOS 27 need macOS 26.2 or later to read</td><td><code class="copy">sudo log collect --last 1d --output ~/Desktop/case-042.logarchive</code></td></tr>
+<tr><td><code>/var/db/diagnostics</code></td><td>Where the unified log is stored (binary <code>tracev3</code> files, with <code>/var/db/uuidtext</code>)</td><td><code class="copy">sudo du -sh /var/db/diagnostics</code></td></tr>
+<tr><td><code>/var/log/install.log</code></td><td>Text log of installers and software updates</td><td><code class="copy">grep -i "installed" /var/log/install.log | tail -20</code></td></tr>
+<tr><td>DiagnosticReports</td><td>Crash and hang reports, system wide and per user</td><td><code class="copy">ls -lt /Library/Logs/DiagnosticReports ~/Library/Logs/DiagnosticReports | head</code></td></tr>
+<tr><td><code>last</code></td><td>Login, logout and reboot history</td><td><code class="copy">last -20; last reboot</code></td></tr>
+<tr><td>Installed apps</td><td>Every app with version, signer and location</td><td><code class="copy">system_profiler SPApplicationsDataType -json &gt; apps.json</code></td></tr>
+<tr><td>Install history</td><td>macOS updates, App Store and package installs with dates</td><td><code class="copy">system_profiler SPInstallHistoryDataType | less</code></td></tr>
+<tr><td>Quarantine events</td><td>Files downloaded by quarantine aware apps, with the source URL and time</td><td><code class="copy">sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2 "SELECT datetime(LSQuarantineTimeStamp + 978307200, 'unixepoch'), LSQuarantineAgentName, LSQuarantineDataURLString FROM LSQuarantineEvent ORDER BY LSQuarantineTimeStamp DESC LIMIT 20"</code></td></tr>
+<tr><td><code>eslogger</code></td><td>Stream Endpoint Security events as JSON, for example every process start (needs sudo and Full Disk Access)</td><td><code class="copy">sudo eslogger exec &gt; exec-events.json</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="power-and-updates">
+<h2 class="panel-title">Power and Updates</h2>
+<p class="panel-lead">Sleep, battery and wake history with <code>pmset</code>, and macOS updates with <code>softwareupdate</code>.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>pmset -g</code></td><td>Current power settings (sleep timers, wake on network, power nap)</td><td><code class="copy">pmset -g</code></td></tr>
+<tr><td><code>pmset -g batt</code></td><td>Battery charge and power source</td><td><code class="copy">pmset -g batt</code></td></tr>
+<tr><td><code>pmset -g assertions</code></td><td>Which processes are preventing sleep right now</td><td><code class="copy">pmset -g assertions</code></td></tr>
+<tr><td><code>pmset -g log</code></td><td>Sleep, wake and lid history, useful to build a timeline</td><td><code class="copy">pmset -g log | grep -E " (Sleep|Wake|DarkWake) " | tail -20</code></td></tr>
+<tr><td><code>pmset -a</code></td><td>Change a setting for all power sources (needs sudo)</td><td><code class="copy">sudo pmset -a displaysleep 10 sleep 30</code></td></tr>
+<tr><td><code>softwareupdate --list</code></td><td>Available macOS and security updates</td><td><code class="copy">softwareupdate --list</code></td></tr>
+<tr><td><code>softwareupdate --install</code></td><td>Install all updates and restart if required (needs sudo)</td><td><code class="copy">sudo softwareupdate --install --all --restart</code></td></tr>
+<tr><td><code>softwareupdate --history</code></td><td>Updates installed so far, with dates</td><td><code class="copy">softwareupdate --history</code></td></tr>
+<tr><td><code>softwareupdate --fetch-full-installer</code></td><td>Download the full Install macOS app to <code>/Applications</code></td><td><code class="copy">softwareupdate --fetch-full-installer --full-installer-version 26.7</code></td></tr>
+<tr><td><code>softwareupdate --install-rosetta</code></td><td>Install Rosetta 2 for Intel apps on Apple silicon; macOS 27 is the last release with full Rosetta</td><td><code class="copy">sudo softwareupdate --install-rosetta --agree-to-license</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="defaults">
+<h2 class="panel-title">Defaults (Preferences)</h2>
+<p class="panel-lead">Read and change app and system preferences stored as plists. Restart the app (or <code>killall</code> it) for most changes to apply.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>defaults domains</code></td><td>Every preference domain for the current user</td><td><code class="copy">defaults domains | tr ',' '\n' | less</code></td></tr>
+<tr><td><code>defaults read</code></td><td>All settings of a domain, or one key</td><td><code class="copy">defaults read com.apple.dock autohide</code></td></tr>
+<tr><td><code>defaults read -g</code></td><td>Global settings, for example dark mode</td><td><code class="copy">defaults read -g AppleInterfaceStyle</code></td></tr>
+<tr><td><code>defaults write -bool</code></td><td>Show hidden files in Finder (<kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>.</kbd> toggles it too)</td><td><code class="copy">defaults write com.apple.finder AppleShowAllFiles -bool true &amp;&amp; killall Finder</code></td></tr>
+<tr><td><code>defaults write -string</code></td><td>Save screenshots to a folder of your choice</td><td><code class="copy">defaults write com.apple.screencapture location ~/Pictures/Screenshots</code></td></tr>
+<tr><td><code>defaults write</code> network stores</td><td>Stop Finder writing <code>.DS_Store</code> files on network shares</td><td><code class="copy">defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true</code></td></tr>
+<tr><td><code>defaults delete</code></td><td>Remove a key to go back to the default value</td><td><code class="copy">defaults delete com.apple.finder AppleShowAllFiles</code></td></tr>
+<tr><td><code>defaults read</code> system file</td><td>System wide preferences by path, for example the login window</td><td><code class="copy">defaults read /Library/Preferences/com.apple.loginwindow</code></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-warning"><p><strong>Note:</strong> settings delivered by an MDM profile live in <code>/Library/Managed Preferences</code> and override anything you write with <code>defaults</code>. Many security settings, such as FileVault or the firewall, are better checked with their own tools than with raw preference keys.</p></div>
+</section>
+<section class="panel" id="incident-response">
+<h2 class="panel-title">Security Quick Checks for Incident Response</h2>
+<p class="panel-lead">A first pass on a Mac you suspect is compromised: posture, persistence, network and recent activity.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Check</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>Security posture</td><td>SIP, Gatekeeper, FileVault and firewall state in one go</td><td><code class="copy">csrutil status; spctl --status; fdesetup status; /usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate</code></td></tr>
+<tr><td>Background items</td><td>Every login item, launch agent and daemon macOS tracks, with the app that owns it (needs sudo)</td><td><code class="copy">sudo sfltool dumpbtm</code></td></tr>
+<tr><td>Recent launch plists</td><td>Launch agents and daemons changed in the last 7 days</td><td><code class="copy">sudo find ~/Library/LaunchAgents /Library/LaunchAgents /Library/LaunchDaemons -name "*.plist" -mtime -7 -ls</code></td></tr>
+<tr><td>Running third party jobs</td><td>Loaded jobs that are not Apple's</td><td><code class="copy">launchctl list | grep -v com.apple; sudo launchctl list | grep -v com.apple</code></td></tr>
+<tr><td>Cron and periodic</td><td>Old style scheduled jobs, still honoured on macOS</td><td><code class="copy">crontab -l; sudo ls -la /usr/lib/cron/tabs /etc/periodic/daily</code></td></tr>
+<tr><td>Shell startup files</td><td>Persistence hidden in zsh startup files</td><td><code class="copy">ls -la ~/.zshrc ~/.zprofile ~/.zshenv /etc/zshrc /etc/zprofile 2&gt;/dev/null</code></td></tr>
+<tr><td>SSH access</td><td>Remote Login state and authorized keys</td><td><code class="copy">sudo systemsetup -getremotelogin; cat ~/.ssh/authorized_keys</code></td></tr>
+<tr><td>Admins and new accounts</td><td>Local admins and every human account</td><td><code class="copy">dscl . -read /Groups/admin GroupMembership; dscl . -list /Users UniqueID | awk '$2 &gt; 500'</code></td></tr>
+<tr><td>Sudo rules</td><td>Extra sudo rights added outside the default file</td><td><code class="copy">sudo ls -la /etc/sudoers.d; sudo grep -v '^#' /etc/sudoers | grep .</code></td></tr>
+<tr><td>Kernel and system extensions</td><td>Third party code running in or near the kernel</td><td><code class="copy">kmutil showloaded --list-only | grep -v com.apple; systemextensionsctl list</code></td></tr>
+<tr><td>Profiles and MDM</td><td>Unexpected configuration profiles can install root CAs, proxies or VPNs</td><td><code class="copy">profiles status -type enrollment; sudo profiles show -type configuration</code></td></tr>
+<tr><td>Trusted certificates</td><td>Admin added trust settings, a sign of TLS interception</td><td><code class="copy">security dump-trust-settings -d</code></td></tr>
+<tr><td>Listening ports</td><td>Services waiting for connections and their processes</td><td><code class="copy">sudo lsof -nP -iTCP -sTCP:LISTEN</code></td></tr>
+<tr><td>DNS and proxy hijack</td><td>Resolver, proxy and hosts file changes</td><td><code class="copy">scutil --dns | grep nameserver; scutil --proxy; grep -v '^#' /etc/hosts</code></td></tr>
+<tr><td>Unsigned processes</td><td>Check the signature of a process you do not recognise</td><td><code class="copy">codesign -dv --verbose=2 "$(ps -p 1234 -o comm=)"</code></td></tr>
+<tr><td>Recent downloads</td><td>Quarantine attribute and download source of a suspect file</td><td><code class="copy">xattr -p com.apple.quarantine suspect.app; mdls -name kMDItemWhereFroms suspect.app</code></td></tr>
+<tr><td>Privilege use</td><td>Who used sudo and from which terminal</td><td><code class="copy">log show --last 3d --predicate 'process == "sudo"' --style syslog | grep COMMAND</code></td></tr>
+<tr><td>Preserve evidence</td><td>Export logs before rebooting or cleaning up</td><td><code class="copy">sudo log collect --last 7d --output ~/Desktop/ir-$(date +%F).logarchive</code></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-warning"><p><strong>Authorization:</strong> run these checks only on Macs you own or are responsible for. Collect evidence (log archive, hashes, copies of suspicious plists) before you remove anything, and note that Terminal needs Full Disk Access for TCC, Time Machine and some log queries.</p></div>
+<div class="callout"><p><strong>macOS 27 notes:</strong> Golden Gate runs on Apple silicon only, so macOS 26 Tahoe is the last release for Intel Macs. <code>hdiutil</code> is deprecated in favour of <code>diskutil image</code>, encrypted HFS+ is deprecated, and Rosetta is expected to be removed in macOS 28 except for some games.</p></div>
+<p><a class="link-button" href="https://support.apple.com/guide/terminal/welcome/mac">Terminal User Guide on Apple Support</a></p>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

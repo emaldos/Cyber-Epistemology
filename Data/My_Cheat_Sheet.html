@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Cheat Sheet | Cyber Epistemology</title>
+<meta name="description" content="Your personal cheat sheet: every command, path and tool you starred across Cyber Epistemology, ready to print, export or back up. Saved only in your browser.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../Assets/Image/AppleTouchIcon.png">
+<link rel="manifest" href="../Manifest.webmanifest">
+<link rel="stylesheet" href="../Assets/Style/Site.css">
+<script src="../Assets/Script/CheatSheet.js" defer></script>
+<script src="../Assets/Script/Site.js" defer></script>
+</head>
+<body class="is-content-page" data-root="../" data-section="cheat-sheet" data-no-stars>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-separator">/</span><span>Tools</span><span class="breadcrumb-separator">/</span><span>My Cheat Sheet</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../Assets/Icon/Star.svg" alt="">
+<div>
+<p class="hero-eyebrow">Tools</p>
+<h1 class="hero-title">My Cheat Sheet</h1>
+</div>
+</div>
+<p class="hero-lead">Press the star next to any command, path or tool on the site and it lands here, grouped by page. Everything is saved only in this browser, so back it up if you switch devices.</p>
+<div class="hero-meta"><span class="badge" data-cheat-sheet-count>0 items</span><span class="badge">Saved in this browser</span></div>
+<div class="cheat-sheet-toolbar">
+<button class="link-button" type="button" data-action="print"><img src="../Assets/Icon/Printer.svg" alt="">Print or save as PDF</button>
+<button class="link-button" type="button" data-action="export-markdown"><img src="../Assets/Icon/Download.svg" alt="">Export Markdown</button>
+<button class="link-button" type="button" data-action="export-backup"><img src="../Assets/Icon/Download.svg" alt="">Back up</button>
+<button class="link-button" type="button" data-action="import-backup"><img src="../Assets/Icon/Upload.svg" alt="">Restore backup</button>
+<button class="link-button is-danger" type="button" data-action="clear"><img src="../Assets/Icon/Trash.svg" alt="">Clear all</button>
+<input type="file" accept="application/json,.json" hidden data-import-input aria-label="Choose a backup file">
+</div>
+<p class="cheat-sheet-message" data-cheat-sheet-message role="status" hidden></p>
+<label class="page-filter"><img src="../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter your cheat sheet" data-page-filter aria-label="Filter your cheat sheet"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content" id="cheat-sheet-content"></div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

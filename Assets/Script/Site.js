@@ -3,14 +3,44 @@
   const siteName = "Cyber Epistemology";
   const siteVersion = "V3";
   const repositoryUrl = "https://github.com/emaldos/Cyber-Epistemology";
-  const navigationItems = [
-    { key: "home", label: "Home", path: "index.html", icon: "Home.png" },
-    { key: "system-files", label: "System Files", path: "Data/System_Files_Info.html", icon: "Folder.png" },
-    { key: "commands", label: "Commands", path: "Data/Commands.html", icon: "Terminal.png" },
-    { key: "kali-tools", label: "Kali Tools", path: "Data/Kali_Tools.html", icon: "KaliLinux.png" },
-    { key: "roadmap", label: "Roadmap", path: "Data/cyber_roadmap.html", icon: "Roadmap.png" },
-    { key: "websites", label: "Websites", path: "Data/Cyber_Websites.html", icon: "Globe.png" },
-    { key: "awareness", label: "Awareness", path: "Data/Maximum_Security.html", icon: "Awareness.png" }
+  const homeItem = { label: "Home", description: "Start page and site search", path: "index.html", icon: "Home.svg" };
+  const navigationGroups = [
+    { key: "system-files", label: "Operating Systems", sections: ["system-files"], items: [
+      { label: "All systems", description: "Compare every platform side by side", path: "Data/System_Files_Info.html", icon: "Folder.svg", isOverview: true },
+      { label: "Windows 11", path: "Data/OS/Windows_11.html", icon: "Windows11.svg" },
+      { label: "Windows Server", path: "Data/OS/Windows_Server.html", icon: "WindowsServer.svg" },
+      { label: "macOS", path: "Data/OS/macOS.html", icon: "MacOs.svg" },
+      { label: "iOS", path: "Data/OS/IOS.html", icon: "Ios.svg" },
+      { label: "Android", path: "Data/OS/Android.html", icon: "Android.svg" },
+      { label: "Ubuntu Server", path: "Data/OS/Ubuntu_Server.html", icon: "UbuntuServer.svg" },
+      { label: "Kali Linux", path: "Data/OS/Kali_Linux.html", icon: "KaliLinux.svg" }
+    ] },
+    { key: "commands", label: "Commands", sections: ["commands"], items: [
+      { label: "All shells", description: "The same task in Bash, PowerShell and CMD", path: "Data/Commands.html", icon: "Terminal.svg", isOverview: true },
+      { label: "Bash", description: "Linux and macOS shell", path: "Data/Commands/Bash.html", icon: "Bash.svg" },
+      { label: "macOS Terminal", description: "zsh, launchctl, security and logs", path: "Data/Commands/macOS.html", icon: "MacOs.svg" },
+      { label: "PowerShell", description: "Windows, servers and Active Directory", path: "Data/Commands/PS.html", icon: "PowerShell.svg" },
+      { label: "CMD", description: "Classic Command Prompt and batch", path: "Data/Commands/CMD.html", icon: "CommandPrompt.svg" }
+    ] },
+    { key: "guides", label: "Guides", sections: ["guides"], items: [
+      { label: "Cloud Security", description: "AWS, Azure and GCP CLI and IAM", path: "Data/Guides/Cloud_Security.html", icon: "Cloud.svg" },
+      { label: "Ports and Protocols", description: "Common ports and what to check", path: "Data/Guides/Ports_And_Protocols.html", icon: "Ports.svg" },
+      { label: "Wireshark Filters", description: "Display and capture filters by task", path: "Data/Guides/Wireshark_Filters.html", icon: "Wireshark.svg" }
+    ] },
+    { key: "tools", label: "Tools", sections: ["kali-tools", "websites", "utilities", "cheat-sheet"], items: [
+      { label: "Kali Tools", description: "Tools for each phase of an assessment", path: "Data/Kali_Tools.html", icon: "KaliLinux.svg" },
+      { label: "Utilities", description: "Encode, decode, hash, JWT and subnets", path: "Data/Utilities.html", icon: "Utilities.svg" },
+      { label: "My Cheat Sheet", description: "Everything you starred, ready to print", path: "Data/My_Cheat_Sheet.html", icon: "Star.svg" },
+      { label: "Cyber Websites", description: "Labs, CTFs, threat intel and OSINT", path: "Data/Cyber_Websites.html", icon: "Globe.svg" }
+    ] },
+    { key: "learn", label: "Learn", sections: ["start-here", "study-planner", "roadmap", "awareness", "glossary", "about"], items: [
+      { label: "Start Here", description: "Guided paths for your role", path: "Data/Start_Here.html", icon: "StartHere.svg" },
+      { label: "Study Planner", description: "A weekly schedule you can export", path: "Data/Study_Planner.html", icon: "Calendar.svg" },
+      { label: "Certification Roadmap", description: "Certifications by career track and level", path: "Data/cyber_roadmap.html", icon: "Roadmap.svg" },
+      { label: "Personal Security", description: "Passwords, passkeys, phishing and backups", path: "Data/Maximum_Security.html", icon: "Awareness.svg" },
+      { label: "Glossary", description: "Security terms in plain language", path: "Data/Glossary.html", icon: "Glossary.svg" },
+      { label: "About", description: "The project and how pages are reviewed", path: "Data/About.html", icon: "Shield.svg" }
+    ] }
   ];
   const rootPath = document.body.dataset.root || "";
   const currentSection = document.body.dataset.section || "";
@@ -26,10 +56,73 @@
     return element;
   };
   const createIcon = (name, className = "") => createElement("img", { src: iconPath(name), alt: "", "aria-hidden": "true", className, width: "20", height: "20" });
-  const createNavigationLink = item => {
-    const link = createElement("a", { href: rootPath + item.path, className: "main-nav-link" + (item.key === currentSection ? " is-active" : "") }, [createIcon(item.icon), createElement("span", { text: item.label })]);
-    if (item.key === currentSection) link.setAttribute("aria-current", "page");
+  const normalizePagePath = pathname => pathname.replace(/index\.html$/, "");
+  const isCurrentPage = path => normalizePagePath(new URL(rootPath + path, document.baseURI).pathname) === normalizePagePath(window.location.pathname);
+  const createMenuLink = item => {
+    const text = createElement("span", { className: "menu-link-text" }, [createElement("span", { className: "menu-link-label", text: item.label })]);
+    if (item.description) text.append(createElement("span", { className: "menu-link-description", text: item.description }));
+    const link = createElement("a", { href: rootPath + item.path, className: "menu-link" + (item.isOverview ? " is-overview" : "") }, [createIcon(item.icon, "menu-link-icon"), text]);
+    if (isCurrentPage(item.path)) link.setAttribute("aria-current", "page");
     return link;
+  };
+  const createNavigationGroup = group => {
+    const panelId = "site-menu-" + group.key;
+    const isActive = group.sections.includes(currentSection);
+    const trigger = createElement("button", { className: "main-nav-trigger" + (isActive ? " is-active" : ""), type: "button", "aria-expanded": "false", "aria-controls": panelId }, [createElement("span", { text: group.label }), createIcon("Chevron.svg", "main-nav-chevron")]);
+    const panel = createElement("div", { className: "main-nav-panel" + (group.items.length > 5 ? " is-wide" : ""), id: panelId, hidden: "" }, group.items.map(createMenuLink));
+    return createElement("div", { className: "main-nav-group" }, [trigger, panel]);
+  };
+  const setupNavigationGroups = navigation => {
+    const groups = [...navigation.querySelectorAll(".main-nav-group")];
+    const setGroupOpen = (group, isOpen) => {
+      group.classList.toggle("is-open", isOpen);
+      group.querySelector(".main-nav-trigger").setAttribute("aria-expanded", String(isOpen));
+      group.querySelector(".main-nav-panel").hidden = !isOpen;
+    };
+    const closeOtherGroups = openGroup => groups.forEach(group => { if (group !== openGroup) setGroupOpen(group, false); });
+    groups.forEach(group => {
+      const trigger = group.querySelector(".main-nav-trigger");
+      let closeTimer = null;
+      let isOpenedByHover = false;
+      trigger.addEventListener("click", () => {
+        const willOpen = isOpenedByHover || !group.classList.contains("is-open");
+        isOpenedByHover = false;
+        closeOtherGroups(group);
+        setGroupOpen(group, willOpen);
+      });
+      trigger.addEventListener("keydown", event => {
+        if (event.key !== "ArrowDown") return;
+        event.preventDefault();
+        closeOtherGroups(group);
+        setGroupOpen(group, true);
+        group.querySelector(".menu-link").focus();
+      });
+      group.addEventListener("pointerenter", event => {
+        if (event.pointerType !== "mouse") return;
+        clearTimeout(closeTimer);
+        if (!group.classList.contains("is-open")) isOpenedByHover = true;
+        closeOtherGroups(group);
+        setGroupOpen(group, true);
+      });
+      group.addEventListener("pointerleave", event => {
+        if (event.pointerType !== "mouse") return;
+        closeTimer = setTimeout(() => {
+          isOpenedByHover = false;
+          setGroupOpen(group, false);
+        }, 200);
+      });
+      group.addEventListener("focusout", event => { if (!group.contains(event.relatedTarget)) setGroupOpen(group, false); });
+      group.addEventListener("keydown", event => {
+        if (event.key !== "Escape" || !group.classList.contains("is-open")) return;
+        setGroupOpen(group, false);
+        trigger.focus();
+      });
+    });
+    document.addEventListener("click", event => { if (!navigation.contains(event.target)) closeOtherGroups(null); });
+  };
+  const createMobileMenu = () => {
+    const sections = navigationGroups.map(group => createElement("div", { className: "mobile-menu-group" }, [createElement("p", { className: "mobile-menu-title", text: group.label }), createElement("div", { className: "mobile-menu-links" }, group.items.map(createMenuLink))]));
+    return createElement("nav", { className: "mobile-menu", id: "site-mobile-menu", "aria-label": "Mobile" }, [createElement("div", { className: "mobile-menu-links" }, [createMenuLink(homeItem)]), ...sections]);
   };
   const createSearchBox = () => {
     const results = createElement("div", { className: "search-results", id: "site-search-results", role: "listbox", hidden: "" });
@@ -42,25 +135,37 @@
     if (!topbar) return null;
     topbar.className = "topbar";
     const brandLogo = createElement("img", { className: "brand-logo", src: rootPath + "Assets/Image/Logo.webp", alt: "", width: "38", height: "38" });
-    const brand = createElement("a", { className: "brand", href: rootPath + "index.html", "aria-label": siteName + " home" }, [brandLogo, createElement("span", { className: "brand-name", text: siteName }), createElement("span", { className: "version-badge", text: siteVersion })]);
-    const mainNavigation = createElement("nav", { className: "main-nav", "aria-label": "Main" }, navigationItems.map(createNavigationLink));
+    const brand = createElement("a", { className: "brand", href: rootPath + "index.html", "aria-label": siteName + " home" }, [brandLogo, createElement("span", { className: "brand-name", text: siteName })]);
+    const mainNavigation = createElement("nav", { className: "main-nav", "aria-label": "Main" }, navigationGroups.map(createNavigationGroup));
     const searchToggle = createElement("button", { className: "icon-button search-toggle", type: "button", "aria-label": "Open search" }, [createIcon("Search.svg")]);
-    const menuButton = createElement("button", { className: "icon-button menu-button", type: "button", "aria-label": "Open menu", "aria-expanded": "false", "aria-controls": "site-mobile-menu" }, [createIcon("Menu.png")]);
+    const menuButton = createElement("button", { className: "icon-button menu-button", type: "button", "aria-label": "Open menu", "aria-expanded": "false", "aria-controls": "site-mobile-menu" }, [createIcon("Menu.svg")]);
     const actions = createElement("div", { className: "topbar-actions" }, [createSearchBox(), searchToggle, menuButton]);
     topbar.append(createElement("div", { className: "topbar-inner" }, [brand, mainNavigation, actions]));
-    const mobileMenu = createElement("nav", { className: "mobile-menu", id: "site-mobile-menu", "aria-label": "Mobile" }, navigationItems.concat([{ key: "about", label: "About", path: "Data/About.html", icon: "Shield.svg" }]).map(createNavigationLink));
+    setupNavigationGroups(mainNavigation);
+    const mobileMenu = createMobileMenu();
     topbar.after(mobileMenu);
-    menuButton.addEventListener("click", () => {
-      const isOpen = topbar.classList.toggle("is-menu-open");
-      topbar.classList.remove("is-search-open");
+    const setMobileMenuOpen = isOpen => {
+      topbar.classList.toggle("is-menu-open", isOpen);
       menuButton.setAttribute("aria-expanded", String(isOpen));
-      menuButton.replaceChildren(createIcon(isOpen ? "Close.svg" : "Menu.png"));
+      menuButton.replaceChildren(createIcon(isOpen ? "Close.svg" : "Menu.svg"));
+    };
+    menuButton.addEventListener("click", () => {
+      const isOpen = !topbar.classList.contains("is-menu-open");
+      topbar.classList.remove("is-search-open");
+      setMobileMenuOpen(isOpen);
+      if (isOpen) mobileMenu.querySelector(".menu-link").focus();
+    });
+    document.addEventListener("keydown", event => {
+      if (event.key !== "Escape" || !topbar.classList.contains("is-menu-open")) return;
+      setMobileMenuOpen(false);
+      menuButton.focus();
+    });
+    document.addEventListener("click", event => {
+      if (topbar.classList.contains("is-menu-open") && !topbar.contains(event.target) && !mobileMenu.contains(event.target)) setMobileMenuOpen(false);
     });
     searchToggle.addEventListener("click", () => {
       const isOpen = topbar.classList.toggle("is-search-open");
-      topbar.classList.remove("is-menu-open");
-      menuButton.setAttribute("aria-expanded", "false");
-      menuButton.replaceChildren(createIcon("Menu.png"));
+      setMobileMenuOpen(false);
       searchToggle.replaceChildren(createIcon(isOpen ? "Close.svg" : "Search.svg"));
       if (isOpen) topbar.querySelector(".search-input").focus();
     });
@@ -72,7 +177,8 @@
     footer.className = "footer";
     const copyright = createElement("span", { text: "© " + new Date().getFullYear() + " " + siteName + " · " + siteVersion + " · Learn. Secure. Share." });
     const links = createElement("div", { className: "footer-links" }, [createElement("a", { href: rootPath + "index.html", text: "Home" }), createElement("a", { href: rootPath + "Data/About.html", text: "About" }), createElement("a", { href: repositoryUrl, text: "GitHub" })]);
-    footer.append(createElement("div", { className: "footer-inner" }, [copyright, links]));
+    const offlineStatus = createElement("span", { className: "offline-status", "data-offline-status": "", hidden: "" }, [createIcon("Offline.svg"), createElement("span", { text: "Available offline" })]);
+    footer.append(createElement("div", { className: "footer-inner" }, [copyright, offlineStatus, links]));
   };
   const watchScroll = topbar => {
     if (!topbar) return;
@@ -259,6 +365,76 @@
     });
     return button;
   };
+  const cheatSheetStorageKey = "cyberEpistemology.cheatSheet";
+  const readCheatSheet = () => {
+    try {
+      const entries = JSON.parse(window.localStorage.getItem(cheatSheetStorageKey) || "[]");
+      return Array.isArray(entries) ? entries : [];
+    } catch (error) {
+      return [];
+    }
+  };
+  const writeCheatSheet = entries => {
+    try {
+      window.localStorage.setItem(cheatSheetStorageKey, JSON.stringify(entries));
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+  const currentPagePath = () => {
+    const sitePath = new URL(rootPath || "./", document.baseURI).pathname;
+    return decodeURIComponent(window.location.pathname.slice(sitePath.length)) || "index.html";
+  };
+  const readCellText = cell => {
+    const cellCopy = cell.cloneNode(true);
+    cellCopy.querySelectorAll(".star-button, .copy-button").forEach(element => element.remove());
+    cellCopy.querySelectorAll(".tag, .attack-tag").forEach(element => element.after(" "));
+    return cellCopy.textContent.replace(/\s+/g, " ").trim();
+  };
+  const createStarButton = (row, table, panel, starredIdentifiers) => {
+    const pagePath = currentPagePath();
+    const cells = [...row.children];
+    const entryIdentifier = pagePath + "#" + panel.id + "|" + readCellText(cells[0]);
+    const button = createElement("button", { className: "star-button", type: "button" });
+    const renderState = isStarred => {
+      const label = isStarred ? "Remove from My Cheat Sheet" : "Add to My Cheat Sheet";
+      button.classList.toggle("is-starred", isStarred);
+      button.setAttribute("aria-pressed", String(isStarred));
+      button.setAttribute("aria-label", label);
+      button.title = label;
+      button.replaceChildren(createIcon(isStarred ? "StarFilled.svg" : "Star.svg"));
+    };
+    renderState(starredIdentifiers.has(entryIdentifier));
+    button.addEventListener("click", () => {
+      const entries = readCheatSheet();
+      const isStarred = entries.some(entry => entry.id === entryIdentifier);
+      const pageTitle = (document.querySelector(".hero-title") || document.querySelector("title")).textContent.trim();
+      const sectionTitle = ((panel.querySelector(".panel-title") || {}).textContent || "").trim();
+      const headers = [...table.querySelectorAll("thead th")].map(header => header.textContent.trim());
+      const newEntry = { id: entryIdentifier, pagePath, pageTitle, sectionId: panel.id, sectionTitle, headers, cells: cells.map(cell => ({ text: readCellText(cell), isCommand: Boolean(cell.querySelector("code.copy")) })), savedAt: new Date().toISOString() };
+      const updatedEntries = isStarred ? entries.filter(entry => entry.id !== entryIdentifier) : entries.concat([newEntry]);
+      if (writeCheatSheet(updatedEntries)) renderState(!isStarred);
+    });
+    return button;
+  };
+  const addStarButtons = () => {
+    if (document.body.hasAttribute("data-no-stars")) return;
+    const starredIdentifiers = new Set(readCheatSheet().map(entry => entry.id));
+    document.querySelectorAll(".content > .panel[id] .data-table tbody tr").forEach(row => {
+      const firstCell = row.children[0];
+      if (firstCell) firstCell.append(createStarButton(row, row.closest(".data-table"), row.closest(".panel[id]"), starredIdentifiers));
+    });
+  };
+  const registerOfflineSupport = () => {
+    if (!("serviceWorker" in navigator)) return;
+    const isSecureOrigin = window.location.protocol === "https:" || ["localhost", "127.0.0.1"].includes(window.location.hostname);
+    if (!isSecureOrigin) return;
+    navigator.serviceWorker.register(rootPath + "ServiceWorker.js").then(() => navigator.serviceWorker.ready).then(() => {
+      const status = document.querySelector("[data-offline-status]");
+      if (status) status.hidden = false;
+    }).catch(() => {});
+  };
   const enhanceContent = () => {
     document.querySelectorAll(".data-table").forEach(table => {
       const labels = [...table.querySelectorAll("thead th")].map(header => header.textContent.trim());
@@ -358,6 +534,8 @@
   watchShortcuts(topbar);
   document.querySelectorAll("[data-search]").forEach(initializeSearch);
   enhanceContent();
+  addStarButtons();
   buildTableOfContents();
   initializePageFilter();
+  registerOfflineSupport();
 })();

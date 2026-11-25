@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#04070e">
 <link rel="icon" href="Assets/Image/Favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="Assets/Image/AppleTouchIcon.png">
+<link rel="manifest" href="Manifest.webmanifest">
 <link rel="stylesheet" href="Assets/Style/Site.css">
 <script src="Assets/Script/Site.js" defer></script>
 </head>
@@ -27,39 +28,57 @@
 <div class="search-results" id="home-search-results" role="listbox" hidden></div>
 </div>
 <nav class="home-quick" aria-label="Popular pages">
-<a class="sub-nav-link" href="Data/Commands/Bash.html"><img src="Assets/Icon/Bash.png" alt="">Bash</a>
-<a class="sub-nav-link" href="Data/Commands/PS.html"><img src="Assets/Icon/PowerShell.png" alt="">PowerShell</a>
-<a class="sub-nav-link" href="Data/OS/Windows_11.html"><img src="Assets/Icon/Windows11.png" alt="">Windows 11 paths</a>
-<a class="sub-nav-link" href="Data/Kali_Tools.html"><img src="Assets/Icon/KaliLinux.png" alt="">Kali tools</a>
+<a class="sub-nav-link" href="Data/Start_Here.html"><img src="Assets/Icon/StartHere.svg" alt="">Start here</a>
+<a class="sub-nav-link" href="Data/Commands/Bash.html"><img src="Assets/Icon/Bash.svg" alt="">Bash</a>
+<a class="sub-nav-link" href="Data/OS/Windows_11.html"><img src="Assets/Icon/Windows11.svg" alt="">Windows 11 paths</a>
+<a class="sub-nav-link" href="Data/Kali_Tools.html"><img src="Assets/Icon/KaliLinux.svg" alt="">Kali tools</a>
+<a class="sub-nav-link" href="Data/Utilities.html"><img src="Assets/Icon/Utilities.svg" alt="">Utilities</a>
 </nav>
 </div>
 </section>
-<div class="section-heading"><h2>Explore</h2><p>Six sections, all reviewed November 2026</p></div>
+<div class="section-heading"><h2>Reference</h2><p>Look it up fast, all reviewed November 2026</p></div>
 <div class="card-grid card-grid-wide">
-<a class="card" href="Data/System_Files_Info.html"><img class="card-icon" src="Assets/Icon/Folder.png" alt=""><span class="card-title">System Files</span><span class="card-text">High value paths, secrets, persistence and forensic artifacts for Windows, macOS, Linux, Android and iOS.</span><span class="card-meta">7 platforms</span></a>
-<a class="card" href="Data/Commands.html"><img class="card-icon" src="Assets/Icon/Terminal.png" alt=""><span class="card-title">Commands</span><span class="card-text">Cheat sheets for Bash, PowerShell and CMD, grouped by task, with one click copy.</span><span class="card-meta">3 shells</span></a>
-<a class="card" href="Data/Kali_Tools.html"><img class="card-icon" src="Assets/Icon/KaliLinux.png" alt=""><span class="card-title">Kali Tools</span><span class="card-text">The tools that matter in each phase of an assessment, with working example commands.</span><span class="card-meta">By attack phase</span></a>
-<a class="card" href="Data/cyber_roadmap.html"><img class="card-icon" src="Assets/Icon/Roadmap.png" alt=""><span class="card-title">Certification Roadmap</span><span class="card-text">Current certifications by career track and level, from first steps to expert.</span><span class="card-meta">Interactive</span></a>
-<a class="card" href="Data/Cyber_Websites.html"><img class="card-icon" src="Assets/Icon/Globe.png" alt=""><span class="card-title">Cyber Websites</span><span class="card-text">Checked links to labs, CTFs, threat intelligence, sandboxes, OSINT and knowledge bases.</span><span class="card-meta">Links verified</span></a>
-<a class="card" href="Data/Maximum_Security.html"><img class="card-icon" src="Assets/Icon/Awareness.png" alt=""><span class="card-title">Awareness</span><span class="card-text">Personal cyber security that works: passwords, passkeys, phishing, updates, backups and what to do after a click.</span><span class="card-meta">For everyone</span></a>
+<a class="card" href="Data/System_Files_Info.html"><img class="card-icon" src="Assets/Icon/Folder.svg" alt=""><span class="card-title">Operating Systems</span><span class="card-text">Where Windows, macOS, Linux, Android and iOS keep passwords, logs, startup items and evidence, tagged with MITRE ATT&amp;CK.</span><span class="card-meta">7 platforms</span></a>
+<a class="card" href="Data/Commands.html"><img class="card-icon" src="Assets/Icon/Terminal.svg" alt=""><span class="card-title">Commands</span><span class="card-text">Cheat sheets for Bash, PowerShell, CMD and the macOS Terminal, grouped by task, with one click copy.</span><span class="card-meta">4 shells</span></a>
+<a class="card" href="Data/Kali_Tools.html"><img class="card-icon" src="Assets/Icon/KaliLinux.svg" alt=""><span class="card-title">Kali Tools</span><span class="card-text">The tools that matter in each phase of an assessment, with working example commands and ATT&amp;CK tags.</span><span class="card-meta">By attack phase</span></a>
+<a class="card" href="Data/Guides/Cloud_Security.html"><img class="card-icon" src="Assets/Icon/Cloud.svg" alt=""><span class="card-title">Cloud Security</span><span class="card-text">AWS, Azure and Google Cloud CLI essentials, where the logs live, common misconfigurations and hardening checklists.</span><span class="card-meta">3 providers</span></a>
+<a class="card" href="Data/Guides/Ports_And_Protocols.html"><img class="card-icon" src="Assets/Icon/Ports.svg" alt=""><span class="card-title">Ports and Protocols</span><span class="card-text">Common ports by category with what defenders should check and the secure alternative to use.</span><span class="card-meta">Quick lookup</span></a>
+<a class="card" href="Data/Guides/Wireshark_Filters.html"><img class="card-icon" src="Assets/Icon/Wireshark.svg" alt=""><span class="card-title">Wireshark Filters</span><span class="card-text">Display and capture filters by task, from TCP problems to DNS, TLS, SMB and suspicious traffic, plus tshark.</span><span class="card-meta">Copy and paste</span></a>
+<a class="card" href="Data/Cyber_Websites.html"><img class="card-icon" src="Assets/Icon/Globe.svg" alt=""><span class="card-title">Cyber Websites</span><span class="card-text">Checked links to labs, CTFs, threat intelligence, sandboxes, OSINT and knowledge bases.</span><span class="card-meta">Links verified</span></a>
 </div>
-<div class="section-heading"><h2>System files by platform</h2><p>Where each operating system keeps what matters</p></div>
+<div class="section-heading"><h2>Learn and practice</h2><p>Plan your path and keep track of it</p></div>
+<div class="card-grid card-grid-wide">
+<a class="card" href="Data/Start_Here.html"><img class="card-icon" src="Assets/Icon/StartHere.svg" alt=""><span class="card-title">Start Here</span><span class="card-text">Guided paths through the site for beginners, SOC analysts, penetration testers, admins and everyday users.</span><span class="card-meta">5 paths</span></a>
+<a class="card" href="Data/Study_Planner.html"><img class="card-icon" src="Assets/Icon/Calendar.svg" alt=""><span class="card-title">Study Planner</span><span class="card-text">Pick a field, your level and your hours. Get a week by week schedule with where to study and where to practice, then export it.</span><span class="card-meta">CSV, calendar, PDF</span></a>
+<a class="card" href="Data/cyber_roadmap.html"><img class="card-icon" src="Assets/Icon/Roadmap.svg" alt=""><span class="card-title">Certification Roadmap</span><span class="card-text">Current certifications by career track and level, from first steps to expert.</span><span class="card-meta">Interactive</span></a>
+<a class="card" href="Data/Maximum_Security.html"><img class="card-icon" src="Assets/Icon/Awareness.svg" alt=""><span class="card-title">Personal Security</span><span class="card-text">Personal cyber security that works: passwords, passkeys, phishing, updates, backups and what to do after a click.</span><span class="card-meta">For everyone</span></a>
+<a class="card" href="Data/Glossary.html"><img class="card-icon" src="Assets/Icon/Glossary.svg" alt=""><span class="card-title">Glossary</span><span class="card-text">Security terms in plain language, from ATT&amp;CK and CVSS to zero trust, each with a link you can share.</span><span class="card-meta">A to Z</span></a>
+</div>
+<div class="section-heading"><h2>Your tools</h2><p>Runs in your browser, nothing is sent anywhere</p></div>
+<div class="card-grid card-grid-wide">
+<a class="card" href="Data/Utilities.html"><img class="card-icon" src="Assets/Icon/Utilities.svg" alt=""><span class="card-title">Utilities</span><span class="card-text">Encode and decode, hash text, identify a hash, decode a JWT, calculate subnets and convert timestamps.</span><span class="card-meta">6 tools</span></a>
+<a class="card" href="Data/My_Cheat_Sheet.html"><img class="card-icon" src="Assets/Icon/Star.svg" alt=""><span class="card-title">My Cheat Sheet</span><span class="card-text">Star any command, path or tool on the site and it lands here, ready to print, export or back up.</span><span class="card-meta">Saved in your browser</span></a>
+</div>
+<div class="section-heading"><h2>Pick your operating system</h2><p>Security paths for each platform</p></div>
 <div class="card-grid card-grid-compact">
-<a class="card" href="Data/OS/Windows_11.html"><img class="card-icon" src="Assets/Icon/Windows11.png" alt=""><span class="card-title">Windows 11</span></a>
-<a class="card" href="Data/OS/Windows_Server.html"><img class="card-icon" src="Assets/Icon/WindowsServer.png" alt=""><span class="card-title">Windows Server</span></a>
-<a class="card" href="Data/OS/macOS.html"><img class="card-icon" src="Assets/Icon/MacOs.png" alt=""><span class="card-title">macOS</span></a>
-<a class="card" href="Data/OS/IOS.html"><img class="card-icon" src="Assets/Icon/Ios.png" alt=""><span class="card-title">iOS</span></a>
-<a class="card" href="Data/OS/Android.html"><img class="card-icon" src="Assets/Icon/Android.png" alt=""><span class="card-title">Android</span></a>
-<a class="card" href="Data/OS/Ubuntu_Server.html"><img class="card-icon" src="Assets/Icon/UbuntuServer.png" alt=""><span class="card-title">Ubuntu Server</span></a>
-<a class="card" href="Data/OS/Kali_Linux.html"><img class="card-icon" src="Assets/Icon/KaliLinux.png" alt=""><span class="card-title">Kali Linux</span></a>
+<a class="card" href="Data/OS/Windows_11.html"><img class="card-icon" src="Assets/Icon/Windows11.svg" alt=""><span class="card-title">Windows 11</span></a>
+<a class="card" href="Data/OS/Windows_Server.html"><img class="card-icon" src="Assets/Icon/WindowsServer.svg" alt=""><span class="card-title">Windows Server</span></a>
+<a class="card" href="Data/OS/macOS.html"><img class="card-icon" src="Assets/Icon/MacOs.svg" alt=""><span class="card-title">macOS</span></a>
+<a class="card" href="Data/OS/IOS.html"><img class="card-icon" src="Assets/Icon/Ios.svg" alt=""><span class="card-title">iOS</span></a>
+<a class="card" href="Data/OS/Android.html"><img class="card-icon" src="Assets/Icon/Android.svg" alt=""><span class="card-title">Android</span></a>
+<a class="card" href="Data/OS/Ubuntu_Server.html"><img class="card-icon" src="Assets/Icon/UbuntuServer.svg" alt=""><span class="card-title">Ubuntu Server</span></a>
+<a class="card" href="Data/OS/Kali_Linux.html"><img class="card-icon" src="Assets/Icon/KaliLinux.svg" alt=""><span class="card-title">Kali Linux</span></a>
 </div>
 <div class="section-heading"><h2>New in V3</h2><p>What changed since V2</p></div>
 <section class="panel">
 <ul class="checklist">
 <li>Search the whole site from any page. Press <kbd>/</kbd> or <kbd>Ctrl</kbd> <kbd>K</kbd> to start typing.</li>
+<li>New guides for cloud security, ports and protocols and Wireshark filters, a macOS Terminal cheat sheet, a glossary and a Start Here page.</li>
+<li>A study planner that builds a weekly schedule with where to study and where to practice, exportable to Excel, your calendar or PDF.</li>
+<li>Star rows to build your own cheat sheet, and use the encoding, hashing, JWT and subnet utilities right in the browser.</li>
+<li>MITRE ATT&amp;CK technique tags on system file paths and Kali tools, checked against the current matrix.</li>
+<li>Works offline after your first visit, and can be installed as an app.</li>
 <li>Every page reviewed and updated for November 2026, with wrong and outdated entries removed.</li>
-<li>One top bar on every page, a table of contents that follows your scroll, and a filter on each page.</li>
-<li>Copy buttons on commands, tables that stay readable on phones, and much faster loading.</li>
 </ul>
 <div class="button-row"><a class="link-button" href="Data/About.html">About the project</a><a class="link-button" href="https://github.com/emaldos/Cyber-Epistemology">Source on GitHub</a></div>
 </section>

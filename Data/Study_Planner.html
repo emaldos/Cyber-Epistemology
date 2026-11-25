@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Study Planner | Cyber Epistemology</title>
+<meta name="description" content="Build a week by week cyber security study plan for your career track: topics, site pages, where to study, where to practice with CTFs and labs, hours and certification milestones. Export to CSV, Markdown, calendar or PDF.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../Assets/Image/AppleTouchIcon.png">
+<link rel="manifest" href="../Manifest.webmanifest">
+<link rel="stylesheet" href="../Assets/Style/Site.css">
+<link rel="stylesheet" href="../Assets/Style/StudyPlanner.css">
+<script src="../Assets/Script/StudyPlanData.js" defer></script>
+<script src="../Assets/Script/StudyPlanner.js" defer></script>
+<script src="../Assets/Script/Site.js" defer></script>
+</head>
+<body class="is-content-page" data-root="../" data-section="study-planner" data-no-stars>
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-separator">/</span><span>Learn</span><span class="breadcrumb-separator">/</span><span>Study Planner</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../Assets/Icon/Roadmap.svg" alt="">
+<div>
+<p class="hero-eyebrow">Learn</p>
+<h1 class="hero-title">Study Planner</h1>
+</div>
+</div>
+<p class="hero-lead">Pick a field, your level and the hours you have each week. You get a week by week schedule with what to study, where to study it, where to practice it in CTFs and labs, and when to book each certification exam.</p>
+<div class="hero-meta"><span class="badge">7 career tracks</span><span class="badge">Free study and practice resources</span><span class="badge">Saved in this browser</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter your weeks, for example: Wireshark" data-page-filter aria-label="Filter your weeks"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="plan-settings">
+<h2 class="panel-title">Plan Settings</h2>
+<p class="panel-lead">Choose your track and pace, then generate the plan. Your settings and the weeks you tick are saved only in this browser.</p>
+<form class="study-planner-form" data-study-form>
+<div class="study-planner-fields">
+<label class="study-planner-field" for="study-field"><span class="study-planner-label">Field</span><select id="study-field" name="field" data-study-field></select></label>
+<label class="study-planner-field" for="study-level"><span class="study-planner-label">Starting level</span><select id="study-level" name="level" data-study-level></select></label>
+<label class="study-planner-field" for="study-hours"><span class="study-planner-label">Hours per week</span><select id="study-hours" name="hours" data-study-hours></select></label>
+<label class="study-planner-field" for="study-start"><span class="study-planner-label">Start date</span><input id="study-start" name="start" type="date" required data-study-start aria-describedby="study-start-hint"><span class="study-planner-field-hint" id="study-start-hint">Plans start on a Monday</span></label>
+</div>
+<p class="study-planner-hint" data-study-field-summary></p>
+<div class="button-row"><button class="link-button study-planner-generate" type="submit"><img src="../Assets/Icon/Roadmap.svg" alt="">Generate plan</button></div>
+</form>
+</section>
+<section class="panel" id="your-schedule">
+<h2 class="panel-title">Your Schedule</h2>
+<div class="study-summary" data-study-summary></div>
+<div class="study-progress">
+<label class="study-progress-label" for="study-progress">Progress</label>
+<progress id="study-progress" class="study-progress-bar" max="1" value="0" data-study-progress></progress>
+<span class="study-progress-text" data-study-progress-text></span>
+</div>
+<div class="button-row study-planner-actions">
+<button class="link-button" type="button" data-study-action="export-csv"><img src="../Assets/Icon/Download.svg" alt="">Export CSV</button>
+<button class="link-button" type="button" data-study-action="export-markdown"><img src="../Assets/Icon/Download.svg" alt="">Export Markdown</button>
+<button class="link-button" type="button" data-study-action="export-ics"><img src="../Assets/Icon/Calendar.svg" alt="">Export calendar (.ics)</button>
+<button class="link-button" type="button" data-study-action="print"><img src="../Assets/Icon/Printer.svg" alt="">Print or save as PDF</button>
+<button class="link-button is-danger" type="button" data-study-action="clear-done"><img src="../Assets/Icon/Trash.svg" alt="">Clear done marks</button>
+</div>
+<p class="study-planner-status" role="status" aria-live="polite" data-study-status hidden></p>
+<div class="table-wrap">
+<table class="data-table study-table">
+<caption class="study-table-caption">Week by week study schedule</caption>
+<thead><tr><th scope="col">Week</th><th scope="col">Dates</th><th scope="col">Topic</th><th scope="col">What to do</th><th scope="col">Site pages</th><th scope="col">Study from</th><th scope="col">Practice on</th><th scope="col">Hours</th><th scope="col">Milestones</th><th scope="col">Done</th></tr></thead>
+<tbody data-study-body></tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="how-it-works">
+<h2 class="panel-title">How It Works</h2>
+<ul class="checklist">
+<li>Each field is a list of modules with an estimated number of hours. Modules fill your weekly hours in order, so a long module spans several weeks and short modules can share a week.</li>
+<li>Beginner plans start with the foundation modules: computers, networking, Linux, Windows and security basics. Some experience skips them and starts with the field topics.</li>
+<li>After 7 study weeks in a row you get a review and buffer week to catch up, redo hard labs or rest. An exam prep week also counts as a break.</li>
+<li>Every certification gets a booking milestone when its final module starts and a full exam prep week right before the exam.</li>
+<li>Certification names match the <a href="cyber_roadmap.html">Certification Roadmap</a>. Hours are estimates: if a week takes longer, regenerate the plan with a later start date.</li>
+<li>The calendar export adds one all day event per week, Monday to Sunday, that does not block your calendar.</li>
+</ul>
+</section>
+<section class="panel" id="practice-platforms">
+<h2 class="panel-title">Where to Practice</h2>
+<p class="panel-lead">The Practice on column tags each platform so you know what to expect.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term"><span class="tag">CTF</span> Capture the flag</span><span class="definition-text">Challenges and wargames where you find a flag: OverTheWire, picoCTF, Root Me, CryptoHack, OWASP Juice Shop, flaws.cloud and CyberDefenders.</span></div>
+<div class="definition"><span class="definition-term"><span class="tag tag-neutral">Lab</span> Hands-on lab</span><span class="definition-text">Guided rooms, machines and simulators: TryHackMe, Hack The Box, PortSwigger Web Security Academy, LetsDefend, Blue Team Labs Online and CloudGoat.</span></div>
+<div class="definition"><span class="definition-term">Free tiers</span><span class="definition-text">Every platform listed has free content. Some paths need a subscription for every room, so start with the free ones and only pay when you need more.</span></div>
+<div class="definition"><span class="definition-term">Stay legal</span><span class="definition-text">Only attack the labs and targets these platforms give you, or systems you own. Cloud labs such as CloudGoat run in your own account, so delete them when you finish.</span></div>
+</div>
+<div class="button-row"><a class="link-button" href="Cyber_Websites.html"><img src="../Assets/Icon/Globe.svg" alt="">All labs and CTF sites</a><a class="link-button" href="Start_Here.html"><img src="../Assets/Icon/StartHere.svg" alt="">Start Here</a></div>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

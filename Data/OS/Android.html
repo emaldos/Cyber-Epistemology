@@ -8,6 +8,7 @@
 <meta name="theme-color" content="#04070e">
 <link rel="icon" href="../../Assets/Image/Favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="../../Assets/Image/AppleTouchIcon.png">
+<link rel="manifest" href="../../Manifest.webmanifest">
 <link rel="stylesheet" href="../../Assets/Style/Site.css">
 <script src="../../Assets/Script/Site.js" defer></script>
 </head>
@@ -15,13 +16,13 @@
 <a class="skip-link" href="#main-content">Skip to content</a>
 <header id="site-topbar"></header>
 <main class="page" id="main-content">
-<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><a href="../System_Files_Info.html">System Files</a><span class="breadcrumb-separator">/</span><span>Android</span></nav>
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><a href="../System_Files_Info.html">Operating Systems</a><span class="breadcrumb-separator">/</span><span>Android</span></nav>
 <section class="hero">
 <div class="hero-header">
-<img class="hero-icon" src="../../Assets/Icon/Android.png" alt="">
+<img class="hero-icon" src="../../Assets/Icon/Android.svg" alt="">
 <div>
-<p class="hero-eyebrow">System Files</p>
-<h1 class="hero-title">Android Security Reference</h1>
+<p class="hero-eyebrow">Operating Systems</p>
+<h1 class="hero-title">Android Security Paths</h1>
 </div>
 </div>
 <p class="hero-lead">How to collect data from an Android phone, which paths hold secrets and evidence, and how to check for stalkerware and spyware. Without root you work through <code>adb</code>, bug reports and AndroidQF; the <code>/data</code> paths below need root or a full file system extraction.</p>
@@ -29,14 +30,14 @@
 <label class="page-filter"><img src="../../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: keystore" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
 </section>
 <nav class="sub-nav" aria-label="Operating systems">
-<a class="sub-nav-link" href="../System_Files_Info.html"><img src="../../Assets/Icon/Folder.png" alt="">All systems</a>
-<a class="sub-nav-link" href="Windows_11.html"><img src="../../Assets/Icon/Windows11.png" alt="">Windows 11</a>
-<a class="sub-nav-link" href="Windows_Server.html"><img src="../../Assets/Icon/WindowsServer.png" alt="">Windows Server</a>
-<a class="sub-nav-link" href="macOS.html"><img src="../../Assets/Icon/MacOs.png" alt="">macOS</a>
-<a class="sub-nav-link" href="IOS.html"><img src="../../Assets/Icon/Ios.png" alt="">iOS</a>
-<a class="sub-nav-link is-active" href="Android.html" aria-current="page"><img src="../../Assets/Icon/Android.png" alt="">Android</a>
-<a class="sub-nav-link" href="Ubuntu_Server.html"><img src="../../Assets/Icon/UbuntuServer.png" alt="">Ubuntu Server</a>
-<a class="sub-nav-link" href="Kali_Linux.html"><img src="../../Assets/Icon/KaliLinux.png" alt="">Kali Linux</a>
+<a class="sub-nav-link" href="../System_Files_Info.html"><img src="../../Assets/Icon/Folder.svg" alt="">All systems</a>
+<a class="sub-nav-link" href="Windows_11.html"><img src="../../Assets/Icon/Windows11.svg" alt="">Windows 11</a>
+<a class="sub-nav-link" href="Windows_Server.html"><img src="../../Assets/Icon/WindowsServer.svg" alt="">Windows Server</a>
+<a class="sub-nav-link" href="macOS.html"><img src="../../Assets/Icon/MacOs.svg" alt="">macOS</a>
+<a class="sub-nav-link" href="IOS.html"><img src="../../Assets/Icon/Ios.svg" alt="">iOS</a>
+<a class="sub-nav-link is-active" href="Android.html" aria-current="page"><img src="../../Assets/Icon/Android.svg" alt="">Android</a>
+<a class="sub-nav-link" href="Ubuntu_Server.html"><img src="../../Assets/Icon/UbuntuServer.svg" alt="">Ubuntu Server</a>
+<a class="sub-nav-link" href="Kali_Linux.html"><img src="../../Assets/Icon/KaliLinux.svg" alt="">Kali Linux</a>
 </nav>
 <div class="layout">
 <aside data-toc></aside>
@@ -82,13 +83,13 @@
 <thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
 <tbody>
 <tr><td><code>/data/misc/keystore/persistent.sqlite</code></td><td>Keystore2 database of app key blobs (Android 12 and later)</td><td>Key material stays bound to the TEE or StrongBox, but the database shows which apps hold which keys</td><td><span class="tag tag-critical">Critical</span></td></tr>
-<tr><td><code>/data/system/locksettings.db</code></td><td>Lock screen settings and credential metadata</td><td>Removing or editing entries was a classic lock bypass on older versions</td><td><span class="tag tag-critical">Critical</span></td></tr>
-<tr><td><code>/data/system_de/0/spblob/</code></td><td>Synthetic password blobs that protect CE storage keys</td><td>Combined with the PIN and the TEE, these unlock user data; target of brute force tools</td><td><span class="tag tag-critical">Critical</span></td></tr>
-<tr><td><code>/data/system_ce/0/accounts_ce.db</code></td><td>Account manager database with auth tokens</td><td>Tokens for Google and other accounts can allow access from another device</td><td><span class="tag tag-critical">Critical</span></td></tr>
-<tr><td><code>/data/system_de/0/accounts_de.db</code></td><td>Account list available before first unlock</td><td>Shows which accounts are on the device</td><td><span class="tag tag-medium">Medium</span></td></tr>
-<tr><td><code>/data/misc/user/0/cacerts-added/</code></td><td>User installed CA certificates</td><td>Apps targeting Android 7 and later ignore them by default, but browsers and some apps do not; a rogue CA enables interception</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/data/system/locksettings.db</code></td><td>Lock screen settings and credential metadata</td><td>Removing or editing entries was a classic lock bypass on older versions</td><td><span class="tag tag-critical">Critical</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1461/" title="Lockscreen Bypass">T1461</a></td></tr>
+<tr><td><code>/data/system_de/0/spblob/</code></td><td>Synthetic password blobs that protect CE storage keys</td><td>Combined with the PIN and the TEE, these unlock user data; target of brute force tools</td><td><span class="tag tag-critical">Critical</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1461/" title="Lockscreen Bypass">T1461</a></td></tr>
+<tr><td><code>/data/system_ce/0/accounts_ce.db</code></td><td>Account manager database with auth tokens</td><td>Tokens for Google and other accounts can allow access from another device</td><td><span class="tag tag-critical">Critical</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1636/005/" title="Protected User Data: Accounts">T1636.005</a></td></tr>
+<tr><td><code>/data/system_de/0/accounts_de.db</code></td><td>Account list available before first unlock</td><td>Shows which accounts are on the device</td><td><span class="tag tag-medium">Medium</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1636/005/" title="Protected User Data: Accounts">T1636.005</a></td></tr>
+<tr><td><code>/data/misc/user/0/cacerts-added/</code></td><td>User installed CA certificates</td><td>Apps targeting Android 7 and later ignore them by default, but browsers and some apps do not; a rogue CA enables interception</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1638/" title="Adversary-in-the-Middle">T1638</a></td></tr>
 <tr><td><code>/apex/com.android.conscrypt/cacerts/</code></td><td>System root CAs, updatable through Google Play since Android 14</td><td>Replaced <code>/system/etc/security/cacerts/</code> as the active store; root tools that inject CAs must target it</td><td><span class="tag tag-medium">Medium</span></td></tr>
-<tr><td><code>/data/data/&lt;package&gt;/shared_prefs/</code></td><td>App preference XML files</td><td>Common place for API keys, session tokens and feature flags in poorly written apps</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/data/data/&lt;package&gt;/shared_prefs/</code></td><td>App preference XML files</td><td>Common place for API keys, session tokens and feature flags in poorly written apps</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1409/" title="Stored Application Data">T1409</a></td></tr>
 </tbody>
 </table>
 </div>
@@ -100,11 +101,11 @@
 <table class="data-table">
 <thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
 <tbody>
-<tr><td><code>/data/system/users/0/settings_secure.xml</code></td><td>Secure settings: <code>enabled_accessibility_services</code>, <code>enabled_notification_listeners</code>, default input method</td><td>Accessibility and notification access let an app read the screen, messages and codes; check with <code>settings get secure</code></td><td><span class="tag tag-critical">Critical</span></td></tr>
-<tr><td><code>/data/system/device_policies.xml</code></td><td>Active device admins, device owner and profile owner</td><td>Device admin blocks uninstall; an unexpected owner means someone else manages the phone</td><td><span class="tag tag-critical">Critical</span></td></tr>
-<tr><td><code>/data/adb/modules/</code>, <code>/data/adb/service.d/</code>, <code>/data/adb/post-fs-data.d/</code></td><td>Magisk, KernelSU or APatch modules and boot scripts</td><td>Root level persistence that survives app removal; only exists on rooted devices</td><td><span class="tag tag-critical">Critical</span></td></tr>
-<tr><td><code>/data/app/</code></td><td>Installed APKs in randomized folders (<code>~~xxxx/&lt;package&gt;-yyyy/base.apk</code>)</td><td>Pull suspect APKs for analysis; apps can start on boot via <code>RECEIVE_BOOT_COMPLETED</code></td><td><span class="tag tag-high">High</span></td></tr>
-<tr><td><code>/data/system/job/jobs.xml</code></td><td>Persisted JobScheduler jobs</td><td>Apps use jobs to wake up regularly after reboot</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/data/system/users/0/settings_secure.xml</code></td><td>Secure settings: <code>enabled_accessibility_services</code>, <code>enabled_notification_listeners</code>, default input method</td><td>Accessibility and notification access let an app read the screen, messages and codes; check with <code>settings get secure</code></td><td><span class="tag tag-critical">Critical</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1453/" title="Abuse Accessibility Features">T1453</a><a class="attack-tag" href="https://attack.mitre.org/techniques/T1517/" title="Access Notifications">T1517</a></td></tr>
+<tr><td><code>/data/system/device_policies.xml</code></td><td>Active device admins, device owner and profile owner</td><td>Device admin blocks uninstall; an unexpected owner means someone else manages the phone</td><td><span class="tag tag-critical">Critical</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1626/001/" title="Abuse Elevation Control Mechanism: Device Administrator Permissions">T1626.001</a><a class="attack-tag" href="https://attack.mitre.org/techniques/T1629/001/" title="Impair Defenses: Prevent Application Removal">T1629.001</a></td></tr>
+<tr><td><code>/data/adb/modules/</code>, <code>/data/adb/service.d/</code>, <code>/data/adb/post-fs-data.d/</code></td><td>Magisk, KernelSU or APatch modules and boot scripts</td><td>Root level persistence that survives app removal; only exists on rooted devices</td><td><span class="tag tag-critical">Critical</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1398/" title="Boot or Logon Initialization Scripts">T1398</a></td></tr>
+<tr><td><code>/data/app/</code></td><td>Installed APKs in randomized folders (<code>~~xxxx/&lt;package&gt;-yyyy/base.apk</code>)</td><td>Pull suspect APKs for analysis; apps can start on boot via <code>RECEIVE_BOOT_COMPLETED</code></td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1624/001/" title="Event Triggered Execution: Broadcast Receivers">T1624.001</a></td></tr>
+<tr><td><code>/data/system/job/jobs.xml</code></td><td>Persisted JobScheduler jobs</td><td>Apps use jobs to wake up regularly after reboot</td><td><span class="tag tag-medium">Medium</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1603/" title="Scheduled Task/Job">T1603</a></td></tr>
 <tr><td><code>/data/local/tmp/</code></td><td>Shell user writable staging folder</td><td>Exploit binaries and agents such as frida-server are dropped here</td><td><span class="tag tag-high">High</span></td></tr>
 <tr><td><code>/system/etc/init/</code>, <code>/vendor/etc/init/</code></td><td>init <code>.rc</code> service definitions</td><td>Read-only and checked by Verified Boot; changes mean a modified system image</td><td><span class="tag tag-low">Low</span></td></tr>
 </tbody>
@@ -158,7 +159,7 @@
 <thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
 <tbody>
 <tr><td><code>/data/misc/adb/adb_keys</code></td><td>Public keys of computers allowed to use adb</td><td>An authorized host can install apps and read data whenever USB or wireless debugging is on</td><td><span class="tag tag-critical">Critical</span></td></tr>
-<tr><td><code>/data/misc/apexdata/com.android.wifi/WifiConfigStore.xml</code></td><td>Saved Wi-Fi networks with PSKs and EAP settings in clear text (Android 11 and later; older at <code>/data/misc/wifi/</code>)</td><td>Gives access to every network the phone has joined</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/data/misc/apexdata/com.android.wifi/WifiConfigStore.xml</code></td><td>Saved Wi-Fi networks with PSKs and EAP settings in clear text (Android 11 and later; older at <code>/data/misc/wifi/</code>)</td><td>Gives access to every network the phone has joined</td><td><span class="tag tag-critical">Critical</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1422/002/" title="System Network Configuration Discovery: Wi-Fi Discovery">T1422.002</a></td></tr>
 <tr><td><code>/data/system/users/0/settings_global.xml</code></td><td>Global settings: <code>adb_enabled</code>, <code>private_dns_mode</code>, developer options, airplane mode</td><td>Shows whether debugging was left on and which DNS resolver is forced</td><td><span class="tag tag-high">High</span></td></tr>
 <tr><td><code>/data/misc/bluedroid/bt_config.conf</code></td><td>Paired Bluetooth devices and link keys (location can vary by vendor)</td><td>Link keys allow impersonating a paired device</td><td><span class="tag tag-medium">Medium</span></td></tr>
 <tr><td><code>/data/misc/vpn/</code></td><td>State for the built-in VPN client</td><td>Most VPNs are now apps using <code>VpnService</code>; check always-on VPN with <code>settings get secure always_on_vpn_app</code></td><td><span class="tag tag-medium">Medium</span></td></tr>
@@ -174,16 +175,16 @@
 <table class="data-table">
 <thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
 <tbody>
-<tr><td><code>/data/data/&lt;package&gt;/</code></td><td>Private app storage (same as <code>/data/user/0/&lt;package&gt;/</code>): <code>databases</code>, <code>files</code>, <code>shared_prefs</code>, <code>cache</code></td><td>Each app's own data in CE storage; available only after first unlock</td><td><span class="tag tag-high">High</span></td></tr>
-<tr><td><code>/data/user/&lt;user-id&gt;/&lt;package&gt;/</code></td><td>App data for secondary users, work profile and Private Space</td><td>Hidden apps and data often sit under a user ID other than 0</td><td><span class="tag tag-high">High</span></td></tr>
-<tr><td><code>/data/user_de/0/&lt;package&gt;/</code></td><td>Device encrypted app storage, readable before first unlock</td><td>Alarm, messaging and boot time data that is available in BFU state</td><td><span class="tag tag-medium">Medium</span></td></tr>
-<tr><td><code>/data/data/com.android.providers.telephony/databases/mmssms.db</code></td><td>SMS and MMS</td><td>Messages and one time codes; Google Messages also keeps <code>bugle_db</code> in its own sandbox</td><td><span class="tag tag-high">High</span></td></tr>
-<tr><td><code>/data/data/com.android.providers.contacts/databases/</code></td><td><code>contacts2.db</code> and <code>calllog.db</code></td><td>Contacts and call history</td><td><span class="tag tag-high">High</span></td></tr>
-<tr><td><code>/data/data/com.android.chrome/app_chrome/Default/</code></td><td><code>Login Data</code>, <code>Cookies</code>, <code>History</code>, <code>Web Data</code></td><td>Browsing history and sessions; saved passwords are usually in Google Password Manager</td><td><span class="tag tag-high">High</span></td></tr>
-<tr><td><code>/data/data/&lt;package&gt;/app_webview/</code></td><td>WebView cookies, local storage and cache for embedded browsers</td><td>Session tokens for in-app web logins</td><td><span class="tag tag-medium">Medium</span></td></tr>
-<tr><td><code>/data/data/com.whatsapp/databases/msgstore.db</code></td><td>WhatsApp messages</td><td>Encrypted backups also sit in <code>/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Databases/</code></td><td><span class="tag tag-high">High</span></td></tr>
-<tr><td><code>/storage/emulated/0/</code> (<code>/sdcard</code>)</td><td>Shared storage: <code>DCIM</code>, <code>Pictures</code>, <code>Download</code>, <code>Documents</code></td><td>Readable over adb without root; payload downloads and exported data land here</td><td><span class="tag tag-high">High</span></td></tr>
-<tr><td><code>/storage/emulated/0/Android/data/&lt;package&gt;/</code>, <code>/storage/emulated/0/Android/media/</code></td><td>App specific external storage</td><td>Scoped storage blocks other apps since Android 11, but exports and media caches still leak here</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/data/data/&lt;package&gt;/</code></td><td>Private app storage (same as <code>/data/user/0/&lt;package&gt;/</code>): <code>databases</code>, <code>files</code>, <code>shared_prefs</code>, <code>cache</code></td><td>Each app's own data in CE storage; available only after first unlock</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1409/" title="Stored Application Data">T1409</a></td></tr>
+<tr><td><code>/data/user/&lt;user-id&gt;/&lt;package&gt;/</code></td><td>App data for secondary users, work profile and Private Space</td><td>Hidden apps and data often sit under a user ID other than 0</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1409/" title="Stored Application Data">T1409</a></td></tr>
+<tr><td><code>/data/user_de/0/&lt;package&gt;/</code></td><td>Device encrypted app storage, readable before first unlock</td><td>Alarm, messaging and boot time data that is available in BFU state</td><td><span class="tag tag-medium">Medium</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1409/" title="Stored Application Data">T1409</a></td></tr>
+<tr><td><code>/data/data/com.android.providers.telephony/databases/mmssms.db</code></td><td>SMS and MMS</td><td>Messages and one time codes; Google Messages also keeps <code>bugle_db</code> in its own sandbox</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1636/004/" title="Protected User Data: SMS Messages">T1636.004</a></td></tr>
+<tr><td><code>/data/data/com.android.providers.contacts/databases/</code></td><td><code>contacts2.db</code> and <code>calllog.db</code></td><td>Contacts and call history</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1636/003/" title="Protected User Data: Contact List">T1636.003</a><a class="attack-tag" href="https://attack.mitre.org/techniques/T1636/002/" title="Protected User Data: Call Log">T1636.002</a></td></tr>
+<tr><td><code>/data/data/com.android.chrome/app_chrome/Default/</code></td><td><code>Login Data</code>, <code>Cookies</code>, <code>History</code>, <code>Web Data</code></td><td>Browsing history and sessions; saved passwords are usually in Google Password Manager</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1409/" title="Stored Application Data">T1409</a></td></tr>
+<tr><td><code>/data/data/&lt;package&gt;/app_webview/</code></td><td>WebView cookies, local storage and cache for embedded browsers</td><td>Session tokens for in-app web logins</td><td><span class="tag tag-medium">Medium</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1409/" title="Stored Application Data">T1409</a></td></tr>
+<tr><td><code>/data/data/com.whatsapp/databases/msgstore.db</code></td><td>WhatsApp messages</td><td>Encrypted backups also sit in <code>/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Databases/</code></td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1409/" title="Stored Application Data">T1409</a></td></tr>
+<tr><td><code>/storage/emulated/0/</code> (<code>/sdcard</code>)</td><td>Shared storage: <code>DCIM</code>, <code>Pictures</code>, <code>Download</code>, <code>Documents</code></td><td>Readable over adb without root; payload downloads and exported data land here</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1533/" title="Data from Local System">T1533</a></td></tr>
+<tr><td><code>/storage/emulated/0/Android/data/&lt;package&gt;/</code>, <code>/storage/emulated/0/Android/media/</code></td><td>App specific external storage</td><td>Scoped storage blocks other apps since Android 11, but exports and media caches still leak here</td><td><span class="tag tag-medium">Medium</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1533/" title="Data from Local System">T1533</a></td></tr>
 </tbody>
 </table>
 </div>

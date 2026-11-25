@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cloud Security | Cyber Epistemology</title>
+<meta name="description" content="Cloud security for AWS, Microsoft Azure and Google Cloud: identity checks, IAM review, audit logs, threat detection, common misconfigurations and a hardening checklist per provider, with CLI and Microsoft Graph PowerShell examples.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../../Assets/Image/AppleTouchIcon.png">
+<link rel="manifest" href="../../Manifest.webmanifest">
+<link rel="stylesheet" href="../../Assets/Style/Site.css">
+<script src="../../Assets/Script/Site.js" defer></script>
+</head>
+<body class="is-content-page" data-root="../../" data-section="guides">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><span>Guides</span><span class="breadcrumb-separator">/</span><span>Cloud Security</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../../Assets/Icon/Cloud.svg" alt="">
+<div>
+<p class="hero-eyebrow">Guides</p>
+<h1 class="hero-title">Cloud Security</h1>
+</div>
+</div>
+<p class="hero-lead">Administration, auditing and hardening for AWS, Microsoft Azure and Google Cloud accounts. Check who you are, who can do what, what the logs say and which settings leave the door open.</p>
+<div class="hero-meta"><span class="badge">AWS, Azure and GCP</span><span class="badge">98 entries</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: CloudTrail" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="overview">
+<h2 class="panel-title">Overview</h2>
+<p class="panel-lead">The ideas that shape every cloud review, whatever the provider.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term">Shared responsibility</span><span class="definition-text">The provider secures the physical data centers, hardware and managed service internals. You secure identities, permissions, data, network rules, guest operating systems and configuration. Most cloud breaches come from the customer side of that line.</span></div>
+<div class="definition"><span class="definition-term">Identity is the perimeter</span><span class="definition-text">Every API call is authenticated, so a stolen access key, token or session cookie is as good as being inside. Protect accounts with MFA and short-lived credentials before worrying about firewalls.</span></div>
+<div class="definition"><span class="definition-term">Control plane and data plane</span><span class="definition-text">The control plane manages resources (create a VM, change a role). The data plane touches the content (read an object, query a database). Control plane activity is logged by default; data plane logging is often off and must be enabled.</span></div>
+<div class="definition"><span class="definition-term">Resource hierarchy</span><span class="definition-text">AWS: organization, organizational units, accounts. Azure: Microsoft Entra ID tenant, management groups, subscriptions, resource groups. GCP: organization, folders, projects. Permissions granted high in the tree flow down.</span></div>
+<div class="definition"><span class="definition-term">Least privilege</span><span class="definition-text">Grant the narrowest role at the lowest scope, prefer groups over direct user grants, and review unused permissions with IAM Access Analyzer, Microsoft Entra access reviews or the GCP IAM recommender.</span></div>
+<div class="definition"><span class="definition-term">Native security services</span><span class="definition-text">AWS: GuardDuty, Security Hub and Security Hub CSPM, IAM Access Analyzer, Config. Azure: Microsoft Defender for Cloud, Microsoft Sentinel, Entra ID Protection. GCP: Security Command Center, Cloud Asset Inventory, IAM recommender.</span></div>
+</div>
+<div class="callout callout-warning"><p><strong>Authorized use only:</strong> run these commands against accounts you administer or have written permission to audit. Most are read only, but they still appear in the audit logs under your identity.</p></div>
+</section>
+<section class="panel" id="aws-cli">
+<h2 class="panel-title">AWS CLI Essentials</h2>
+<p class="panel-lead">Identity, IAM, CloudTrail, S3 and detection checks with AWS CLI v2. Add <code>--profile</code> and <code>--region</code> as needed.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th><th>Tags</th></tr></thead>
+<tbody>
+<tr><td><code>sts get-caller-identity</code></td><td>Show the account, user or role behind the current credentials</td><td><code class="copy">aws sts get-caller-identity</code></td><td><span class="tag">Identity</span></td></tr>
+<tr><td><code>organizations list-accounts</code></td><td>List every account in the organization (management or delegated admin account)</td><td><code class="copy">aws organizations list-accounts --query "Accounts[].[Id,Name,Status]" --output table</code></td><td><span class="tag">Inventory</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1580/" title="Cloud Infrastructure Discovery">T1580</a></td></tr>
+<tr><td><code>iam get-account-summary</code></td><td>Check root MFA and whether root access keys exist</td><td><code class="copy">aws iam get-account-summary --query "SummaryMap.[AccountMFAEnabled,AccountAccessKeysPresent]"</code></td><td><span class="tag">Root</span><span class="tag">MFA</span></td></tr>
+<tr><td><code>iam get-credential-report</code></td><td>CSV of every user with password, MFA and access key age and last use</td><td><code class="copy">aws iam generate-credential-report &amp;&amp; aws iam get-credential-report --query Content --output text | base64 -d &gt; credential-report.csv</code></td><td><span class="tag">Audit</span><span class="tag">Keys</span></td></tr>
+<tr><td><code>iam list-users</code></td><td>List IAM users with creation and last console sign in</td><td><code class="copy">aws iam list-users --query "Users[].[UserName,CreateDate,PasswordLastUsed]" --output table</code></td><td><span class="tag">Identity</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1087/004/" title="Account Discovery: Cloud Account">T1087.004</a></td></tr>
+<tr><td><code>iam list-roles</code></td><td>List roles, including cross account and service roles</td><td><code class="copy">aws iam list-roles --query "Roles[].[RoleName,Arn]" --output table</code></td><td><span class="tag">Identity</span></td></tr>
+<tr><td><code>iam get-role</code></td><td>Read a role trust policy to see who can assume it</td><td><code class="copy">aws iam get-role --role-name DeployRole --query Role.AssumeRolePolicyDocument</code></td><td><span class="tag">Trust</span></td></tr>
+<tr><td><code>iam list-policies</code></td><td>List customer managed policies that are attached somewhere</td><td><code class="copy">aws iam list-policies --scope Local --only-attached</code></td><td><span class="tag">Policy</span></td></tr>
+<tr><td><code>iam list-entities-for-policy</code></td><td>Find every user, group and role holding a powerful policy</td><td><code class="copy">aws iam list-entities-for-policy --policy-arn arn:aws:iam::aws:policy/AdministratorAccess</code></td><td><span class="tag">Privilege</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1069/003/" title="Permission Groups Discovery: Cloud Groups">T1069.003</a></td></tr>
+<tr><td><code>iam list-access-keys</code></td><td>List a user's access keys with status and creation date</td><td><code class="copy">aws iam list-access-keys --user-name alice</code></td><td><span class="tag">Keys</span></td></tr>
+<tr><td><code>iam get-access-key-last-used</code></td><td>When, where and for which service a key was last used</td><td><code class="copy">aws iam get-access-key-last-used --access-key-id AKIAIOSFODNN7EXAMPLE</code></td><td><span class="tag">Keys</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1078/004/" title="Valid Accounts: Cloud Accounts">T1078.004</a></td></tr>
+<tr><td><code>iam list-mfa-devices</code></td><td>Confirm a user has an MFA device or passkey registered</td><td><code class="copy">aws iam list-mfa-devices --user-name alice</code></td><td><span class="tag">MFA</span></td></tr>
+<tr><td><code>iam simulate-principal-policy</code></td><td>Test whether a principal is allowed a specific action</td><td><code class="copy">aws iam simulate-principal-policy --policy-source-arn arn:aws:iam::123456789012:user/alice --action-names s3:DeleteBucket iam:CreateUser</code></td><td><span class="tag">Privilege</span></td></tr>
+<tr><td><code>accessanalyzer list-findings-v2</code></td><td>Resources shared outside the account or organization, and unused access</td><td><code class="copy">aws accessanalyzer list-findings-v2 --analyzer-arn arn:aws:access-analyzer:us-east-1:123456789012:analyzer/OrgAnalyzer</code></td><td><span class="tag">Exposure</span></td></tr>
+<tr><td><code>cloudtrail describe-trails</code></td><td>List trails, whether they are multi region and where they deliver</td><td><code class="copy">aws cloudtrail describe-trails --query "trailList[].[Name,IsMultiRegionTrail,IsOrganizationTrail,S3BucketName]" --output table</code></td><td><span class="tag">Logging</span></td></tr>
+<tr><td><code>cloudtrail get-trail-status</code></td><td>Confirm a trail is still logging and delivering without errors</td><td><code class="copy">aws cloudtrail get-trail-status --name org-trail</code></td><td><span class="tag">Logging</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1685/002/" title="Disable or Modify Tools: Disable or Modify Cloud Log">T1685.002</a></td></tr>
+<tr><td><code>cloudtrail lookup-events</code></td><td>Search 90 days of management events in the current region</td><td><code class="copy">aws cloudtrail lookup-events --lookup-attributes AttributeKey=EventName,AttributeValue=ConsoleLogin --max-results 20</code></td><td><span class="tag">Logging</span><span class="tag">Hunting</span></td></tr>
+<tr><td><code>s3control get-public-access-block</code></td><td>Account level S3 Block Public Access settings (all four should be true)</td><td><code class="copy">aws s3control get-public-access-block --account-id 123456789012</code></td><td><span class="tag">Storage</span></td></tr>
+<tr><td><code>s3api get-bucket-policy-status</code></td><td>Whether a bucket policy makes the bucket public</td><td><code class="copy">aws s3api get-bucket-policy-status --bucket example-bucket</code></td><td><span class="tag">Storage</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1530/" title="Data from Cloud Storage">T1530</a></td></tr>
+<tr><td><code>guardduty list-detectors</code></td><td>Check GuardDuty is enabled in this region and get the detector ID</td><td><code class="copy">aws guardduty list-detectors</code></td><td><span class="tag">Detection</span></td></tr>
+<tr><td><code>guardduty list-findings</code></td><td>High severity GuardDuty findings (pass IDs to <code>get-findings</code> for detail)</td><td><code class="copy">aws guardduty list-findings --detector-id 12abc34d567e8fa901bc2d34e56789f0 --finding-criteria '{"Criterion":{"severity":{"GreaterThanOrEqual":7}}}'</code></td><td><span class="tag">Detection</span></td></tr>
+<tr><td><code>securityhub get-findings</code></td><td>Active critical findings in Security Hub CSPM (ASFF format)</td><td><code class="copy">aws securityhub get-findings --filters '{"SeverityLabel":[{"Value":"CRITICAL","Comparison":"EQUALS"}],"RecordState":[{"Value":"ACTIVE","Comparison":"EQUALS"}]}' --max-items 20</code></td><td><span class="tag">Posture</span></td></tr>
+<tr><td><code>securityhub get-enabled-standards</code></td><td>Which benchmarks are on, for example CIS AWS Foundations and AWS Foundational Security Best Practices</td><td><code class="copy">aws securityhub get-enabled-standards</code></td><td><span class="tag">Posture</span></td></tr>
+<tr><td><code>configservice describe-configuration-recorder-status</code></td><td>Confirm AWS Config is recording resource changes</td><td><code class="copy">aws configservice describe-configuration-recorder-status</code></td><td><span class="tag">Logging</span></td></tr>
+<tr><td><code>ec2 describe-security-groups</code></td><td>Security groups that allow traffic from anywhere</td><td><code class="copy">aws ec2 describe-security-groups --filters Name=ip-permission.cidr,Values=0.0.0.0/0 --query "SecurityGroups[].[GroupId,GroupName]" --output table</code></td><td><span class="tag">Network</span></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-tip"><p><strong>Security Hub naming:</strong> the original service is now AWS Security Hub CSPM, which runs posture checks and uses <code>get-findings</code>. The newer AWS Security Hub correlates findings from GuardDuty, Inspector, Macie and CSPM in the OCSF format and is queried with <code>get-findings-v2</code>. Both live under <code>aws securityhub</code>.</p></div>
+</section>
+<section class="panel" id="azure-cli">
+<h2 class="panel-title">Azure CLI Essentials</h2>
+<p class="panel-lead">Subscription context, Azure RBAC, Activity log and Microsoft Defender for Cloud with <code>az</code>.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th><th>Tags</th></tr></thead>
+<tbody>
+<tr><td><code>az login</code></td><td>Sign in to a specific Microsoft Entra ID tenant</td><td><code class="copy">az login --tenant contoso.onmicrosoft.com</code></td><td><span class="tag">Identity</span></td></tr>
+<tr><td><code>az account show</code></td><td>Current subscription, tenant and signed in identity</td><td><code class="copy">az account show --output table</code></td><td><span class="tag">Identity</span></td></tr>
+<tr><td><code>az account list</code></td><td>Every subscription the identity can see</td><td><code class="copy">az account list --query "[].{name:name, id:id, state:state}" --output table</code></td><td><span class="tag">Inventory</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1580/" title="Cloud Infrastructure Discovery">T1580</a></td></tr>
+<tr><td><code>az role assignment list</code></td><td>All Azure RBAC assignments in the subscription, including inherited ones</td><td><code class="copy">az role assignment list --all --output table</code></td><td><span class="tag">Privilege</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1069/003/" title="Permission Groups Discovery: Cloud Groups">T1069.003</a></td></tr>
+<tr><td><code>az role assignment list --role Owner</code></td><td>Who holds Owner and at which scope</td><td><code class="copy">az role assignment list --all --role Owner --query "[].{principal:principalName, type:principalType, scope:scope}" --output table</code></td><td><span class="tag">Privilege</span></td></tr>
+<tr><td><code>az role assignment list --assignee</code></td><td>Every role one user or service principal holds</td><td><code class="copy">az role assignment list --assignee alice@contoso.com --all --include-inherited --output table</code></td><td><span class="tag">Privilege</span></td></tr>
+<tr><td><code>az role definition list</code></td><td>Custom roles, which often hide wildcard actions</td><td><code class="copy">az role definition list --custom-role-only true --query "[].{name:roleName, actions:permissions[0].actions}"</code></td><td><span class="tag">Policy</span></td></tr>
+<tr><td><code>az ad app credential list</code></td><td>Client secrets and certificates on an app registration, with expiry</td><td><code class="copy">az ad app credential list --id 00000000-0000-0000-0000-000000000000</code></td><td><span class="tag">Keys</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1098/001/" title="Account Manipulation: Additional Cloud Credentials">T1098.001</a></td></tr>
+<tr><td><code>az monitor activity-log list</code></td><td>Failed control plane operations in the last day</td><td><code class="copy">az monitor activity-log list --offset 1d --status Failed --max-events 50</code></td><td><span class="tag">Logging</span><span class="tag">Hunting</span></td></tr>
+<tr><td><code>az monitor activity-log list --caller</code></td><td>What one identity changed in the last week</td><td><code class="copy">az monitor activity-log list --caller alice@contoso.com --offset 7d --query "[].{time:eventTimestamp, operation:operationName.value, status:status.value}" --output table</code></td><td><span class="tag">Hunting</span></td></tr>
+<tr><td><code>az monitor diagnostic-settings subscription list</code></td><td>Confirm the Activity log is exported to Log Analytics or storage</td><td><code class="copy">az monitor diagnostic-settings subscription list</code></td><td><span class="tag">Logging</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1685/002/" title="Disable or Modify Tools: Disable or Modify Cloud Log">T1685.002</a></td></tr>
+<tr><td><code>az security pricing list</code></td><td>Which Microsoft Defender for Cloud plans are on (Free or Standard)</td><td><code class="copy">az security pricing list --output table</code></td><td><span class="tag">Detection</span></td></tr>
+<tr><td><code>az security alert list</code></td><td>Defender for Cloud security alerts</td><td><code class="copy">az security alert list --query "[].{name:alertDisplayName, severity:severity, status:status}" --output table</code></td><td><span class="tag">Detection</span></td></tr>
+<tr><td><code>az security assessment list</code></td><td>Defender for Cloud recommendations and their health status</td><td><code class="copy">az security assessment list --query "[?status.code=='Unhealthy'].displayName"</code></td><td><span class="tag">Posture</span></td></tr>
+<tr><td><code>az security secure-scores list</code></td><td>Secure score per initiative, a quick posture trend</td><td><code class="copy">az security secure-scores list --output table</code></td><td><span class="tag">Posture</span></td></tr>
+<tr><td><code>az storage account list</code></td><td>Storage accounts that allow anonymous blob access or shared key auth</td><td><code class="copy">az storage account list --query "[].{name:name, publicBlob:allowBlobPublicAccess, sharedKey:allowSharedKeyAccess, tls:minimumTlsVersion}" --output table</code></td><td><span class="tag">Storage</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1530/" title="Data from Cloud Storage">T1530</a></td></tr>
+<tr><td><code>az keyvault list</code></td><td>Key vaults with soft delete and purge protection status</td><td><code class="copy">az keyvault list --query "[].{name:name, purgeProtection:properties.enablePurgeProtection, rbac:properties.enableRbacAuthorization}" --output table</code></td><td><span class="tag">Secrets</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="microsoft-graph">
+<h2 class="panel-title">Microsoft Graph PowerShell Essentials</h2>
+<p class="panel-lead">Microsoft Entra ID users, roles, sign-in logs and audit logs. Install with <code>Install-Module Microsoft.Graph</code>. It replaces the deprecated AzureAD and MSOnline modules.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th><th>Tags</th></tr></thead>
+<tbody>
+<tr><td><code>Connect-MgGraph</code></td><td>Sign in with only the read scopes the audit needs</td><td><code class="copy">Connect-MgGraph -Scopes "AuditLog.Read.All","Directory.Read.All","Policy.Read.All"</code></td><td><span class="tag">Identity</span></td></tr>
+<tr><td><code>Get-MgContext</code></td><td>Confirm tenant, account and granted scopes</td><td><code class="copy">Get-MgContext | Select-Object TenantId, Account, Scopes</code></td><td><span class="tag">Identity</span></td></tr>
+<tr><td><code>Get-MgAuditLogSignIn</code></td><td>Failed sign-ins since a date (needs Entra ID P1 or P2)</td><td><code class="copy">Get-MgAuditLogSignIn -Filter "createdDateTime ge 2026-11-19T00:00:00Z and status/errorCode ne 0" -Top 50 | Select-Object CreatedDateTime, UserPrincipalName, IPAddress, AppDisplayName</code></td><td><span class="tag">Logging</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1078/004/" title="Valid Accounts: Cloud Accounts">T1078.004</a></td></tr>
+<tr><td><code>Get-MgAuditLogDirectoryAudit</code></td><td>Directory changes: role grants, app consents, new credentials</td><td><code class="copy">Get-MgAuditLogDirectoryAudit -Filter "activityDisplayName eq 'Add member to role'" -Top 20 | Select-Object ActivityDateTime, ActivityDisplayName, InitiatedBy</code></td><td><span class="tag">Logging</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1098/003/" title="Account Manipulation: Additional Cloud Roles">T1098.003</a></td></tr>
+<tr><td><code>Get-MgRoleManagementDirectoryRoleAssignment</code></td><td>Who holds Global Administrator (role template ID shown)</td><td><code class="copy">Get-MgRoleManagementDirectoryRoleAssignment -Filter "roleDefinitionId eq '62e90394-69f5-4237-9190-012177145e10'" -ExpandProperty Principal</code></td><td><span class="tag">Privilege</span></td></tr>
+<tr><td><code>Get-MgReportAuthenticationMethodUserRegistrationDetail</code></td><td>Users with no MFA method registered</td><td><code class="copy">Get-MgReportAuthenticationMethodUserRegistrationDetail -All -Filter "isMfaRegistered eq false" | Select-Object UserPrincipalName, IsAdmin</code></td><td><span class="tag">MFA</span></td></tr>
+<tr><td><code>Get-MgIdentityConditionalAccessPolicy</code></td><td>Conditional Access policies and whether each is on, off or report only</td><td><code class="copy">Get-MgIdentityConditionalAccessPolicy | Select-Object DisplayName, State</code></td><td><span class="tag">Policy</span></td></tr>
+<tr><td><code>Get-MgApplication</code></td><td>App registrations with secrets or certificates attached</td><td><code class="copy">Get-MgApplication -All -Property DisplayName, AppId, PasswordCredentials, KeyCredentials | Where-Object { $_.PasswordCredentials -or $_.KeyCredentials }</code></td><td><span class="tag">Keys</span></td></tr>
+<tr><td><code>Get-MgRiskyUser</code></td><td>Users Entra ID Protection rates as high risk (needs P2)</td><td><code class="copy">Get-MgRiskyUser -Filter "riskLevel eq 'high'" | Select-Object UserPrincipalName, RiskState, RiskLastUpdatedDateTime</code></td><td><span class="tag">Detection</span></td></tr>
+<tr><td><code>Get-MgPolicyAuthorizationPolicy</code></td><td>Tenant defaults such as user consent to apps and guest permissions</td><td><code class="copy">Get-MgPolicyAuthorizationPolicy | Select-Object -ExpandProperty DefaultUserRolePermissions</code></td><td><span class="tag">Policy</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="gcp-gcloud">
+<h2 class="panel-title">Google Cloud gcloud Essentials</h2>
+<p class="panel-lead">Active account, IAM policy bindings, Cloud Audit Logs and Security Command Center with the gcloud CLI.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th><th>Tags</th></tr></thead>
+<tbody>
+<tr><td><code>gcloud auth list</code></td><td>Credentialed accounts and which one is active</td><td><code class="copy">gcloud auth list</code></td><td><span class="tag">Identity</span></td></tr>
+<tr><td><code>gcloud projects list</code></td><td>Every project the identity can see</td><td><code class="copy">gcloud projects list --format="table(projectId, name, parent.id)"</code></td><td><span class="tag">Inventory</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1580/" title="Cloud Infrastructure Discovery">T1580</a></td></tr>
+<tr><td><code>gcloud projects get-iam-policy</code></td><td>One row per role and member on a project</td><td><code class="copy">gcloud projects get-iam-policy example-project --flatten="bindings[].members" --format="table(bindings.role, bindings.members)"</code></td><td><span class="tag">Privilege</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1069/003/" title="Permission Groups Discovery: Cloud Groups">T1069.003</a></td></tr>
+<tr><td><code>gcloud projects get-iam-policy</code> owners</td><td>Only the members holding the basic Owner role</td><td><code class="copy">gcloud projects get-iam-policy example-project --flatten="bindings[].members" --filter="bindings.role:roles/owner" --format="value(bindings.members)"</code></td><td><span class="tag">Privilege</span></td></tr>
+<tr><td><code>gcloud organizations get-iam-policy</code></td><td>Bindings at the organization level, which flow to every project</td><td><code class="copy">gcloud organizations get-iam-policy 123456789012</code></td><td><span class="tag">Privilege</span></td></tr>
+<tr><td><code>gcloud asset search-all-iam-policies</code></td><td>Find anything granted to <code>allUsers</code> or <code>allAuthenticatedUsers</code> across the organization</td><td><code class="copy">gcloud asset search-all-iam-policies --scope=organizations/123456789012 --query="policy:allUsers OR policy:allAuthenticatedUsers"</code></td><td><span class="tag">Exposure</span></td></tr>
+<tr><td><code>gcloud iam service-accounts list</code></td><td>Service accounts in the project</td><td><code class="copy">gcloud iam service-accounts list</code></td><td><span class="tag">Identity</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1087/004/" title="Account Discovery: Cloud Account">T1087.004</a></td></tr>
+<tr><td><code>gcloud iam service-accounts keys list</code></td><td>User managed (downloadable) keys on a service account</td><td><code class="copy">gcloud iam service-accounts keys list --iam-account=app@example-project.iam.gserviceaccount.com --managed-by=user</code></td><td><span class="tag">Keys</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1098/001/" title="Account Manipulation: Additional Cloud Credentials">T1098.001</a></td></tr>
+<tr><td><code>gcloud recommender recommendations list</code></td><td>IAM recommender: roles with permissions that are never used</td><td><code class="copy">gcloud recommender recommendations list --project=example-project --location=global --recommender=google.iam.policy.Recommender</code></td><td><span class="tag">Privilege</span></td></tr>
+<tr><td><code>gcloud logging read</code> admin activity</td><td>Admin Activity audit log entries from the last day</td><td><code class="copy">gcloud logging read 'logName:"cloudaudit.googleapis.com%2Factivity"' --freshness=1d --limit=20</code></td><td><span class="tag">Logging</span></td></tr>
+<tr><td><code>gcloud logging read</code> IAM changes</td><td>Every IAM policy change in the last week</td><td><code class="copy">gcloud logging read 'protoPayload.methodName="SetIamPolicy"' --freshness=7d --format="table(timestamp, protoPayload.authenticationInfo.principalEmail, resource.type)"</code></td><td><span class="tag">Hunting</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1098/003/" title="Account Manipulation: Additional Cloud Roles">T1098.003</a></td></tr>
+<tr><td><code>gcloud projects get-iam-policy</code> audit config</td><td>Show which services have Data Access audit logs turned on</td><td><code class="copy">gcloud projects get-iam-policy example-project --format="json(auditConfigs)"</code></td><td><span class="tag">Logging</span></td></tr>
+<tr><td><code>gcloud logging sinks list</code></td><td>Where logs are exported, and whether a sink was deleted or changed</td><td><code class="copy">gcloud logging sinks list</code></td><td><span class="tag">Logging</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1685/002/" title="Disable or Modify Tools: Disable or Modify Cloud Log">T1685.002</a></td></tr>
+<tr><td><code>gcloud scc findings list</code></td><td>Active critical Security Command Center findings for the organization</td><td><code class="copy">gcloud scc findings list 123456789012 --location=global --filter='state="ACTIVE" AND severity="CRITICAL"'</code></td><td><span class="tag">Detection</span><span class="tag">Posture</span></td></tr>
+<tr><td><code>gcloud storage buckets get-iam-policy</code></td><td>Check a bucket for public members</td><td><code class="copy">gcloud storage buckets get-iam-policy gs://example-bucket</code></td><td><span class="tag">Storage</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1530/" title="Data from Cloud Storage">T1530</a></td></tr>
+<tr><td><code>gcloud storage buckets describe</code></td><td>Public access prevention and uniform bucket level access</td><td><code class="copy">gcloud storage buckets describe gs://example-bucket --format="default(public_access_prevention, uniform_bucket_level_access)"</code></td><td><span class="tag">Storage</span></td></tr>
+<tr><td><code>gcloud compute firewall-rules list</code></td><td>Ingress firewall rules open to the whole internet</td><td><code class="copy">gcloud compute firewall-rules list --filter="direction=INGRESS AND sourceRanges:0.0.0.0/0" --format="table(name, network, allowed[].map().firewall_rule().list())"</code></td><td><span class="tag">Network</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="where-logs-live">
+<h2 class="panel-title">Where Logs Live</h2>
+<p class="panel-lead">The audit sources a SOC analyst needs per provider, with default retention. Export them to a SIEM or a locked storage account to keep them longer.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Log</th><th>Provider</th><th>What it records</th><th>Retention and notes</th></tr></thead>
+<tbody>
+<tr><td>CloudTrail Event history</td><td>AWS</td><td>Management events (API calls and console sign-ins) per region</td><td>90 days, on by default, read only. Create a trail to keep more and to cover every region.</td></tr>
+<tr><td>CloudTrail trail or CloudTrail Lake</td><td>AWS</td><td>Management events, plus data events (S3 object reads, Lambda invokes) when selected</td><td>Kept as long as the S3 bucket or event data store keeps it. Data events cost extra and are off by default.</td></tr>
+<tr><td>VPC Flow Logs</td><td>AWS</td><td>Accepted and rejected network flows per interface, subnet or VPC</td><td>Off by default. Delivered to CloudWatch Logs, S3 or Firehose.</td></tr>
+<tr><td>GuardDuty findings</td><td>AWS</td><td>Threat detections built from CloudTrail, VPC Flow Logs, DNS logs and runtime data</td><td>Findings kept 90 days. Export to S3 or Security Hub for history.</td></tr>
+<tr><td>Azure Activity log</td><td>Azure</td><td>Subscription control plane operations: create, update, delete, role assignments</td><td>90 days by default. Use a diagnostic setting to send it to a Log Analytics workspace.</td></tr>
+<tr><td>Microsoft Entra sign-in logs</td><td>Azure</td><td>Interactive, non interactive, service principal and managed identity sign-ins</td><td>7 days on Entra ID Free, 30 days on P1 and P2. Graph API access needs P1 or P2.</td></tr>
+<tr><td>Microsoft Entra audit logs</td><td>Azure</td><td>Directory changes: users, groups, roles, apps, policies</td><td>7 days on Free, 30 days on P1 and P2. Export with diagnostic settings for longer.</td></tr>
+<tr><td>Resource logs</td><td>Azure</td><td>Data plane activity inside a resource, for example Key Vault access or storage reads</td><td>Not collected until you add a diagnostic setting on each resource or by Azure Policy.</td></tr>
+<tr><td>Microsoft Defender for Cloud alerts</td><td>Azure</td><td>Threat alerts and recommendations across Azure, AWS and GCP connectors</td><td>Stream with continuous export to Log Analytics or Event Hubs, or read in Microsoft Sentinel.</td></tr>
+<tr><td>Admin Activity audit logs</td><td>GCP</td><td>Configuration and IAM changes made through the API or console</td><td>Always on, cannot be disabled, kept 400 days in the <code>_Required</code> bucket.</td></tr>
+<tr><td>Data Access audit logs</td><td>GCP</td><td>Reads of configuration and user data, for example Cloud Storage object reads</td><td>Off by default for most services (BigQuery is the exception). Kept 30 days in the <code>_Default</code> bucket.</td></tr>
+<tr><td>System Event and Policy Denied audit logs</td><td>GCP</td><td>Google initiated system actions, and requests denied by VPC Service Controls or policy</td><td>System Event: 400 days. Policy Denied: 30 days, can be excluded.</td></tr>
+<tr><td>Security Command Center findings</td><td>GCP</td><td>Misconfigurations, vulnerabilities and threats from built-in detectors</td><td>Standard, Premium and Enterprise tiers. Export with continuous exports to Pub/Sub or BigQuery.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout"><p><strong>Tip:</strong> attackers often turn logging off before they act. Alert on <code>StopLogging</code>, <code>DeleteTrail</code> and <code>UpdateTrail</code> in CloudTrail, on deleted diagnostic settings in the Azure Activity log, and on <code>DeleteSink</code> or <code>UpdateSink</code> in GCP Admin Activity logs.</p></div>
+</section>
+<section class="panel" id="misconfigurations">
+<h2 class="panel-title">Common Misconfigurations</h2>
+<p class="panel-lead">The findings that show up in almost every cloud review, how to spot them and what to change.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Misconfiguration</th><th>How to find it</th><th>Fix</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td>Public S3 bucket</td><td><code class="copy">aws s3api get-bucket-policy-status --bucket example-bucket</code></td><td>Turn on account level S3 Block Public Access and serve public content through CloudFront.</td><td><span class="tag tag-critical">Critical</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1530/" title="Data from Cloud Storage">T1530</a></td></tr>
+<tr><td>Anonymous Azure blob access</td><td><code class="copy">az storage account list --query "[?allowBlobPublicAccess].name"</code></td><td>Set <code>allowBlobPublicAccess</code> to false and enforce it with Azure Policy.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td>Public Cloud Storage bucket</td><td><code class="copy">gcloud asset search-all-iam-policies --scope=organizations/123456789012 --query="policy:allUsers"</code></td><td>Enforce the <code>storage.publicAccessPrevention</code> organization policy.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td>Root or Global Administrator used day to day</td><td><code class="copy">aws cloudtrail lookup-events --lookup-attributes AttributeKey=Username,AttributeValue=root</code></td><td>Lock root away with MFA, no access keys, and use named admin roles. Keep Global Administrators to a few break glass and PIM eligible accounts.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td>Over-broad roles</td><td><code class="copy">aws iam list-entities-for-policy --policy-arn arn:aws:iam::aws:policy/AdministratorAccess</code></td><td>Replace AdministratorAccess, Owner and basic <code>roles/owner</code> or <code>roles/editor</code> grants with scoped roles. Use PIM or just in time access for admin.</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1098/003/" title="Account Manipulation: Additional Cloud Roles">T1098.003</a></td></tr>
+<tr><td>Wildcard actions in custom policies</td><td><code class="copy">az role definition list --custom-role-only true --query "[?contains(to_string(permissions[0].actions), '*')].roleName"</code></td><td>List exact actions. Review with IAM Access Analyzer policy validation or the GCP IAM recommender.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td>Long-lived IAM user access keys</td><td><code class="copy">aws iam get-credential-report --query Content --output text | base64 -d | cut -d, -f1,9,10,11</code></td><td>Move people to IAM Identity Center and workloads to roles. Rotate or delete keys older than 90 days or never used.</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1078/004/" title="Valid Accounts: Cloud Accounts">T1078.004</a></td></tr>
+<tr><td>Downloaded service account keys</td><td><code class="copy">gcloud iam service-accounts keys list --iam-account=app@example-project.iam.gserviceaccount.com --managed-by=user</code></td><td>Use workload identity federation or attached service accounts, and enforce <code>iam.disableServiceAccountKeyCreation</code>.</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1098/001/" title="Account Manipulation: Additional Cloud Credentials">T1098.001</a></td></tr>
+<tr><td>Long-lived app registration secrets</td><td><code class="copy">az ad app credential list --id 00000000-0000-0000-0000-000000000000</code></td><td>Prefer managed identities or certificates, and keep secret lifetimes short with app management policies.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td>Missing MFA</td><td><code class="copy">Get-MgReportAuthenticationMethodUserRegistrationDetail -All -Filter "isMfaRegistered eq false"</code></td><td>Require phishing resistant MFA (passkeys or FIDO2) through Conditional Access, AWS IAM MFA and Google 2-Step Verification enforcement.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td>CloudTrail not logging in every region</td><td><code class="copy">aws cloudtrail describe-trails --query "trailList[?IsMultiRegionTrail==`false`].Name"</code></td><td>Create an organization trail that is multi region, with log file validation and a separate log archive account.</td><td><span class="tag tag-high">High</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1685/002/" title="Disable or Modify Tools: Disable or Modify Cloud Log">T1685.002</a></td></tr>
+<tr><td>Azure logs not exported</td><td><code class="copy">az monitor diagnostic-settings subscription list</code></td><td>Send the Activity log and Entra ID logs to a Log Analytics workspace or Microsoft Sentinel.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td>GCP Data Access logs off</td><td><code class="copy">gcloud projects get-iam-policy example-project --format="json(auditConfigs)"</code></td><td>Enable Data Access logs for sensitive services at the organization or folder level.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td>Management ports open to the internet</td><td><code class="copy">aws ec2 describe-security-groups --filters Name=ip-permission.from-port,Values=22,3389 Name=ip-permission.cidr,Values=0.0.0.0/0</code></td><td>Close SSH and RDP to <code>0.0.0.0/0</code>. Use Systems Manager Session Manager, Azure Bastion or IAP TCP forwarding.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td>IMDSv1 still allowed</td><td><code class="copy">aws ec2 describe-instances --query "Reservations[].Instances[?MetadataOptions.HttpTokens=='optional'].InstanceId"</code></td><td>Require IMDSv2 on every instance and set it as the account default for new launches.</td><td><span class="tag tag-medium">Medium</span><a class="attack-tag" href="https://attack.mitre.org/techniques/T1552/005/" title="Unsecured Credentials: Cloud Instance Metadata API">T1552.005</a></td></tr>
+<tr><td>Threat detection disabled</td><td><code class="copy">aws guardduty list-detectors</code></td><td>Enable GuardDuty in every region through the organization, Defender for Cloud plans on every subscription and Security Command Center at the organization level.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-tip"><p><strong>Secure defaults help:</strong> new S3 buckets block public access and disable ACLs, new Azure storage accounts disallow anonymous blob access, and GCP organizations created since 2024 get secure by default organization policies. Older accounts and projects keep their old settings, so check them first.</p></div>
+</section>
+<section class="panel" id="hardening">
+<h2 class="panel-title">Hardening Checklist</h2>
+<p class="panel-lead">A baseline per provider. Benchmark against the CIS Foundations Benchmarks for AWS, Azure and GCP.</p>
+<h3>AWS</h3>
+<ul class="checklist">
+<li>Use AWS Organizations with separate accounts for workloads, security tooling and log archive, and apply service control policies.</li>
+<li>Protect the root user with MFA, delete root access keys, and enable centralized root access management where available.</li>
+<li>Give people access through IAM Identity Center with MFA instead of IAM users and access keys.</li>
+<li>Run an organization CloudTrail trail in every region with log file validation, delivered to a locked bucket in the log archive account.</li>
+<li>Turn on S3 Block Public Access at the account level and default encryption with KMS where required.</li>
+<li>Enable GuardDuty, Security Hub CSPM standards, IAM Access Analyzer and AWS Config in every region through delegated administrators.</li>
+<li>Require IMDSv2, turn on EBS encryption by default and keep security groups free of <code>0.0.0.0/0</code> on management ports.</li>
+</ul>
+<h3>Microsoft Azure</h3>
+<ul class="checklist">
+<li>Require MFA for every user with Conditional Access (or security defaults on small tenants) and block legacy authentication.</li>
+<li>Keep two cloud only break glass accounts with phishing resistant credentials, excluded from risky policies and monitored for sign-ins.</li>
+<li>Use Privileged Identity Management so Global Administrator, Owner and User Access Administrator are eligible, time bound and approved.</li>
+<li>Send the Activity log, Entra ID sign-in and audit logs to Log Analytics or Microsoft Sentinel with retention that meets policy.</li>
+<li>Enable Microsoft Defender for Cloud plans on every subscription and work the secure score recommendations.</li>
+<li>Disable anonymous blob access and shared key authorization on storage accounts, and enable purge protection on key vaults.</li>
+<li>Restrict user consent to verified publishers or low risk permissions and review enterprise application grants.</li>
+</ul>
+<h3>Google Cloud</h3>
+<ul class="checklist">
+<li>Manage identities in Cloud Identity or Google Workspace and enforce 2-Step Verification, with security keys for admins.</li>
+<li>Avoid the basic Owner, Editor and Viewer roles; grant predefined or custom roles to groups at the lowest folder or project.</li>
+<li>Enforce organization policies: disable service account key creation, enforce public access prevention, restrict domain sharing and require uniform bucket level access.</li>
+<li>Enable Data Access audit logs for sensitive services and route all audit logs to a central, locked log bucket or BigQuery dataset.</li>
+<li>Activate Security Command Center at the organization level and review findings weekly.</li>
+<li>Use workload identity federation for external workloads and IAP instead of public SSH and RDP.</li>
+<li>Act on IAM recommender findings to remove permissions that have not been used in 90 days.</li>
+</ul>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

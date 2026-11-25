@@ -1,0 +1,14 @@
+{
+  "name": "Cyber Epistemology",
+  "short_name": "Cyber Epistemology",
+  "description": "Practical cyber security knowledge: system files, commands, tools, guides, utilities and a certification roadmap. Works offline.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#04070e",
+  "theme_color": "#04070e",
+  "icons": [
+    { "src": "Assets/Image/AppIcon192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "Assets/Image/AppIcon512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

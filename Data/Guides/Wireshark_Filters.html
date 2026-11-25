@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireshark Filters | Cyber Epistemology</title>
+<meta name="description" content="Wireshark 4.x display and capture filters for defenders: syntax and operators, addresses and ports, TCP analysis, HTTP and TLS, DNS, SMB, Kerberos, DHCP and ARP, scans, beaconing and cleartext credentials, plus tshark commands and Statistics menus.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../../Assets/Image/AppleTouchIcon.png">
+<link rel="manifest" href="../../Manifest.webmanifest">
+<link rel="stylesheet" href="../../Assets/Style/Site.css">
+<script src="../../Assets/Script/Site.js" defer></script>
+</head>
+<body class="is-content-page" data-root="../../" data-section="guides">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><span>Guides</span><span class="breadcrumb-separator">/</span><span>Wireshark Filters</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../../Assets/Icon/Wireshark.svg" alt="">
+<div>
+<p class="hero-eyebrow">Guides</p>
+<h1 class="hero-title">Wireshark Filters</h1>
+</div>
+</div>
+<p class="hero-lead">Copy ready display and capture filters for triage and threat hunting, from basic address matching to Kerberos errors, TLS fingerprints and cleartext passwords.</p>
+<div class="hero-meta"><span class="badge">Wireshark 4.6</span><span class="badge">184 filters and commands</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: kerberos" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="display-vs-capture">
+<h2 class="panel-title">Display and Capture Filters</h2>
+<p class="panel-lead">Two different languages: capture filters decide what is saved, display filters decide what is shown.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term">Capture filter</span><span class="definition-text">BPF (libpcap) syntax, set before the capture starts in the capture options or with <code>-f</code>. Dropped packets are gone for good, so keep these broad.</span></div>
+<div class="definition"><span class="definition-term">Display filter</span><span class="definition-text">Wireshark field syntax such as <code>tcp.port == 443</code>, typed in the filter bar or passed with <code>-Y</code>. Applied to saved packets and changeable at any time.</span></div>
+<div class="definition"><span class="definition-term">Building filters</span><span class="definition-text">Right click any field in the packet details and choose Apply as Filter or Prepare as Filter. The status bar shows the field name of the selected item.</span></div>
+<div class="definition"><span class="definition-term">Field reference</span><span class="definition-text">Every field is listed in the display filter reference at wireshark.org/docs/dfref, or locally with <code>tshark -G fields</code>.</span></div>
+</div>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Capture filter (BPF)</th><th>What it captures</th></tr></thead>
+<tbody>
+<tr><td><code class="copy">host 10.0.0.5</code></td><td>Traffic to or from one host</td></tr>
+<tr><td><code class="copy">src host 10.0.0.5</code></td><td>Traffic sent by one host only</td></tr>
+<tr><td><code class="copy">net 10.0.0.0/24</code></td><td>Traffic to or from a subnet</td></tr>
+<tr><td><code class="copy">port 53</code></td><td>TCP and UDP on port 53</td></tr>
+<tr><td><code class="copy">tcp port 443</code></td><td>TCP on port 443 only</td></tr>
+<tr><td><code class="copy">portrange 8000-8100</code></td><td>Any port in a range</td></tr>
+<tr><td><code class="copy">not port 22</code></td><td>Everything except SSH, useful when capturing over your own SSH session</td></tr>
+<tr><td><code class="copy">host 10.0.0.5 and not (port 22 or port 3389)</code></td><td>One host without remote admin noise</td></tr>
+<tr><td><code class="copy">tcp[tcpflags] &amp; (tcp-syn|tcp-ack) == tcp-syn</code></td><td>Only SYN packets, a light way to log connection attempts</td></tr>
+<tr><td><code class="copy">tcp[tcpflags] &amp; tcp-rst != 0</code></td><td>Only TCP resets</td></tr>
+<tr><td><code class="copy">ether host 00:11:22:33:44:55</code></td><td>Traffic to or from one MAC address</td></tr>
+<tr><td><code class="copy">udp port 67 or udp port 68</code></td><td>DHCP only</td></tr>
+<tr><td><code class="copy">icmp or icmp6</code></td><td>ICMP for IPv4 and IPv6</td></tr>
+<tr><td><code class="copy">vlan and host 10.0.0.5</code></td><td>One host on a VLAN tagged trunk (<code>vlan</code> must come first)</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-tip"><p><strong>Tip:</strong> when unsure, capture everything into a ring buffer and narrow down later with display filters. A capture filter mistake cannot be undone.</p></div>
+</section>
+<section class="panel" id="operators-syntax">
+<h2 class="panel-title">Operators and Syntax</h2>
+<p class="panel-lead">Comparison, logic, sets, slices and functions in the Wireshark 4.x display filter language.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Filter</th><th>What it shows</th></tr></thead>
+<tbody>
+<tr><td><code class="copy">tcp</code></td><td>A protocol or field name alone tests that it exists in the packet</td></tr>
+<tr><td><code class="copy">ip.src == 10.0.0.5</code></td><td>Equal (<code>eq</code> also works)</td></tr>
+<tr><td><code class="copy">tcp.port != 443</code></td><td>Not equal. Since 3.6 this means the same as <code>!(tcp.port == 443)</code>, so neither port may be 443</td></tr>
+<tr><td><code class="copy">frame.len &gt; 1000</code></td><td>Greater than; also <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code> or <code>gt</code>, <code>lt</code>, <code>ge</code>, <code>le</code></td></tr>
+<tr><td><code class="copy">ip.src == 10.0.0.5 &amp;&amp; tcp.port == 443</code></td><td>Logical AND (<code>and</code> also works)</td></tr>
+<tr><td><code class="copy">dns || llmnr || nbns</code></td><td>Logical OR (<code>or</code> also works)</td></tr>
+<tr><td><code class="copy">!arp</code></td><td>Logical NOT (<code>not</code> also works): hide ARP</td></tr>
+<tr><td><code class="copy">!(ip.addr == 10.0.0.5)</code></td><td>Hide every packet with this address as source or destination</td></tr>
+<tr><td><code class="copy">tcp.port in {80, 443, 8080}</code></td><td>Set membership; elements are separated by commas in 4.x</td></tr>
+<tr><td><code class="copy">tcp.port in {8000..8100}</code></td><td>Range inside a set</td></tr>
+<tr><td><code class="copy">http.host contains "example"</code></td><td>Substring match, case sensitive</td></tr>
+<tr><td><code class="copy">http.user_agent matches "(curl|wget|python)"</code></td><td>PCRE2 regular expression, case insensitive by default (start with <code>(?-i)</code> to make it case sensitive)</td></tr>
+<tr><td><code class="copy">eth.src[0:3] == 00:0c:29</code></td><td>Slice: first 3 bytes of the source MAC, here a VMware OUI</td></tr>
+<tr><td><code class="copy">len(http.request.uri) &gt; 200</code></td><td>Function: length of a field, here very long URLs</td></tr>
+<tr><td><code class="copy">lower(http.user_agent) contains "powershell"</code></td><td>Function: lower case before comparing; <code>upper()</code> also exists</td></tr>
+<tr><td><code class="copy">ip.addr#2 == 10.0.0.5</code></td><td>Layer operator: match the inner IP header of a tunnel such as GRE or VXLAN</td></tr>
+<tr><td><code class="copy">all tcp.port &gt; 1024</code></td><td>Quantifier: every occurrence must match, so both ports are above 1024</td></tr>
+<tr><td><code class="copy">frame contains "password"</code></td><td>Search raw bytes of every frame for a string</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="address-port">
+<h2 class="panel-title">Filter by Address and Port</h2>
+<p class="panel-lead">The everyday filters for isolating hosts, conversations and time windows.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Filter</th><th>What it shows</th></tr></thead>
+<tbody>
+<tr><td><code class="copy">ip.addr == 10.0.0.5</code></td><td>Packets to or from one IPv4 address</td></tr>
+<tr><td><code class="copy">ip.src == 10.0.0.5</code></td><td>Packets sent by one host</td></tr>
+<tr><td><code class="copy">ip.dst == 10.0.0.5</code></td><td>Packets sent to one host</td></tr>
+<tr><td><code class="copy">ip.addr == 10.0.0.0/24</code></td><td>Any address in a subnet (CIDR works on address fields)</td></tr>
+<tr><td><code class="copy">ip.src == 10.0.0.5 &amp;&amp; ip.dst == 10.0.0.9</code></td><td>One direction between two hosts</td></tr>
+<tr><td><code class="copy">ipv6.addr == 2001:db8::1</code></td><td>Packets to or from one IPv6 address</td></tr>
+<tr><td><code class="copy">eth.addr == 00:11:22:33:44:55</code></td><td>Packets to or from one MAC address</td></tr>
+<tr><td><code class="copy">tcp.port == 443</code></td><td>TCP source or destination port 443</td></tr>
+<tr><td><code class="copy">tcp.dstport == 3389</code></td><td>TCP traffic to RDP</td></tr>
+<tr><td><code class="copy">udp.port == 53</code></td><td>UDP source or destination port 53</td></tr>
+<tr><td><code class="copy">tcp.stream == 7</code></td><td>One TCP conversation by stream index (also <code>udp.stream</code>)</td></tr>
+<tr><td><code class="copy">!(ip.dst == 10.0.0.0/8) &amp;&amp; !(ip.dst == 172.16.0.0/12) &amp;&amp; !(ip.dst == 192.168.0.0/16)</code></td><td>Traffic leaving for public addresses</td></tr>
+<tr><td><code class="copy">vlan.id == 100</code></td><td>Frames tagged with one VLAN</td></tr>
+<tr><td><code class="copy">frame.time &gt;= "2026-11-26T09:00:00"</code></td><td>Packets after an absolute time (ISO 8601, local time zone)</td></tr>
+<tr><td><code class="copy">frame.number &gt;= 1000 &amp;&amp; frame.number &lt;= 2000</code></td><td>A range of packet numbers</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="tcp-analysis">
+<h2 class="panel-title">TCP Analysis</h2>
+<p class="panel-lead">Handshakes, resets and the expert analysis flags that point to loss, delay or broken connections.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Filter</th><th>What it shows</th></tr></thead>
+<tbody>
+<tr><td><code class="copy">tcp.flags.syn == 1 &amp;&amp; tcp.flags.ack == 0</code></td><td>Connection attempts (first packet of the handshake)</td></tr>
+<tr><td><code class="copy">tcp.flags.syn == 1 &amp;&amp; tcp.flags.ack == 1</code></td><td>SYN-ACK replies: the port is open</td></tr>
+<tr><td><code class="copy">tcp.flags == 0x002</code></td><td>Packets with only the SYN flag set</td></tr>
+<tr><td><code class="copy">tcp.flags.reset == 1</code></td><td>Resets: refused, closed or killed connections</td></tr>
+<tr><td><code class="copy">tcp.flags.fin == 1</code></td><td>Graceful connection closes</td></tr>
+<tr><td><code class="copy">tcp.completeness == 1</code></td><td>Streams where only a SYN was seen: no answer, so a filtered port or a dead host</td></tr>
+<tr><td><code class="copy">tcp.analysis.flags</code></td><td>Every packet with a TCP expert warning</td></tr>
+<tr><td><code class="copy">tcp.analysis.flags &amp;&amp; !tcp.analysis.window_update</code></td><td>TCP problems without the harmless window update noise</td></tr>
+<tr><td><code class="copy">tcp.analysis.retransmission</code></td><td>Retransmitted segments: loss or congestion</td></tr>
+<tr><td><code class="copy">tcp.analysis.fast_retransmission</code></td><td>Retransmissions triggered by duplicate ACKs</td></tr>
+<tr><td><code class="copy">tcp.analysis.duplicate_ack</code></td><td>Duplicate ACKs, the receiver reporting a gap</td></tr>
+<tr><td><code class="copy">tcp.analysis.lost_segment</code></td><td>Gaps in sequence numbers, often packets lost before the capture point</td></tr>
+<tr><td><code class="copy">tcp.analysis.out_of_order</code></td><td>Segments that arrived out of order</td></tr>
+<tr><td><code class="copy">tcp.analysis.zero_window</code></td><td>Receiver buffer full: the application is not reading fast enough</td></tr>
+<tr><td><code class="copy">tcp.analysis.keep_alive</code></td><td>Keep alive probes on idle connections</td></tr>
+<tr><td><code class="copy">tcp.analysis.initial_rtt &gt; 0.1</code></td><td>Handshakes slower than 100 ms</td></tr>
+<tr><td><code class="copy">tcp.analysis.ack_rtt &gt; 0.2</code></td><td>Segments acknowledged after more than 200 ms</td></tr>
+<tr><td><code class="copy">tcp.time_delta &gt; 1</code></td><td>Gaps of over 1 second inside a stream (enable Calculate conversation timestamps in TCP preferences)</td></tr>
+<tr><td><code class="copy">tcp.len &gt; 0</code></td><td>Segments that carry payload, hiding bare ACKs</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="http-tls">
+<h2 class="panel-title">HTTP and TLS</h2>
+<p class="panel-lead">Requests, responses, server names and certificates. Encrypted payloads stay hidden without keys, but the handshake still tells a lot.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Filter</th><th>What it shows</th></tr></thead>
+<tbody>
+<tr><td><code class="copy">http</code></td><td>HTTP/1.x traffic (use <code>http2</code> and <code>quic</code> for newer versions)</td></tr>
+<tr><td><code class="copy">http.request</code></td><td>All HTTP requests</td></tr>
+<tr><td><code class="copy">http.request.method == "POST"</code></td><td>POST requests: logins, uploads and exfiltration</td></tr>
+<tr><td><code class="copy">http.response.code &gt;= 400</code></td><td>Client and server errors, for example scanning that hits 404s</td></tr>
+<tr><td><code class="copy">http.host == "example.com"</code></td><td>Requests to one virtual host</td></tr>
+<tr><td><code class="copy">http.request.uri contains "/admin"</code></td><td>Requests for a path</td></tr>
+<tr><td><code class="copy">http.authorization</code></td><td>Requests with an Authorization header (Basic, Bearer, NTLM)</td></tr>
+<tr><td><code class="copy">http.cookie</code></td><td>Requests carrying cookies, which can be replayed if sent in clear</td></tr>
+<tr><td><code class="copy">http.response &amp;&amp; http.content_type contains "octet-stream"</code></td><td>Binary downloads</td></tr>
+<tr><td><code class="copy">http.location</code></td><td>Redirects and where they point</td></tr>
+<tr><td><code class="copy">tls.handshake.type == 1</code></td><td>TLS Client Hello messages</td></tr>
+<tr><td><code class="copy">tls.handshake.type == 2</code></td><td>TLS Server Hello messages</td></tr>
+<tr><td><code class="copy">tls.handshake.extensions_server_name == "example.com"</code></td><td>Client Hellos for an exact server name (SNI)</td></tr>
+<tr><td><code class="copy">tls.handshake.extensions_server_name contains "example"</code></td><td>Client Hellos whose SNI contains a string</td></tr>
+<tr><td><code class="copy">tls.handshake.type == 2 &amp;&amp; tls.handshake.extensions.supported_version == 0x0304</code></td><td>Sessions that negotiated TLS 1.3</td></tr>
+<tr><td><code class="copy">tls.handshake.type == 2 &amp;&amp; tls.handshake.version &lt; 0x0303</code></td><td>Servers that negotiated TLS 1.1 or older</td></tr>
+<tr><td><code class="copy">tls.handshake.type == 11</code></td><td>Certificate messages (visible up to TLS 1.2, encrypted in TLS 1.3)</td></tr>
+<tr><td><code class="copy">x509ce.dNSName contains "example"</code></td><td>Certificates with a matching subject alternative name</td></tr>
+<tr><td><code class="copy">tls.alert_message</code></td><td>TLS alerts: failed handshakes, bad certificates, interception</td></tr>
+<tr><td><code class="copy">tls.handshake.ja4</code></td><td>Client Hellos with a JA4 fingerprint; add it as a column and compare with threat intel (<code>tls.handshake.ja3</code> for JA3)</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-tip"><p><strong>Decrypt TLS you control:</strong> set the <code>SSLKEYLOGFILE</code> environment variable before starting a browser, then point Edit, Preferences, Protocols, TLS, (Pre)-Master-Secret log filename at that file. Decrypted traffic appears as <code>http</code> and <code>http2</code>.</p></div>
+</section>
+<section class="panel" id="dns">
+<h2 class="panel-title">DNS</h2>
+<p class="panel-lead">Queries, failures and the patterns behind tunneling and fast flux.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Filter</th><th>What it shows</th></tr></thead>
+<tbody>
+<tr><td><code class="copy">dns</code></td><td>All DNS traffic</td></tr>
+<tr><td><code class="copy">dns.flags.response == 0</code></td><td>Queries only</td></tr>
+<tr><td><code class="copy">dns.flags.response == 1</code></td><td>Responses only</td></tr>
+<tr><td><code class="copy">dns.qry.name == "example.com"</code></td><td>Queries for an exact name</td></tr>
+<tr><td><code class="copy">dns.qry.name contains "example"</code></td><td>Queries containing a string</td></tr>
+<tr><td><code class="copy">dns.qry.type == 16</code></td><td>TXT queries, a common tunneling and C2 carrier (1 is A, 28 is AAAA, 255 is ANY)</td></tr>
+<tr><td><code class="copy">dns.qry.type == 252</code></td><td>Zone transfer (AXFR) attempts</td></tr>
+<tr><td><code class="copy">dns.flags.rcode == 3</code></td><td>NXDOMAIN answers: typos, or domain generation algorithm malware</td></tr>
+<tr><td><code class="copy">dns.flags.rcode != 0</code></td><td>Every failed lookup</td></tr>
+<tr><td><code class="copy">dns.qry.name.len &gt; 50</code></td><td>Very long names, a tunneling hint</td></tr>
+<tr><td><code class="copy">dns.resp.ttl &lt; 60</code></td><td>Very short TTLs, typical of fast flux and some CDNs</td></tr>
+<tr><td><code class="copy">dns.a == 10.0.0.5</code></td><td>Answers that resolve to an address</td></tr>
+<tr><td><code class="copy">dns.time &gt; 0.5</code></td><td>Responses slower than 500 ms</td></tr>
+<tr><td><code class="copy">udp.dstport == 53 &amp;&amp; !(ip.dst == 10.0.0.53)</code></td><td>Clients bypassing the internal resolver (replace with yours)</td></tr>
+<tr><td><code class="copy">tcp.port == 853 || udp.port == 853</code></td><td>DNS over TLS or QUIC that skips resolver logging</td></tr>
+<tr><td><code class="copy">mdns || llmnr || nbns</code></td><td>Multicast and NetBIOS name lookups that Responder can poison</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="smb-kerberos">
+<h2 class="panel-title">SMB, Kerberos and NTLM</h2>
+<p class="panel-lead">Windows file sharing and authentication, where lateral movement and credential attacks show up.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Filter</th><th>What it shows</th></tr></thead>
+<tbody>
+<tr><td><code class="copy">smb2</code></td><td>SMB 2 and 3 traffic</td></tr>
+<tr><td><code class="copy">smb</code></td><td>SMBv1, which should not exist on a modern network</td></tr>
+<tr><td><code class="copy">smb2.cmd == 1</code></td><td>Session setup (authentication)</td></tr>
+<tr><td><code class="copy">smb2.cmd == 3</code></td><td>Tree connect: which shares are opened</td></tr>
+<tr><td><code class="copy">smb2.tree contains "ADMIN$" || smb2.tree contains "C$"</code></td><td>Admin share access, typical of PsExec style lateral movement</td></tr>
+<tr><td><code class="copy">smb2.filename contains "svcctl"</code></td><td>Service control pipe: remote service creation</td></tr>
+<tr><td><code class="copy">smb2.cmd == 5 &amp;&amp; smb2.filename contains ".exe"</code></td><td>Executables opened or written over SMB</td></tr>
+<tr><td><code class="copy">smb2.nt_status == 0xc000006d</code></td><td>STATUS_LOGON_FAILURE: wrong passwords, brute force or spraying</td></tr>
+<tr><td><code class="copy">smb2.nt_status == 0xc0000022</code></td><td>STATUS_ACCESS_DENIED</td></tr>
+<tr><td><code class="copy">smb2.sec_mode.sign_required == 0</code></td><td>Negotiations where signing is not required: NTLM relay is possible</td></tr>
+<tr><td><code class="copy">ntlmssp.messagetype == 0x00000003</code></td><td>NTLM authenticate messages; add <code>ntlmssp.auth.username</code> and <code>ntlmssp.auth.domain</code> as columns</td></tr>
+<tr><td><code class="copy">kerberos.msg_type == 10</code></td><td>AS-REQ: TGT requests (11 is AS-REP, 12 TGS-REQ, 13 TGS-REP, 30 KRB-ERROR)</td></tr>
+<tr><td><code class="copy">kerberos.error_code == 24</code></td><td>KDC_ERR_PREAUTH_FAILED: bad password, password spraying</td></tr>
+<tr><td><code class="copy">kerberos.error_code == 6</code></td><td>KDC_ERR_C_PRINCIPAL_UNKNOWN: user name enumeration</td></tr>
+<tr><td><code class="copy">kerberos.msg_type == 13 &amp;&amp; kerberos.etype == 23</code></td><td>Service tickets with RC4 encryption, a Kerberoasting hint</td></tr>
+<tr><td><code class="copy">kerberos.CNameString == "alice"</code></td><td>Kerberos traffic for one client account</td></tr>
+<tr><td><code class="copy">ldap.protocolOp == 3</code></td><td>LDAP search requests, heavy volume suggests directory enumeration</td></tr>
+<tr><td><code class="copy">ldap.simple</code></td><td>LDAP simple binds, with the password in clear text</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="dhcp-arp">
+<h2 class="panel-title">DHCP, ARP and IPv6 Neighbor Traffic</h2>
+<p class="panel-lead">Local network plumbing, where rogue servers and spoofing attacks live.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Filter</th><th>What it shows</th></tr></thead>
+<tbody>
+<tr><td><code class="copy">dhcp</code></td><td>DHCP traffic (the old <code>bootp</code> name was replaced in 3.0)</td></tr>
+<tr><td><code class="copy">dhcp.option.dhcp == 1</code></td><td>Discover messages (2 Offer, 3 Request, 5 ACK, 6 NAK)</td></tr>
+<tr><td><code class="copy">dhcp.option.dhcp == 2 &amp;&amp; !(ip.src == 10.0.0.1)</code></td><td>Offers from anything but your DHCP server: a rogue server</td></tr>
+<tr><td><code class="copy">dhcp.option.hostname contains "DESKTOP"</code></td><td>Clients announcing a hostname</td></tr>
+<tr><td><code class="copy">dhcp.hw.mac_addr == 00:11:22:33:44:55</code></td><td>DHCP for one device, to map MAC to IP and hostname</td></tr>
+<tr><td><code class="copy">arp</code></td><td>All ARP traffic</td></tr>
+<tr><td><code class="copy">arp.opcode == 1</code></td><td>ARP requests; bursts from one host mean an ARP scan</td></tr>
+<tr><td><code class="copy">arp.opcode == 2</code></td><td>ARP replies</td></tr>
+<tr><td><code class="copy">arp.duplicate-address-detected</code></td><td>Two MAC addresses claiming one IP: ARP spoofing or a conflict</td></tr>
+<tr><td><code class="copy">arp.isgratuitous</code></td><td>Gratuitous ARP, used by failover and by poisoning tools</td></tr>
+<tr><td><code class="copy">arp.src.proto_ipv4 == 10.0.0.1</code></td><td>ARP claiming to be the gateway; check that the MAC never changes</td></tr>
+<tr><td><code class="copy">dhcpv6</code></td><td>DHCPv6; an unexpected server answering suggests mitm6</td></tr>
+<tr><td><code class="copy">icmpv6.type == 134</code></td><td>IPv6 router advertisements, rogue ones redirect traffic</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="scans-recon">
+<h2 class="panel-title">Scans and Reconnaissance</h2>
+<p class="panel-lead">Signatures of port scans and sweeps. Confirm with Statistics, Conversations sorted by packet count.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Filter</th><th>What it shows</th></tr></thead>
+<tbody>
+<tr><td><code class="copy">tcp.flags.syn == 1 &amp;&amp; tcp.flags.ack == 0 &amp;&amp; tcp.window_size &lt;= 1024</code></td><td>SYN packets with a tiny window, typical of an nmap SYN scan</td></tr>
+<tr><td><code class="copy">tcp.flags.reset == 1 &amp;&amp; tcp.flags.ack == 1 &amp;&amp; tcp.len == 0</code></td><td>RST-ACK replies; many to one source means closed ports answering a scan</td></tr>
+<tr><td><code class="copy">tcp.flags == 0x000</code></td><td>NULL scan (no flags)</td></tr>
+<tr><td><code class="copy">tcp.flags == 0x001</code></td><td>FIN scan</td></tr>
+<tr><td><code class="copy">tcp.flags == 0x029</code></td><td>Xmas scan (FIN, PSH and URG)</td></tr>
+<tr><td><code class="copy">icmp.type == 3 &amp;&amp; icmp.code == 3</code></td><td>Port unreachable, the reply to a UDP scan of closed ports</td></tr>
+<tr><td><code class="copy">icmp.type == 8</code></td><td>Echo requests; many targets from one source is a ping sweep</td></tr>
+<tr><td><code class="copy">http.response.code == 404</code></td><td>Floods of 404s point to directory brute forcing</td></tr>
+<tr><td><code class="copy">http.user_agent matches "(nmap|nikto|sqlmap|gobuster|masscan)"</code></td><td>Scanners that keep their default user agent</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="beaconing-c2">
+<h2 class="panel-title">Beaconing and C2 Hints</h2>
+<p class="panel-lead">No single filter proves C2. Use these to pick candidates, then check timing in an I/O graph and the destination in threat intel.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Filter</th><th>What it shows</th></tr></thead>
+<tbody>
+<tr><td><code class="copy">ip.dst == 203.0.113.10 &amp;&amp; tcp.flags.syn == 1 &amp;&amp; tcp.flags.ack == 0</code></td><td>New connections to one destination; add <code>frame.time_delta_displayed</code> as a column and look for a steady interval</td></tr>
+<tr><td><code class="copy">tls.handshake.type == 1 &amp;&amp; !tls.handshake.extensions_server_name</code></td><td>TLS with no server name, common when malware connects straight to an IP</td></tr>
+<tr><td><code class="copy">http.request &amp;&amp; !http.user_agent</code></td><td>HTTP requests without a user agent</td></tr>
+<tr><td><code class="copy">lower(http.user_agent) contains "powershell"</code></td><td>Downloads by PowerShell, a common stager</td></tr>
+<tr><td><code class="copy">http.request.uri matches "[.](exe|dll|ps1|hta|vbs)$"</code></td><td>Requests for executable or script files</td></tr>
+<tr><td><code class="copy">frame contains "This program cannot be run in DOS mode"</code></td><td>Windows executables crossing the wire in clear</td></tr>
+<tr><td><code class="copy">tcp.port in {4444, 6667, 9001, 9050, 50050}</code></td><td>Well known Metasploit, IRC, Tor and Cobalt Strike default ports</td></tr>
+<tr><td><code class="copy">ssh &amp;&amp; !(tcp.port == 22)</code></td><td>SSH on an unusual port</td></tr>
+<tr><td><code class="copy">tls &amp;&amp; !(tcp.port == 443)</code></td><td>TLS on an unusual port</td></tr>
+<tr><td><code class="copy">http &amp;&amp; !(tcp.port in {80, 8080})</code></td><td>HTTP on an unusual port</td></tr>
+<tr><td><code class="copy">icmp &amp;&amp; data.len &gt; 64</code></td><td>ICMP with large payloads, an ICMP tunnel hint</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="cleartext-credentials">
+<h2 class="panel-title">Cleartext Credentials</h2>
+<p class="panel-lead">Protocols that expose passwords to anyone on the path. Tools, Credentials lists many of them automatically.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Filter</th><th>What it shows</th></tr></thead>
+<tbody>
+<tr><td><code class="copy">ftp.request.command == "USER" || ftp.request.command == "PASS"</code></td><td>FTP logins</td></tr>
+<tr><td><code class="copy">pop.request.command == "USER" || pop.request.command == "PASS"</code></td><td>POP3 logins</td></tr>
+<tr><td><code class="copy">imap.request.command == "LOGIN"</code></td><td>IMAP logins (see <code>imap.request.username</code> and <code>imap.request.password</code>)</td></tr>
+<tr><td><code class="copy">smtp.req.command == "AUTH"</code></td><td>SMTP authentication; credentials follow in base64</td></tr>
+<tr><td><code class="copy">http.authbasic</code></td><td>Decoded HTTP Basic credentials</td></tr>
+<tr><td><code class="copy">urlencoded-form.key contains "pass"</code></td><td>Login forms posted over plain HTTP</td></tr>
+<tr><td><code class="copy">telnet</code></td><td>Telnet sessions; follow the TCP stream to read the login</td></tr>
+<tr><td><code class="copy">snmp.community</code></td><td>SNMP v1 and v2c community strings</td></tr>
+<tr><td><code class="copy">ldap.simple</code></td><td>LDAP simple bind passwords</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-warning"><p><strong>Warning:</strong> capture only on networks you own or are authorized to monitor. Packet captures can hold passwords and personal data, so store them encrypted and delete them when the case closes.</p></div>
+</section>
+<section class="panel" id="tshark">
+<h2 class="panel-title">tshark Command Line</h2>
+<p class="panel-lead">The command line version of Wireshark, for servers, scripts and large files. The same display filters work with <code>-Y</code>.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td><code class="copy">tshark -D</code></td><td>List capture interfaces</td></tr>
+<tr><td><code class="copy">tshark -i eth0 -f "not port 22" -w capture.pcapng</code></td><td>Capture to a file with a capture filter</td></tr>
+<tr><td><code class="copy">tshark -i eth0 -b duration:3600 -b files:24 -w hourly.pcapng</code></td><td>Ring buffer: a new file every hour, keep the last 24</td></tr>
+<tr><td><code class="copy">dumpcap -i eth0 -w capture.pcapng</code></td><td>Capture only, with lower overhead for long captures</td></tr>
+<tr><td><code class="copy">tshark -r capture.pcapng -Y "http.request" -T fields -e ip.src -e http.host -e http.request.uri</code></td><td>Print chosen fields for matching packets</td></tr>
+<tr><td><code class="copy">tshark -r capture.pcapng -Y "tls.handshake.type == 1" -T fields -e tls.handshake.extensions_server_name | sort | uniq -c | sort -rn</code></td><td>Most contacted TLS server names</td></tr>
+<tr><td><code class="copy">tshark -r capture.pcapng -Y "dns.flags.response == 0" -T fields -E separator=, -e frame.time -e ip.src -e dns.qry.name</code></td><td>DNS queries as CSV</td></tr>
+<tr><td><code class="copy">tshark -r capture.pcapng -Y "smb2 || kerberos" -w subset.pcapng</code></td><td>Save only matching packets to a new file</td></tr>
+<tr><td><code class="copy">tshark -r capture.pcapng -q -z io,phs</code></td><td>Protocol hierarchy</td></tr>
+<tr><td><code class="copy">tshark -r capture.pcapng -q -z conv,tcp</code></td><td>TCP conversations with bytes and duration</td></tr>
+<tr><td><code class="copy">tshark -r capture.pcapng -q -z endpoints,ip</code></td><td>Top talkers by IP</td></tr>
+<tr><td><code class="copy">tshark -r capture.pcapng -q -z http,tree</code></td><td>HTTP request and response statistics</td></tr>
+<tr><td><code class="copy">tshark -r capture.pcapng -q -z dns,tree</code></td><td>DNS statistics by query type and response code</td></tr>
+<tr><td><code class="copy">tshark -r capture.pcapng -q -z expert</code></td><td>Expert information summary</td></tr>
+<tr><td><code class="copy">tshark -r capture.pcapng -q -z credentials</code></td><td>Credentials found in the capture</td></tr>
+<tr><td><code class="copy">tshark -r capture.pcapng -q -z follow,tcp,ascii,0</code></td><td>Print TCP stream 0 as text</td></tr>
+<tr><td><code class="copy">tshark -r capture.pcapng --export-objects http,exported</code></td><td>Extract files transferred over HTTP into a folder (also smb, tftp, imf)</td></tr>
+<tr><td><code class="copy">tshark -r capture.pcapng -o tls.keylog_file:sslkeys.log -Y http</code></td><td>Decrypt TLS with a key log file</td></tr>
+<tr><td><code class="copy">tshark -G fields</code></td><td>Dump every display filter field name</td></tr>
+<tr><td><code class="copy">capinfos capture.pcapng</code></td><td>File summary: packet count, duration, start and end time</td></tr>
+<tr><td><code class="copy">mergecap -w merged.pcapng first.pcapng second.pcapng</code></td><td>Merge captures in time order</td></tr>
+<tr><td><code class="copy">editcap -c 100000 large.pcapng part.pcapng</code></td><td>Split a large capture into files of 100,000 packets</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="statistics-menus">
+<h2 class="panel-title">Useful Statistics Menus</h2>
+<p class="panel-lead">Start here before filtering: these views show the shape of a capture in seconds.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Menu</th><th>What it shows</th></tr></thead>
+<tbody>
+<tr><td>Statistics, Capture File Properties</td><td>Duration, packet count, interfaces and capture comments</td></tr>
+<tr><td>Statistics, Protocol Hierarchy</td><td>Share of traffic per protocol; odd protocols stand out quickly</td></tr>
+<tr><td>Statistics, Conversations</td><td>Pairs of hosts by bytes, packets and duration: exfiltration and scans</td></tr>
+<tr><td>Statistics, Endpoints</td><td>Every host seen, with totals, top talkers first when sorted</td></tr>
+<tr><td>Statistics, I/O Graphs</td><td>Traffic over time; graph a filter for one destination to spot regular beacons</td></tr>
+<tr><td>Statistics, Flow Graph</td><td>Ladder diagram of a conversation, good for handshakes and logins</td></tr>
+<tr><td>Statistics, HTTP, Requests</td><td>Every requested host and URL</td></tr>
+<tr><td>Statistics, DNS</td><td>Query types, response codes and timing</td></tr>
+<tr><td>Statistics, Packet Lengths</td><td>Size distribution; uniform sizes can mean beaconing or tunneling</td></tr>
+<tr><td>Statistics, TCP Stream Graphs</td><td>Throughput, round trip time and window scaling for one stream</td></tr>
+<tr><td>Statistics, Resolved Addresses</td><td>Names learned from DNS in the capture</td></tr>
+<tr><td>Analyze, Expert Information</td><td>Warnings and errors grouped by severity</td></tr>
+<tr><td>Analyze, Follow, TCP Stream</td><td>Reassembled payload of one conversation (also UDP, TLS, HTTP)</td></tr>
+<tr><td>File, Export Objects</td><td>Files carried over HTTP, SMB, TFTP, IMF and DICOM</td></tr>
+<tr><td>Tools, Credentials</td><td>Usernames and passwords found in the capture, with packet links</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

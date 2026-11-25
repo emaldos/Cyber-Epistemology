@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Start Here | Cyber Epistemology</title>
+<meta name="description" content="Guided learning paths through Cyber Epistemology for beginners, SOC analysts, penetration testers, system administrators and everyday users, plus tips for using the site.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../Assets/Image/AppleTouchIcon.png">
+<link rel="manifest" href="../Manifest.webmanifest">
+<link rel="stylesheet" href="../Assets/Style/Site.css">
+<script src="../Assets/Script/Site.js" defer></script>
+</head>
+<body class="is-content-page" data-root="../" data-section="start-here">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-separator">/</span><span>Learn</span><span class="breadcrumb-separator">/</span><span>Start Here</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../Assets/Icon/StartHere.svg" alt="">
+<div>
+<p class="hero-eyebrow">Learn</p>
+<h1 class="hero-title">Start Here</h1>
+</div>
+</div>
+<p class="hero-lead">Not sure where to begin? Pick the path that fits you and follow the steps in order. Each step links to a page on this site and tells you why it is worth your time.</p>
+<div class="hero-meta"><span class="badge">5 guided paths</span><span class="badge">Beginner friendly</span><span class="badge">Reviewed November 2026</span></div>
+</section>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="how-to-use">
+<h2 class="panel-title">How to Use This Site</h2>
+<p class="panel-lead">A few features that make the reference pages faster to use.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term">Search everything</span><span class="definition-text">Press <kbd>/</kbd> or <kbd>Ctrl</kbd> + <kbd>K</kbd> (<kbd>Cmd</kbd> + <kbd>K</kbd> on a Mac) on any page to search every path, command, tool and term on the site.</span></div>
+<div class="definition"><span class="definition-term">Filter a page</span><span class="definition-text">Long pages have a filter box under the title. Type a word and only the matching rows stay visible. Press <kbd>Esc</kbd> to clear it.</span></div>
+<div class="definition"><span class="definition-term">Star rows</span><span class="definition-text">Star the rows you use most and they are collected on <a href="My_Cheat_Sheet.html">My Cheat Sheet</a>, ready to print or export.</span></div>
+<div class="definition"><span class="definition-term">Copy buttons</span><span class="definition-text">Commands have a copy button, so you can paste them straight into your terminal without typos.</span></div>
+<div class="definition"><span class="definition-term">Works offline</span><span class="definition-text">After your first visit the site keeps working without a connection, which is handy in labs and on isolated networks.</span></div>
+<div class="definition"><span class="definition-term">Unknown word?</span><span class="definition-text">The <a href="Glossary.html">Glossary</a> explains 172 security terms in plain language.</span></div>
+</div>
+</section>
+<section class="panel" id="new-to-security">
+<h2 class="panel-title">New to Cyber Security</h2>
+<p class="panel-lead">For students, career changers and anyone curious who wants a solid base before picking a specialty.</p>
+<ol class="steps">
+<li><a href="Glossary.html">Glossary</a>: learn the core vocabulary first, starting with the <a href="Glossary.html#term-cia-triad">CIA triad</a>, threats, vulnerabilities and risk.</li>
+<li><a href="Maximum_Security.html">Personal Security</a>: secure your own accounts and devices before you defend anyone else's.</li>
+<li><a href="Guides/Ports_And_Protocols.html">Ports and Protocols</a>: understand how computers talk to each other, since almost every attack crosses a network.</li>
+<li><a href="System_Files_Info.html">Operating Systems</a>: see where operating systems keep passwords, logs and settings, and why attackers want them.</li>
+<li><a href="OS/Windows_11.html">Windows 11</a>: the most common desktop and a great first system to study in depth.</li>
+<li><a href="Commands.html#equivalents">Command Equivalents</a>: compare Bash, PowerShell and CMD side by side so the command line stops feeling foreign.</li>
+<li><a href="Commands/Bash.html#navigation-and-files">Bash basics</a>: practice moving around and working with files on Linux.</li>
+<li><a href="Cyber_Websites.html#learning-platforms">Learning platforms</a>: pick a free lab platform and start doing hands on exercises.</li>
+<li><a href="cyber_roadmap.html#starting-paths">Certification Roadmap</a>: choose a realistic first certification once you know what interests you.</li>
+</ol>
+<div class="callout callout-tip"><p><strong>Next step:</strong> the roadmap has a <a href="cyber_roadmap.html#starting-paths">complete beginner path</a> from Tech+ or A+ through Network+ to Security+.</p></div>
+</section>
+<section class="panel" id="soc-blue-team">
+<h2 class="panel-title">SOC and Blue Team</h2>
+<p class="panel-lead">For analysts, incident responders and anyone who watches alerts and investigates what happened.</p>
+<ol class="steps">
+<li><a href="Glossary.html#term-siem">Glossary</a>: get the defense terms straight, including <a href="Glossary.html#term-siem">SIEM</a>, <a href="Glossary.html#term-edr">EDR</a>, <a href="Glossary.html#term-ioc">IOC</a> and <a href="Glossary.html#term-ttps">TTPs</a>.</li>
+<li><a href="Guides/Ports_And_Protocols.html">Ports and Protocols</a>: know what normal traffic looks like so the odd connection stands out.</li>
+<li><a href="Guides/Wireshark_Filters.html">Wireshark Filters</a>: dig into packet captures with ready made filters for common investigations.</li>
+<li><a href="OS/Windows_11.html#logs-artifacts">Windows 11 logs and artifacts</a>: the event IDs and execution evidence used to build a timeline.</li>
+<li><a href="OS/Windows_Server.html#active-directory">Active Directory</a>: where domain attacks happen and which logs show them.</li>
+<li><a href="OS/Ubuntu_Server.html#logs-artifacts">Ubuntu Server logs</a>: the Linux side of the investigation, from auth logs to the journal.</li>
+<li><a href="Commands/PS.html#security-and-triage">PowerShell triage</a>: quick commands for live response on Windows hosts.</li>
+<li><a href="Cyber_Websites.html#dfir-blue-team">DFIR and blue team sites</a>: free tools, sandboxes and training for defenders.</li>
+<li><a href="Cyber_Websites.html#threat-intelligence">Threat intelligence</a>: look up IPs, domains and hashes from your alerts.</li>
+<li><a href="Utilities.html">Utilities</a>: decode Base64, check hashes and read JWTs without pasting evidence into random websites.</li>
+<li><a href="My_Cheat_Sheet.html">My Cheat Sheet</a>: star your favorite triage commands and keep them on one printable page.</li>
+</ol>
+<div class="callout"><p><strong>Career track:</strong> see <a href="cyber_roadmap.html?role=soc-analyst-tier-1#role-details">SOC Analyst Tier 1</a> on the roadmap, then move on to Tier 2, incident response or threat hunting.</p></div>
+</section>
+<section class="panel" id="penetration-tester">
+<h2 class="panel-title">Penetration Tester</h2>
+<p class="panel-lead">For people who want to find and prove weaknesses through authorized testing.</p>
+<ol class="steps">
+<li><a href="Guides/Ports_And_Protocols.html">Ports and Protocols</a>: every scan result is a port and a service, so learn what each one means and what to check.</li>
+<li><a href="OS/Kali_Linux.html">Kali Linux</a>: set up and protect your own attack machine, including where tools keep their data.</li>
+<li><a href="Commands/Bash.html#networking">Bash networking</a>: the command line skills you use on every engagement.</li>
+<li><a href="Kali_Tools.html#information-gathering">Information gathering</a>: start every test with reconnaissance and enumeration.</li>
+<li><a href="Kali_Tools.html#web-application-testing">Web application testing</a>: the tools for the most common kind of target.</li>
+<li><a href="OS/Windows_11.html#credentials-secrets">Windows credentials and secrets</a>: what to look for after you get a foothold.</li>
+<li><a href="OS/Windows_Server.html#active-directory">Active Directory</a>: the heart of most internal tests, then the <a href="Kali_Tools.html#active-directory-and-windows">AD tools</a>.</li>
+<li><a href="Guides/Cloud_Security.html">Cloud Security</a>: more and more targets live in AWS, Azure and Google Cloud.</li>
+<li><a href="Utilities.html">Utilities</a>: encode payloads, decode tokens and calculate subnets offline.</li>
+<li><a href="Cyber_Websites.html#ctfs-wargames">CTFs and wargames</a>: practice legally until the techniques become second nature.</li>
+<li><a href="Kali_Tools.html#reporting-and-collaboration">Reporting</a>: the report is what the client pays for, so learn to write it well.</li>
+</ol>
+<div class="callout callout-warning"><p><strong>Authorized use only:</strong> test only systems you own or have written permission to test. When you are ready, follow the <a href="cyber_roadmap.html?role=junior-penetration-tester#role-details">Junior Penetration Tester</a> track on the roadmap.</p></div>
+</section>
+<section class="panel" id="system-administrator">
+<h2 class="panel-title">System Administrator</h2>
+<p class="panel-lead">For admins and IT staff who keep servers and workstations running and want to keep them secure.</p>
+<ol class="steps">
+<li><a href="OS/Windows_Server.html#hardening">Windows Server hardening</a>: lock down domain controllers and member servers first.</li>
+<li><a href="OS/Ubuntu_Server.html#hardening">Ubuntu Server hardening</a>: secure SSH, services and updates on Linux.</li>
+<li><a href="OS/Windows_11.html#hardening">Windows 11 hardening</a>: bring every workstation up to the same baseline.</li>
+<li><a href="Commands/PS.html">PowerShell</a>: automate Active Directory, Defender, BitLocker and updates across the fleet.</li>
+<li><a href="Commands/Bash.html#services-and-logs">Bash services and logs</a>: manage systemd services and read the journal.</li>
+<li><a href="Commands/CMD.html">CMD</a>: the classic commands that still work on every Windows machine, including recovery.</li>
+<li><a href="Guides/Ports_And_Protocols.html">Ports and Protocols</a>: close what you do not need and know the risks of what stays open.</li>
+<li><a href="Guides/Cloud_Security.html">Cloud Security</a>: IAM and logging basics for the cloud services you manage.</li>
+<li><a href="Maximum_Security.html#small-team">Small team security</a>: simple policies that protect the whole office, not only the servers.</li>
+</ol>
+<div class="callout"><p><strong>Career track:</strong> the <a href="cyber_roadmap.html?role=security-administrator#role-details">Security Administrator</a> role on the roadmap is a natural next step from system administration.</p></div>
+</section>
+<section class="panel" id="everyday-user">
+<h2 class="panel-title">Everyday User (Protect Yourself)</h2>
+<p class="panel-lead">For anyone who wants to keep their accounts, money and family safe online, no technical background needed.</p>
+<ol class="steps">
+<li><a href="Maximum_Security.html#start-here">The first six things</a>: the few changes that block most attacks, done in order.</li>
+<li><a href="Maximum_Security.html#passwords">Passwords</a>: use a password manager and a unique password for every account.</li>
+<li><a href="Maximum_Security.html#mfa-passkeys">MFA and passkeys</a>: add a second step to sign in, or skip passwords completely with passkeys.</li>
+<li><a href="Maximum_Security.html#phishing">Phishing</a>: spot fake emails, texts, calls and QR codes before you click.</li>
+<li><a href="Maximum_Security.html#devices-updates">Devices and updates</a>: keep phones and computers updated and locked.</li>
+<li><a href="Maximum_Security.html#mobile">Mobile</a>: safer settings for your phone and its apps.</li>
+<li><a href="Maximum_Security.html#backups-encryption">Backups and encryption</a>: make sure a lost laptop or ransomware does not cost you your photos.</li>
+<li><a href="Maximum_Security.html#incident-plan">If something goes wrong</a>: what to do right away when an account is hacked or you clicked a bad link.</li>
+</ol>
+<div class="callout callout-tip"><p><strong>Tip:</strong> share this path with family and friends. If a word is unclear, look it up in the <a href="Glossary.html">Glossary</a>.</p></div>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>
