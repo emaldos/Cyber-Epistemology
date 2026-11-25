@@ -1,210 +1,405 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Cyber Websites</title>
-<link rel="icon" href="../Image/Logo.png" type="image/png" sizes="32x32"/><link rel="icon" href="../Image/Logo.png" type="image/png" sizes="192x192"/><link rel="apple-touch-icon" href="../Image/Logo.png"/><meta name="theme-color" content="#111"/>
-<style>
-:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--blue:#2196f3;--line:rgba(255,255,255,.10)}
-*{box-sizing:border-box}html,body{height:100%}
-body{margin:0;font:16px/1.5 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111}
-.bg{position:fixed;inset:0;background:url("../Image/Logo.png") center/cover no-repeat;z-index:-2}
-.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.78) 100%);z-index:-1}
-.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
-.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
-.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
-.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
-.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
-.homepill span{font-weight:700;letter-spacing:.15px}
-.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
-.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);cursor:pointer;user-select:none;flex:0 0 auto}
-.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
-.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0}
-.tabs.overflow{overflow:auto}
-.tabs::-webkit-scrollbar{display:none}
-.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
-.tab:hover{opacity:1}
-.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
-.tab.active{color:var(--blue)}
-.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
-.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
-.page{position:relative;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:96px 28px 28px}
-.shell{width:min(1200px,94%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
-.h{margin:0 0 8px;font-size:28px;font-weight:800;letter-spacing:.2px}
-.p{margin:0 0 18px;color:var(--muted)}
-.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:8px 0 18px}
-.search{flex:1;min-width:260px;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid var(--ring)}
-.search input{flex:1;border:0;outline:0;background:transparent;color:var(--text);font:inherit}
-.count{margin-left:auto;color:var(--muted);font-size:13px;white-space:nowrap}
-.section{margin:22px 0 12px}
-.section h2{margin:0 0 8px;font-size:18px;letter-spacing:.2px}
-.tablewrap{overflow:auto;border-radius:14px;border:1px solid var(--tileBorder);background:rgba(255,255,255,.04)}
-table{width:100%;border-collapse:separate;border-spacing:0;min-width:720px}
-thead th{position:sticky;top:0;background:rgba(255,255,255,.06);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);text-align:left;padding:12px;border-bottom:1px solid var(--tileBorder);font-weight:800}
-tbody td{padding:12px;border-bottom:1px solid var(--tileBorder);vertical-align:top}
-tbody tr:hover{background:rgba(255,255,255,.04)}
-.tag{display:inline-block;margin-right:6px;margin-bottom:4px;padding:2px 8px;border-radius:999px;border:1px solid rgba(160,190,255,.28);background:rgba(255,255,255,.05);font-size:12px;color:#cfe0ff}
-.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 14px;border-radius:12px;text-decoration:none;color:#cfe0ff;background:rgba(255,255,255,.06);border:1px solid rgba(160,190,255,.28);font-weight:800}
-.btn:hover{transform:translateY(-1px)}
-</style></head><body>
-<div class="bg"></div>
-<nav class="topbar" id="topbar">
-  <div class="nav">
-    <a class="homepill" href="../index.html" aria-label="Home"><img src="../Image/Home.png" alt="Home"/><span>Home</span></a>
-    <div class="tabswrap">
-      <button class="navbtn" id="leftbtn"><span>&lt;</span></button>
-      <div class="tabs" id="tabs">
-        <a class="tab" href="System_Files_Info.html"><img src="../Image/Nav.png" alt="System Files"/>System Files</a>
-        <a class="tab" href="Commands.html"><img src="../Image/Command.png" alt="Commands"/>Commands</a>
-        <a class="tab" href="Kali_Tools.html"><img src="../Image/KaliLinux.png" alt="Kali Tools"/>Kali Tools</a>
-        <a class="tab" href="cyber_roadmap.html"><img src="../Image/roadmap.png" alt="RoadMap"/>RoadMap</a>
-        <a class="tab active" href="Cyber_Websites.html"><img src="../Image/Awareness.png" alt="Websites"/>Cyber Websites</a>
-      </div>
-      <button class="navbtn" id="rightbtn"><span>&gt;</span></button>
-    </div>
-  </div>
-</nav>
-
-<div class="page">
-<main class="shell">
-  <h1 class="h">Cyber Websites — Curated Resources</h1>
-  <p class="p">Search by any keyword across all categories. Columns: Website Name | Targetation | Small Description | Open.</p>
-  <div class="controls">
-    <div class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.2-4.2M10.8 18a7.2 7.2 0 1 1 0-14.4 7.2 7.2 0 0 1 0 14.4Z" stroke="#cfe0ff" stroke-width="2" stroke-linecap="round"/></svg><input id="q" type="text" placeholder="Search websites, tags, descriptions..."></div>
-    <div class="count" id="count">0 results</div>
-  </div>
-
-  <section class="section" data-section="pentest"><h2>Pentest</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
-    <tr data-name="HackTricks" data-tags="pentest cheatsheets"><td>HackTricks</td><td><span class="tag">Cheatsheets</span></td><td>Massive handbook for pentest, cloud, mobile, AD, and more.</td><td><a class="btn" target="_blank" rel="noopener" href="https://book.hacktricks.xyz/">Open</a></td></tr>
-    <tr data-name="PayloadsAllTheThings" data-tags="payloads bypass web cloud"><td>PayloadsAllTheThings</td><td><span class="tag">Web</span><span class="tag">Cloud</span></td><td>Curated payloads and bypass techniques.</td><td><a class="btn" target="_blank" rel="noopener" href="https://payloadsallthethings.gitbook.io/">Open</a></td></tr>
-    <tr data-name="SecLists" data-tags="wordlists fuzz credentials discovery"><td>SecLists</td><td><span class="tag">Wordlists</span></td><td>Comprehensive wordlists for discovery, fuzzing, creds.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/danielmiessler/SecLists">Open</a></td></tr>
-    <tr data-name="Exploit-DB" data-tags="exploits cve poc"><td>Exploit-DB</td><td><span class="tag">Exploits</span></td><td>Public exploits and PoCs database.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.exploit-db.com/">Open</a></td></tr>
-    <tr data-name="ProjectDiscovery" data-tags="recon nuclei subfinder httpx"><td>ProjectDiscovery</td><td><span class="tag">Recon</span><span class="tag">Automation</span></td><td>Modern offensive tooling (Nuclei, Subfinder, httpx).</td><td><a class="btn" target="_blank" rel="noopener" href="https://projectdiscovery.io/">Open</a></td></tr>
-    <tr data-name="Nmap" data-tags="scanner network"><td>Nmap</td><td><span class="tag">Network</span></td><td>Network scanner and NSE scripts reference.</td><td><a class="btn" target="_blank" rel="noopener" href="https://nmap.org/">Open</a></td></tr>
-    <tr data-name="Burp Suite Docs" data-tags="web proxy burp"><td>Burp Suite Docs</td><td><span class="tag">Web</span></td><td>Burp tooling, extensions, and web testing guidance.</td><td><a class="btn" target="_blank" rel="noopener" href="https://portswigger.net/burp/documentation">Open</a></td></tr>
-    <tr data-name="Feroxbuster" data-tags="content discovery dir busting"><td>Feroxbuster</td><td><span class="tag">Discovery</span></td><td>Fast content discovery tool documentation.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/epi052/feroxbuster">Open</a></td></tr>
-    <tr data-name="FFUF" data-tags="fuzz web discovery"><td>ffuf</td><td><span class="tag">Fuzz</span></td><td>Fast web fuzzer usage and examples.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/ffuf/ffuf">Open</a></td></tr>
-    <tr data-name="Wordlists OPSEC" data-tags="wordlists hygiene"><td>Wordlists OPSEC</td><td><span class="tag">OPSEC</span></td><td>Advice on safe use of wordlists and scopes.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/insidetrust/statistically-likely-usernames">Open</a></td></tr>
-  </tbody></table></div></section>
-
-  <section class="section" data-section="red"><h2>Red Team</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
-    <tr data-name="Atomic Red Team" data-tags="ttp tests purple"><td>Atomic Red Team</td><td><span class="tag">ATT&CK</span></td><td>Atomic tests to emulate MITRE ATT&CK techniques.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/redcanaryco/atomic-red-team">Open</a></td></tr>
-    <tr data-name="MITRE Caldera" data-tags="adversary emulation"><td>MITRE Caldera</td><td><span class="tag">Emulation</span></td><td>Automated adversary emulation platform.</td><td><a class="btn" target="_blank" rel="noopener" href="https://caldera.mitre.org/">Open</a></td></tr>
-    <tr data-name="BloodHound" data-tags="active directory attack paths"><td>BloodHound</td><td><span class="tag">Active Directory</span></td><td>AD attack paths discovery and docs.</td><td><a class="btn" target="_blank" rel="noopener" href="https://bloodhound.readthedocs.io/">Open</a></td></tr>
-    <tr data-name="SharpHound" data-tags="collection ad"><td>SharpHound</td><td><span class="tag">Collection</span></td><td>BloodHound data collection tooling.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/BloodHoundAD/SharpHound">Open</a></td></tr>
-    <tr data-name="C2 Matrix" data-tags="command and control"><td>The C2 Matrix</td><td><span class="tag">C2</span></td><td>Comparison matrix of C2 frameworks.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.thec2matrix.com/">Open</a></td></tr>
-    <tr data-name="LOLDriver" data-tags="drivers edr bypass"><td>LOLBL Driver</td><td><span class="tag">Drivers</span></td><td>Living-off-the-land drivers for offensive tradecraft.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.loldrivers.io/">Open</a></td></tr>
-    <tr data-name="Red Team Notes" data-tags="tradecraft opsec"><td>Red Team Notes</td><td><span class="tag">OPSEC</span></td><td>Tradecraft notes and TTP references.</td><td><a class="btn" target="_blank" rel="noopener" href="https://twitter.com/mrd0x">Open</a></td></tr>
-  </tbody></table></div></section>
-
-  <section class="section" data-section="blue"><h2>Blue Team</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
-    <tr data-name="MITRE ATT&CK" data-tags="tactics techniques mapping"><td>MITRE ATT&CK</td><td><span class="tag">Knowledge Base</span></td><td>Global knowledge base of adversary behaviors.</td><td><a class="btn" target="_blank" rel="noopener" href="https://attack.mitre.org/">Open</a></td></tr>
-    <tr data-name="NVD" data-tags="cve vulnerabilities nist"><td>NVD (NIST)</td><td><span class="tag">CVE</span></td><td>Vulnerability catalog with scoring feeds.</td><td><a class="btn" target="_blank" rel="noopener" href="https://nvd.nist.gov/vuln">Open</a></td></tr>
-    <tr data-name="CVE.org" data-tags="identifiers cve"><td>CVE.org</td><td><span class="tag">CVE</span></td><td>Official CVE registry.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.cve.org/">Open</a></td></tr>
-    <tr data-name="SigmaHQ" data-tags="siem detection rules"><td>Sigma Rules</td><td><span class="tag">SIEM</span></td><td>Generic detection rules and tooling.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/SigmaHQ/sigma">Open</a></td></tr>
-    <tr data-name="Elastic Security" data-tags="detections rules endpoint"><td>Elastic Detections</td><td><span class="tag">Rules</span></td><td>Open detections and endpoint content.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/elastic/detection-rules">Open</a></td></tr>
-    <tr data-name="Wazuh" data-tags="edr siem"><td>Wazuh</td><td><span class="tag">EDR</span><span class="tag">SIEM</span></td><td>Open-source endpoint and SIEM platform.</td><td><a class="btn" target="_blank" rel="noopener" href="https://wazuh.com/">Open</a></td></tr>
-    <tr data-name="Velociraptor" data-tags="dfir endpoint hunting"><td>Velociraptor</td><td><span class="tag">DFIR</span></td><td>Endpoint visibility and hunting queries.</td><td><a class="btn" target="_blank" rel="noopener" href="https://docs.velociraptor.app/">Open</a></td></tr>
-    <tr data-name="Sysmon" data-tags="windows logging"><td>Sysmon</td><td><span class="tag">Windows</span></td><td>Sysinternals system monitor and config schemas.</td><td><a class="btn" target="_blank" rel="noopener" href="https://learn.microsoft.com/sysinternals/downloads/sysmon">Open</a></td></tr>
-    <tr data-name="Zeek" data-tags="nsm detection"><td>Zeek Docs</td><td><span class="tag">NSM</span></td><td>Network Security Monitoring scripting platform.</td><td><a class="btn" target="_blank" rel="noopener" href="https://docs.zeek.org/en/current/">Open</a></td></tr>
-    <tr data-name="Suricata" data-tags="ids ips nids rules"><td>Suricata Docs</td><td><span class="tag">IDS/IPS</span></td><td>Rule language and tuning guides.</td><td><a class="btn" target="_blank" rel="noopener" href="https://docs.suricata.io/">Open</a></td></tr>
-    <tr data-name="Wireshark" data-tags="pcap analysis"><td>Wireshark Docs</td><td><span class="tag">Network</span></td><td>Packet analysis documentation.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.wireshark.org/docs/">Open</a></td></tr>
-  </tbody></table></div></section>
-
-  <section class="section" data-section="purple"><h2>Purple</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
-    <tr data-name="OWASP" data-tags="web appsec top10"><td>OWASP</td><td><span class="tag">AppSec</span></td><td>Community projects and secure development guidance.</td><td><a class="btn" target="_blank" rel="noopener" href="https://owasp.org/">Open</a></td></tr>
-    <tr data-name="CyberChef" data-tags="encode decode forensics"><td>CyberChef</td><td><span class="tag">Utilities</span></td><td>Data transforms, encoding, hashing, parsers.</td><td><a class="btn" target="_blank" rel="noopener" href="https://gchq.github.io/CyberChef/">Open</a></td></tr>
-    <tr data-name="ATT&CK Navigator" data-tags="matrix heatmap mapping"><td>ATT&CK Navigator</td><td><span class="tag">Mapping</span></td><td>Visualize and map TTP coverage.</td><td><a class="btn" target="_blank" rel="noopener" href="https://mitre-attack.github.io/attack-navigator/">Open</a></td></tr>
-  </tbody></table></div></section>
-
-  <section class="section" data-section="offensive"><h2>Offensive</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
-    <tr data-name="Hashcat" data-tags="password crack gpu"><td>Hashcat</td><td><span class="tag">Passwords</span></td><td>GPU-accelerated password cracking framework.</td><td><a class="btn" target="_blank" rel="noopener" href="https://hashcat.net/hashcat/">Open</a></td></tr>
-    <tr data-name="John the Ripper" data-tags="password cracking"><td>John the Ripper</td><td><span class="tag">Passwords</span></td><td>Popular CPU password cracker and rules.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.openwall.com/john/">Open</a></td></tr>
-    <tr data-name="CrackStation" data-tags="hash lookup"><td>CrackStation</td><td><span class="tag">Hashes</span></td><td>Online hash lookup using precomputed tables.</td><td><a class="btn" target="_blank" rel="noopener" href="https://crackstation.net/">Open</a></td></tr>
-    <tr data-name="Impacket" data-tags="ad protocols"><td>Impacket</td><td><span class="tag">AD</span></td><td>Python collection for network protocols and AD ops.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/fortra/impacket">Open</a></td></tr>
-    <tr data-name="Responder" data-tags="lldp ntlm relay"><td>Responder</td><td><span class="tag">Lateral</span></td><td>LLMNR/NBT-NS/MDNS poisoner with rogue services.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/lgandx/Responder">Open</a></td></tr>
-    <tr data-name="Rubeus" data-tags="kerberos ad"><td>Rubeus</td><td><span class="tag">Kerberos</span></td><td>Kerberos abuse toolkit for AD.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/GhostPack/Rubeus">Open</a></td></tr>
-  </tbody></table></div></section>
-
-  <section class="section" data-section="defensive"><h2>Defensive</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
-    <tr data-name="GreyNoise" data-tags="ip reputation internet noise"><td>GreyNoise</td><td><span class="tag">IP Intel</span></td><td>Classifies Internet background noise to reduce false positives.</td><td><a class="btn" target="_blank" rel="noopener" href="https://viz.greynoise.io/">Open</a></td></tr>
-    <tr data-name="AbuseIPDB" data-tags="ip reputation"><td>AbuseIPDB</td><td><span class="tag">Reputation</span></td><td>IP abuse reports and reputation checks.</td><td><a class="btn" target="_blank" rel="noopener" href="https://abuseipdb.com/">Open</a></td></tr>
-    <tr data-name="urlscan.io" data-tags="url screenshots verdicts"><td>urlscan.io</td><td><span class="tag">URLs</span></td><td>Analyze URLs with screenshots and indicators.</td><td><a class="btn" target="_blank" rel="noopener" href="https://urlscan.io/">Open</a></td></tr>
-    <tr data-name="VirusTotal" data-tags="multiav url file hash"><td>VirusTotal</td><td><span class="tag">Multi-AV</span></td><td>Scan files, URLs, and hashes with multiple engines.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.virustotal.com/">Open</a></td></tr>
-    <tr data-name="AlienVault OTX" data-tags="threat intel pulses"><td>AlienVault OTX</td><td><span class="tag">Intel</span></td><td>Community threat intelligence pulses and indicators.</td><td><a class="btn" target="_blank" rel="noopener" href="https://otx.alienvault.com/">Open</a></td></tr>
-  </tbody></table></div></section>
-
-  <section class="section" data-section="osint"><h2>OSINT</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
-    <tr data-name="Shodan" data-tags="internet scan devices"><td>Shodan</td><td><span class="tag">Assets</span></td><td>Search engine for Internet-connected devices.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.shodan.io/">Open</a></td></tr>
-    <tr data-name="Censys" data-tags="certificates assets"><td>Censys</td><td><span class="tag">Assets</span></td><td>Discover Internet assets, hosts, and certificates.</td><td><a class="btn" target="_blank" rel="noopener" href="https://search.censys.io/">Open</a></td></tr>
-    <tr data-name="BinaryEdge" data-tags="internet scan"><td>BinaryEdge</td><td><span class="tag">Scan</span></td><td>Asset discovery, ports, and exposures.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.binaryedge.io/">Open</a></td></tr>
-    <tr data-name="crt.sh" data-tags="cert transparency subdomains"><td>crt.sh</td><td><span class="tag">Certificates</span></td><td>Certificate transparency search (subdomain discovery).</td><td><a class="btn" target="_blank" rel="noopener" href="https://crt.sh/">Open</a></td></tr>
-    <tr data-name="Hunter.io" data-tags="emails discovery"><td>Hunter.io</td><td><span class="tag">Emails</span></td><td>Find emails by domain and verify formats.</td><td><a class="btn" target="_blank" rel="noopener" href="https://hunter.io/">Open</a></td></tr>
-    <tr data-name="Have I Been Pwned" data-tags="breach exposure email phone"><td>Have I Been Pwned</td><td><span class="tag">Breaches</span></td><td>Check email/phone exposure in known breaches.</td><td><a class="btn" target="_blank" rel="noopener" href="https://haveibeenpwned.com/">Open</a></td></tr>
-    <tr data-name="Wayback Machine" data-tags="archives recon"><td>Wayback Machine</td><td><span class="tag">Archive</span></td><td>Historical snapshots of websites for recon.</td><td><a class="btn" target="_blank" rel="noopener" href="https://web.archive.org/">Open</a></td></tr>
-  </tbody></table></div></section>
-
-  <section class="section" data-section="malware"><h2>Malware / DFIR</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
-    <tr data-name="Hybrid Analysis" data-tags="sandbox detonation"><td>Hybrid Analysis</td><td><span class="tag">Sandbox</span></td><td>Automated malware analysis with community submissions.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.hybrid-analysis.com/">Open</a></td></tr>
-    <tr data-name="ANY.RUN" data-tags="interactive sandbox"><td>ANY.RUN</td><td><span class="tag">Interactive</span></td><td>Interactive malware analysis sandbox for dynamic behavior.</td><td><a class="btn" target="_blank" rel="noopener" href="https://any.run/">Open</a></td></tr>
-    <tr data-name="Triage" data-tags="sandbox triage hatching"><td>Triage</td><td><span class="tag">Sandbox</span></td><td>Hatching triage cloud sandbox and reports.</td><td><a class="btn" target="_blank" rel="noopener" href="https://tria.ge/">Open</a></td></tr>
-    <tr data-name="Intezer Analyze" data-tags="genetic code reuse"><td>Intezer Analyze</td><td><span class="tag">Attribution</span></td><td>Code reuse and family attribution analysis.</td><td><a class="btn" target="_blank" rel="noopener" href="https://analyze.intezer.com/">Open</a></td></tr>
-    <tr data-name="MalwareBazaar" data-tags="samples yara"><td>MalwareBazaar</td><td><span class="tag">Samples</span></td><td>Sample repository and YARA rules by abuse.ch.</td><td><a class="btn" target="_blank" rel="noopener" href="https://bazaar.abuse.ch/">Open</a></td></tr>
-    <tr data-name="Unpac.me" data-tags="unpacker pe"><td>Unpac.me</td><td><span class="tag">Unpack</span></td><td>Automated unpacking of packed malware samples.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.unpac.me/">Open</a></td></tr>
-    <tr data-name="YARA Docs" data-tags="signatures detection"><td>YARA Docs</td><td><span class="tag">Detection</span></td><td>Authoring signatures to classify malware.</td><td><a class="btn" target="_blank" rel="noopener" href="https://yara.readthedocs.io/">Open</a></td></tr>
-    <tr data-name="The DFIR Report" data-tags="case studies intrusions"><td>The DFIR Report</td><td><span class="tag">Cases</span></td><td>Detailed real-world intrusion write-ups and TTPs.</td><td><a class="btn" target="_blank" rel="noopener" href="https://thedfirreport.com/">Open</a></td></tr>
-  </tbody></table></div></section>
-
-  <section class="section" data-section="reverse"><h2>Reverse Engineering</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
-    <tr data-name="Ghidra" data-tags="disassembler decompiler"><td>Ghidra</td><td><span class="tag">RE</span></td><td>NSA's free reverse engineering suite.</td><td><a class="btn" target="_blank" rel="noopener" href="https://ghidra-sre.org/">Open</a></td></tr>
-    <tr data-name="radare2" data-tags="framework re"><td>radare2</td><td><span class="tag">RE</span></td><td>Open-source reverse engineering framework.</td><td><a class="btn" target="_blank" rel="noopener" href="https://rada.re/n/">Open</a></td></tr>
-    <tr data-name="RetDec" data-tags="decompiler"><td>RetDec</td><td><span class="tag">Decompiler</span></td><td>Open-source machine-code decompiler.</td><td><a class="btn" target="_blank" rel="noopener" href="https://retdec.com/">Open</a></td></tr>
-    <tr data-name="Capstone" data-tags="disassembly"><td>Capstone</td><td><span class="tag">Library</span></td><td>Lightweight multi-arch disassembly framework.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.capstone-engine.org/">Open</a></td></tr>
-  </tbody></table></div></section>
-
-  <section class="section" data-section="cloud"><h2>Cloud & Containers</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
-    <tr data-name="CloudMapper" data-tags="aws visualize attack paths"><td>CloudMapper</td><td><span class="tag">AWS</span></td><td>Visualize AWS environments and identify risks.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/duo-labs/cloudmapper">Open</a></td></tr>
-    <tr data-name="PMapper" data-tags="aws iam privesc"><td>PMapper</td><td><span class="tag">AWS</span></td><td>Analyze IAM policies for privilege escalation.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/nccgroup/PMapper">Open</a></td></tr>
-    <tr data-name="kube-hunter" data-tags="kubernetes security"><td>kube-hunter</td><td><span class="tag">Kubernetes</span></td><td>Hunt for Kubernetes security issues.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/aquasecurity/kube-hunter">Open</a></td></tr>
-    <tr data-name="trivy" data-tags="scanner container iac"><td>Trivy</td><td><span class="tag">Containers</span></td><td>Vulnerability scanner for containers and IaC.</td><td><a class="btn" target="_blank" rel="noopener" href="https://github.com/aquasecurity/trivy">Open</a></td></tr>
-  </tbody></table></div></section>
-
-  <section class="section" data-section="bugbounty"><h2>Bug Bounty</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
-    <tr data-name="HackerOne" data-tags="bounty programs disclosure"><td>HackerOne</td><td><span class="tag">Platform</span></td><td>Bug bounty programs and vulnerability disclosure.</td><td><a class="btn" target="_blank" rel="noopener" href="https://hackerone.com/">Open</a></td></tr>
-    <tr data-name="Bugcrowd" data-tags="bounty programs"><td>Bugcrowd</td><td><span class="tag">Platform</span></td><td>Crowdsourced security platform and programs.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.bugcrowd.com/">Open</a></td></tr>
-    <tr data-name="Intigriti" data-tags="bounty programs europe"><td>Intigriti</td><td><span class="tag">Platform</span></td><td>EU-focused bug bounty platform.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.intigriti.com/">Open</a></td></tr>
-    <tr data-name="PortSwigger Academy" data-tags="web training labs"><td>Web Security Academy</td><td><span class="tag">Web</span></td><td>Free interactive labs for web vulns.</td><td><a class="btn" target="_blank" rel="noopener" href="https://portswigger.net/web-security">Open</a></td></tr>
-  </tbody></table></div></section>
-
-  <section class="section" data-section="training"><h2>Training & CTF</h2><div class="tablewrap"><table><thead><tr><th>Website Name</th><th>Targetation</th><th>Small Description</th><th>Open</th></tr></thead><tbody>
-    <tr data-name="Hack The Box" data-tags="labs pro ctf challenges"><td>Hack The Box</td><td><span class="tag">Labs</span><span class="tag">CTF</span></td><td>Hands-on offensive labs and challenges.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.hackthebox.com/">Open</a></td></tr>
-    <tr data-name="TryHackMe" data-tags="labs beginner rooms"><td>TryHackMe</td><td><span class="tag">Labs</span></td><td>Guided, beginner-friendly threat and pentest rooms.</td><td><a class="btn" target="_blank" rel="noopener" href="https://tryhackme.com/">Open</a></td></tr>
-    <tr data-name="picoCTF" data-tags="ctf learning beginner"><td>picoCTF</td><td><span class="tag">CTF</span></td><td>Beginner CTF by Carnegie Mellon.</td><td><a class="btn" target="_blank" rel="noopener" href="https://picoctf.org/">Open</a></td></tr>
-    <tr data-name="OverTheWire" data-tags="wargames linux basics"><td>OverTheWire</td><td><span class="tag">Wargames</span></td><td>Progressive wargames for core skills.</td><td><a class="btn" target="_blank" rel="noopener" href="https://overthewire.org/wargames/">Open</a></td></tr>
-    <tr data-name="Root-Me" data-tags="challenges ctf"><td>Root-Me</td><td><span class="tag">Challenges</span></td><td>Large challenge library across many domains.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.root-me.org/">Open</a></td></tr>
-    <tr data-name="VulnHub" data-tags="vms practice offline"><td>VulnHub</td><td><span class="tag">VMs</span></td><td>Downloadable vulnerable machines for offline practice.</td><td><a class="btn" target="_blank" rel="noopener" href="https://www.vulnhub.com/">Open</a></td></tr>
-    <tr data-name="CyberDefenders" data-tags="dfir blue challenges"><td>CyberDefenders</td><td><span class="tag">DFIR</span></td><td>Blue-team labs and challenges.</td><td><a class="btn" target="_blank" rel="noopener" href="https://cyberdefenders.org/">Open</a></td></tr>
-    <tr data-name="Blue Team Labs Online" data-tags="blue detections labs"><td>BTLO</td><td><span class="tag">Blue</span></td><td>SOC-style blue-team labs and incidents.</td><td><a class="btn" target="_blank" rel="noopener" href="https://blueteamlabs.online/">Open</a></td></tr>
-    <tr data-name="CTFtime" data-tags="events scoreboard"><td>CTFtime</td><td><span class="tag">Events</span></td><td>Calendar and ranking for global CTFs.</td><td><a class="btn" target="_blank" rel="noopener" href="https://ctftime.org/">Open</a></td></tr>
-    <tr data-name="Pwnable.kr" data-tags="pwn reversing"><td>Pwnable.kr</td><td><span class="tag">Pwn</span></td><td>Classic pwnable challenges.</td><td><a class="btn" target="_blank" rel="noopener" href="http://pwnable.kr/">Open</a></td></tr>
-  </tbody></table></div></section>
-
-</main>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cyber Websites | Cyber Epistemology</title>
+<meta name="description" content="Checked directory of cybersecurity websites: frameworks, labs, CTFs, vulnerability databases, threat intelligence, sandboxes, OSINT, detection rules, offensive and DFIR references, utilities, bug bounty and news.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../Assets/Image/AppleTouchIcon.png">
+<link rel="stylesheet" href="../Assets/Style/Site.css">
+<script src="../Assets/Script/Site.js" defer></script>
+</head>
+<body class="is-content-page" data-root="../" data-section="websites">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-separator">/</span><span>Cyber Websites</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../Assets/Icon/Globe.png" alt="">
+<div>
+<p class="hero-eyebrow">Websites</p>
+<h1 class="hero-title">Cyber Security Websites</h1>
 </div>
-
-<script>
-(function(){
-  var tb=document.getElementById('topbar'),lastY=window.scrollY||0,hidden=false;
-  window.addEventListener('scroll',function(){if(!tb)return;var y=window.scrollY||0;if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
-  var p=location.pathname.replace(/\/+$/,'');document.querySelectorAll('.tabs .tab').forEach(function(a){var h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');if(p.endsWith(h))a.classList.add('active')});
-  var tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
-  function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
-  function updateArrows(){var o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;tabs.classList.toggle('overflow',o);leftbtn.style.display=o&&s>0?'inline-flex':'none';rightbtn.style.display=o&&s<max-1?'inline-flex':'none'}
-  function scrollByStep(d){var step=Math.max(120,Math.floor(tabs.clientWidth*.6));tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})}
-  leftbtn.addEventListener('click',function(){scrollByStep(-1)});rightbtn.addEventListener('click',function(){scrollByStep(1)});
-  tabs.addEventListener('scroll',updateArrows,{passive:true});new ResizeObserver(updateArrows).observe(tabs);window.addEventListener('resize',updateArrows);tabs.addEventListener('wheel',function(e){if(!hasOverflow())return;var dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}});
-  updateArrows();
-  var q=document.getElementById('q'),count=document.getElementById('count');
-  function norm(s){return (s||'').toLowerCase().trim()}
-  function rowMatches(r,term){if(!term)return true;var txt=(r.getAttribute('data-name')||'')+' '+(r.getAttribute('data-tags')||'')+' '+r.innerText;return norm(txt).indexOf(term)>-1}
-  function apply(){var term=norm(q&&q.value),rows=[].slice.call(document.querySelectorAll('tbody tr')),shown=0;rows.forEach(function(r){var show=rowMatches(r,term);r.style.display=show?'table-row':'none';if(show)shown++});if(count)count.textContent=shown+' results';[].slice.call(document.querySelectorAll('section.section')).forEach(function(sec){var any=[].slice.call(sec.querySelectorAll('tbody tr')).some(function(r){return r.style.display!=='none'});sec.style.display=any?'block':'none'})}
-  if(q)q.addEventListener('input',apply);apply();
-})();
-</script>
-</body></html>
+</div>
+<p class="hero-lead">Sites that security students, SOC analysts, sysadmins and penetration testers use every week. Every link was opened and checked in November 2026, and each row says whether the site is free, freemium or paid.</p>
+<div class="hero-meta"><span class="badge">188 sites</span><span class="badge">16 sections</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: sandbox" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="standards-frameworks">
+<h2 class="panel-title">Standards and Frameworks</h2>
+<p class="panel-lead">Shared vocabularies for attacks, defenses, weaknesses and security programs.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>MITRE ATT&amp;CK</td><td><span class="tag">Adversary behavior</span> <span class="tag tag-neutral">Free</span></td><td>Knowledge base of attacker tactics and techniques for Enterprise, Mobile and ICS, with groups, software and detections</td><td><a class="link-button" href="https://attack.mitre.org/">Open</a></td></tr>
+<tr><td>ATT&amp;CK Navigator</td><td><span class="tag">Coverage mapping</span> <span class="tag tag-neutral">Free</span></td><td>Color and layer ATT&amp;CK techniques to show detection coverage or a threat group profile</td><td><a class="link-button" href="https://mitre-attack.github.io/attack-navigator/">Open</a></td></tr>
+<tr><td>MITRE D3FEND</td><td><span class="tag">Countermeasures</span> <span class="tag tag-neutral">Free</span></td><td>Knowledge graph of defensive techniques, linked to the ATT&amp;CK techniques they counter</td><td><a class="link-button" href="https://d3fend.mitre.org/">Open</a></td></tr>
+<tr><td>MITRE ATLAS</td><td><span class="tag">AI security</span> <span class="tag tag-neutral">Free</span></td><td>Tactics, techniques and case studies of attacks on AI and machine learning systems</td><td><a class="link-button" href="https://atlas.mitre.org/">Open</a></td></tr>
+<tr><td>MITRE CWE</td><td><span class="tag">Weaknesses</span> <span class="tag tag-neutral">Free</span></td><td>Catalog of software and hardware weakness types that CVE records map to, including the yearly Top 25</td><td><a class="link-button" href="https://cwe.mitre.org/">Open</a></td></tr>
+<tr><td>MITRE CAPEC</td><td><span class="tag">Attack patterns</span> <span class="tag tag-neutral">Free</span></td><td>Common attack patterns, how they work and which weaknesses they exploit</td><td><a class="link-button" href="https://capec.mitre.org/">Open</a></td></tr>
+<tr><td>NIST CSF 2.0</td><td><span class="tag">Governance</span> <span class="tag tag-neutral">Free</span></td><td>NIST Cybersecurity Framework 2.0 with six functions: Govern, Identify, Protect, Detect, Respond, Recover</td><td><a class="link-button" href="https://www.nist.gov/cyberframework">Open</a></td></tr>
+<tr><td>CIS Controls v8.1</td><td><span class="tag">Hardening</span> <span class="tag tag-neutral">Free</span></td><td>18 prioritized controls with Implementation Groups IG1 to IG3 for small to large organizations</td><td><a class="link-button" href="https://www.cisecurity.org/controls">Open</a></td></tr>
+<tr><td>CIS Benchmarks</td><td><span class="tag">Configuration</span> <span class="tag tag-neutral">Freemium</span></td><td>Secure configuration baselines for Windows, Linux, cloud, browsers and network devices (PDFs free, tooling paid)</td><td><a class="link-button" href="https://www.cisecurity.org/cis-benchmarks">Open</a></td></tr>
+<tr><td>OWASP Top 10:2025</td><td><span class="tag">Web</span> <span class="tag tag-neutral">Free</span></td><td>Current edition of the top web application risks, adds Software Supply Chain Failures and Mishandling of Exceptional Conditions</td><td><a class="link-button" href="https://top10.owasp.org/2025/">Open</a></td></tr>
+<tr><td>OWASP API Security Top 10</td><td><span class="tag">API</span> <span class="tag tag-neutral">Free</span></td><td>Most common API risks such as broken object level authorization</td><td><a class="link-button" href="https://api-security.owasp.org/">Open</a></td></tr>
+<tr><td>OWASP GenAI Security Project</td><td><span class="tag">LLM</span> <span class="tag tag-neutral">Free</span></td><td>Top 10 for LLM applications and agentic AI, prompt injection and other AI risks</td><td><a class="link-button" href="https://genai.owasp.org/">Open</a></td></tr>
+<tr><td>OWASP ASVS</td><td><span class="tag">Verification</span> <span class="tag tag-neutral">Free</span></td><td>Application Security Verification Standard: testable security requirements for web apps</td><td><a class="link-button" href="https://asvs.owasp.org/">Open</a></td></tr>
+<tr><td>OWASP Cheat Sheet Series</td><td><span class="tag">Secure coding</span> <span class="tag tag-neutral">Free</span></td><td>Short, practical guides on authentication, input validation, session handling and more</td><td><a class="link-button" href="https://cheatsheetseries.owasp.org/">Open</a></td></tr>
+<tr><td>OWASP Foundation</td><td><span class="tag">AppSec</span> <span class="tag tag-neutral">Free</span></td><td>Index of all OWASP projects such as the Web Security Testing Guide, Juice Shop and Dependency-Check</td><td><a class="link-button" href="https://owasp.org/">Open</a></td></tr>
+<tr><td>FIRST CVSS</td><td><span class="tag">Scoring</span> <span class="tag tag-neutral">Free</span></td><td>CVSS v4.0 and v3.1 specifications and the official score calculators</td><td><a class="link-button" href="https://www.first.org/cvss/">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="learning-platforms">
+<h2 class="panel-title">Learning Platforms and Labs</h2>
+<p class="panel-lead">Guided courses and hands-on labs, from first steps to exam preparation.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>TryHackMe</td><td><span class="tag">Guided labs</span> <span class="tag tag-neutral">Freemium</span></td><td>Beginner friendly browser labs and learning paths for offensive and defensive skills</td><td><a class="link-button" href="https://tryhackme.com/">Open</a></td></tr>
+<tr><td>Hack The Box</td><td><span class="tag">Labs</span> <span class="tag">CTF</span> <span class="tag tag-neutral">Freemium</span></td><td>Vulnerable machines, Pro Labs, challenges and seasonal competitions</td><td><a class="link-button" href="https://www.hackthebox.com/">Open</a></td></tr>
+<tr><td>HTB Academy</td><td><span class="tag">Courses</span> <span class="tag tag-neutral">Freemium</span></td><td>Structured modules and job role paths for pentesting, SOC and web testing</td><td><a class="link-button" href="https://academy.hackthebox.com/">Open</a></td></tr>
+<tr><td>PortSwigger Web Security Academy</td><td><span class="tag">Web</span> <span class="tag tag-neutral">Free</span></td><td>Free labs for SQL injection, XSS, SSRF, access control and every other major web bug class</td><td><a class="link-button" href="https://portswigger.net/web-security">Open</a></td></tr>
+<tr><td>pwn.college</td><td><span class="tag">Binary exploitation</span> <span class="tag tag-neutral">Free</span></td><td>Arizona State University course with hosted labs for Linux, memory corruption and kernel exploitation</td><td><a class="link-button" href="https://pwn.college/">Open</a></td></tr>
+<tr><td>OffSec Proving Grounds</td><td><span class="tag">Labs</span> <span class="tag tag-neutral">Freemium</span></td><td>Vulnerable machines from OffSec: Play is free, Practice is paid and close to OSCP style</td><td><a class="link-button" href="https://www.offsec.com/products/proving-grounds/">Open</a></td></tr>
+<tr><td>TCM Academy</td><td><span class="tag">Courses</span> <span class="tag tag-neutral">Freemium</span></td><td>Practical courses on ethical hacking, Active Directory, SOC work and scripting</td><td><a class="link-button" href="https://tcm-sec.com/academy/">Open</a></td></tr>
+<tr><td>Hacker101</td><td><span class="tag">Web</span> <span class="tag tag-neutral">Free</span></td><td>HackerOne video lessons and a CTF aimed at new bug bounty hunters</td><td><a class="link-button" href="https://www.hacker101.com/">Open</a></td></tr>
+<tr><td>LetsDefend</td><td><span class="tag">SOC</span> <span class="tag tag-neutral">Freemium</span></td><td>Simulated SOC with alerts to triage, plus courses for analysts</td><td><a class="link-button" href="https://letsdefend.io/">Open</a></td></tr>
+<tr><td>CyberDefenders</td><td><span class="tag">Blue team</span> <span class="tag tag-neutral">Freemium</span></td><td>Blue team labs built on real logs, PCAPs and disk images</td><td><a class="link-button" href="https://cyberdefenders.org/">Open</a></td></tr>
+<tr><td>Blue Team Labs Online</td><td><span class="tag">Blue team</span> <span class="tag tag-neutral">Freemium</span></td><td>Security Blue Team challenges and investigations for SOC and DFIR practice</td><td><a class="link-button" href="https://blueteamlabs.online/">Open</a></td></tr>
+<tr><td>VulnHub</td><td><span class="tag">Offline VMs</span> <span class="tag tag-neutral">Free</span></td><td>Archive of downloadable vulnerable VMs for a home lab, few new uploads in recent years</td><td><a class="link-button" href="https://www.vulnhub.com/">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="ctfs-wargames">
+<h2 class="panel-title">CTFs and Wargames</h2>
+<p class="panel-lead">Competitions and always-on challenge sites to sharpen specific skills.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>CTFtime</td><td><span class="tag">Events</span> <span class="tag tag-neutral">Free</span></td><td>Calendar of upcoming CTFs, team rankings and write-ups</td><td><a class="link-button" href="https://ctftime.org/">Open</a></td></tr>
+<tr><td>picoCTF</td><td><span class="tag">Beginner</span> <span class="tag tag-neutral">Free</span></td><td>Carnegie Mellon CTF with a year-round practice gym for students</td><td><a class="link-button" href="https://picoctf.org/">Open</a></td></tr>
+<tr><td>OverTheWire</td><td><span class="tag">Linux</span> <span class="tag tag-neutral">Free</span></td><td>SSH wargames; start with Bandit to learn the Linux shell</td><td><a class="link-button" href="https://overthewire.org/wargames/">Open</a></td></tr>
+<tr><td>Under The Wire</td><td><span class="tag">PowerShell</span> <span class="tag tag-neutral">Free</span></td><td>PowerShell wargames played over SSH</td><td><a class="link-button" href="https://underthewire.tech/">Open</a></td></tr>
+<tr><td>Root-Me</td><td><span class="tag">Challenges</span> <span class="tag tag-neutral">Free</span></td><td>Hundreds of challenges across web, network, forensics, crypto and reversing</td><td><a class="link-button" href="https://www.root-me.org/">Open</a></td></tr>
+<tr><td>pwnable.kr</td><td><span class="tag">Pwn</span> <span class="tag tag-neutral">Free</span></td><td>Classic binary exploitation challenges, from toddler level to hacker level</td><td><a class="link-button" href="https://pwnable.kr/">Open</a></td></tr>
+<tr><td>pwnable.tw</td><td><span class="tag">Pwn</span> <span class="tag tag-neutral">Free</span></td><td>Harder exploitation challenges for heap and modern mitigations</td><td><a class="link-button" href="https://pwnable.tw/">Open</a></td></tr>
+<tr><td>CryptoHack</td><td><span class="tag">Cryptography</span> <span class="tag tag-neutral">Free</span></td><td>Learn applied cryptography by breaking it, from XOR to elliptic curves</td><td><a class="link-button" href="https://cryptohack.org/">Open</a></td></tr>
+<tr><td>crackmes.one</td><td><span class="tag">Reversing</span> <span class="tag tag-neutral">Free</span></td><td>Community uploaded crackme binaries sorted by difficulty and platform</td><td><a class="link-button" href="https://crackmes.one/">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="vulnerability-databases">
+<h2 class="panel-title">Vulnerability Databases and Advisories</h2>
+<p class="panel-lead">Where CVEs are published, scored, prioritized and patched.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>CVE.org</td><td><span class="tag">CVE</span> <span class="tag tag-neutral">Free</span></td><td>Official CVE Program: authoritative CVE records and the list of CVE Numbering Authorities</td><td><a class="link-button" href="https://www.cve.org/">Open</a></td></tr>
+<tr><td>NVD (NIST)</td><td><span class="tag">CVE</span> <span class="tag tag-neutral">Free</span></td><td>CVE enrichment with CVSS, CWE and CPE data plus APIs; enrichment can lag behind new CVEs</td><td><a class="link-button" href="https://nvd.nist.gov/vuln">Open</a></td></tr>
+<tr><td>CISA KEV Catalog</td><td><span class="tag">Exploited</span> <span class="tag tag-neutral">Free</span></td><td>CVEs confirmed as exploited in the wild, with remediation due dates; patch these first</td><td><a class="link-button" href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog">Open</a></td></tr>
+<tr><td>FIRST EPSS</td><td><span class="tag">Prioritization</span> <span class="tag tag-neutral">Free</span></td><td>Daily probability that a CVE is exploited in the next 30 days, useful next to CVSS and KEV</td><td><a class="link-button" href="https://www.first.org/epss/">Open</a></td></tr>
+<tr><td>VulnCheck KEV</td><td><span class="tag">Exploited</span> <span class="tag tag-neutral">Freemium</span></td><td>Larger community list of exploited CVEs with exploit references (free account)</td><td><a class="link-button" href="https://www.vulncheck.com/kev">Open</a></td></tr>
+<tr><td>EUVD (ENISA)</td><td><span class="tag">CVE</span> <span class="tag tag-neutral">Free</span></td><td>European Vulnerability Database with exploited and critical views</td><td><a class="link-button" href="https://euvd.enisa.europa.eu/">Open</a></td></tr>
+<tr><td>GitHub Advisory Database</td><td><span class="tag">Open source</span> <span class="tag tag-neutral">Free</span></td><td>Advisories for npm, PyPI, Maven, NuGet, Go and other package ecosystems</td><td><a class="link-button" href="https://github.com/advisories">Open</a></td></tr>
+<tr><td>OSV.dev</td><td><span class="tag">Open source</span> <span class="tag tag-neutral">Free</span></td><td>Google led open source vulnerability database and API used by osv-scanner</td><td><a class="link-button" href="https://osv.dev/">Open</a></td></tr>
+<tr><td>Vulnerability-Lookup (CIRCL)</td><td><span class="tag">Aggregator</span> <span class="tag tag-neutral">Free</span></td><td>Searches CVE, GitHub, vendor and national advisories in one place</td><td><a class="link-button" href="https://vulnerability.circl.lu/">Open</a></td></tr>
+<tr><td>OpenCVE</td><td><span class="tag">Alerts</span> <span class="tag tag-neutral">Freemium</span></td><td>Subscribe to vendors and products and get notified about new CVEs</td><td><a class="link-button" href="https://www.opencve.io/">Open</a></td></tr>
+<tr><td>Microsoft Security Update Guide</td><td><span class="tag">Vendor</span> <span class="tag tag-neutral">Free</span></td><td>Patch Tuesday CVEs, affected products, KB numbers and exploitation status</td><td><a class="link-button" href="https://msrc.microsoft.com/update-guide">Open</a></td></tr>
+<tr><td>CISA Cybersecurity Advisories</td><td><span class="tag">Advisories</span> <span class="tag tag-neutral">Free</span></td><td>Joint advisories, ICS advisories and alerts with IOCs and mitigations</td><td><a class="link-button" href="https://www.cisa.gov/news-events/cybersecurity-advisories">Open</a></td></tr>
+<tr><td>Exploit-DB</td><td><span class="tag">Exploits</span> <span class="tag tag-neutral">Free</span></td><td>OffSec archive of public exploits and proof of concept code, searchable offline with searchsploit</td><td><a class="link-button" href="https://www.exploit-db.com/">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="threat-intelligence">
+<h2 class="panel-title">Threat Intelligence and Reputation</h2>
+<p class="panel-lead">Check an IP, domain, URL or hash before you block, escalate or close an alert.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>VirusTotal</td><td><span class="tag">Files</span> <span class="tag">URLs</span> <span class="tag tag-neutral">Freemium</span></td><td>Scan files, URLs, domains and hashes with many engines; uploads are visible to other users</td><td><a class="link-button" href="https://www.virustotal.com/">Open</a></td></tr>
+<tr><td>GreyNoise Visualizer</td><td><span class="tag">IP noise</span> <span class="tag tag-neutral">Freemium</span></td><td>Shows whether an IP is a mass scanner or a known benign service, to cut false positives</td><td><a class="link-button" href="https://viz.greynoise.io/">Open</a></td></tr>
+<tr><td>AbuseIPDB</td><td><span class="tag">IP reputation</span> <span class="tag tag-neutral">Freemium</span></td><td>Community abuse reports and confidence score for an IP address</td><td><a class="link-button" href="https://www.abuseipdb.com/">Open</a></td></tr>
+<tr><td>urlscan.io</td><td><span class="tag">URLs</span> <span class="tag tag-neutral">Freemium</span></td><td>Loads a URL in a sandboxed browser and records screenshot, requests and indicators</td><td><a class="link-button" href="https://urlscan.io/">Open</a></td></tr>
+<tr><td>LevelBlue OTX</td><td><span class="tag">Community intel</span> <span class="tag tag-neutral">Free</span></td><td>Open Threat Exchange (formerly AlienVault OTX): community pulses with IOCs</td><td><a class="link-button" href="https://otx.alienvault.com/">Open</a></td></tr>
+<tr><td>ThreatFox</td><td><span class="tag">IOCs</span> <span class="tag tag-neutral">Free</span></td><td>abuse.ch database of malware IOCs such as C2 IPs, domains and URLs</td><td><a class="link-button" href="https://threatfox.abuse.ch/">Open</a></td></tr>
+<tr><td>URLhaus</td><td><span class="tag">Malware URLs</span> <span class="tag tag-neutral">Free</span></td><td>abuse.ch list of URLs that distribute malware, with blocklist feeds</td><td><a class="link-button" href="https://urlhaus.abuse.ch/">Open</a></td></tr>
+<tr><td>Feodo Tracker</td><td><span class="tag">Botnet C2</span> <span class="tag tag-neutral">Free</span></td><td>abuse.ch tracker of botnet C2 servers with an IP blocklist</td><td><a class="link-button" href="https://feodotracker.abuse.ch/">Open</a></td></tr>
+<tr><td>Cisco Talos Reputation Center</td><td><span class="tag">Reputation</span> <span class="tag tag-neutral">Free</span></td><td>Email and web reputation of an IP or domain from Talos telemetry</td><td><a class="link-button" href="https://www.talosintelligence.com/reputation_center">Open</a></td></tr>
+<tr><td>IBM X-Force Exchange</td><td><span class="tag">Intel</span> <span class="tag tag-neutral">Freemium</span></td><td>Reputation lookups, threat reports and collections from IBM X-Force</td><td><a class="link-button" href="https://exchange.xforce.ibmcloud.com/">Open</a></td></tr>
+<tr><td>Pulsedive</td><td><span class="tag">Intel</span> <span class="tag tag-neutral">Freemium</span></td><td>Enriches indicators with risk scores, linked threats and feeds</td><td><a class="link-button" href="https://pulsedive.com/">Open</a></td></tr>
+<tr><td>Spamhaus</td><td><span class="tag">Blocklists</span> <span class="tag tag-neutral">Freemium</span></td><td>IP and domain reputation lookups and the widely used DNS blocklists</td><td><a class="link-button" href="https://www.spamhaus.org/">Open</a></td></tr>
+<tr><td>PhishTank</td><td><span class="tag">Phishing</span> <span class="tag tag-neutral">Free</span></td><td>Community verified phishing URLs and a lookup for suspicious links</td><td><a class="link-button" href="https://www.phishtank.com/">Open</a></td></tr>
+<tr><td>MISP Project</td><td><span class="tag">Sharing platform</span> <span class="tag tag-neutral">Free</span></td><td>Open source threat intelligence platform for storing and sharing IOCs between teams</td><td><a class="link-button" href="https://www.misp-project.org/">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="malware-analysis">
+<h2 class="panel-title">Malware Analysis and Sandboxes</h2>
+<p class="panel-lead">Detonate, unpack and classify samples without running them on your own machine.</p>
+<div class="callout callout-warning"><p><strong>Warning:</strong> public sandboxes publish submissions. Do not upload files that contain customer data or internal documents.</p></div>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>ANY.RUN</td><td><span class="tag">Interactive sandbox</span> <span class="tag tag-neutral">Freemium</span></td><td>Interactive Windows, Linux and Android sandbox where you click through the sample live</td><td><a class="link-button" href="https://any.run/">Open</a></td></tr>
+<tr><td>Hybrid Analysis</td><td><span class="tag">Sandbox</span> <span class="tag tag-neutral">Free</span></td><td>Public sandbox powered by CrowdStrike Falcon Sandbox, with community reports</td><td><a class="link-button" href="https://hybrid-analysis.com/">Open</a></td></tr>
+<tr><td>Recorded Future Triage</td><td><span class="tag">Sandbox</span> <span class="tag tag-neutral">Freemium</span></td><td>Fast cloud sandbox with malware family and config extraction</td><td><a class="link-button" href="https://tria.ge/">Open</a></td></tr>
+<tr><td>Joe Sandbox</td><td><span class="tag">Sandbox</span> <span class="tag tag-neutral">Freemium</span></td><td>Deep behavior reports; the free Cloud Basic tier has monthly limits</td><td><a class="link-button" href="https://www.joesandbox.com/">Open</a></td></tr>
+<tr><td>FileScan.IO</td><td><span class="tag">Static analysis</span> <span class="tag tag-neutral">Freemium</span></td><td>Fast emulation based scan of documents, scripts and executables</td><td><a class="link-button" href="https://www.filescan.io/">Open</a></td></tr>
+<tr><td>Intezer Analyze</td><td><span class="tag">Code reuse</span> <span class="tag tag-neutral">Freemium</span></td><td>Classifies samples by shared code with known families; small free monthly quota</td><td><a class="link-button" href="https://analyze.intezer.com/">Open</a></td></tr>
+<tr><td>MalwareBazaar</td><td><span class="tag">Samples</span> <span class="tag tag-neutral">Free</span></td><td>abuse.ch repository of malware samples, tagged by family, for research and detection</td><td><a class="link-button" href="https://bazaar.abuse.ch/">Open</a></td></tr>
+<tr><td>YARAify</td><td><span class="tag">YARA</span> <span class="tag tag-neutral">Free</span></td><td>abuse.ch service that scans files against public YARA rules</td><td><a class="link-button" href="https://yaraify.abuse.ch/">Open</a></td></tr>
+<tr><td>UnpacMe</td><td><span class="tag">Unpacking</span> <span class="tag tag-neutral">Freemium</span></td><td>Automated unpacking of packed samples, returns the unpacked payloads</td><td><a class="link-button" href="https://www.unpac.me/">Open</a></td></tr>
+<tr><td>Malpedia</td><td><span class="tag">Families</span> <span class="tag tag-neutral">Free</span></td><td>Fraunhofer FKIE reference of malware families, aliases, reports and YARA rules</td><td><a class="link-button" href="https://malpedia.caad.fkie.fraunhofer.de/">Open</a></td></tr>
+<tr><td>YARA-X</td><td><span class="tag">Rules</span> <span class="tag tag-neutral">Free</span></td><td>Docs for the Rust rewrite of YARA, stable since 2025; classic YARA is in maintenance mode</td><td><a class="link-button" href="https://virustotal.github.io/yara-x/">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="reverse-engineering">
+<h2 class="panel-title">Reverse Engineering</h2>
+<p class="panel-lead">Disassemblers, decompilers and libraries for understanding binaries.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>Ghidra</td><td><span class="tag">Decompiler</span> <span class="tag tag-neutral">Free</span></td><td>NSA open source reverse engineering suite with a decompiler for many architectures</td><td><a class="link-button" href="https://github.com/NationalSecurityAgency/ghidra">Open</a></td></tr>
+<tr><td>IDA Free</td><td><span class="tag">Disassembler</span> <span class="tag tag-neutral">Freemium</span></td><td>Free edition of IDA for non-commercial use with a cloud decompiler; IDA Pro is paid</td><td><a class="link-button" href="https://hex-rays.com/ida-free">Open</a></td></tr>
+<tr><td>Binary Ninja</td><td><span class="tag">Decompiler</span> <span class="tag tag-neutral">Freemium</span></td><td>Modern RE platform with a scripting API; free edition available</td><td><a class="link-button" href="https://binary.ninja/">Open</a></td></tr>
+<tr><td>radare2</td><td><span class="tag">Framework</span> <span class="tag tag-neutral">Free</span></td><td>Command line reverse engineering framework, with the Iaito GUI</td><td><a class="link-button" href="https://www.radare.org/">Open</a></td></tr>
+<tr><td>Decompiler Explorer</td><td><span class="tag">Online</span> <span class="tag tag-neutral">Free</span></td><td>Dogbolt: upload a small binary and compare output from several decompilers side by side</td><td><a class="link-button" href="https://dogbolt.org/">Open</a></td></tr>
+<tr><td>RetDec</td><td><span class="tag">Decompiler</span> <span class="tag tag-neutral">Free</span></td><td>Avast open source decompiler; the old retdec.com site now redirects to the GitHub project</td><td><a class="link-button" href="https://github.com/avast/retdec">Open</a></td></tr>
+<tr><td>Capstone</td><td><span class="tag">Library</span> <span class="tag tag-neutral">Free</span></td><td>Multi architecture disassembly library used by many RE tools</td><td><a class="link-button" href="https://www.capstone-engine.org/">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="osint-attack-surface">
+<h2 class="panel-title">OSINT and Attack Surface</h2>
+<p class="panel-lead">Find exposed hosts, subdomains, certificates, emails and leaked data.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>Shodan</td><td><span class="tag">Internet scan</span> <span class="tag tag-neutral">Freemium</span></td><td>Search engine for Internet facing devices, banners and open ports</td><td><a class="link-button" href="https://www.shodan.io/">Open</a></td></tr>
+<tr><td>Censys Platform</td><td><span class="tag">Internet scan</span> <span class="tag tag-neutral">Freemium</span></td><td>Hosts, services and certificates seen on the Internet; replaces the retired search.censys.io</td><td><a class="link-button" href="https://platform.censys.io/">Open</a></td></tr>
+<tr><td>Netlas</td><td><span class="tag">Internet scan</span> <span class="tag tag-neutral">Freemium</span></td><td>Internet scan data with DNS, WHOIS and certificate search</td><td><a class="link-button" href="https://netlas.io/">Open</a></td></tr>
+<tr><td>FOFA</td><td><span class="tag">Internet scan</span> <span class="tag tag-neutral">Freemium</span></td><td>Cyberspace search engine with strong coverage of Asian networks</td><td><a class="link-button" href="https://en.fofa.info/">Open</a></td></tr>
+<tr><td>ZoomEye</td><td><span class="tag">Internet scan</span> <span class="tag tag-neutral">Freemium</span></td><td>Device and service search engine from Knownsec</td><td><a class="link-button" href="https://www.zoomeye.ai/">Open</a></td></tr>
+<tr><td>crt.sh</td><td><span class="tag">Certificates</span> <span class="tag tag-neutral">Free</span></td><td>Certificate Transparency search; query <code>%.example.com</code> to list subdomains</td><td><a class="link-button" href="https://crt.sh/">Open</a></td></tr>
+<tr><td>DNSDumpster</td><td><span class="tag">DNS</span> <span class="tag tag-neutral">Freemium</span></td><td>Maps a domain's DNS records, subdomains and hosting</td><td><a class="link-button" href="https://dnsdumpster.com/">Open</a></td></tr>
+<tr><td>SecurityTrails</td><td><span class="tag">DNS history</span> <span class="tag tag-neutral">Freemium</span></td><td>Historical DNS and WHOIS data, useful for finding origin IPs</td><td><a class="link-button" href="https://securitytrails.com/">Open</a></td></tr>
+<tr><td>ICANN Lookup</td><td><span class="tag">WHOIS</span> <span class="tag tag-neutral">Free</span></td><td>Official RDAP registration lookup for domains</td><td><a class="link-button" href="https://lookup.icann.org/">Open</a></td></tr>
+<tr><td>ViewDNS.info</td><td><span class="tag">DNS tools</span> <span class="tag tag-neutral">Freemium</span></td><td>Reverse IP, reverse WHOIS, DNS history and other quick lookups</td><td><a class="link-button" href="https://viewdns.info/">Open</a></td></tr>
+<tr><td>Hunter.io</td><td><span class="tag">Emails</span> <span class="tag tag-neutral">Freemium</span></td><td>Find email addresses and naming formats for a domain</td><td><a class="link-button" href="https://hunter.io/">Open</a></td></tr>
+<tr><td>Have I Been Pwned</td><td><span class="tag">Breaches</span> <span class="tag tag-neutral">Freemium</span></td><td>Check whether an email appears in known breaches; domain search and API are paid</td><td><a class="link-button" href="https://haveibeenpwned.com/">Open</a></td></tr>
+<tr><td>Intelligence X</td><td><span class="tag">Leaks</span> <span class="tag tag-neutral">Freemium</span></td><td>Search engine for leaks, pastes, darknet content and historical data</td><td><a class="link-button" href="https://intelx.io/">Open</a></td></tr>
+<tr><td>Wayback Machine</td><td><span class="tag">Archive</span> <span class="tag tag-neutral">Free</span></td><td>Old snapshots of websites; finds forgotten endpoints and files</td><td><a class="link-button" href="https://web.archive.org/">Open</a></td></tr>
+<tr><td>OSINT Framework</td><td><span class="tag">Directory</span> <span class="tag tag-neutral">Free</span></td><td>Tree of OSINT tools grouped by what you are looking for</td><td><a class="link-button" href="https://osintframework.com/">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="detection-engineering">
+<h2 class="panel-title">Detection Engineering</h2>
+<p class="panel-lead">Detection rules, query translation and attack simulation to test them.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>Sigma</td><td><span class="tag">Rule format</span> <span class="tag tag-neutral">Free</span></td><td>Vendor neutral detection rule format, docs and pySigma converters</td><td><a class="link-button" href="https://sigmahq.io/">Open</a></td></tr>
+<tr><td>SigmaHQ Rules</td><td><span class="tag">SIEM rules</span> <span class="tag tag-neutral">Free</span></td><td>Main community repository of Sigma rules for Windows, Linux, cloud and network logs</td><td><a class="link-button" href="https://github.com/SigmaHQ/sigma">Open</a></td></tr>
+<tr><td>Elastic Detection Rules</td><td><span class="tag">SIEM rules</span> <span class="tag tag-neutral">Free</span></td><td>Source of Elastic Security prebuilt rules in KQL, EQL and ES|QL</td><td><a class="link-button" href="https://github.com/elastic/detection-rules">Open</a></td></tr>
+<tr><td>Splunk Security Content</td><td><span class="tag">SIEM rules</span> <span class="tag tag-neutral">Free</span></td><td>Splunk Threat Research detections and analytic stories mapped to ATT&amp;CK</td><td><a class="link-button" href="https://research.splunk.com/">Open</a></td></tr>
+<tr><td>detection.fyi</td><td><span class="tag">Rule search</span> <span class="tag tag-neutral">Free</span></td><td>Searchable index of public detection rules from several open repositories</td><td><a class="link-button" href="https://detection.fyi/">Open</a></td></tr>
+<tr><td>MITRE CAR</td><td><span class="tag">Analytics</span> <span class="tag tag-neutral">Free</span></td><td>Cyber Analytics Repository: pseudocode analytics mapped to ATT&amp;CK</td><td><a class="link-button" href="https://car.mitre.org/">Open</a></td></tr>
+<tr><td>Uncoder.io</td><td><span class="tag">Translation</span> <span class="tag tag-neutral">Freemium</span></td><td>Translate Sigma and other rules into Splunk, Sentinel KQL, Elastic and more</td><td><a class="link-button" href="https://uncoder.io/">Open</a></td></tr>
+<tr><td>Atomic Red Team</td><td><span class="tag">Testing</span> <span class="tag tag-neutral">Free</span></td><td>Small, scripted tests per ATT&amp;CK technique to check that detections fire</td><td><a class="link-button" href="https://github.com/redcanaryco/atomic-red-team">Open</a></td></tr>
+<tr><td>MITRE Caldera</td><td><span class="tag">Emulation</span> <span class="tag tag-neutral">Free</span></td><td>Automated adversary emulation platform for purple team exercises</td><td><a class="link-button" href="https://caldera.mitre.org/">Open</a></td></tr>
+<tr><td>Sysmon</td><td><span class="tag">Windows telemetry</span> <span class="tag tag-neutral">Free</span></td><td>Sysinternals System Monitor: process, network and file events for Windows logging</td><td><a class="link-button" href="https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon">Open</a></td></tr>
+<tr><td>sysmon-modular</td><td><span class="tag">Config</span> <span class="tag tag-neutral">Free</span></td><td>Maintained Sysmon configuration split into modules mapped to ATT&amp;CK</td><td><a class="link-button" href="https://github.com/olafhartong/sysmon-modular">Open</a></td></tr>
+<tr><td>Detection Engineering Weekly</td><td><span class="tag">Newsletter</span> <span class="tag tag-neutral">Freemium</span></td><td>Weekly newsletter on detection techniques, rules and tooling</td><td><a class="link-button" href="https://www.detectionengineering.net/">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="offensive-knowledge">
+<h2 class="panel-title">Offensive Knowledge Bases</h2>
+<p class="panel-lead">Methodology, payloads and living off the land references for authorized testing.</p>
+<div class="callout callout-danger"><p><strong>Authorization:</strong> use offensive techniques and tools only on systems you own or have written permission to test.</p></div>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>HackTricks</td><td><span class="tag">Methodology</span> <span class="tag tag-neutral">Free</span></td><td>Large pentest handbook for Linux, Windows, AD, web and mobile; moved from book.hacktricks.xyz</td><td><a class="link-button" href="https://hacktricks.wiki/">Open</a></td></tr>
+<tr><td>HackTricks Cloud</td><td><span class="tag">Cloud</span> <span class="tag tag-neutral">Free</span></td><td>Companion book for AWS, Azure, GCP, Kubernetes and CI/CD attacks</td><td><a class="link-button" href="https://cloud.hacktricks.wiki/">Open</a></td></tr>
+<tr><td>PayloadsAllTheThings</td><td><span class="tag">Payloads</span> <span class="tag tag-neutral">Free</span></td><td>Payloads and bypasses per vulnerability class; the old GitBook site is gone</td><td><a class="link-button" href="https://swisskyrepo.github.io/PayloadsAllTheThings/">Open</a></td></tr>
+<tr><td>The Hacker Recipes</td><td><span class="tag">Active Directory</span> <span class="tag tag-neutral">Free</span></td><td>Clear explanations of AD, Kerberos, NTLM and web attacks with commands</td><td><a class="link-button" href="https://www.thehacker.recipes/">Open</a></td></tr>
+<tr><td>Red Team Notes (ired.team)</td><td><span class="tag">Tradecraft</span> <span class="tag tag-neutral">Free</span></td><td>Notes on Windows internals, code injection, credential access and lateral movement</td><td><a class="link-button" href="https://www.ired.team/">Open</a></td></tr>
+<tr><td>WADComs</td><td><span class="tag">Active Directory</span> <span class="tag tag-neutral">Free</span></td><td>Interactive cheat sheet of Windows and AD commands filtered by what you have</td><td><a class="link-button" href="https://wadcoms.github.io/">Open</a></td></tr>
+<tr><td>GTFOBins</td><td><span class="tag">Linux</span> <span class="tag tag-neutral">Free</span></td><td>Unix binaries that can be abused to escape shells, read files or escalate privileges</td><td><a class="link-button" href="https://gtfobins.org/">Open</a></td></tr>
+<tr><td>LOLBAS</td><td><span class="tag">Windows</span> <span class="tag tag-neutral">Free</span></td><td>Signed Windows binaries, scripts and libraries that attackers abuse, with detections</td><td><a class="link-button" href="https://lolbas-project.github.io/">Open</a></td></tr>
+<tr><td>LOLDrivers</td><td><span class="tag">Drivers</span> <span class="tag tag-neutral">Free</span></td><td>Vulnerable and malicious Windows drivers used for BYOVD, with hashes and Sigma rules</td><td><a class="link-button" href="https://www.loldrivers.io/">Open</a></td></tr>
+<tr><td>LOLRMM</td><td><span class="tag">Remote access</span> <span class="tag tag-neutral">Free</span></td><td>Remote management tools abused by attackers, with artifacts and detections</td><td><a class="link-button" href="https://lolrmm.io/">Open</a></td></tr>
+<tr><td>The C2 Matrix</td><td><span class="tag">C2</span> <span class="tag tag-neutral">Free</span></td><td>Side by side comparison of command and control frameworks</td><td><a class="link-button" href="https://howto.thec2matrix.com/">Open</a></td></tr>
+<tr><td>SecLists</td><td><span class="tag">Wordlists</span> <span class="tag tag-neutral">Free</span></td><td>Wordlists for content discovery, fuzzing, usernames and passwords</td><td><a class="link-button" href="https://github.com/danielmiessler/SecLists">Open</a></td></tr>
+<tr><td>Statistically Likely Usernames</td><td><span class="tag">Wordlists</span> <span class="tag tag-neutral">Free</span></td><td>Username lists built from common name formats, for password spraying in scope</td><td><a class="link-button" href="https://github.com/insidetrust/statistically-likely-usernames">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="offensive-tool-projects">
+<h2 class="panel-title">Offensive Tool Projects</h2>
+<p class="panel-lead">Official homes and docs of the tools most pentests rely on.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>Nmap</td><td><span class="tag">Network</span> <span class="tag tag-neutral">Free</span></td><td>Port scanner, reference guide and NSE script documentation</td><td><a class="link-button" href="https://nmap.org/">Open</a></td></tr>
+<tr><td>Burp Suite Docs</td><td><span class="tag">Web</span> <span class="tag tag-neutral">Free</span></td><td>Documentation for Burp Suite Community and Professional</td><td><a class="link-button" href="https://portswigger.net/burp/documentation">Open</a></td></tr>
+<tr><td>ProjectDiscovery</td><td><span class="tag">Recon</span> <span class="tag">Automation</span> <span class="tag tag-neutral">Freemium</span></td><td>Nuclei, subfinder, httpx, naabu and katana, with docs and a cloud platform</td><td><a class="link-button" href="https://docs.projectdiscovery.io/">Open</a></td></tr>
+<tr><td>Nuclei Templates</td><td><span class="tag">Scanning</span> <span class="tag tag-neutral">Free</span></td><td>Community templates for CVEs, misconfigurations and exposures</td><td><a class="link-button" href="https://github.com/projectdiscovery/nuclei-templates">Open</a></td></tr>
+<tr><td>ffuf</td><td><span class="tag">Fuzzing</span> <span class="tag tag-neutral">Free</span></td><td>Fast web fuzzer for directories, parameters and virtual hosts</td><td><a class="link-button" href="https://github.com/ffuf/ffuf">Open</a></td></tr>
+<tr><td>feroxbuster</td><td><span class="tag">Discovery</span> <span class="tag tag-neutral">Free</span></td><td>Recursive content discovery written in Rust</td><td><a class="link-button" href="https://github.com/epi052/feroxbuster">Open</a></td></tr>
+<tr><td>BloodHound</td><td><span class="tag">Active Directory</span> <span class="tag tag-neutral">Freemium</span></td><td>SpecterOps docs for BloodHound Community Edition and Enterprise: AD and Entra ID attack paths</td><td><a class="link-button" href="https://bloodhound.specterops.io/">Open</a></td></tr>
+<tr><td>SharpHound</td><td><span class="tag">Collection</span> <span class="tag tag-neutral">Free</span></td><td>BloodHound data collector, now under the SpecterOps GitHub organization</td><td><a class="link-button" href="https://github.com/SpecterOps/SharpHound">Open</a></td></tr>
+<tr><td>Impacket</td><td><span class="tag">Active Directory</span> <span class="tag tag-neutral">Free</span></td><td>Python classes and scripts for SMB, MSRPC, Kerberos and LDAP (secretsdump, psexec and more)</td><td><a class="link-button" href="https://github.com/fortra/impacket">Open</a></td></tr>
+<tr><td>Responder</td><td><span class="tag">Poisoning</span> <span class="tag tag-neutral">Free</span></td><td>LLMNR, NBT-NS and mDNS poisoner with rogue authentication servers</td><td><a class="link-button" href="https://github.com/lgandx/Responder">Open</a></td></tr>
+<tr><td>Rubeus</td><td><span class="tag">Kerberos</span> <span class="tag tag-neutral">Free</span></td><td>GhostPack toolkit for Kerberos ticket requests, roasting and abuse</td><td><a class="link-button" href="https://github.com/GhostPack/Rubeus">Open</a></td></tr>
+<tr><td>Hashcat</td><td><span class="tag">Passwords</span> <span class="tag tag-neutral">Free</span></td><td>GPU password cracker; the site lists hash modes and example hashes</td><td><a class="link-button" href="https://hashcat.net/hashcat/">Open</a></td></tr>
+<tr><td>John the Ripper</td><td><span class="tag">Passwords</span> <span class="tag tag-neutral">Free</span></td><td>CPU and GPU password cracker with the *2john format converters</td><td><a class="link-button" href="https://www.openwall.com/john/">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="cloud-container-security">
+<h2 class="panel-title">Cloud and Container Security</h2>
+<p class="panel-lead">Assess cloud accounts, Kubernetes clusters and images, and practice cloud attacks.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>Hacking the Cloud</td><td><span class="tag">Knowledge base</span> <span class="tag tag-neutral">Free</span></td><td>Encyclopedia of AWS, Azure and GCP attack techniques</td><td><a class="link-button" href="https://hackingthe.cloud/">Open</a></td></tr>
+<tr><td>Prowler</td><td><span class="tag">Posture</span> <span class="tag tag-neutral">Free</span></td><td>Open source security checks for AWS, Azure, GCP, Kubernetes and Microsoft 365</td><td><a class="link-button" href="https://github.com/prowler-cloud/prowler">Open</a></td></tr>
+<tr><td>ScoutSuite</td><td><span class="tag">Posture</span> <span class="tag tag-neutral">Free</span></td><td>NCC Group multi cloud audit tool that builds an offline HTML report</td><td><a class="link-button" href="https://github.com/nccgroup/ScoutSuite">Open</a></td></tr>
+<tr><td>PMapper</td><td><span class="tag">AWS IAM</span> <span class="tag tag-neutral">Free</span></td><td>Graphs AWS IAM to find privilege escalation paths; updated rarely</td><td><a class="link-button" href="https://github.com/nccgroup/PMapper">Open</a></td></tr>
+<tr><td>Pacu</td><td><span class="tag">AWS</span> <span class="tag tag-neutral">Free</span></td><td>Rhino Security Labs AWS exploitation framework for authorized tests</td><td><a class="link-button" href="https://github.com/RhinoSecurityLabs/pacu">Open</a></td></tr>
+<tr><td>CloudGoat</td><td><span class="tag">AWS lab</span> <span class="tag tag-neutral">Free</span></td><td>Deploys deliberately vulnerable AWS scenarios into your own account</td><td><a class="link-button" href="https://github.com/RhinoSecurityLabs/cloudgoat">Open</a></td></tr>
+<tr><td>Trivy</td><td><span class="tag">Containers</span> <span class="tag tag-neutral">Free</span></td><td>Scans images, file systems, IaC and Kubernetes for CVEs, misconfigurations and secrets</td><td><a class="link-button" href="https://github.com/aquasecurity/trivy">Open</a></td></tr>
+<tr><td>kube-bench</td><td><span class="tag">Kubernetes</span> <span class="tag tag-neutral">Free</span></td><td>Checks a Kubernetes cluster against the CIS Kubernetes Benchmark</td><td><a class="link-button" href="https://github.com/aquasecurity/kube-bench">Open</a></td></tr>
+<tr><td>Kubernetes Security Docs</td><td><span class="tag">Kubernetes</span> <span class="tag tag-neutral">Free</span></td><td>Official guidance on RBAC, Pod Security Standards, secrets and network policies</td><td><a class="link-button" href="https://kubernetes.io/docs/concepts/security/">Open</a></td></tr>
+<tr><td>Datadog Security Labs</td><td><span class="tag">Research</span> <span class="tag tag-neutral">Free</span></td><td>Cloud attack research, threat reports and open source cloud tooling</td><td><a class="link-button" href="https://securitylabs.datadoghq.com/">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="dfir-blue-team">
+<h2 class="panel-title">DFIR and Blue Team Knowledge</h2>
+<p class="panel-lead">Monitoring platforms, forensic tools and references for investigations.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>The DFIR Report</td><td><span class="tag">Case studies</span> <span class="tag tag-neutral">Free</span></td><td>Detailed intrusion timelines from real attacks, with IOCs and detections</td><td><a class="link-button" href="https://thedfirreport.com/">Open</a></td></tr>
+<tr><td>Velociraptor</td><td><span class="tag">DFIR</span> <span class="tag tag-neutral">Free</span></td><td>Docs for endpoint collection and hunting with VQL artifacts</td><td><a class="link-button" href="https://docs.velociraptor.app/">Open</a></td></tr>
+<tr><td>Wazuh</td><td><span class="tag">SIEM</span> <span class="tag">XDR</span> <span class="tag tag-neutral">Free</span></td><td>Open source SIEM and XDR platform with agents, rules and docs</td><td><a class="link-button" href="https://wazuh.com/">Open</a></td></tr>
+<tr><td>Security Onion</td><td><span class="tag">NSM</span> <span class="tag tag-neutral">Free</span></td><td>Docs for the free platform for network monitoring, log management and hunting</td><td><a class="link-button" href="https://docs.securityonion.net/">Open</a></td></tr>
+<tr><td>Zeek</td><td><span class="tag">NSM</span> <span class="tag tag-neutral">Free</span></td><td>Docs for the network monitor that turns traffic into rich logs</td><td><a class="link-button" href="https://docs.zeek.org/en/current/">Open</a></td></tr>
+<tr><td>Suricata</td><td><span class="tag">IDS/IPS</span> <span class="tag tag-neutral">Free</span></td><td>Docs for the IDS and IPS engine, rule language and tuning</td><td><a class="link-button" href="https://docs.suricata.io/">Open</a></td></tr>
+<tr><td>Wireshark Docs</td><td><span class="tag">Packets</span> <span class="tag tag-neutral">Free</span></td><td>User guide and display filter reference for packet analysis</td><td><a class="link-button" href="https://www.wireshark.org/docs/">Open</a></td></tr>
+<tr><td>Malware Traffic Analysis</td><td><span class="tag">PCAP practice</span> <span class="tag tag-neutral">Free</span></td><td>Real infection PCAPs and exercises for traffic analysis</td><td><a class="link-button" href="https://www.malware-traffic-analysis.net/">Open</a></td></tr>
+<tr><td>Eric Zimmerman's Tools</td><td><span class="tag">Windows forensics</span> <span class="tag tag-neutral">Free</span></td><td>Free Windows forensic tools such as MFTECmd, EvtxECmd, PECmd and Timeline Explorer</td><td><a class="link-button" href="https://ericzimmerman.github.io/">Open</a></td></tr>
+<tr><td>Windows Security Log Encyclopedia</td><td><span class="tag">Event IDs</span> <span class="tag tag-neutral">Free</span></td><td>Meaning and fields of every Windows Security event ID, such as 4624 and 4688</td><td><a class="link-button" href="https://www.ultimatewindowssecurity.com/securitylog/encyclopedia/">Open</a></td></tr>
+<tr><td>SANS Posters and Cheat Sheets</td><td><span class="tag">Reference</span> <span class="tag tag-neutral">Free</span></td><td>Hunt Evil, Windows Forensic Analysis and other printable references</td><td><a class="link-button" href="https://www.sans.org/posters">Open</a></td></tr>
+<tr><td>AboutDFIR</td><td><span class="tag">Directory</span> <span class="tag tag-neutral">Free</span></td><td>Curated DFIR resources, challenges, books and tool lists</td><td><a class="link-button" href="https://aboutdfir.com/">Open</a></td></tr>
+<tr><td>CISA StopRansomware</td><td><span class="tag">Incident response</span> <span class="tag tag-neutral">Free</span></td><td>Ransomware guide, response checklist and #StopRansomware advisories</td><td><a class="link-button" href="https://www.cisa.gov/stopransomware">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="online-utilities">
+<h2 class="panel-title">Online Utilities</h2>
+<p class="panel-lead">Quick browser tools for decoding, explaining and checking things during work.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>CyberChef</td><td><span class="tag">Decoding</span> <span class="tag tag-neutral">Free</span></td><td>GCHQ tool for chaining encodings, hashes, compression and parsers; runs fully in the browser</td><td><a class="link-button" href="https://gchq.github.io/CyberChef/">Open</a></td></tr>
+<tr><td>explainshell</td><td><span class="tag">Shell</span> <span class="tag tag-neutral">Free</span></td><td>Paste a command line and see each flag explained from the man pages</td><td><a class="link-button" href="https://explainshell.com/">Open</a></td></tr>
+<tr><td>ShellCheck</td><td><span class="tag">Scripts</span> <span class="tag tag-neutral">Free</span></td><td>Finds bugs and unsafe quoting in shell scripts</td><td><a class="link-button" href="https://www.shellcheck.net/">Open</a></td></tr>
+<tr><td>regex101</td><td><span class="tag">Regex</span> <span class="tag tag-neutral">Free</span></td><td>Build and test regular expressions with live explanation</td><td><a class="link-button" href="https://regex101.com/">Open</a></td></tr>
+<tr><td>JWT.io</td><td><span class="tag">Tokens</span> <span class="tag tag-neutral">Free</span></td><td>Decode and inspect JSON Web Tokens; do not paste production tokens</td><td><a class="link-button" href="https://www.jwt.io/">Open</a></td></tr>
+<tr><td>CrackStation</td><td><span class="tag">Hashes</span> <span class="tag tag-neutral">Free</span></td><td>Looks up unsalted hashes in large precomputed tables</td><td><a class="link-button" href="https://crackstation.net/">Open</a></td></tr>
+<tr><td>Reverse Shell Generator</td><td><span class="tag">Shells</span> <span class="tag tag-neutral">Free</span></td><td>Builds reverse and bind shell one liners and listeners for labs</td><td><a class="link-button" href="https://www.revshells.com/">Open</a></td></tr>
+<tr><td>MxToolbox</td><td><span class="tag">Email</span> <span class="tag">DNS</span> <span class="tag tag-neutral">Freemium</span></td><td>MX, SPF, DKIM, DMARC and blocklist checks, plus an email header analyzer</td><td><a class="link-button" href="https://mxtoolbox.com/">Open</a></td></tr>
+<tr><td>SSL Labs Server Test</td><td><span class="tag">TLS</span> <span class="tag tag-neutral">Free</span></td><td>Grades a public server's TLS configuration and certificate chain</td><td><a class="link-button" href="https://www.ssllabs.com/ssltest/">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="bug-bounty">
+<h2 class="panel-title">Bug Bounty Platforms</h2>
+<p class="panel-lead">Programs that pay for valid findings. Read each program's scope and rules first.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>HackerOne</td><td><span class="tag">Platform</span> <span class="tag tag-neutral">Free</span></td><td>Largest bug bounty and disclosure platform; public Hacktivity reports are good learning</td><td><a class="link-button" href="https://www.hackerone.com/">Open</a></td></tr>
+<tr><td>Bugcrowd</td><td><span class="tag">Platform</span> <span class="tag tag-neutral">Free</span></td><td>Bug bounty, disclosure programs and the Vulnerability Rating Taxonomy</td><td><a class="link-button" href="https://www.bugcrowd.com/">Open</a></td></tr>
+<tr><td>Intigriti</td><td><span class="tag">Platform</span> <span class="tag tag-neutral">Free</span></td><td>European bug bounty platform with monthly XSS challenges</td><td><a class="link-button" href="https://www.intigriti.com/">Open</a></td></tr>
+<tr><td>YesWeHack</td><td><span class="tag">Platform</span> <span class="tag tag-neutral">Free</span></td><td>European platform with public and private programs and a training dojo</td><td><a class="link-button" href="https://www.yeswehack.com/">Open</a></td></tr>
+<tr><td>Immunefi</td><td><span class="tag">Web3</span> <span class="tag tag-neutral">Free</span></td><td>Bug bounties for smart contracts and blockchain projects</td><td><a class="link-button" href="https://immunefi.com/">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="news-research">
+<h2 class="panel-title">News and Research</h2>
+<p class="panel-lead">Daily news, vendor research and podcasts to stay current.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Site</th><th>Tags</th><th>What it is for</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>BleepingComputer</td><td><span class="tag">News</span> <span class="tag tag-neutral">Free</span></td><td>Fast coverage of breaches, ransomware and patches</td><td><a class="link-button" href="https://www.bleepingcomputer.com/">Open</a></td></tr>
+<tr><td>The Record</td><td><span class="tag">News</span> <span class="tag tag-neutral">Free</span></td><td>Recorded Future News: cybercrime, nation state activity and policy</td><td><a class="link-button" href="https://therecord.media/">Open</a></td></tr>
+<tr><td>SecurityWeek</td><td><span class="tag">News</span> <span class="tag tag-neutral">Free</span></td><td>Industry news, vulnerabilities and ICS security</td><td><a class="link-button" href="https://www.securityweek.com/">Open</a></td></tr>
+<tr><td>Krebs on Security</td><td><span class="tag">Investigations</span> <span class="tag tag-neutral">Free</span></td><td>Brian Krebs's in-depth reporting on cybercrime</td><td><a class="link-button" href="https://krebsonsecurity.com/">Open</a></td></tr>
+<tr><td>The Hacker News</td><td><span class="tag">News</span> <span class="tag tag-neutral">Free</span></td><td>Daily security headlines and vulnerability news</td><td><a class="link-button" href="https://thehackernews.com/">Open</a></td></tr>
+<tr><td>SANS Internet Storm Center</td><td><span class="tag">Diaries</span> <span class="tag tag-neutral">Free</span></td><td>Daily handler diaries and the StormCast podcast</td><td><a class="link-button" href="https://isc.sans.edu/">Open</a></td></tr>
+<tr><td>Risky Business</td><td><span class="tag">Podcast</span> <span class="tag tag-neutral">Free</span></td><td>Weekly security news podcast and newsletter</td><td><a class="link-button" href="https://risky.biz/">Open</a></td></tr>
+<tr><td>tl;dr sec</td><td><span class="tag">Newsletter</span> <span class="tag tag-neutral">Free</span></td><td>Weekly curated AppSec, cloud and AI security links</td><td><a class="link-button" href="https://tldrsec.com/">Open</a></td></tr>
+<tr><td>Google Project Zero</td><td><span class="tag">Research</span> <span class="tag tag-neutral">Free</span></td><td>Deep vulnerability research and root cause analyses</td><td><a class="link-button" href="https://projectzero.google/">Open</a></td></tr>
+<tr><td>Google Threat Intelligence Blog</td><td><span class="tag">Threat research</span> <span class="tag tag-neutral">Free</span></td><td>Mandiant and Google threat actor and campaign reports</td><td><a class="link-button" href="https://cloud.google.com/blog/topics/threat-intelligence">Open</a></td></tr>
+<tr><td>Unit 42</td><td><span class="tag">Threat research</span> <span class="tag tag-neutral">Free</span></td><td>Palo Alto Networks threat research and incident response reports</td><td><a class="link-button" href="https://unit42.paloaltonetworks.com/">Open</a></td></tr>
+<tr><td>Cisco Talos Blog</td><td><span class="tag">Threat research</span> <span class="tag tag-neutral">Free</span></td><td>Malware and threat actor research plus Patch Tuesday breakdowns</td><td><a class="link-button" href="https://blog.talosintelligence.com/">Open</a></td></tr>
+<tr><td>Microsoft Security Blog</td><td><span class="tag">Threat research</span> <span class="tag tag-neutral">Free</span></td><td>Microsoft Threat Intelligence reports and product security guidance</td><td><a class="link-button" href="https://www.microsoft.com/en-us/security/blog/">Open</a></td></tr>
+<tr><td>Securelist</td><td><span class="tag">Threat research</span> <span class="tag tag-neutral">Free</span></td><td>Kaspersky GReAT research on APTs and malware</td><td><a class="link-button" href="https://securelist.com/">Open</a></td></tr>
+<tr><td>ESET WeLiveSecurity</td><td><span class="tag">Threat research</span> <span class="tag tag-neutral">Free</span></td><td>ESET research on malware, APT groups and threat reports</td><td><a class="link-button" href="https://www.welivesecurity.com/en/">Open</a></td></tr>
+<tr><td>SpecterOps Blog</td><td><span class="tag">Offensive research</span> <span class="tag tag-neutral">Free</span></td><td>Active Directory, Entra ID and attack path research</td><td><a class="link-button" href="https://specterops.io/blog/">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

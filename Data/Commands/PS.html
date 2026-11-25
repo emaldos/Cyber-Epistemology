@@ -1,346 +1,673 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>PowerShell — Commands</title>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="32x32"/>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="192x192"/>
-<link rel="apple-touch-icon" href="../../Image/Logo.png"/>
-<meta name="theme-color" content="#111"/>
-<style>
-:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--line:rgba(255,255,255,.10);--blue:#2196f3}
-*{box-sizing:border-box}
-html,body{height:100%}
-html{scroll-behavior:smooth}
-body{margin:0;font:16px/1.55 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111}
-.bg{position:fixed;inset:0;background:url("../../Image/Logo.png") center/cover no-repeat;z-index:-2}
-.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.80) 100%);z-index:-1}
-.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
-.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
-.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
-.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
-.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
-.homepill span{font-weight:700;letter-spacing:.15px}
-.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
-.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);cursor:pointer;user-select:none;flex:0 0 auto}
-.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
-.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0;max-width:none}
-.tabs.overflow{overflow:auto}
-.tabs::-webkit-scrollbar{display:none}
-.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
-.tab:hover{opacity:1}
-.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
-.tab.active{color:var(--blue)}
-.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
-.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
-.shell .h,.shell .sub{text-align:center}
-.page{position:relative;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:96px 20px 28px}
-.shell{width:min(1200px,96%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
-.h{margin:0 0 6px;font-size:28px;font-weight:800;letter-spacing:.2px}
-.sub{margin:0 0 14px;color:var(--muted)}
-.refs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:8px 0 18px}
-.ref{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-weight:700}
-.ref img{width:16px;height:16px;object-fit:contain}
-.quicknav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 8px}
-.qbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-weight:700}
-.qbtn:hover{background:rgba(255,255,255,.1)}
-.morewrap{display:flex;gap:10px;justify-content:center;margin-top:10px}
-.more{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px dashed var(--ring);background:rgba(255,255,255,.04);color:var(--text);text-decoration:none;font-weight:700;cursor:pointer}
-.section{margin:22px 0 0;scroll-margin-top:90px}
-.section .title{margin:0 0 10px;font-size:20px;font-weight:800}
-.card{border:1px solid var(--tileBorder);background:var(--tile);border-radius:18px;box-shadow:0 12px 28px rgba(0,0,0,.3);overflow:hidden}
-.tablewrap{width:100%;overflow:auto}
-table{width:100%;border-collapse:separate;border-spacing:0}
-thead th{position:sticky;top:0;background:linear-gradient(180deg,rgba(33,150,243,.18),rgba(33,150,243,.14));backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid rgba(33,150,243,.35);text-align:left;padding:12px 14px;font-size:14px;color:var(--text);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
-tbody td{border-bottom:1px solid var(--line);padding:12px 14px;vertical-align:top}
-tbody tr:hover{background:rgba(255,255,255,.04)}
-th:first-child,td:first-child{border-left:none}
-th:last-child,td:last-child{border-right:none}
-th,td{word-break:break-word;overflow-wrap:anywhere}
-caption{caption-side:top;color:var(--text);padding:10px 4px 6px;font-weight:800}
-.kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.06);font:12px/1.2 ui-monospace,monospace}
-pre{margin:0;max-height:480px;overflow:auto;padding:18px;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;background:rgba(0,0,0,.35);border-bottom:1px solid var(--line);white-space:pre}
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PowerShell | Cyber Epistemology</title>
+<meta name="description" content="PowerShell 7 and Windows PowerShell 5.1 cheat sheet: files, pipeline, processes, event logs, networking, firewall, Defender, BitLocker, Active Directory, DNS, DHCP, Group Policy, Hyper-V, remoting, Microsoft Graph and triage.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../../Assets/Image/AppleTouchIcon.png">
+<link rel="stylesheet" href="../../Assets/Style/Site.css">
+<script src="../../Assets/Script/Site.js" defer></script>
 </head>
-<body>
-<div class="bg"></div>
-<nav class="topbar" id="topbar">
-  <div class="nav">
-    <a class="homepill" href="../../index.html" title="Home" aria-label="Home"><img src="../../Image/Home.png" alt="Home"/><span>Home</span></a>
-    <div class="tabswrap">
-      <button class="navbtn" id="leftbtn" aria-label="Prev"><span>&lt;</span></button>
-      <div class="tabs" id="tabs">
-        <a class="tab" href="../Commands.html"><img src="../../Image/Command.png" alt="Commands"/>Commands</a>
-        <a class="tab" href="Bash.html"><img src="../../Image/Bash.png" alt="Bash"/>Bash</a>
-        <a class="tab" href="CMD.html"><img src="../../Image/CMD.png" alt="CMD"/>CMD</a>
-        <a class="tab active" href="PS.html"><img src="../../Image/PS.png" alt="PowerShell"/>PowerShell</a>
-      </div>
-      <button class="navbtn" id="rightbtn" aria-label="Next"><span>&gt;</span></button>
-    </div>
-  </div>
-</nav>
-
-<div class="page">
-  <main class="shell">
-    <h1 class="h">PowerShell — Cheat Sheet</h1>
-    <p class="sub">Focused on Windows and Windows Server administration.</p>
-
-    <div class="refs">
-      <a class="ref" href="https://learn.microsoft.com/powershell/" target="_blank" rel="noopener"><img src="../../Image/PS.png" alt="PS"/>PowerShell Docs</a>
-      <a class="ref" href="https://learn.microsoft.com/windows-server/" target="_blank" rel="noopener"><img src="../../Image/WinServer.png" alt="WS"/>Windows Server Docs</a>
-      <a class="ref" href="https://learn.microsoft.com/powershell/module/" target="_blank" rel="noopener"><img src="../../Image/PS.png" alt="PSM"/>Module Browser</a>
-      <a class="ref" href="https://learn.microsoft.com/windows/package-manager/winget/" target="_blank" rel="noopener"><img src="../../Image/Win11.png" alt="Win"/>WinGet</a>
-    </div>
-
-    <div class="quicknav" id="quicknav">
-      <a class="qbtn" href="#basics">Basics</a>
-      <a class="qbtn" href="#files">Files & Text</a>
-      <a class="qbtn" href="#objects">Pipelines & Objects</a>
-      <a class="qbtn" href="#process">Processes & Services</a>
-      <a class="qbtn" href="#network">Networking</a>
-      <a class="qbtn" href="#package">Packages</a>
-      <a class="qbtn extra" href="#servermgr">Server Manager</a>
-      <a class="qbtn extra" href="#ad">Active Directory</a>
-      <a class="qbtn extra" href="#dns">DNS Server</a>
-      <a class="qbtn extra" href="#gpo">Group Policy</a>
-      <a class="qbtn extra" href="#hyperv">Hyper-V</a>
-      <a class="qbtn extra" href="#storage">Storage</a>
-      <a class="qbtn extra" href="#print">Print</a>
-      <a class="qbtn extra" href="#security">Security</a>
-      <a class="qbtn extra" href="#remoting">Remoting</a>
-      <a class="qbtn extra" href="#scheduled">Scheduled Tasks</a>
-    </div>
-    <div class="morewrap"><button class="more" id="morebtn">..show more</button></div>
-
-    <section class="section" id="basics">
-      <h2 class="title">Basics</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">Get-Help</span></td><td>Show help; update help</td><td><span class="kbd">Update-Help; Get-Help Get-Process -Full</span></td></tr>
-          <tr><td><span class="kbd">Get-Command</span></td><td>Discover commands</td><td><span class="kbd">Get-Command -Noun Service</span></td></tr>
-          <tr><td><span class="kbd">Get-Alias</span></td><td>List aliases</td><td><span class="kbd">Get-Alias ls</span></td></tr>
-          <tr><td><span class="kbd">$PSVersionTable</span></td><td>Engine version</td><td><span class="kbd">$PSVersionTable.PSVersion</span></td></tr>
-          <tr><td><span class="kbd">Set-ExecutionPolicy</span></td><td>Script policy</td><td><span class="kbd">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="files">
-      <h2 class="title">Files & Text</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">Get-ChildItem</span></td><td>List directory</td><td><span class="kbd">Get-ChildItem -Force -Recurse</span></td></tr>
-          <tr><td><span class="kbd">Set-Location</span></td><td>Change directory</td><td><span class="kbd">Set-Location C:\Windows</span></td></tr>
-          <tr><td><span class="kbd">Copy-Item</span></td><td>Copy</td><td><span class="kbd">Copy-Item .\a.txt .\b.txt</span></td></tr>
-          <tr><td><span class="kbd">Move-Item</span></td><td>Move/rename</td><td><span class="kbd">Move-Item a.txt D:\tmp\</span></td></tr>
-          <tr><td><span class="kbd">Remove-Item</span></td><td>Delete</td><td><span class="kbd">Remove-Item .\logs\* -Recurse -Force</span></td></tr>
-          <tr><td><span class="kbd">Get-Content</span></td><td>Read text</td><td><span class="kbd">Get-Content .\app.log -Tail 50 -Wait</span></td></tr>
-          <tr><td><span class="kbd">Set-Content / Add-Content</span></td><td>Write/append</td><td><span class="kbd">'ok' | Set-Content out.txt</span></td></tr>
-          <tr><td><span class="kbd">Select-String</span></td><td>Search text (regex)</td><td><span class="kbd">Select-String -Path *.log -Pattern 'error|fail' -AllMatches</span></td></tr>
-          <tr><td><span class="kbd">Compress-Archive</span></td><td>Zip</td><td><span class="kbd">Compress-Archive .\site .\site.zip</span></td></tr>
-          <tr><td><span class="kbd">Expand-Archive</span></td><td>Unzip</td><td><span class="kbd">Expand-Archive .\site.zip -DestinationPath .\out</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="objects">
-      <h2 class="title">Pipelines & Objects</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Syntax</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">|</span></td><td>Pipe objects</td><td><span class="kbd">Get-Process | Where-Object CPU -gt 100 | Sort-Object CPU -Desc</span></td></tr>
-          <tr><td><span class="kbd">Select-Object</span></td><td>Pick properties</td><td><span class="kbd">Get-Service | Select-Object Name,Status</span></td></tr>
-          <tr><td><span class="kbd">Where-Object</span></td><td>Filter</td><td><span class="kbd">Get-LocalUser | Where-Object Enabled</span></td></tr>
-          <tr><td><span class="kbd">ForEach-Object</span></td><td>Loop</td><td><span class="kbd">Get-Item *.txt | ForEach-Object { $_.Name }</span></td></tr>
-          <tr><td><span class="kbd">Export-Csv / ConvertTo-Json</span></td><td>Export</td><td><span class="kbd">Get-Process | Export-Csv procs.csv -NoTypeInformation</span></td></tr>
-          <tr><td><span class="kbd">Measure-Object</span></td><td>Stats</td><td><span class="kbd">Get-Content a.txt | Measure-Object -Line</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="process">
-      <h2 class="title">Processes & Services</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">Get-Process / Stop-Process</span></td><td>List/kill process</td><td><span class="kbd">Stop-Process -Name notepad -Force</span></td></tr>
-          <tr><td><span class="kbd">Get-Service</span></td><td>List services</td><td><span class="kbd">Get-Service | Where Status -ne 'Running'</span></td></tr>
-          <tr><td><span class="kbd">Start/Stop/Restart-Service</span></td><td>Control service</td><td><span class="kbd">Restart-Service -Name dnscache</span></td></tr>
-          <tr><td><span class="kbd">Get-EventLog</span></td><td>Legacy event logs</td><td><span class="kbd">Get-EventLog -LogName System -Newest 50</span></td></tr>
-          <tr><td><span class="kbd">Get-WinEvent</span></td><td>New event logs</td><td><span class="kbd">Get-WinEvent -LogName Security -MaxEvents 50</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="network">
-      <h2 class="title">Networking</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">Get-NetIPConfiguration</span></td><td>IPs/DNS</td><td><span class="kbd">Get-NetIPConfiguration</span></td></tr>
-          <tr><td><span class="kbd">Test-NetConnection</span></td><td>Ping/port test</td><td><span class="kbd">Test-NetConnection 8.8.8.8 -Port 53</span></td></tr>
-          <tr><td><span class="kbd">Get-NetTCPConnection</span></td><td>Sockets</td><td><span class="kbd">Get-NetTCPConnection | Where State -eq 'Listen'</span></td></tr>
-          <tr><td><span class="kbd">Get-DnsClientCache</span></td><td>DNS cache</td><td><span class="kbd">Get-DnsClientCache | Select-Object -First 10</span></td></tr>
-          <tr><td><span class="kbd">Get-NetAdapter</span></td><td>NICs</td><td><span class="kbd">Get-NetAdapter | Format-Table -Auto</span></td></tr>
-          <tr><td><span class="kbd">New-NetFirewallRule</span></td><td>Firewall rule</td><td><span class="kbd">New-NetFirewallRule -DisplayName Web -Dir Inbound -Action Allow -Protocol TCP -LocalPort 80</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="package">
-      <h2 class="title">Packages</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">Get-Package / Uninstall-Package</span></td><td>List/remove packages</td><td><span class="kbd">Get-Package | Select Name,Version</span></td></tr>
-          <tr><td><span class="kbd">winget</span></td><td>Install apps (Win 10/11)</td><td><span class="kbd">winget install --id=Microsoft.VisualStudioCode</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="servermgr">
-      <h2 class="title">Windows Server — ServerManager</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Cmdlet (ServerManager)</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">Get-WindowsFeature</span></td><td>List roles/features</td><td><span class="kbd">Get-WindowsFeature | Where InstallState -eq Installed</span></td></tr>
-          <tr><td><span class="kbd">Install-WindowsFeature</span></td><td>Install role/feature</td><td><span class="kbd">Install-WindowsFeature -Name Web-Server -IncludeManagementTools</span></td></tr>
-          <tr><td><span class="kbd">Uninstall-WindowsFeature</span></td><td>Remove feature</td><td><span class="kbd">Uninstall-WindowsFeature -Name Web-Server</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="ad">
-      <h2 class="title">Windows Server — Active Directory</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Cmdlet (ActiveDirectory)</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">Get-ADUser</span></td><td>Query users</td><td><span class="kbd">Get-ADUser -Filter "Enabled -eq 'True'" -Properties LastLogonDate</span></td></tr>
-          <tr><td><span class="kbd">New-ADUser</span></td><td>Create user</td><td><span class="kbd">New-ADUser -Name "Ops One" -SamAccountName ops1 -AccountPassword (Read-Host -AsSecureString) -Enabled $true</span></td></tr>
-          <tr><td><span class="kbd">Set-ADUser</span></td><td>Modify user</td><td><span class="kbd">Set-ADUser ops1 -Title "SysAdmin"</span></td></tr>
-          <tr><td><span class="kbd">Get-ADGroup / Add-ADGroupMember</span></td><td>Groups</td><td><span class="kbd">Add-ADGroupMember "Domain Admins" ops1</span></td></tr>
-          <tr><td><span class="kbd">Get-ADComputer</span></td><td>Computers</td><td><span class="kbd">Get-ADComputer -Filter * -SearchBase "OU=Servers,DC=corp,DC=local"</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="dns">
-      <h2 class="title">Windows Server — DNS</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Cmdlet (DnsServer)</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">Get-DnsServerResourceRecord</span></td><td>Query records</td><td><span class="kbd">Get-DnsServerResourceRecord -ZoneName corp.local -RRType A</span></td></tr>
-          <tr><td><span class="kbd">Add-DnsServerResourceRecordA</span></td><td>Add A record</td><td><span class="kbd">Add-DnsServerResourceRecordA -ZoneName corp.local -Name app -IPv4Address 10.0.1.50</span></td></tr>
-          <tr><td><span class="kbd">Remove-DnsServerResourceRecord</span></td><td>Remove record</td><td><span class="kbd">Remove-DnsServerResourceRecord -ZoneName corp.local -Name oldapp -RRType A -Force</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="gpo">
-      <h2 class="title">Windows Server — Group Policy</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Cmdlet (GroupPolicy)</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">Get-GPO / New-GPO</span></td><td>View/create GPO</td><td><span class="kbd">New-GPO -Name "Hardening-Workstations"</span></td></tr>
-          <tr><td><span class="kbd">New-GPLink</span></td><td>Link GPO to OU</td><td><span class="kbd">New-GPLink -Name "Hardening-Workstations" -Target "OU=Workstations,DC=corp,DC=local" -Enforced Yes</span></td></tr>
-          <tr><td><span class="kbd">Backup-GPO / Restore-GPO</span></td><td>Backup/restore</td><td><span class="kbd">Backup-GPO -Name "Hardening-Workstations" -Path D:\GPOBackups</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="hyperv">
-      <h2 class="title">Windows Server — Hyper-V</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Cmdlet (Hyper-V)</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">Get-VM</span></td><td>List VMs</td><td><span class="kbd">Get-VM | Select Name,State,CPUUsage</span></td></tr>
-          <tr><td><span class="kbd">Start-VM / Stop-VM</span></td><td>Control VM</td><td><span class="kbd">Stop-VM -Name LAB-DC -Force</span></td></tr>
-          <tr><td><span class="kbd">Checkpoint-VM</span></td><td>Snapshot</td><td><span class="kbd">Checkpoint-VM -Name LAB-APP -SnapshotName PreUpdate</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="storage">
-      <h2 class="title">Windows Server — Storage</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Cmdlet (Storage/FS)</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">Get-Disk / Initialize-Disk</span></td><td>Disks</td><td><span class="kbd">Get-Disk; Initialize-Disk -Number 2 -PartitionStyle GPT</span></td></tr>
-          <tr><td><span class="kbd">New-Partition / Format-Volume</span></td><td>Partitions/FS</td><td><span class="kbd">New-Partition -DiskNumber 2 -UseMaximumSize -DriveLetter F | Format-Volume -FileSystem NTFS -NewFileSystemLabel Data</span></td></tr>
-          <tr><td><span class="kbd">Get-SmbShare / New-SmbShare</span></td><td>SMB shares</td><td><span class="kbd">New-SmbShare -Name Data -Path F:\Data -FullAccess "Domain Admins"</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="print">
-      <h2 class="title">Windows Server — Print</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Cmdlet (PrintManagement)</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">Get-Printer</span></td><td>List printers</td><td><span class="kbd">Get-Printer -ComputerName PRN-SRV</span></td></tr>
-          <tr><td><span class="kbd">Add-Printer</span></td><td>Add printer</td><td><span class="kbd">Add-Printer -Name HP01 -DriverName "HP Universal" -PortName "IP_10.0.2.50"</span></td></tr>
-          <tr><td><span class="kbd">Remove-Printer</span></td><td>Remove printer</td><td><span class="kbd">Remove-Printer -Name HP01</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="security">
-      <h2 class="title">Security & Certificates</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Cmdlet</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">Get-LocalUser / Get-LocalGroup</span></td><td>Local accounts</td><td><span class="kbd">Get-LocalGroupMember Administrators</span></td></tr>
-          <tr><td><span class="kbd">Get-FileHash</span></td><td>File hash</td><td><span class="kbd">Get-FileHash .\installer.msi -Algorithm SHA256</span></td></tr>
-          <tr><td><span class="kbd">Get-ChildItem Cert:</span></td><td>Cert store</td><td><span class="kbd">Get-ChildItem Cert:\LocalMachine\My</span></td></tr>
-          <tr><td><span class="kbd">New-SelfSignedCertificate</span></td><td>Create cert</td><td><span class="kbd">New-SelfSignedCertificate -DnsName app.local -CertStoreLocation Cert:\LocalMachine\My</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="remoting">
-      <h2 class="title">Remoting</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">Enable-PSRemoting</span></td><td>Enable WinRM</td><td><span class="kbd">Enable-PSRemoting -Force</span></td></tr>
-          <tr><td><span class="kbd">Enter-PSSession / Invoke-Command</span></td><td>Interactive/remote run</td><td><span class="kbd">Invoke-Command -ComputerName srv1 -ScriptBlock { Get-Service }</span></td></tr>
-          <tr><td><span class="kbd">New-PSSession</span></td><td>Create session</td><td><span class="kbd">$s=New-PSSession srv1; Invoke-Command -Session $s -ScriptBlock { hostname }</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="scheduled">
-      <h2 class="title">Scheduled Tasks</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Cmdlet (ScheduledTasks)</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">Get-ScheduledTask</span></td><td>List tasks</td><td><span class="kbd">Get-ScheduledTask | Where State -eq 'Ready'</span></td></tr>
-          <tr><td><span class="kbd">Register-ScheduledTask</span></td><td>Create task</td><td><span class="kbd">$a=New-ScheduledTaskAction -Execute 'powershell.exe' -Argument '-File C:\job.ps1'; $t=New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(5); Register-ScheduledTask -TaskName RunJob -Action $a -Trigger $t</span></td></tr>
-          <tr><td><span class="kbd">Unregister-ScheduledTask</span></td><td>Delete task</td><td><span class="kbd">Unregister-ScheduledTask -TaskName RunJob -Confirm:$false</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-  </main>
+<body class="is-content-page" data-root="../../" data-section="commands">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><a href="../Commands.html">Commands</a><span class="breadcrumb-separator">/</span><span>PowerShell</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../../Assets/Icon/PowerShell.png" alt="">
+<div>
+<p class="hero-eyebrow">Commands</p>
+<h1 class="hero-title">PowerShell Cheat Sheet</h1>
 </div>
-
-<script>
-let lastY=scrollY,hidden=false;
-addEventListener('scroll',()=>{const y=scrollY,tb=document.getElementById('topbar');if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
-const p=location.pathname.replace(/\/+$/,'');document.querySelectorAll('.tabs .tab').forEach(a=>{const h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');if(p.endsWith(h))a.classList.add('active')});
-const tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
-function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
-function updateArrows(){const o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;tabs.classList.toggle('overflow',o);leftbtn.style.display=o&&s>0?'inline-flex':'none';rightbtn.style.display=o&&s<max-1?'inline-flex':'none'}
-function scrollByStep(d){const step=Math.max(120,Math.floor(tabs.clientWidth*.6));tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})}
-leftbtn.addEventListener('click',()=>scrollByStep(-1));rightbtn.addEventListener('click',()=>scrollByStep(1));
-tabs.addEventListener('scroll',updateArrows,{passive:true});new ResizeObserver(updateArrows).observe(tabs);
-addEventListener('resize',updateArrows);
-tabs.addEventListener('wheel',e=>{if(!hasOverflow())return;const dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}});
-updateArrows();
-
-const morebtn=document.getElementById('morebtn');const extras=[...document.querySelectorAll('.quicknav .extra')];
-function setCollapsed(c){extras.forEach(el=>{el.style.display=c?'none':''});morebtn.textContent=c?'..show more':'..show less'}
-setCollapsed(true);
-morebtn.addEventListener('click',()=>{const collapsed=extras[0].style.display==='none';setCollapsed(!collapsed)});
-</script>
-</body></html>
+</div>
+<p class="hero-lead">Object based shell for Windows, Windows Server, Active Directory and Microsoft 365 administration. Examples target PowerShell 7 unless a row is tagged 5.1 only.</p>
+<div class="hero-meta"><span class="badge">290 commands</span><span class="badge">PowerShell 7.7 and 5.1</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: Get-WinEvent" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<nav class="sub-nav" aria-label="Shells">
+<a class="sub-nav-link" href="../Commands.html"><img src="../../Assets/Icon/Terminal.png" alt="">All shells</a>
+<a class="sub-nav-link" href="Bash.html"><img src="../../Assets/Icon/Bash.png" alt="">Bash</a>
+<a class="sub-nav-link is-active" href="PS.html" aria-current="page"><img src="../../Assets/Icon/PowerShell.png" alt="">PowerShell</a>
+<a class="sub-nav-link" href="CMD.html"><img src="../../Assets/Icon/CommandPrompt.png" alt="">CMD</a>
+</nav>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="versions">
+<h2 class="panel-title">PowerShell 7 or Windows PowerShell 5.1</h2>
+<p class="panel-lead">Two products share the name. Know which one you are running before you copy a command.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term">Current release</span><span class="definition-text">PowerShell 7.7 (Standard Term Support, November 2026, .NET 11)</span></div>
+<div class="definition"><span class="definition-term">Long Term Support</span><span class="definition-text">PowerShell 7.6 LTS (.NET 10), supported until November 2028</span></div>
+<div class="definition"><span class="definition-term">Out of support</span><span class="definition-text">PowerShell 7.4 and 7.5. Upgrade to 7.6 LTS or 7.7</span></div>
+<div class="definition"><span class="definition-term">Built into Windows</span><span class="definition-text">Windows PowerShell 5.1 (<code>powershell.exe</code>), maintained but gets no new features</span></div>
+<div class="definition"><span class="definition-term">Executable</span><span class="definition-text"><code>pwsh.exe</code> for 7.x, <code>powershell.exe</code> for 5.1. Both can be installed side by side</span></div>
+<div class="definition"><span class="definition-term">Platforms</span><span class="definition-text">7.x runs on Windows, Linux and macOS. 5.1 is Windows only</span></div>
+</div>
+<div class="callout callout-warning"><p><strong>5.1 only:</strong> <code>Get-EventLog</code>, <code>Clear-EventLog</code>, <code>Write-EventLog</code>, <code>Get-WmiObject</code> and the other <code>*-Wmi*</code> cmdlets do not exist in PowerShell 7. Use <code>Get-WinEvent</code> and <code>Get-CimInstance</code>, which work in both. In 5.1, <code>curl</code> and <code>wget</code> are aliases for <code>Invoke-WebRequest</code>; in 7 they run the real <code>curl.exe</code>.</p></div>
+<div class="callout"><p><strong>Compatibility:</strong> some Windows modules (for example ServerManager and GroupPolicy) load in PowerShell 7 through a hidden 5.1 session. They work, but results come back as deserialized objects without methods. If a module misbehaves in 7, run it in <code>powershell.exe</code>.</p></div>
+</section>
+<section class="panel" id="basics-and-help">
+<h2 class="panel-title">Basics and Help</h2>
+<p class="panel-lead">Discover commands, read help and check the engine before anything else.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-Help</code></td><td>Full help with examples for a cmdlet</td><td><code class="copy">Get-Help Get-Process -Examples</code></td></tr>
+<tr><td><code>Update-Help</code></td><td>Download local help files (run elevated for all users)</td><td><code class="copy">Update-Help -UICulture en-US -ErrorAction SilentlyContinue</code></td></tr>
+<tr><td><code>Get-Help about_*</code></td><td>Read concept topics such as operators and splatting</td><td><code class="copy">Get-Help about_Comparison_Operators</code></td></tr>
+<tr><td><code>Get-Command</code></td><td>Find commands by verb, noun or module</td><td><code class="copy">Get-Command -Noun *Firewall* -Module NetSecurity</code></td></tr>
+<tr><td><code>Get-Member</code></td><td>Show the properties and methods of an object</td><td><code class="copy">Get-Service | Get-Member -MemberType Property</code></td></tr>
+<tr><td><code>Get-Alias</code></td><td>Resolve an alias to its cmdlet</td><td><code class="copy">Get-Alias -Definition Get-ChildItem</code></td></tr>
+<tr><td><code>$PSVersionTable</code></td><td>Engine version and edition (Core or Desktop)</td><td><code class="copy">$PSVersionTable.PSVersion; $PSVersionTable.PSEdition</code></td></tr>
+<tr><td><code>Get-ExecutionPolicy</code></td><td>Show the script policy at every scope</td><td><code class="copy">Get-ExecutionPolicy -List</code></td></tr>
+<tr><td><code>Set-ExecutionPolicy</code></td><td>Allow local scripts for your account (not a security boundary)</td><td><code class="copy">Set-ExecutionPolicy RemoteSigned -Scope CurrentUser</code></td></tr>
+<tr><td><code>Unblock-File</code></td><td>Remove the downloaded from internet mark on a script you trust</td><td><code class="copy">Unblock-File .\Deploy.ps1</code></td></tr>
+<tr><td><code>$PROFILE</code></td><td>Path of your profile script, loaded at start</td><td><code class="copy">if (-not (Test-Path $PROFILE)) { New-Item $PROFILE -Force }; notepad $PROFILE</code></td></tr>
+<tr><td><code>Get-History</code></td><td>Commands from this session</td><td><code class="copy">Get-History | Select-Object -Last 20</code></td></tr>
+<tr><td><code>Start-Transcript</code></td><td>Record everything typed and printed to a file</td><td><code class="copy">Start-Transcript -Path C:\Temp\session.txt -Append</code></td></tr>
+<tr><td><code>Clear-Host</code></td><td>Clear the screen (alias <code>cls</code>)</td><td><code class="copy">Clear-Host</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="files-and-text">
+<h2 class="panel-title">Files and Text</h2>
+<p class="panel-lead">Navigate, copy, read, write and search files through the FileSystem provider.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-ChildItem</code></td><td>List a folder, including hidden items (alias <code>ls</code>, <code>dir</code>)</td><td><code class="copy">Get-ChildItem -Force</code></td></tr>
+<tr><td><code>Get-ChildItem -Recurse</code></td><td>Find files by name anywhere below a folder</td><td><code class="copy">Get-ChildItem C:\ -Recurse -Filter *.kdbx -File -ErrorAction SilentlyContinue</code></td></tr>
+<tr><td><code>Set-Location</code></td><td>Change directory (alias <code>cd</code>)</td><td><code class="copy">Set-Location C:\Windows\System32</code></td></tr>
+<tr><td><code>Push-Location</code></td><td>Change directory and remember where you were (<code>Pop-Location</code> returns)</td><td><code class="copy">Push-Location C:\Logs; Get-ChildItem; Pop-Location</code></td></tr>
+<tr><td><code>New-Item</code></td><td>Create a file or folder</td><td><code class="copy">New-Item -ItemType Directory -Path C:\Lab\Logs -Force</code></td></tr>
+<tr><td><code>Copy-Item</code></td><td>Copy files or folders</td><td><code class="copy">Copy-Item .\site -Destination D:\Backup\site -Recurse</code></td></tr>
+<tr><td><code>Move-Item</code></td><td>Move a file or folder</td><td><code class="copy">Move-Item .\report.pdf D:\Archive\</code></td></tr>
+<tr><td><code>Rename-Item</code></td><td>Rename a file or folder</td><td><code class="copy">Rename-Item .\old.log old.log.bak</code></td></tr>
+<tr><td><code>Remove-Item</code></td><td>Delete files or folders, preview first with -WhatIf</td><td><code class="copy">Remove-Item .\build -Recurse -Force -WhatIf</code></td></tr>
+<tr><td><code>Test-Path</code></td><td>Check whether a path exists</td><td><code class="copy">Test-Path C:\Windows\System32\drivers\etc\hosts</code></td></tr>
+<tr><td><code>Get-Content</code></td><td>Read a file, follow it live like tail -f</td><td><code class="copy">Get-Content .\app.log -Tail 50 -Wait</code></td></tr>
+<tr><td><code>Get-Content -Raw</code></td><td>Read a whole file as one string</td><td><code class="copy">$config = Get-Content .\appsettings.json -Raw | ConvertFrom-Json</code></td></tr>
+<tr><td><code>Set-Content</code></td><td>Write text to a file, replacing it (<code>Add-Content</code> appends)</td><td><code class="copy">Set-Content -Path .\status.txt -Value "ok" -Encoding utf8</code></td></tr>
+<tr><td><code>Out-File</code></td><td>Send formatted output to a file</td><td><code class="copy">Get-Process | Out-File .\processes.txt -Encoding utf8</code></td></tr>
+<tr><td><code>Select-String</code></td><td>Search text with regex, like grep</td><td><code class="copy">Select-String -Path .\*.log -Pattern 'error|fail' -CaseSensitive:$false</code></td></tr>
+<tr><td><code>Select-String -Context</code></td><td>Show lines around each match</td><td><code class="copy">Select-String -Path .\app.log -Pattern 'Exception' -Context 2,5</code></td></tr>
+<tr><td><code>Compare-Object</code></td><td>Diff two files or two lists</td><td><code class="copy">Compare-Object (Get-Content .\before.txt) (Get-Content .\after.txt)</code></td></tr>
+<tr><td><code>Get-FileHash</code></td><td>Hash a file (SHA256 by default)</td><td><code class="copy">Get-FileHash .\installer.msi -Algorithm SHA256</code></td></tr>
+<tr><td><code>Compress-Archive</code></td><td>Create a zip file</td><td><code class="copy">Compress-Archive -Path .\site\* -DestinationPath .\site.zip -Force</code></td></tr>
+<tr><td><code>Expand-Archive</code></td><td>Extract a zip file</td><td><code class="copy">Expand-Archive .\site.zip -DestinationPath .\site-out</code></td></tr>
+<tr><td><code>Get-Acl</code></td><td>Show NTFS permissions of a path</td><td><code class="copy">(Get-Acl D:\Shares\Finance).Access | Format-Table IdentityReference,FileSystemRights,AccessControlType</code></td></tr>
+<tr><td><code>Get-Item -Stream</code></td><td>List alternate data streams, such as the Zone.Identifier mark of the web</td><td><code class="copy">Get-Item .\download.exe -Stream *</code></td></tr>
+<tr><td><code>Join-Path</code></td><td>Build paths safely</td><td><code class="copy">Join-Path $env:ProgramData 'Vendor\config.xml'</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="pipeline-and-objects">
+<h2 class="panel-title">Pipeline and Objects</h2>
+<p class="panel-lead">PowerShell passes objects, not text. Filter early, select what you need, format last.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>|</code></td><td>Pass objects from one command to the next</td><td><code class="copy">Get-Process | Where-Object CPU -gt 100 | Sort-Object CPU -Descending</code></td></tr>
+<tr><td><code>Where-Object</code></td><td>Filter objects (alias <code>?</code>)</td><td><code class="copy">Get-Service | Where-Object { $_.Status -eq 'Stopped' -and $_.StartType -eq 'Automatic' }</code></td></tr>
+<tr><td><code>Select-Object</code></td><td>Pick properties, first or last items</td><td><code class="copy">Get-Process | Select-Object -First 5 Name,Id,WorkingSet64</code></td></tr>
+<tr><td><code>Select-Object @{}</code></td><td>Add a calculated property</td><td><code class="copy">Get-ChildItem -File | Select-Object Name,@{Name='SizeMB';Expression={[math]::Round($_.Length/1MB,2)}}</code></td></tr>
+<tr><td><code>Sort-Object</code></td><td>Sort by one or more properties</td><td><code class="copy">Get-ChildItem -File -Recurse | Sort-Object Length -Descending | Select-Object -First 10 FullName,Length</code></td></tr>
+<tr><td><code>Group-Object</code></td><td>Count objects by a property</td><td><code class="copy">Get-Service | Group-Object Status -NoElement</code></td></tr>
+<tr><td><code>Measure-Object</code></td><td>Count, sum, average, lines and words</td><td><code class="copy">Get-ChildItem -File | Measure-Object Length -Sum -Average</code></td></tr>
+<tr><td><code>ForEach-Object</code></td><td>Run a script block for each object (alias <code>%</code>)</td><td><code class="copy">Get-ChildItem *.txt | ForEach-Object { $_.Name.ToUpper() }</code></td></tr>
+<tr><td><code>ForEach-Object -Parallel</code></td><td><span class="tag">7.x</span> Run iterations in parallel runspaces</td><td><code class="copy">1..20 | ForEach-Object -Parallel { Test-Connection "10.0.0.$_" -Count 1 -Quiet } -ThrottleLimit 10</code></td></tr>
+<tr><td><code>Format-Table</code></td><td>Display as a table. Use only at the end of a pipeline</td><td><code class="copy">Get-Service | Format-Table Name,Status,StartType -AutoSize</code></td></tr>
+<tr><td><code>Format-List</code></td><td>Show every property of an object</td><td><code class="copy">Get-Process -Id $PID | Format-List *</code></td></tr>
+<tr><td><code>Out-GridView</code></td><td>Interactive sortable window (Windows only)</td><td><code class="copy">Get-Process | Out-GridView -PassThru | Stop-Process -WhatIf</code></td></tr>
+<tr><td><code>Tee-Object</code></td><td>Save to a file and keep passing down the pipeline</td><td><code class="copy">Get-Service | Tee-Object -FilePath .\services.txt | Where-Object Status -eq Running</code></td></tr>
+<tr><td><code>Export-Csv</code></td><td>Save objects as CSV (7.x omits the type header by default)</td><td><code class="copy">Get-Process | Select-Object Name,Id,CPU | Export-Csv .\processes.csv -NoTypeInformation</code></td></tr>
+<tr><td><code>Import-Csv</code></td><td>Read CSV rows as objects</td><td><code class="copy">Import-Csv .\users.csv | ForEach-Object { $_.SamAccountName }</code></td></tr>
+<tr><td><code>ConvertTo-Json</code></td><td>Serialize objects to JSON (<code>ConvertFrom-Json</code> reverses)</td><td><code class="copy">Get-Service WinRM | Select-Object Name,Status | ConvertTo-Json</code></td></tr>
+<tr><td><code>Invoke-RestMethod</code></td><td>Call a REST API and get objects back</td><td><code class="copy">Invoke-RestMethod https://api.github.com/repos/PowerShell/PowerShell/releases/latest | Select-Object tag_name,published_at</code></td></tr>
+<tr><td><code>&amp;&amp;</code> and <code>||</code></td><td><span class="tag">7.x</span> Run the next command only on success or on failure</td><td><code class="copy">git pull &amp;&amp; .\Build.ps1</code></td></tr>
+<tr><td><code>??</code> and <code>? :</code></td><td><span class="tag">7.x</span> Null coalescing and ternary operators</td><td><code class="copy">$port = $env:APP_PORT ?? 8080; (Test-Path .\lock) ? 'busy' : 'free'</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="processes-and-services">
+<h2 class="panel-title">Processes and Services</h2>
+<p class="panel-lead">Inspect, start and stop processes and Windows services.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-Process</code></td><td>List processes with CPU and memory</td><td><code class="copy">Get-Process | Sort-Object WorkingSet64 -Descending | Select-Object -First 10</code></td></tr>
+<tr><td><code>Get-Process -IncludeUserName</code></td><td>Show the owner of each process (needs elevation)</td><td><code class="copy">Get-Process -IncludeUserName | Select-Object Name,Id,UserName</code></td></tr>
+<tr><td><code>Stop-Process</code></td><td>Kill a process by name or ID</td><td><code class="copy">Stop-Process -Name notepad -Force</code></td></tr>
+<tr><td><code>Start-Process</code></td><td>Start a program, optionally elevated</td><td><code class="copy">Start-Process pwsh -Verb RunAs</code></td></tr>
+<tr><td><code>Wait-Process</code></td><td>Wait until a process exits</td><td><code class="copy">Start-Process msiexec -ArgumentList '/i app.msi /qn' -PassThru | Wait-Process</code></td></tr>
+<tr><td><code>Get-Service</code></td><td>List services. 7.x adds StartType, UserName and BinaryPathName</td><td><code class="copy">Get-Service | Select-Object Name,Status,StartType,UserName,BinaryPathName</code></td></tr>
+<tr><td><code>Restart-Service</code></td><td>Restart a service (<code>Start-Service</code>, <code>Stop-Service</code> work the same way)</td><td><code class="copy">Restart-Service -Name Spooler -Force</code></td></tr>
+<tr><td><code>Set-Service</code></td><td>Change the startup type</td><td><code class="copy">Set-Service -Name RemoteRegistry -StartupType Disabled</code></td></tr>
+<tr><td><code>New-Service</code></td><td>Register a new service</td><td><code class="copy">New-Service -Name AgentSvc -BinaryPathName '"C:\Program Files\Agent\agent.exe"' -StartupType Automatic</code></td></tr>
+<tr><td><code>Remove-Service</code></td><td><span class="tag">7.x</span> Delete a service (in 5.1 use <code>sc.exe delete</code>)</td><td><code class="copy">Remove-Service -Name AgentSvc</code></td></tr>
+<tr><td><code>Get-CimInstance Win32_Service</code></td><td>Service path and account in both editions</td><td><code class="copy">Get-CimInstance Win32_Service | Select-Object Name,State,StartName,PathName</code></td></tr>
+<tr><td><code>Get-Job</code></td><td>Run work in the background and collect results</td><td><code class="copy">$job = Start-Job { Get-ChildItem C:\ -Recurse -File -ErrorAction SilentlyContinue | Measure-Object }; Receive-Job $job -Wait</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="system-information">
+<h2 class="panel-title">System Information</h2>
+<p class="panel-lead">Hardware, OS build, updates and uptime. CIM replaces WMIC and Get-WmiObject.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-ComputerInfo</code></td><td>OS, BIOS, hardware and domain summary</td><td><code class="copy">Get-ComputerInfo -Property OsName,OsVersion,OsBuildNumber,CsDomain,BiosSMBIOSBIOSVersion</code></td></tr>
+<tr><td><code>Get-CimInstance</code></td><td>Query any WMI class, local or remote</td><td><code class="copy">Get-CimInstance Win32_OperatingSystem | Select-Object Caption,Version,LastBootUpTime</code></td></tr>
+<tr><td><code>Get-WmiObject</code></td><td><span class="tag tag-medium">5.1 only</span> Legacy WMI query. Replace with Get-CimInstance</td><td><code class="copy">Get-CimInstance Win32_BIOS</code></td></tr>
+<tr><td><code>Get-Uptime</code></td><td><span class="tag">7.x</span> Time since the last boot</td><td><code class="copy">Get-Uptime -Since</code></td></tr>
+<tr><td><code>Get-HotFix</code></td><td>Installed Windows updates</td><td><code class="copy">Get-HotFix | Sort-Object InstalledOn -Descending | Select-Object -First 10</code></td></tr>
+<tr><td><code>Get-PSDrive</code></td><td>Free and used space on every drive</td><td><code class="copy">Get-PSDrive -PSProvider FileSystem</code></td></tr>
+<tr><td><code>Get-ItemProperty</code></td><td>Read registry values (the registry is a drive)</td><td><code class="copy">Get-ItemProperty 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' | Select-Object ProductName,DisplayVersion,CurrentBuild</code></td></tr>
+<tr><td><code>Set-ItemProperty</code></td><td>Write a registry value</td><td><code class="copy">Set-ItemProperty -Path HKCU:\Software\Lab -Name Mode -Value 1</code></td></tr>
+<tr><td><code>Get-Date</code></td><td>Current time, in UTC or ISO 8601 for logs</td><td><code class="copy">(Get-Date).ToUniversalTime().ToString('o')</code></td></tr>
+<tr><td><code>Restart-Computer</code></td><td>Restart now or a remote machine (<code>Stop-Computer</code> shuts down)</td><td><code class="copy">Restart-Computer -ComputerName SRV01 -Wait -For PowerShell -Timeout 600</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="event-logs">
+<h2 class="panel-title">Event Logs</h2>
+<p class="panel-lead">Get-WinEvent with -FilterHashtable filters at the source and is the fastest way to hunt in logs.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-WinEvent -ListLog</code></td><td>List logs with record counts</td><td><code class="copy">Get-WinEvent -ListLog * | Where-Object RecordCount -gt 0 | Sort-Object RecordCount -Descending</code></td></tr>
+<tr><td><code>Get-WinEvent -LogName</code></td><td>Newest events from one log</td><td><code class="copy">Get-WinEvent -LogName System -MaxEvents 50</code></td></tr>
+<tr><td><code>-FilterHashtable Id</code></td><td>Failed logons in the last 24 hours</td><td><code class="copy">Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625; StartTime=(Get-Date).AddDays(-1)}</code></td></tr>
+<tr><td><code>-FilterHashtable Id list</code></td><td>Account and group changes</td><td><code class="copy">Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4720,4722,4724,4728,4732,4756} -MaxEvents 100</code></td></tr>
+<tr><td><code>-FilterHashtable Level</code></td><td>Critical and error events only (Level 1 and 2)</td><td><code class="copy">Get-WinEvent -FilterHashtable @{LogName='System','Application'; Level=1,2; StartTime=(Get-Date).AddHours(-12)}</code></td></tr>
+<tr><td><code>-FilterHashtable ProviderName</code></td><td>Events from one source</td><td><code class="copy">Get-WinEvent -FilterHashtable @{LogName='System'; ProviderName='Service Control Manager'; Id=7045}</code></td></tr>
+<tr><td><code>-FilterHashtable Data</code></td><td>Match a value in any event data field, here a user name</td><td><code class="copy">Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625; Data='jdoe'} -MaxEvents 20</code></td></tr>
+<tr><td><code>-FilterXPath</code></td><td>Filter on a named field such as the logon type</td><td><code class="copy">Get-WinEvent -LogName Security -FilterXPath "*[System[EventID=4624] and EventData[Data[@Name='LogonType']='10']]" -MaxEvents 20</code></td></tr>
+<tr><td><code>Get-WinEvent -Path</code></td><td>Read an exported .evtx file offline</td><td><code class="copy">Get-WinEvent -Path .\Security.evtx -FilterXPath "*[System[EventID=1102]]"</code></td></tr>
+<tr><td>PowerShell script block log</td><td>Code PowerShell actually ran (event 4104)</td><td><code class="copy">Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-PowerShell/Operational'; Id=4104} -MaxEvents 20 | Select-Object TimeCreated,Message</code></td></tr>
+<tr><td>Defender detections log</td><td>Malware detected and actions taken (1116, 1117)</td><td><code class="copy">Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Windows Defender/Operational'; Id=1116,1117}</code></td></tr>
+<tr><td>Sysmon process log</td><td>Process creation with hashes, if Sysmon is installed</td><td><code class="copy">Get-WinEvent -FilterHashtable @{LogName='Microsoft-Windows-Sysmon/Operational'; Id=1} -MaxEvents 20</code></td></tr>
+<tr><td><code>Get-EventLog</code></td><td><span class="tag tag-medium">5.1 only</span> Legacy classic log reader. Use Get-WinEvent</td><td><code class="copy">Get-WinEvent -LogName System -MaxEvents 50</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Pull fields out of events</h3>
+<p>Every event carries named fields in its XML. This turns failed logons into a table of user and source address.</p>
+<pre><code>Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4625; StartTime=(Get-Date).AddDays(-1)} | ForEach-Object {
+    $eventData = ([xml]$_.ToXml()).Event.EventData.Data
+    [pscustomobject]@{
+        Time = $_.TimeCreated
+        User = ($eventData | Where-Object Name -eq 'TargetUserName').'#text'
+        Source = ($eventData | Where-Object Name -eq 'IpAddress').'#text'
+        LogonType = ($eventData | Where-Object Name -eq 'LogonType').'#text'
+    }
+} | Group-Object Source | Sort-Object Count -Descending</code></pre>
+<h3>Event IDs worth knowing</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Event ID</th><th>Log</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td><code>4624</code></td><td>Security</td><td>Successful logon. LogonType 2 interactive, 3 network, 10 RDP</td></tr>
+<tr><td><code>4625</code></td><td>Security</td><td>Failed logon. Bursts mean password guessing or spraying</td></tr>
+<tr><td><code>4634</code></td><td>Security</td><td>Logoff</td></tr>
+<tr><td><code>4648</code></td><td>Security</td><td>Logon with explicit credentials (runas, lateral movement)</td></tr>
+<tr><td><code>4672</code></td><td>Security</td><td>Special privileges assigned to a new logon (admin logon)</td></tr>
+<tr><td><code>4688</code></td><td>Security</td><td>Process created. Command line only if that audit policy is enabled</td></tr>
+<tr><td><code>4697</code></td><td>Security</td><td>Service installed</td></tr>
+<tr><td><code>4698</code></td><td>Security</td><td>Scheduled task created</td></tr>
+<tr><td><code>4720</code></td><td>Security</td><td>User account created</td></tr>
+<tr><td><code>4722</code></td><td>Security</td><td>User account enabled</td></tr>
+<tr><td><code>4724</code></td><td>Security</td><td>Password reset attempt</td></tr>
+<tr><td><code>4725</code></td><td>Security</td><td>User account disabled</td></tr>
+<tr><td><code>4726</code></td><td>Security</td><td>User account deleted</td></tr>
+<tr><td><code>4728</code></td><td>Security</td><td>Member added to a global security group</td></tr>
+<tr><td><code>4732</code></td><td>Security</td><td>Member added to a local security group, such as Administrators</td></tr>
+<tr><td><code>4756</code></td><td>Security</td><td>Member added to a universal security group</td></tr>
+<tr><td><code>4740</code></td><td>Security</td><td>Account locked out (on the domain controller)</td></tr>
+<tr><td><code>4768</code></td><td>Security</td><td>Kerberos TGT requested</td></tr>
+<tr><td><code>4769</code></td><td>Security</td><td>Kerberos service ticket requested. RC4 tickets for many SPNs suggest Kerberoasting</td></tr>
+<tr><td><code>4771</code></td><td>Security</td><td>Kerberos pre-authentication failed</td></tr>
+<tr><td><code>4776</code></td><td>Security</td><td>NTLM credential validation</td></tr>
+<tr><td><code>1102</code></td><td>Security</td><td>Security log cleared</td></tr>
+<tr><td><code>7045</code></td><td>System</td><td>New service installed</td></tr>
+<tr><td><code>7036</code></td><td>System</td><td>Service started or stopped</td></tr>
+<tr><td><code>4104</code></td><td>PowerShell Operational</td><td>Script block logged</td></tr>
+<tr><td><code>1116</code></td><td>Defender Operational</td><td>Malware detected</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="networking">
+<h2 class="panel-title">Networking</h2>
+<p class="panel-lead">Addresses, DNS, sockets, routes and connectivity tests.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-NetIPConfiguration</code></td><td>Addresses, gateway and DNS per adapter</td><td><code class="copy">Get-NetIPConfiguration -Detailed</code></td></tr>
+<tr><td><code>Get-NetIPAddress</code></td><td>IPv4 addresses only</td><td><code class="copy">Get-NetIPAddress -AddressFamily IPv4 | Select-Object InterfaceAlias,IPAddress,PrefixLength</code></td></tr>
+<tr><td><code>Get-NetAdapter</code></td><td>Adapters, link speed and MAC</td><td><code class="copy">Get-NetAdapter | Format-Table Name,Status,LinkSpeed,MacAddress -AutoSize</code></td></tr>
+<tr><td><code>New-NetIPAddress</code></td><td>Set a static address and gateway</td><td><code class="copy">New-NetIPAddress -InterfaceAlias Ethernet -IPAddress 10.0.0.20 -PrefixLength 24 -DefaultGateway 10.0.0.1</code></td></tr>
+<tr><td><code>Set-DnsClientServerAddress</code></td><td>Set DNS servers on an adapter</td><td><code class="copy">Set-DnsClientServerAddress -InterfaceAlias Ethernet -ServerAddresses 10.0.0.10,10.0.0.11</code></td></tr>
+<tr><td><code>Test-NetConnection</code></td><td>Ping plus TCP port test</td><td><code class="copy">Test-NetConnection srv01.corp.example.com -Port 443</code></td></tr>
+<tr><td><code>Test-NetConnection -TraceRoute</code></td><td>Trace the route to a host</td><td><code class="copy">Test-NetConnection 1.1.1.1 -TraceRoute</code></td></tr>
+<tr><td><code>Test-Connection</code></td><td>ICMP ping. <span class="tag">7.x</span> adds <code>-TcpPort</code> for port tests</td><td><code class="copy">Test-Connection 10.0.0.1 -Count 4</code></td></tr>
+<tr><td><code>Resolve-DnsName</code></td><td>DNS query for any record type, against any server</td><td><code class="copy">Resolve-DnsName example.com -Type MX -Server 1.1.1.1</code></td></tr>
+<tr><td><code>Get-DnsClientCache</code></td><td>Local DNS cache (<code>Clear-DnsClientCache</code> flushes it)</td><td><code class="copy">Get-DnsClientCache | Select-Object Entry,Data -First 20</code></td></tr>
+<tr><td><code>Get-NetTCPConnection</code></td><td>Listening ports with the owning process</td><td><code class="copy">Get-NetTCPConnection -State Listen | Sort-Object LocalPort | Select-Object LocalAddress,LocalPort,OwningProcess,@{Name='Process';Expression={(Get-Process -Id $_.OwningProcess).Name}}</code></td></tr>
+<tr><td><code>Get-NetUDPEndpoint</code></td><td>Open UDP ports</td><td><code class="copy">Get-NetUDPEndpoint | Select-Object LocalAddress,LocalPort,OwningProcess</code></td></tr>
+<tr><td><code>Get-NetRoute</code></td><td>Routing table</td><td><code class="copy">Get-NetRoute -AddressFamily IPv4 | Sort-Object RouteMetric</code></td></tr>
+<tr><td><code>Get-NetNeighbor</code></td><td>ARP and neighbor cache</td><td><code class="copy">Get-NetNeighbor -AddressFamily IPv4 -State Reachable,Stale</code></td></tr>
+<tr><td><code>Set-NetConnectionProfile</code></td><td>Mark a network as Private or Public</td><td><code class="copy">Set-NetConnectionProfile -InterfaceAlias Ethernet -NetworkCategory Private</code></td></tr>
+<tr><td><code>Invoke-WebRequest</code></td><td>Download a file or check HTTP headers</td><td><code class="copy">Invoke-WebRequest https://example.com/tool.zip -OutFile .\tool.zip</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="firewall">
+<h2 class="panel-title">Windows Firewall</h2>
+<p class="panel-lead">The NetSecurity module manages profiles and rules for Windows Defender Firewall.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-NetFirewallProfile</code></td><td>Is the firewall on for each profile</td><td><code class="copy">Get-NetFirewallProfile | Select-Object Name,Enabled,DefaultInboundAction,LogFileName</code></td></tr>
+<tr><td><code>Set-NetFirewallProfile</code></td><td>Turn every profile on and block inbound by default</td><td><code class="copy">Set-NetFirewallProfile -Profile Domain,Private,Public -Enabled True -DefaultInboundAction Block</code></td></tr>
+<tr><td><code>Get-NetFirewallRule</code></td><td>Enabled inbound allow rules</td><td><code class="copy">Get-NetFirewallRule -Direction Inbound -Enabled True -Action Allow | Select-Object DisplayName,Profile</code></td></tr>
+<tr><td><code>Get-NetFirewallPortFilter</code></td><td>Ports behind a rule</td><td><code class="copy">Get-NetFirewallRule -DisplayName 'Remote Desktop*' | Get-NetFirewallPortFilter</code></td></tr>
+<tr><td><code>New-NetFirewallRule</code></td><td>Allow an inbound TCP port</td><td><code class="copy">New-NetFirewallRule -DisplayName 'Web HTTPS' -Direction Inbound -Action Allow -Protocol TCP -LocalPort 443 -Profile Domain</code></td></tr>
+<tr><td><code>New-NetFirewallRule -RemoteAddress</code></td><td>Allow a port only from a management subnet</td><td><code class="copy">New-NetFirewallRule -DisplayName 'RDP from admin LAN' -Direction Inbound -Action Allow -Protocol TCP -LocalPort 3389 -RemoteAddress 10.0.99.0/24</code></td></tr>
+<tr><td><code>Disable-NetFirewallRule</code></td><td>Turn a rule off without deleting it</td><td><code class="copy">Disable-NetFirewallRule -DisplayName 'Web HTTPS'</code></td></tr>
+<tr><td><code>Remove-NetFirewallRule</code></td><td>Delete a rule</td><td><code class="copy">Remove-NetFirewallRule -DisplayName 'Web HTTPS'</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="local-users-and-groups">
+<h2 class="panel-title">Local Users and Groups</h2>
+<p class="panel-lead">Accounts on a single machine (Microsoft.PowerShell.LocalAccounts).</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-LocalUser</code></td><td>Local accounts with status and password age</td><td><code class="copy">Get-LocalUser | Select-Object Name,Enabled,LastLogon,PasswordLastSet</code></td></tr>
+<tr><td><code>New-LocalUser</code></td><td>Create an account with a prompted password</td><td><code class="copy">New-LocalUser -Name labadmin -Password (Read-Host -AsSecureString 'Password') -FullName 'Lab Admin'</code></td></tr>
+<tr><td><code>Set-LocalUser</code></td><td>Reset a password</td><td><code class="copy">Set-LocalUser -Name labadmin -Password (Read-Host -AsSecureString 'New password')</code></td></tr>
+<tr><td><code>Disable-LocalUser</code></td><td>Disable an account (<code>Enable-LocalUser</code> reverses)</td><td><code class="copy">Disable-LocalUser -Name Guest</code></td></tr>
+<tr><td><code>Remove-LocalUser</code></td><td>Delete an account</td><td><code class="copy">Remove-LocalUser -Name olduser</code></td></tr>
+<tr><td><code>Get-LocalGroup</code></td><td>List local groups</td><td><code class="copy">Get-LocalGroup</code></td></tr>
+<tr><td><code>Get-LocalGroupMember</code></td><td>Who is a local administrator</td><td><code class="copy">Get-LocalGroupMember -Group Administrators</code></td></tr>
+<tr><td><code>Add-LocalGroupMember</code></td><td>Add a user to a group</td><td><code class="copy">Add-LocalGroupMember -Group 'Remote Desktop Users' -Member 'CORP\jdoe'</code></td></tr>
+<tr><td><code>Remove-LocalGroupMember</code></td><td>Remove a user from a group</td><td><code class="copy">Remove-LocalGroupMember -Group Administrators -Member labadmin</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="microsoft-defender">
+<h2 class="panel-title">Microsoft Defender Antivirus</h2>
+<p class="panel-lead">Status, scans, detections and hardening with the Defender module. Run elevated.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-MpComputerStatus</code></td><td>Engine mode, real time protection, tamper protection and signature age</td><td><code class="copy">Get-MpComputerStatus | Select-Object AMRunningMode,RealTimeProtectionEnabled,IsTamperProtected,AntivirusSignatureLastUpdated</code></td></tr>
+<tr><td><code>Update-MpSignature</code></td><td>Update security intelligence now</td><td><code class="copy">Update-MpSignature</code></td></tr>
+<tr><td><code>Start-MpScan</code></td><td>Quick, full or custom scan</td><td><code class="copy">Start-MpScan -ScanType CustomScan -ScanPath D:\Downloads</code></td></tr>
+<tr><td><code>Start-MpWDOScan</code></td><td>Reboot into a Microsoft Defender Offline scan</td><td><code class="copy">Start-MpWDOScan</code></td></tr>
+<tr><td><code>Get-MpThreatDetection</code></td><td>Detection history with file paths and times</td><td><code class="copy">Get-MpThreatDetection | Select-Object InitialDetectionTime,ThreatID,Resources,ActionSuccess</code></td></tr>
+<tr><td><code>Get-MpThreat</code></td><td>Threat names and severity behind those detections</td><td><code class="copy">Get-MpThreat | Select-Object ThreatName,SeverityID,IsActive</code></td></tr>
+<tr><td><code>Remove-MpThreat</code></td><td>Remediate active threats</td><td><code class="copy">Remove-MpThreat</code></td></tr>
+<tr><td><code>Get-MpPreference</code></td><td>Review exclusions. Attackers add them to hide tools</td><td><code class="copy">Get-MpPreference | Select-Object ExclusionPath,ExclusionProcess,ExclusionExtension</code></td></tr>
+<tr><td><code>Remove-MpPreference</code></td><td>Delete an exclusion (<code>Add-MpPreference</code> adds one)</td><td><code class="copy">Remove-MpPreference -ExclusionPath C:\Temp</code></td></tr>
+<tr><td><code>Set-MpPreference</code></td><td>Turn on PUA blocking, network protection and controlled folder access</td><td><code class="copy">Set-MpPreference -PUAProtection Enabled -EnableNetworkProtection Enabled -EnableControlledFolderAccess AuditMode</code></td></tr>
+<tr><td><code>Add-MpPreference ASR</code></td><td>Attack surface reduction rule, here block credential theft from LSASS, in audit mode</td><td><code class="copy">Add-MpPreference -AttackSurfaceReductionRules_Ids 9e6c4e1f-7d60-472f-ba1a-a39ef669e4b2 -AttackSurfaceReductionRules_Actions AuditMode</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="bitlocker">
+<h2 class="panel-title">BitLocker</h2>
+<p class="panel-lead">Drive encryption status, protectors and recovery keys. Run elevated.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-BitLockerVolume</code></td><td>Encryption status and method for every volume</td><td><code class="copy">Get-BitLockerVolume | Select-Object MountPoint,VolumeStatus,EncryptionMethod,ProtectionStatus,EncryptionPercentage</code></td></tr>
+<tr><td><code>KeyProtector</code></td><td>Show protectors and the recovery password</td><td><code class="copy">(Get-BitLockerVolume -MountPoint C:).KeyProtector</code></td></tr>
+<tr><td><code>Add-BitLockerKeyProtector</code></td><td>Add a recovery password before you encrypt</td><td><code class="copy">Add-BitLockerKeyProtector -MountPoint C: -RecoveryPasswordProtector</code></td></tr>
+<tr><td><code>Enable-BitLocker</code></td><td>Encrypt the OS drive with the TPM</td><td><code class="copy">Enable-BitLocker -MountPoint C: -EncryptionMethod XtsAes256 -UsedSpaceOnly -TpmProtector</code></td></tr>
+<tr><td><code>BackupToAAD-BitLockerKeyProtector</code></td><td>Escrow a recovery password to Microsoft Entra ID</td><td><code class="copy">$protector = (Get-BitLockerVolume -MountPoint C:).KeyProtector | Where-Object KeyProtectorType -eq RecoveryPassword; BackupToAAD-BitLockerKeyProtector -MountPoint C: -KeyProtectorId $protector.KeyProtectorId</code></td></tr>
+<tr><td><code>Backup-BitLockerKeyProtector</code></td><td>Escrow a recovery password to Active Directory</td><td><code class="copy">Backup-BitLockerKeyProtector -MountPoint C: -KeyProtectorId $protector.KeyProtectorId</code></td></tr>
+<tr><td><code>Suspend-BitLocker</code></td><td>Pause protection for a BIOS or firmware update</td><td><code class="copy">Suspend-BitLocker -MountPoint C: -RebootCount 1</code></td></tr>
+<tr><td><code>Resume-BitLocker</code></td><td>Resume protection</td><td><code class="copy">Resume-BitLocker -MountPoint C:</code></td></tr>
+<tr><td><code>Unlock-BitLocker</code></td><td>Unlock a data drive with its recovery password</td><td><code class="copy">Unlock-BitLocker -MountPoint E: -RecoveryPassword 111111-222222-333333-444444-555555-666666-777777-888888</code></td></tr>
+<tr><td><code>Disable-BitLocker</code></td><td>Decrypt a volume</td><td><code class="copy">Disable-BitLocker -MountPoint E:</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="packages-and-winget">
+<h2 class="panel-title">Packages, Modules and WinGet</h2>
+<p class="panel-lead">Install apps with WinGet and PowerShell modules with PSResourceGet.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>winget search</code></td><td>Find a package and its exact ID</td><td><code class="copy">winget search vscode</code></td></tr>
+<tr><td><code>winget install</code></td><td>Install by exact ID, silently</td><td><code class="copy">winget install --id Microsoft.PowerShell --exact --silent --accept-package-agreements --accept-source-agreements</code></td></tr>
+<tr><td><code>winget upgrade</code></td><td>List or apply updates</td><td><code class="copy">winget upgrade --all --silent</code></td></tr>
+<tr><td><code>winget list</code></td><td>Installed apps, including ones not installed by WinGet</td><td><code class="copy">winget list</code></td></tr>
+<tr><td><code>winget uninstall</code></td><td>Remove an app</td><td><code class="copy">winget uninstall --id Mozilla.Firefox --exact</code></td></tr>
+<tr><td><code>winget export</code></td><td>Save the app list to rebuild a machine (<code>winget import</code> restores it)</td><td><code class="copy">winget export -o .\apps.json</code></td></tr>
+<tr><td><code>winget pin</code></td><td>Stop a package from being upgraded</td><td><code class="copy">winget pin add --id Oracle.VirtualBox</code></td></tr>
+<tr><td><code>winget configure</code></td><td>Apply a WinGet Configuration file to set up a machine</td><td><code class="copy">winget configure -f .\configuration.winget</code></td></tr>
+<tr><td><code>Find-PSResource</code></td><td>Search the PowerShell Gallery (PSResourceGet ships with 7.4 and later)</td><td><code class="copy">Find-PSResource -Name Pester</code></td></tr>
+<tr><td><code>Install-PSResource</code></td><td>Install a module for your account</td><td><code class="copy">Install-PSResource -Name Pester -Scope CurrentUser</code></td></tr>
+<tr><td><code>Install-Module</code></td><td>Older PowerShellGet installer, also works in 5.1</td><td><code class="copy">Install-Module -Name Pester -Scope CurrentUser</code></td></tr>
+<tr><td><code>Get-Module -ListAvailable</code></td><td>Modules installed on this machine</td><td><code class="copy">Get-Module -ListAvailable | Sort-Object Name | Select-Object Name,Version,Path</code></td></tr>
+<tr><td><code>Get-Package</code></td><td>Installed MSI and programs (msi and Programs providers work in 5.1 only)</td><td><code class="copy">powershell.exe -NoProfile -Command "Get-Package -ProviderName Programs,msi | Select-Object Name,Version"</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="windows-features">
+<h2 class="panel-title">Windows Features and Server Manager</h2>
+<p class="panel-lead">Optional features and RSAT on Windows 11, roles and features on Windows Server.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-WindowsOptionalFeature</code></td><td>Optional features on a client</td><td><code class="copy">Get-WindowsOptionalFeature -Online | Where-Object State -eq Enabled | Select-Object FeatureName</code></td></tr>
+<tr><td><code>Enable-WindowsOptionalFeature</code></td><td>Turn a feature on, for example Hyper-V</td><td><code class="copy">Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All</code></td></tr>
+<tr><td><code>Disable-WindowsOptionalFeature</code></td><td>Remove SMBv1 and other legacy features</td><td><code class="copy">Disable-WindowsOptionalFeature -Online -FeatureName SMB1Protocol -NoRestart</code></td></tr>
+<tr><td><code>Get-WindowsCapability</code></td><td>RSAT tools and other Features on Demand</td><td><code class="copy">Get-WindowsCapability -Online -Name Rsat* | Select-Object Name,State</code></td></tr>
+<tr><td><code>Add-WindowsCapability</code></td><td>Install the Active Directory RSAT tools on Windows 11</td><td><code class="copy">Add-WindowsCapability -Online -Name Rsat.ActiveDirectory.DS-LDS.Tools~~~~0.0.1.0</code></td></tr>
+<tr><td><code>Get-WindowsFeature</code></td><td>Roles and features on Windows Server</td><td><code class="copy">Get-WindowsFeature | Where-Object Installed</code></td></tr>
+<tr><td><code>Install-WindowsFeature</code></td><td>Install a role with its management tools</td><td><code class="copy">Install-WindowsFeature -Name Web-Server -IncludeManagementTools</code></td></tr>
+<tr><td><code>Uninstall-WindowsFeature</code></td><td>Remove a role or feature</td><td><code class="copy">Uninstall-WindowsFeature -Name Web-Server -Restart</code></td></tr>
+<tr><td><code>Repair-WindowsImage</code></td><td>DISM health repair from PowerShell</td><td><code class="copy">Repair-WindowsImage -Online -RestoreHealth</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="active-directory">
+<h2 class="panel-title">Active Directory</h2>
+<p class="panel-lead">ActiveDirectory module from RSAT or a domain controller. Works natively in PowerShell 7.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-ADDomain</code></td><td>Domain name, functional level and FSMO roles</td><td><code class="copy">Get-ADDomain | Select-Object DNSRoot,DomainMode,PDCEmulator,RIDMaster</code></td></tr>
+<tr><td><code>Get-ADDomainController</code></td><td>All domain controllers and their sites</td><td><code class="copy">Get-ADDomainController -Filter * | Select-Object Name,IPv4Address,Site,OperatingSystem</code></td></tr>
+<tr><td><code>Get-ADUser</code></td><td>Find users with extra properties</td><td><code class="copy">Get-ADUser -Filter "Enabled -eq 'True'" -Properties LastLogonDate,PasswordLastSet | Select-Object SamAccountName,LastLogonDate,PasswordLastSet</code></td></tr>
+<tr><td><code>New-ADUser</code></td><td>Create a user in an OU</td><td><code class="copy">New-ADUser -Name 'Jane Doe' -SamAccountName jdoe -UserPrincipalName jdoe@corp.example.com -Path 'OU=Staff,DC=corp,DC=example,DC=com' -AccountPassword (Read-Host -AsSecureString) -Enabled $true</code></td></tr>
+<tr><td><code>Set-ADUser</code></td><td>Change attributes</td><td><code class="copy">Set-ADUser jdoe -Title 'SOC Analyst' -Department Security</code></td></tr>
+<tr><td><code>Set-ADAccountPassword</code></td><td>Reset a password and force a change at logon</td><td><code class="copy">Set-ADAccountPassword jdoe -Reset -NewPassword (Read-Host -AsSecureString); Set-ADUser jdoe -ChangePasswordAtLogon $true</code></td></tr>
+<tr><td><code>Unlock-ADAccount</code></td><td>Unlock a locked out user</td><td><code class="copy">Unlock-ADAccount -Identity jdoe</code></td></tr>
+<tr><td><code>Disable-ADAccount</code></td><td>Disable a user or computer</td><td><code class="copy">Disable-ADAccount -Identity jdoe</code></td></tr>
+<tr><td><code>Search-ADAccount</code></td><td>Locked, expired or inactive accounts</td><td><code class="copy">Search-ADAccount -AccountInactive -TimeSpan 90.00:00:00 -UsersOnly | Select-Object SamAccountName,LastLogonDate</code></td></tr>
+<tr><td><code>Get-ADGroupMember</code></td><td>Members of a group, including nested groups</td><td><code class="copy">Get-ADGroupMember 'Domain Admins' -Recursive | Select-Object Name,SamAccountName</code></td></tr>
+<tr><td><code>Add-ADGroupMember</code></td><td>Add users to a group</td><td><code class="copy">Add-ADGroupMember -Identity Helpdesk -Members jdoe</code></td></tr>
+<tr><td><code>Get-ADPrincipalGroupMembership</code></td><td>Every group a user belongs to</td><td><code class="copy">Get-ADPrincipalGroupMembership jdoe | Select-Object Name</code></td></tr>
+<tr><td><code>Get-ADComputer</code></td><td>Computers in an OU with their OS</td><td><code class="copy">Get-ADComputer -Filter * -SearchBase 'OU=Servers,DC=corp,DC=example,DC=com' -Properties OperatingSystem | Select-Object Name,OperatingSystem</code></td></tr>
+<tr><td><code>Get-ADOrganizationalUnit</code></td><td>List OUs</td><td><code class="copy">Get-ADOrganizationalUnit -Filter * | Select-Object Name,DistinguishedName</code></td></tr>
+<tr><td><code>Get-ADDefaultDomainPasswordPolicy</code></td><td>Domain password and lockout policy</td><td><code class="copy">Get-ADDefaultDomainPasswordPolicy</code></td></tr>
+<tr><td><code>Restore-ADObject</code></td><td>Recover a deleted object (Recycle Bin must be enabled)</td><td><code class="copy">Get-ADObject -Filter "samAccountName -eq 'jdoe'" -IncludeDeletedObjects | Restore-ADObject</code></td></tr>
+<tr><td><code>Install-ADDSForest</code></td><td>Promote the first domain controller of a new forest</td><td><code class="copy">Install-WindowsFeature AD-Domain-Services -IncludeManagementTools; Install-ADDSForest -DomainName corp.example.com -InstallDns</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="dns-server">
+<h2 class="panel-title">DNS Server</h2>
+<p class="panel-lead">Zones, records and forwarders on a Windows DNS server (DnsServer module).</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-DnsServerZone</code></td><td>List zones</td><td><code class="copy">Get-DnsServerZone | Select-Object ZoneName,ZoneType,IsDsIntegrated,IsReverseLookupZone</code></td></tr>
+<tr><td><code>Add-DnsServerPrimaryZone</code></td><td>Create an AD integrated zone</td><td><code class="copy">Add-DnsServerPrimaryZone -Name lab.corp.example.com -ReplicationScope Domain</code></td></tr>
+<tr><td><code>Get-DnsServerResourceRecord</code></td><td>Records in a zone</td><td><code class="copy">Get-DnsServerResourceRecord -ZoneName corp.example.com -RRType A</code></td></tr>
+<tr><td><code>Add-DnsServerResourceRecordA</code></td><td>Add an A record with its PTR</td><td><code class="copy">Add-DnsServerResourceRecordA -ZoneName corp.example.com -Name app -IPv4Address 10.0.1.50 -CreatePtr</code></td></tr>
+<tr><td><code>Add-DnsServerResourceRecordCName</code></td><td>Add an alias</td><td><code class="copy">Add-DnsServerResourceRecordCName -ZoneName corp.example.com -Name www -HostNameAlias app.corp.example.com</code></td></tr>
+<tr><td><code>Remove-DnsServerResourceRecord</code></td><td>Delete a record</td><td><code class="copy">Remove-DnsServerResourceRecord -ZoneName corp.example.com -Name oldapp -RRType A -Force</code></td></tr>
+<tr><td><code>Add-DnsServerForwarder</code></td><td>Forward unknown names upstream</td><td><code class="copy">Add-DnsServerForwarder -IPAddress 1.1.1.1,9.9.9.9</code></td></tr>
+<tr><td><code>Clear-DnsServerCache</code></td><td>Flush the server cache</td><td><code class="copy">Clear-DnsServerCache -Force</code></td></tr>
+<tr><td><code>Get-DnsServerStatistics</code></td><td>Query and error counters</td><td><code class="copy">Get-DnsServerStatistics</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="dhcp-server">
+<h2 class="panel-title">DHCP Server</h2>
+<p class="panel-lead">Scopes, options, leases and reservations (DhcpServer module).</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Add-DhcpServerInDC</code></td><td>Authorize the DHCP server in Active Directory</td><td><code class="copy">Add-DhcpServerInDC -DnsName dhcp01.corp.example.com -IPAddress 10.0.0.11</code></td></tr>
+<tr><td><code>Get-DhcpServerv4Scope</code></td><td>List IPv4 scopes</td><td><code class="copy">Get-DhcpServerv4Scope | Select-Object ScopeId,Name,StartRange,EndRange,State</code></td></tr>
+<tr><td><code>Add-DhcpServerv4Scope</code></td><td>Create and activate a scope</td><td><code class="copy">Add-DhcpServerv4Scope -Name Office -StartRange 10.0.10.100 -EndRange 10.0.10.200 -SubnetMask 255.255.255.0 -State Active</code></td></tr>
+<tr><td><code>Set-DhcpServerv4OptionValue</code></td><td>Router, DNS servers and domain for a scope</td><td><code class="copy">Set-DhcpServerv4OptionValue -ScopeId 10.0.10.0 -Router 10.0.10.1 -DnsServer 10.0.0.10 -DnsDomain corp.example.com</code></td></tr>
+<tr><td><code>Get-DhcpServerv4Lease</code></td><td>Current leases in a scope</td><td><code class="copy">Get-DhcpServerv4Lease -ScopeId 10.0.10.0 | Select-Object IPAddress,ClientId,HostName,LeaseExpiryTime</code></td></tr>
+<tr><td><code>Add-DhcpServerv4Reservation</code></td><td>Reserve an address for a MAC</td><td><code class="copy">Add-DhcpServerv4Reservation -ScopeId 10.0.10.0 -IPAddress 10.0.10.50 -ClientId 00-15-5D-01-02-03 -Name printer01</code></td></tr>
+<tr><td><code>Get-DhcpServerv4ScopeStatistics</code></td><td>Free and used addresses per scope</td><td><code class="copy">Get-DhcpServerv4ScopeStatistics</code></td></tr>
+<tr><td><code>Export-DhcpServer</code></td><td>Back up the configuration and leases</td><td><code class="copy">Export-DhcpServer -File C:\Backup\dhcp.xml -Leases</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="group-policy">
+<h2 class="panel-title">Group Policy</h2>
+<p class="panel-lead">Create, link, report on and back up GPOs (GroupPolicy module from RSAT).</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-GPO</code></td><td>List every GPO with its status</td><td><code class="copy">Get-GPO -All | Select-Object DisplayName,GpoStatus,ModificationTime</code></td></tr>
+<tr><td><code>New-GPO</code></td><td>Create a GPO</td><td><code class="copy">New-GPO -Name 'Workstation Hardening' -Comment 'Baseline for Windows 11'</code></td></tr>
+<tr><td><code>New-GPLink</code></td><td>Link a GPO to an OU</td><td><code class="copy">New-GPLink -Name 'Workstation Hardening' -Target 'OU=Workstations,DC=corp,DC=example,DC=com'</code></td></tr>
+<tr><td><code>Set-GPRegistryValue</code></td><td>Set a registry based policy inside a GPO</td><td><code class="copy">Set-GPRegistryValue -Name 'Workstation Hardening' -Key 'HKLM\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging' -ValueName EnableScriptBlockLogging -Type DWord -Value 1</code></td></tr>
+<tr><td><code>Get-GPInheritance</code></td><td>GPOs applied to an OU, in order</td><td><code class="copy">Get-GPInheritance -Target 'OU=Workstations,DC=corp,DC=example,DC=com'</code></td></tr>
+<tr><td><code>Get-GPOReport</code></td><td>HTML report of a GPO's settings</td><td><code class="copy">Get-GPOReport -Name 'Workstation Hardening' -ReportType Html -Path C:\Temp\gpo.html</code></td></tr>
+<tr><td><code>Get-GPResultantSetOfPolicy</code></td><td>Resulting policy for a computer and user</td><td><code class="copy">Get-GPResultantSetOfPolicy -Computer PC01 -User CORP\jdoe -ReportType Html -Path C:\Temp\rsop.html</code></td></tr>
+<tr><td><code>Invoke-GPUpdate</code></td><td>Refresh policy on a remote computer</td><td><code class="copy">Invoke-GPUpdate -Computer PC01 -Force -RandomDelayInMinutes 0</code></td></tr>
+<tr><td><code>Backup-GPO</code></td><td>Back up every GPO (<code>Restore-GPO</code> restores one)</td><td><code class="copy">Backup-GPO -All -Path D:\GPOBackups</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="hyper-v">
+<h2 class="panel-title">Hyper-V</h2>
+<p class="panel-lead">Build and manage lab VMs with the Hyper-V module. Run elevated.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-VM</code></td><td>VMs with state and resources</td><td><code class="copy">Get-VM | Select-Object Name,State,CPUUsage,MemoryAssigned,Uptime</code></td></tr>
+<tr><td><code>New-VMSwitch</code></td><td>Create a virtual switch</td><td><code class="copy">New-VMSwitch -Name LabSwitch -SwitchType Internal</code></td></tr>
+<tr><td><code>New-VM</code></td><td>Create a Generation 2 VM with a new disk</td><td><code class="copy">New-VM -Name LAB-WEB -Generation 2 -MemoryStartupBytes 4GB -NewVHDPath D:\VMs\LAB-WEB.vhdx -NewVHDSizeBytes 60GB -SwitchName LabSwitch</code></td></tr>
+<tr><td><code>Add-VMDvdDrive</code></td><td>Attach an install ISO</td><td><code class="copy">Add-VMDvdDrive -VMName LAB-WEB -Path D:\ISO\WindowsServer2025.iso</code></td></tr>
+<tr><td><code>Set-VMProcessor</code></td><td>Set CPUs and enable nested virtualization</td><td><code class="copy">Set-VMProcessor -VMName LAB-WEB -Count 2 -ExposeVirtualizationExtensions $true</code></td></tr>
+<tr><td><code>Start-VM</code></td><td>Start a VM (<code>Stop-VM</code> shuts it down)</td><td><code class="copy">Start-VM -Name LAB-WEB</code></td></tr>
+<tr><td><code>Checkpoint-VM</code></td><td>Take a checkpoint before a risky change</td><td><code class="copy">Checkpoint-VM -Name LAB-WEB -SnapshotName PreUpdate</code></td></tr>
+<tr><td><code>Restore-VMCheckpoint</code></td><td>Roll back to a checkpoint</td><td><code class="copy">Restore-VMCheckpoint -VMName LAB-WEB -Name PreUpdate -Confirm:$false</code></td></tr>
+<tr><td><code>Export-VM</code></td><td>Export a VM to a folder</td><td><code class="copy">Export-VM -Name LAB-WEB -Path E:\Exports</code></td></tr>
+<tr><td><code>Get-VMNetworkAdapter</code></td><td>VM addresses and switch connections</td><td><code class="copy">Get-VMNetworkAdapter -VMName * | Select-Object VMName,SwitchName,IPAddresses</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="storage-and-smb">
+<h2 class="panel-title">Storage and SMB</h2>
+<p class="panel-lead">Disks, partitions, volumes and file shares.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-Disk</code></td><td>Disks with size and partition style</td><td><code class="copy">Get-Disk | Select-Object Number,FriendlyName,Size,PartitionStyle,OperationalStatus</code></td></tr>
+<tr><td><code>Get-PhysicalDisk</code></td><td>Media type and health</td><td><code class="copy">Get-PhysicalDisk | Select-Object FriendlyName,MediaType,HealthStatus</code></td></tr>
+<tr><td><code>Initialize-Disk</code></td><td>Initialize a new disk as GPT</td><td><code class="copy">Initialize-Disk -Number 2 -PartitionStyle GPT</code></td></tr>
+<tr><td><code>New-Partition</code></td><td>Create and format a data volume</td><td><code class="copy">New-Partition -DiskNumber 2 -UseMaximumSize -DriveLetter F | Format-Volume -FileSystem NTFS -NewFileSystemLabel Data</code></td></tr>
+<tr><td><code>Get-Volume</code></td><td>Volumes with free space</td><td><code class="copy">Get-Volume | Select-Object DriveLetter,FileSystemLabel,FileSystem,SizeRemaining,Size</code></td></tr>
+<tr><td><code>Resize-Partition</code></td><td>Grow a partition to its maximum size</td><td><code class="copy">Resize-Partition -DriveLetter F -Size (Get-PartitionSupportedSize -DriveLetter F).SizeMax</code></td></tr>
+<tr><td><code>Repair-Volume</code></td><td>Online scan of a volume, like chkdsk /scan</td><td><code class="copy">Repair-Volume -DriveLetter C -Scan</code></td></tr>
+<tr><td><code>New-SmbShare</code></td><td>Create a share</td><td><code class="copy">New-SmbShare -Name Data -Path F:\Data -ChangeAccess 'CORP\Staff' -FullAccess 'CORP\File Admins'</code></td></tr>
+<tr><td><code>Get-SmbShareAccess</code></td><td>Share permissions</td><td><code class="copy">Get-SmbShare | Get-SmbShareAccess</code></td></tr>
+<tr><td><code>Get-SmbSession</code></td><td>Who is connected to this server</td><td><code class="copy">Get-SmbSession | Select-Object ClientComputerName,ClientUserName,NumOpens</code></td></tr>
+<tr><td><code>New-SmbMapping</code></td><td>Map a drive to a share</td><td><code class="copy">New-SmbMapping -LocalPath Z: -RemotePath \\fs01\Data -Persistent $true</code></td></tr>
+<tr><td><code>Get-SmbServerConfiguration</code></td><td>Check SMBv1 and signing</td><td><code class="copy">Get-SmbServerConfiguration | Select-Object EnableSMB1Protocol,RequireSecuritySignature,EncryptData</code></td></tr>
+<tr><td><code>Set-SmbServerConfiguration</code></td><td>Require SMB signing</td><td><code class="copy">Set-SmbServerConfiguration -RequireSecuritySignature $true -Force</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Printing</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-Printer</code></td><td>Printers on this or a print server</td><td><code class="copy">Get-Printer -ComputerName PRN01 | Select-Object Name,DriverName,PortName,Shared</code></td></tr>
+<tr><td><code>Add-PrinterPort</code></td><td>Create a TCP/IP printer port</td><td><code class="copy">Add-PrinterPort -Name IP_10.0.2.50 -PrinterHostAddress 10.0.2.50</code></td></tr>
+<tr><td><code>Add-Printer</code></td><td>Add a printer on that port</td><td><code class="copy">Add-Printer -Name Floor2 -DriverName 'Microsoft IPP Class Driver' -PortName IP_10.0.2.50</code></td></tr>
+<tr><td><code>Get-PrintJob</code></td><td>Jobs stuck in a queue</td><td><code class="copy">Get-PrintJob -PrinterName Floor2</code></td></tr>
+<tr><td><code>Remove-Printer</code></td><td>Remove a printer</td><td><code class="copy">Remove-Printer -Name Floor2</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="certificates">
+<h2 class="panel-title">Certificates and Signing</h2>
+<p class="panel-lead">The Cert: drive, expiry checks, PFX files and Authenticode signatures.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-ChildItem Cert:</code></td><td>Certificates in the machine store</td><td><code class="copy">Get-ChildItem Cert:\LocalMachine\My | Select-Object Subject,Thumbprint,NotAfter</code></td></tr>
+<tr><td>Expiring certificates</td><td>Certificates that expire in the next 30 days</td><td><code class="copy">Get-ChildItem Cert:\LocalMachine\My | Where-Object NotAfter -lt (Get-Date).AddDays(30)</code></td></tr>
+<tr><td><code>New-SelfSignedCertificate</code></td><td>Lab certificate for TLS or code signing</td><td><code class="copy">New-SelfSignedCertificate -DnsName app.lab.example.com -CertStoreLocation Cert:\LocalMachine\My -NotAfter (Get-Date).AddYears(1)</code></td></tr>
+<tr><td><code>Export-PfxCertificate</code></td><td>Export a certificate with its private key</td><td><code class="copy">Export-PfxCertificate -Cert Cert:\LocalMachine\My\THUMBPRINT -FilePath .\app.pfx -Password (Read-Host -AsSecureString)</code></td></tr>
+<tr><td><code>Import-PfxCertificate</code></td><td>Import a PFX into a store</td><td><code class="copy">Import-PfxCertificate -FilePath .\app.pfx -CertStoreLocation Cert:\LocalMachine\My -Password (Read-Host -AsSecureString)</code></td></tr>
+<tr><td><code>Import-Certificate</code></td><td>Trust a root CA certificate</td><td><code class="copy">Import-Certificate -FilePath .\LabRootCA.cer -CertStoreLocation Cert:\LocalMachine\Root</code></td></tr>
+<tr><td><code>Get-AuthenticodeSignature</code></td><td>Check who signed a file and whether the signature is valid</td><td><code class="copy">Get-AuthenticodeSignature C:\Windows\System32\*.exe | Where-Object Status -ne Valid</code></td></tr>
+<tr><td><code>Set-AuthenticodeSignature</code></td><td>Sign a script with a code signing certificate</td><td><code class="copy">$codeCert = Get-ChildItem Cert:\CurrentUser\My -CodeSigningCert | Select-Object -First 1; Set-AuthenticodeSignature .\Deploy.ps1 -Certificate $codeCert -TimestampServer http://timestamp.digicert.com</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="remoting">
+<h2 class="panel-title">Remoting</h2>
+<p class="panel-lead">Run commands on other machines over WinRM, or over SSH with PowerShell 7.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Enable-PSRemoting</code></td><td>Turn on WinRM. In 7.x it also registers the PowerShell.7 endpoint</td><td><code class="copy">Enable-PSRemoting -Force</code></td></tr>
+<tr><td><code>Test-WSMan</code></td><td>Check that WinRM answers on a host</td><td><code class="copy">Test-WSMan -ComputerName SRV01</code></td></tr>
+<tr><td><code>Enter-PSSession</code></td><td>Interactive remote shell</td><td><code class="copy">Enter-PSSession -ComputerName SRV01 -Credential CORP\admin</code></td></tr>
+<tr><td><code>Invoke-Command</code></td><td>Run a script block on many hosts at once</td><td><code class="copy">Invoke-Command -ComputerName SRV01,SRV02 -ScriptBlock { Get-Service WinRM }</code></td></tr>
+<tr><td><code>Invoke-Command -ConfigurationName</code></td><td>Target PowerShell 7 on the remote side instead of 5.1</td><td><code class="copy">Invoke-Command -ComputerName SRV01 -ConfigurationName PowerShell.7 -ScriptBlock { $PSVersionTable.PSVersion }</code></td></tr>
+<tr><td><code>New-PSSession</code></td><td>Persistent session for several commands</td><td><code class="copy">$session = New-PSSession -ComputerName SRV01; Invoke-Command -Session $session -ScriptBlock { hostname }</code></td></tr>
+<tr><td><code>Copy-Item -ToSession</code></td><td>Copy files over a remoting session</td><td><code class="copy">Copy-Item .\tool.zip -Destination C:\Temp -ToSession $session</code></td></tr>
+<tr><td><code>Enter-PSSession -HostName</code></td><td><span class="tag">7.x</span> Remoting over SSH, also to Linux</td><td><code class="copy">Enter-PSSession -HostName admin@linux01.corp.example.com</code></td></tr>
+<tr><td><code>Remove-PSSession</code></td><td>Close sessions when done</td><td><code class="copy">Get-PSSession | Remove-PSSession</code></td></tr>
+<tr><td><code>TrustedHosts</code></td><td>Allow WinRM to a workgroup host. Avoid * outside a lab</td><td><code class="copy">Set-Item WSMan:\localhost\Client\TrustedHosts -Value 'lab-srv01' -Concatenate -Force</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="scheduled-tasks">
+<h2 class="panel-title">Scheduled Tasks</h2>
+<p class="panel-lead">Create, run and review tasks with the ScheduledTasks module.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Get-ScheduledTask</code></td><td>Tasks outside the built-in Microsoft folder</td><td><code class="copy">Get-ScheduledTask | Where-Object TaskPath -notlike '\Microsoft\*' | Select-Object TaskPath,TaskName,State</code></td></tr>
+<tr><td><code>Get-ScheduledTaskInfo</code></td><td>Last and next run time and result</td><td><code class="copy">Get-ScheduledTaskInfo -TaskName NightlyBackup</code></td></tr>
+<tr><td><code>Register-ScheduledTask</code></td><td>Daily task that runs a script as SYSTEM</td><td><code class="copy">$action = New-ScheduledTaskAction -Execute 'pwsh.exe' -Argument '-NoProfile -File C:\Scripts\Backup.ps1'; $trigger = New-ScheduledTaskTrigger -Daily -At 3am; Register-ScheduledTask -TaskName NightlyBackup -Action $action -Trigger $trigger -User SYSTEM -RunLevel Highest</code></td></tr>
+<tr><td><code>Start-ScheduledTask</code></td><td>Run a task now</td><td><code class="copy">Start-ScheduledTask -TaskName NightlyBackup</code></td></tr>
+<tr><td><code>Disable-ScheduledTask</code></td><td>Disable without deleting</td><td><code class="copy">Disable-ScheduledTask -TaskName NightlyBackup</code></td></tr>
+<tr><td><code>Export-ScheduledTask</code></td><td>Task definition as XML, useful in investigations</td><td><code class="copy">Export-ScheduledTask -TaskName NightlyBackup</code></td></tr>
+<tr><td><code>Unregister-ScheduledTask</code></td><td>Delete a task</td><td><code class="copy">Unregister-ScheduledTask -TaskName NightlyBackup -Confirm:$false</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="microsoft-graph">
+<h2 class="panel-title">Microsoft Graph PowerShell</h2>
+<p class="panel-lead">Manage Microsoft Entra ID and Microsoft 365 with the Microsoft.Graph modules.</p>
+<div class="callout callout-warning"><p><strong>Retired:</strong> the MSOnline and AzureAD modules were retired in 2025 and their cmdlets (<code>Connect-MsolService</code>, <code>Connect-AzureAD</code>) no longer work. Use Microsoft Graph PowerShell, or Microsoft Entra PowerShell (<code>Microsoft.Entra</code>, <code>Connect-Entra</code>), which keeps AzureAD style cmdlet names to ease migration.</p></div>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Install-Module Microsoft.Graph</code></td><td>Install the SDK (large, or install only the sub modules you need)</td><td><code class="copy">Install-Module Microsoft.Graph -Scope CurrentUser</code></td></tr>
+<tr><td><code>Connect-MgGraph</code></td><td>Sign in with delegated scopes</td><td><code class="copy">Connect-MgGraph -Scopes 'User.Read.All','Group.Read.All','AuditLog.Read.All'</code></td></tr>
+<tr><td><code>Connect-MgGraph -CertificateThumbprint</code></td><td>App only sign in for automation</td><td><code class="copy">Connect-MgGraph -ClientId $appId -TenantId $tenantId -CertificateThumbprint $thumbprint</code></td></tr>
+<tr><td><code>Get-MgContext</code></td><td>Current account, tenant and granted scopes</td><td><code class="copy">Get-MgContext | Select-Object Account,TenantId,Scopes</code></td></tr>
+<tr><td><code>Find-MgGraphCommand</code></td><td>Which permission a cmdlet needs</td><td><code class="copy">Find-MgGraphCommand -Command Get-MgUser | Select-Object -First 1 -ExpandProperty Permissions</code></td></tr>
+<tr><td><code>Get-MgUser</code></td><td>Users, with a server side filter</td><td><code class="copy">Get-MgUser -All -Filter 'accountEnabled eq false' -Property DisplayName,UserPrincipalName | Select-Object DisplayName,UserPrincipalName</code></td></tr>
+<tr><td><code>Get-MgGroupMember</code></td><td>Members of a group</td><td><code class="copy">Get-MgGroupMember -GroupId $groupId -All</code></td></tr>
+<tr><td><code>Get-MgDirectoryRoleMember</code></td><td>Who holds Global Administrator</td><td><code class="copy">$role = Get-MgDirectoryRole -Filter "displayName eq 'Global Administrator'"; Get-MgDirectoryRoleMember -DirectoryRoleId $role.Id</code></td></tr>
+<tr><td><code>Get-MgAuditLogSignIn</code></td><td>Recent sign-ins of one user</td><td><code class="copy">Get-MgAuditLogSignIn -Filter "userPrincipalName eq 'jdoe@contoso.com'" -Top 20 | Select-Object CreatedDateTime,IPAddress,AppDisplayName</code></td></tr>
+<tr><td><code>Get-MgUserAuthenticationMethod</code></td><td>MFA methods registered by a user</td><td><code class="copy">Get-MgUserAuthenticationMethod -UserId jdoe@contoso.com</code></td></tr>
+<tr><td><code>Update-MgUser</code></td><td>Block sign-in for a compromised account</td><td><code class="copy">Update-MgUser -UserId jdoe@contoso.com -AccountEnabled:$false</code></td></tr>
+<tr><td><code>Revoke-MgUserSignInSession</code></td><td>Invalidate refresh tokens and sessions</td><td><code class="copy">Revoke-MgUserSignInSession -UserId jdoe@contoso.com</code></td></tr>
+<tr><td><code>Invoke-MgGraphRequest</code></td><td>Call any Graph endpoint directly</td><td><code class="copy">Invoke-MgGraphRequest -Method GET -Uri 'https://graph.microsoft.com/v1.0/organization'</code></td></tr>
+<tr><td><code>Connect-ExchangeOnline</code></td><td>Exchange Online admin (ExchangeOnlineManagement module)</td><td><code class="copy">Connect-ExchangeOnline -UserPrincipalName admin@contoso.com</code></td></tr>
+<tr><td><code>Disconnect-MgGraph</code></td><td>Sign out and clear the token cache</td><td><code class="copy">Disconnect-MgGraph</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="security-and-triage">
+<h2 class="panel-title">Security and Triage</h2>
+<p class="panel-lead">First look at a suspicious Windows host: processes, connections, persistence and history.</p>
+<div class="callout callout-danger"><p><strong>Authorization:</strong> run investigation and offensive commands only on systems you own or are authorized to assess. On a live incident, collect evidence before you change anything.</p></div>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>Win32_Process</code></td><td>Processes with parent ID and full command line</td><td><code class="copy">Get-CimInstance Win32_Process | Select-Object ProcessId,ParentProcessId,Name,CommandLine | Sort-Object ParentProcessId</code></td></tr>
+<tr><td>Established connections</td><td>Who this host is talking to, with process names</td><td><code class="copy">Get-NetTCPConnection -State Established | Select-Object RemoteAddress,RemotePort,OwningProcess,@{Name='Process';Expression={(Get-Process -Id $_.OwningProcess).Name}}</code></td></tr>
+<tr><td>Run keys</td><td>Autostart entries in the registry</td><td><code class="copy">Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Run, HKCU:\Software\Microsoft\Windows\CurrentVersion\Run</code></td></tr>
+<tr><td><code>Win32_StartupCommand</code></td><td>Startup folder and Run key entries in one list</td><td><code class="copy">Get-CimInstance Win32_StartupCommand | Select-Object Name,Command,Location,User</code></td></tr>
+<tr><td>Unsigned service binaries</td><td>Services whose executable is not validly signed</td><td><code class="copy">Get-CimInstance Win32_Service | ForEach-Object { $binaryPath = ($_.PathName -replace '^"([^"]+)".*','$1' -replace '^(\S+\.exe).*','$1'); if ($binaryPath -and (Test-Path $binaryPath)) { [pscustomobject]@{Name=$_.Name; Path=$binaryPath; Signature=(Get-AuthenticodeSignature $binaryPath).Status} } } | Where-Object Signature -ne Valid</code></td></tr>
+<tr><td>WMI event subscriptions</td><td>Persistence through permanent WMI consumers</td><td><code class="copy">Get-CimInstance -Namespace root/subscription -ClassName CommandLineEventConsumer</code></td></tr>
+<tr><td>New executables in writable folders</td><td>Executables dropped in the last 7 days</td><td><code class="copy">Get-ChildItem $env:TEMP, C:\Users\Public, C:\ProgramData -Recurse -File -Include *.exe,*.dll,*.ps1 -ErrorAction SilentlyContinue | Where-Object LastWriteTime -gt (Get-Date).AddDays(-7)</code></td></tr>
+<tr><td><code>Zone.Identifier</code></td><td>Where a downloaded file came from</td><td><code class="copy">Get-Content .\download.exe -Stream Zone.Identifier</code></td></tr>
+<tr><td>PSReadLine history</td><td>Commands typed in past PowerShell sessions by this user</td><td><code class="copy">Get-Content (Get-PSReadLineOption).HistorySavePath -Tail 50</code></td></tr>
+<tr><td>New accounts and admins</td><td>Recent account creation and admin group changes</td><td><code class="copy">Get-WinEvent -FilterHashtable @{LogName='Security'; Id=4720,4732; StartTime=(Get-Date).AddDays(-7)} | Select-Object TimeCreated,Id,Message</code></td></tr>
+<tr><td>Kerberoastable accounts</td><td>User accounts with an SPN, which attackers target first</td><td><code class="copy">Get-ADUser -Filter "ServicePrincipalName -like '*'" -Properties ServicePrincipalName,PasswordLastSet | Select-Object SamAccountName,PasswordLastSet,ServicePrincipalName</code></td></tr>
+<tr><td>Language mode</td><td>Check whether Constrained Language Mode is enforced</td><td><code class="copy">$ExecutionContext.SessionState.LanguageMode</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="references">
+<h2 class="panel-title">References</h2>
+<p class="panel-lead">Official documentation for everything on this page.</p>
+<p><a class="link-button" href="https://learn.microsoft.com/powershell/">PowerShell documentation</a> <a class="link-button" href="https://learn.microsoft.com/powershell/module/">Module browser</a> <a class="link-button" href="https://learn.microsoft.com/powershell/scripting/install/powershell-support-lifecycle">Support lifecycle</a> <a class="link-button" href="https://learn.microsoft.com/powershell/microsoftgraph/">Microsoft Graph PowerShell</a> <a class="link-button" href="https://learn.microsoft.com/windows/package-manager/winget/">WinGet</a></p>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

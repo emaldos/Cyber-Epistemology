@@ -1,173 +1,391 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Maximum Security — Cyber Epistemology</title>
-<link rel="icon" href="../Image/Logo.png" type="image/png" sizes="32x32"/><link rel="icon" href="../Image/Logo.png" type="image/png" sizes="192x192"/><link rel="apple-touch-icon" href="../Image/Logo.png"/><meta name="theme-color" content="#111"/>
-<style>
-:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--accent1:#3a7bfd;--accent2:#1f4fd6;--glow1:rgba(72,132,255,.55);--glow2:rgba(40,100,255,.35)}
-*{box-sizing:border-box}html,body{height:100%}body{margin:0;font:16px/1.5 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111;text-align:center}
-.bg{position:fixed;inset:0;background:url("../Image/Logo.png") center/cover no-repeat;z-index:-2}
-.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.78) 100%);z-index:-1}
-.wrap{position:relative;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px}
-.box{width:min(960px,92%);padding:28px 26px;border-radius:20px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08);text-align:left}
-.h{margin:0 0 10px;font-size:30px;letter-spacing:.2px;text-align:center}
-.p{margin:10px 0;color:var(--muted);text-align:center}
-.sec{margin:18px 0}
-.hr{height:1px;background:rgba(255,255,255,.12);margin:16px 0;border-radius:1px}
-.row{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-.badge{display:inline-block;padding:2px 8px;border-radius:999px;border:1px solid rgba(160,190,255,.28);background:rgba(255,255,255,.05);font-size:12px;margin-left:6px}
-.actions{display:flex;justify-content:center;margin-top:14px}
-.btn{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:16px;text-decoration:none;white-space:nowrap;font-weight:800;letter-spacing:.2px;transition:transform .12s ease,box-shadow .22s ease,filter .22s ease;color:#cfe0ff;background:rgba(255,255,255,.04);border:1px solid rgba(160,190,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
-.btn img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
-.btn::before{content:"";position:absolute;inset:-8px;border-radius:inherit;background:radial-gradient(90% 140% at 50% 0%,var(--glow1),transparent 60%),radial-gradient(120% 120% at 50% 100%,var(--glow2),transparent 60%);filter:blur(12px);opacity:.75;z-index:-1;transition:opacity .22s ease,filter .22s ease}
-.btn:hover{transform:translateY(-1px)}
-.btn:hover::before{opacity:.95;filter:blur(14px)}
-.copy{margin-top:14px;font-size:12px;color:var(--muted);opacity:.85;text-align:center}
-a.inline{color:#cfe0ff;text-decoration:none;border-bottom:1px dashed rgba(160,190,255,.5)}a.inline:hover{filter:brightness(1.08)}
-.accordion{border:1px solid var(--ring);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.03)}
-.ac-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;font-weight:700}
-.ac-head span{opacity:.85}
-.ac-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
-.ac-body-inner{padding:8px 14px 14px}
-.ac-body ul{margin:10px 0 0 18px;padding:0}
-.ac-body li{margin:6px 0}
-.copyrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.copybox{flex:1;min-width:240px;display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(160,190,255,.22);font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
-.copybtn{padding:8px 12px;border-radius:10px;border:1px solid rgba(160,190,255,.28);background:rgba(255,255,255,.06);color:#cfe0ff;font-weight:700;cursor:pointer;transition:transform .12s ease,filter .22s ease,box-shadow .22s ease}
-.copybtn:hover{transform:translateY(-1px);filter:brightness(1.1);box-shadow:0 6px 18px rgba(40,100,255,.15),inset 0 1px 0 rgba(255,255,255,.18)}
-@media print{.bg{display:none}.wrap{padding:0}.box{box-shadow:none;background:#111;border-color:#333}.actions{display:none}a.inline{border:none}}
-</style></head><body>
-<div class="bg"></div>
-<div class="wrap">
-  <div class="box">
-    <h1 class="h">Maximum Security — Personal Cyber Hygiene</h1>
-    <p class="p"><strong>Simple rules. Strict habits. Fewer breaches.</strong></p>
-
-    <div class="sec accordion"><div class="ac-head" data-ac="pwd"><span>Passwords &amp; Vault</span><span>+</span></div><div class="ac-body" id="ac-pwd"><div class="ac-body-inner">
-      <ul>
-        <li><b>Strength:</b> ≥15 chars; upper/lowercase, numbers, special characters.</li>
-        <li><b>Content:</b> no personal info; no readable words/phrases.</li>
-        <li><b>Uniqueness:</b> different password per platform/account.</li>
-        <li><b>Rotation:</b> change every 1–3 months; never reuse last 5 (prefer never reuse).</li>
-        <li><b>Storage:</b> never in browser autofill, notes, screenshots, or paper.</li>
-        <li><b>Sharing:</b> never share; avoid shoulder-surfing.</li>
-        <li><b>Manager:</b> KeePass 2 (offline DB) with strong master password; add keyfile/2FA if available.</li>
-      </ul>
-    </div></div></div>
-
-    <div class="sec accordion"><div class="ac-head" data-ac="mfa"><span>MFA &amp; Passkeys</span><span>+</span></div><div class="ac-body" id="ac-mfa"><div class="ac-body-inner">
-      <ul><li>Prefer passkeys; otherwise app-based TOTP (no SMS).</li><li>Store recovery codes offline; register two authenticators minimum.</li></ul>
-    </div></div></div>
-
-    <div class="sec accordion"><div class="ac-head" data-ac="sess"><span>Sessions &amp; Devices</span><span>+</span></div><div class="ac-body" id="ac-sess"><div class="ac-body-inner">
-      <ul><li>Auto-logout after 5–10 minutes idle where possible.</li><li>Lock screen when away (Win+L / Ctrl+Cmd+Q).</li><li>Disable Bluetooth/Wi-Fi when not needed on phones and PCs.</li></ul>
-    </div></div></div>
-
-    <div class="sec accordion"><div class="ac-head" data-ac="mail"><span>Email, Links &amp; Attachments</span><span>+</span></div><div class="ac-body" id="ac-mail"><div class="ac-body-inner">
-      <ul>
-        <li>Do not open unsolicited photos, GIFs, PDFs, Office files, ZIPs, installers.</li>
-        <li>If the sender has weak awareness, double-check before opening anything.</li>
-        <li>Scan suspicious URLs with <a class="inline" href="https://www.virustotal.com/gui/home/url" target="_blank" rel="noopener">VirusTotal</a>.</li>
-        <li>Analyze headers: <a class="inline" href="https://mxtoolbox.com/EmailHeaders.aspx" target="_blank" rel="noopener">MXToolbox</a>.</li>
-        <li>Check exposures: <a class="inline" href="https://haveibeenpwned.com/" target="_blank" rel="noopener">Have I Been Pwned</a>.</li>
-      </ul>
-    </div></div></div>
-
-    <div class="sec accordion"><div class="ac-head" data-ac="net"><span>Networks &amp; Connectivity</span><span>+</span></div><div class="ac-body" id="ac-net"><div class="ac-body-inner">
-      <ul><li>Avoid public Wi-Fi; if unavoidable, use a trusted VPN and avoid sensitive accounts.</li><li>Do not use personal accounts on networks you don’t control.</li><li>Avoid free/unknown services; read security and privacy terms.</li></ul>
-    </div></div></div>
-
-    <div class="sec accordion"><div class="ac-head" data-ac="data"><span>Data Handling &amp; Privacy</span><span>+</span></div><div class="ac-body" id="ac-data"><div class="ac-body-inner">
-      <ul><li>Prefer E2E encryption and pre-shared keys for sensitive data.</li><li>Remove metadata (author, GPS, device) before sharing files.</li><li>Verify integrity via SHA-256 hashes when possible.</li></ul>
-    </div></div></div>
-
-    <div class="sec accordion"><div class="ac-head" data-ac="sbx"><span>Sandbox &amp; Monitoring</span><span>+</span></div><div class="ac-body" id="ac-sbx"><div class="ac-body-inner">
-      <ul><li>Use a sandbox or VM to test untrusted files/links first.</li><li>Watch for CPU/network spikes, new services, or autostarts.</li></ul>
-    </div></div></div>
-
-    <div class="sec accordion"><div class="ac-head" data-ac="soc"><span>Social Media Exposure</span><span>+</span></div><div class="ac-body" id="ac-soc"><div class="ac-body-inner">
-      <ul><li>Avoid posting routines, locations, or photos that aid profiling or security-answer guessing.</li></ul>
-    </div></div></div>
-
-    <div class="sec accordion"><div class="ac-head" data-ac="sys"><span>System Update Policy &amp; Platform Guidance</span><span>+</span></div>
-      <div class="ac-body" id="ac-sys"><div class="ac-body-inner">
-        <ul>
-          <li><b>Windows:</b> stay on latest stable release (e.g., <b>Windows 11 25H2</b> when available). Secure Boot and TPM enabled.</li>
-          <li><b>Ubuntu/Linux:</b> stay on the latest LTS or current stable release supported by your apps.</li>
-          <li><b>Android/iPhone:</b> keep OS and apps updated; remove unused apps.</li>
-          <li><b>Programs:</b> keep software on the latest version.</li>
-          <li><b>Update SLA:</b> Normal/Mid: <b>≤7 days</b>; High: <b>≤48 hours</b>; Security/Critical: <b>≤24 hours</b>.</li>
-        </ul>
-      </div></div>
-    </div>
-
-    <div class="sec accordion"><div class="ac-head" data-ac="hard"><span>Device Hardening</span><span>+</span></div><div class="ac-body" id="ac-hard"><div class="ac-body-inner">
-      <ul><li>Full-disk encryption (BitLocker/FileVault/mobile encryption).</li><li>UEFI Secure Boot on; BIOS/UEFI admin password; TPM enabled.</li><li>Separate standard vs admin accounts; least privilege daily use.</li></ul>
-    </div></div></div>
-
-    <div class="sec accordion"><div class="ac-head" data-ac="mobile"><span>Mobile Security</span><span>+</span></div><div class="ac-body" id="ac-mobile"><div class="ac-body-inner">
-      <ul><li>Disable sideloading; verify publishers; revoke unused permissions.</li><li>Long PIN/passcode; Find My Device; auto-wipe after N failures.</li></ul>
-    </div></div></div>
-
-    <div class="sec accordion"><div class="ac-head" data-ac="browser"><span>Browser &amp; Extensions</span><span>+</span></div><div class="ac-body" id="ac-browser"><div class="ac-body-inner">
-      <ul><li>Block third-party cookies; clear site data on close for risky profiles.</li><li>Only necessary, reputable extensions; HTTPS-only; block WebRTC leaks if needed.</li></ul>
-    </div></div></div>
-
-    <div class="sec accordion"><div class="ac-head" data-ac="home"><span>Home/Small Office Network</span><span>+</span></div><div class="ac-body" id="ac-home"><div class="ac-body-inner">
-      <ul><li>Router: change default admin; disable WPS/UPnP; enable WPA3; separate guest SSID.</li><li>Update router firmware; consider DNS filtering.</li></ul>
-    </div></div></div>
-
-    <div class="sec accordion"><div class="ac-head" data-ac="backup"><span>Backups (3-2-1)</span><span>+</span></div><div class="ac-body" id="ac-backup"><div class="ac-body-inner">
-      <ul><li>3 copies, 2 media, 1 offsite; ransomware-resistant snapshots.</li><li>Encrypt backups; test restores quarterly.</li></ul>
-    </div></div></div>
-
-    <div class="sec accordion"><div class="ac-head" data-ac="phish"><span>Phishing Playbook</span><span>+</span></div><div class="ac-body" id="ac-phish"><div class="ac-body-inner">
-      <ul><li>Beware MFA fatigue, QR-phish, homoglyph domains, urgent/CEO lures.</li><li>Flow: Stop → Validate → Report.</li></ul>
-    </div></div></div>
-
-    <div class="hr"></div>
-
-    <div class="sec"><h2>Quick Commands</h2>
-      <div class="copyrow">
-        <div class="copybox" data-copy="Get-FileHash -Algorithm SHA256 <file>">Windows: Get-FileHash -Algorithm SHA256 &lt;file&gt;<button class="copybtn" aria-label="Copy">Copy</button></div>
-        <div class="copybox" data-copy="sha256sum <file>">Linux: sha256sum &lt;file&gt;<button class="copybtn" aria-label="Copy">Copy</button></div>
-        <div class="copybox" data-copy="shasum -a 256 <file>">macOS: shasum -a 256 &lt;file&gt;<button class="copybtn" aria-label="Copy">Copy</button></div>
-        <div class="copybox" data-copy="exiftool -all= <file>">Strip metadata: exiftool -all= &lt;file&gt;<button class="copybtn" aria-label="Copy">Copy</button></div>
-      </div>
-    </div>
-
-    <div class="sec"><h2>Quick Routines</h2>
-      <ul>
-        <li><b>Daily:</b> lock devices; avoid unexpected links/attachments; turn off BT/Wi-Fi when not needed.</li>
-        <li><b>Weekly:</b> install updates; review password vault; remove unused accounts.</li>
-        <li><b>Monthly:</b> run HIBP check; ensure browsers saved no passwords.</li>
-        <li><b>Quarterly:</b> rotate critical passwords; review social privacy; audit startup apps/services.</li>
-      </ul>
-    </div>
-
-    <div class="sec"><h2>If You Clicked Something Suspicious (Mini IR Plan)</h2>
-      <ul>
-        <li><b>Isolate:</b> disconnect Wi-Fi/cable, enable airplane mode; do not power off if you may need volatile evidence.</li>
-        <li><b>Do not authenticate:</b> stop entering passwords or MFA approvals; close any prompts.</li>
-        <li><b>Capture evidence:</b> note time, URL/file, sender, screenshots, and any prompts or downloads.</li>
-        <li><b>Initial triage:</b> run reputable AV/EDR; check new installs, services, startup items, scheduled tasks, browser extensions.</li>
-        <li><b>Credentials hygiene:</b> from a clean device, change email, bank, admin, and vault passwords; invalidate active sessions; verify MFA devices.</li>
-        <li><b>Financial safeguards:</b> if payment data was involved, freeze cards or enable spend limits and alerts; contact bank if needed.</li>
-        <li><b>Containment &amp; rebuild:</b> for confirmed compromise, back up needed user data, then wipe and reinstall OS; restore from known-good backups only.</li>
-        <li><b>Reporting:</b> inform IT/Security; for personal cases, consider relevant authorities if fraud occurred; preserve logs.</li>
-        <li><b>Post-incident:</b> update blockers/filters, patch systems, review user training, and document a timeline and lessons learned.</li>
-      </ul>
-    </div>
-
-    <div class="sec row">
-      <a class="btn" href="https://haveibeenpwned.com/" target="_blank" rel="noopener"><img src="../Image/URL.png" alt="" aria-hidden="true">Open HIBP</a>
-      <a class="btn" href="https://mxtoolbox.com/EmailHeaders.aspx" target="_blank" rel="noopener"><img src="../Image/URL.png" alt="" aria-hidden="true">Email Headers</a>
-      <a class="btn" href="https://www.virustotal.com/gui/home/url" target="_blank" rel="noopener"><img src="../Image/URL.png" alt="" aria-hidden="true">Scan URL</a>
-    </div>
-
-    <div class="actions"><a class="btn" href="../index.html"><img src="../Image/Home.png" alt="" aria-hidden="true">Back Home</a></div>
-    <div class="copy">© Epistemology 2025</div>
-  </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Personal Cyber Security | Cyber Epistemology</title>
+<meta name="description" content="Practical security habits for people and small teams: passwords and password managers, passkeys and MFA, updates, phishing and scams, backups, privacy, routines and what to do if you clicked something.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../Assets/Image/AppleTouchIcon.png">
+<link rel="stylesheet" href="../Assets/Style/Site.css">
+<script src="../Assets/Script/Site.js" defer></script>
+</head>
+<body class="is-content-page" data-root="../" data-section="awareness">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-separator">/</span><span>Awareness</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../Assets/Icon/Awareness.png" alt="">
+<div>
+<p class="hero-eyebrow">Awareness</p>
+<h1 class="hero-title">Personal Cyber Security</h1>
 </div>
-<script>
-document.querySelectorAll('.ac-head').forEach(h=>{h.addEventListener('click',()=>{const k=h.dataset.ac;const b=document.getElementById('ac-'+k);const open=b.style.maxHeight;b.style.maxHeight=open&&open!=='0px'?'0':b.scrollHeight+'px';h.lastElementChild.textContent=open&&open!=='0px'?'+':'–'})});
-document.querySelectorAll('.copybox .copybtn').forEach(btn=>btn.addEventListener('click',e=>{const w=e.currentTarget.parentElement;const t=w.getAttribute('data-copy');navigator.clipboard.writeText(t)}));
-</script>
-</body></html>
+</div>
+<p class="hero-lead">Habits that stop most real attacks on people and small teams: unique passwords in a manager, passkeys or strong MFA, automatic updates, a pause before you click, and backups you have tested. Aligned with current NIST, CISA and NCSC guidance.</p>
+<div class="hero-meta"><span class="badge">15 sections</span><span class="badge">NIST SP 800-63B-4</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: passkey" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="start-here">
+<h2 class="panel-title">Start Here</h2>
+<p class="panel-lead">If you only do six things, do these, in this order.</p>
+<ol class="steps">
+<li><strong>Secure your main email account:</strong> it resets every other password. Give it a long unique password and a passkey or security key.</li>
+<li><strong>Use a password manager:</strong> one unique, generated password per account. Reuse is what turns one breach into ten.</li>
+<li><strong>Turn on passkeys or MFA everywhere it matters:</strong> email, bank, cloud storage, social media, work accounts and the password manager itself.</li>
+<li><strong>Turn on automatic updates:</strong> operating system, browser, apps and router. Replace devices that no longer get security updates.</li>
+<li><strong>Back up what you cannot lose:</strong> at least one copy offline or immutable, and test a restore.</li>
+<li><strong>Pause on anything urgent:</strong> unexpected requests for codes, money, logins or remote access are scams until you verify them through a channel you already trust.</li>
+</ol>
+</section>
+<section class="panel" id="passwords">
+<h2 class="panel-title">Passwords and Password Managers</h2>
+<p class="panel-lead">Length and uniqueness beat complexity rules. Let a manager remember them.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term">Minimum length (NIST)</span><span class="definition-text">15 characters when the password is the only factor, 8 when it is used with MFA. Sites should accept at least 64.</span></div>
+<div class="definition"><span class="definition-term">Composition rules</span><span class="definition-text">NIST SP 800-63B-4 says services shall not force mixes of uppercase, digits and symbols. Length matters more.</span></div>
+<div class="definition"><span class="definition-term">Periodic changes</span><span class="definition-text">Not required. Change a password only when there is evidence it was exposed: a breach notice, phishing, malware or shared use.</span></div>
+<div class="definition"><span class="definition-term">Blocklists</span><span class="definition-text">Services should reject common, expected and already breached passwords, and allow paste, autofill and password managers.</span></div>
+</div>
+<h3>Rules that work</h3>
+<ul class="checklist">
+<li>One unique password per account. Never reuse a password, not even with small changes like a different number at the end.</li>
+<li>Let the manager generate random passwords of 20 or more characters for sites you never type by hand.</li>
+<li>For the few passwords you must remember (device login, password manager, main email), use a long passphrase of four or more random words, for example the NCSC three random words idea with an extra word.</li>
+<li>No personal details: names, birthdays, pets, teams, addresses or anything visible on your social media.</li>
+<li>Do not store passwords in plain notes, text files, chat messages, spreadsheets or screenshots.</li>
+<li>Never share a password. Share access instead: shared vault folders, family plans or delegated access.</li>
+<li>Security questions: treat them as extra passwords. Use random answers and save them in the manager.</li>
+<li>Change a password right away if the service reports a breach, Have I Been Pwned lists it, or you typed it into a page you no longer trust.</li>
+</ul>
+<h3>Where to keep passwords</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Option</th><th>Good for</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Dedicated password manager</td><td>Most people and all small teams</td><td>Bitwarden, 1Password, Proton Pass and similar. Syncs across devices and browsers, supports passkeys, shared vaults and breach alerts.</td></tr>
+<tr><td>Offline manager</td><td>People who want no cloud sync</td><td>KeePassXC or KeePass with a long master passphrase. You are responsible for backing up the database file.</td></tr>
+<tr><td>Built-in browser or OS manager</td><td>People on one ecosystem</td><td>Apple Passwords, Google Password Manager, Microsoft Edge. Acceptable when the account behind it has a strong password and MFA or a passkey, and the device has a screen lock.</td></tr>
+<tr><td>Paper notebook</td><td>A few critical items at home</td><td>Acceptable for recovery codes and a master passphrase if kept somewhere safe. Never in a wallet or laptop bag.</td></tr>
+<tr><td>Plain notes, documents, chats</td><td>Nothing</td><td>Unencrypted and easily synced, shared or stolen by malware.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-tip"><p><strong>Tip:</strong> download a password manager only from its official site or the official app store. Fake installers for popular managers are spread through search ads.</p></div>
+<div class="callout callout-warning"><p><strong>Shared computers:</strong> never save passwords in a browser on a library, school, hotel or other shared computer, and always sign out when you leave.</p></div>
+</section>
+<section class="panel" id="mfa-passkeys">
+<h2 class="panel-title">MFA and Passkeys</h2>
+<p class="panel-lead">A second factor stops most account takeovers. Phishing-resistant ones stop nearly all of them.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Method</th><th>Phishing resistant</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Passkey</td><td><span class="tag tag-low">Yes</span></td><td>Bound to the real website, so a fake page cannot use it. Synced passkeys live in your password manager or Apple, Google or Microsoft account; device-bound passkeys stay on one device. Use them wherever they are offered.</td></tr>
+<tr><td>FIDO2 security key</td><td><span class="tag tag-low">Yes</span></td><td>Hardware key (USB, NFC) holding device-bound passkeys. Best choice for email, admin and finance accounts. Register two and keep the spare somewhere safe.</td></tr>
+<tr><td>Authenticator app with number matching</td><td><span class="tag tag-medium">Partly</span></td><td>Microsoft Authenticator and similar. Number matching stops blind approvals, but a fake page can still relay the login in real time.</td></tr>
+<tr><td>Authenticator app (TOTP codes)</td><td><span class="tag tag-medium">No</span></td><td>Six digit codes that change every 30 seconds. Much better than SMS, but a phishing page can ask for the code.</td></tr>
+<tr><td>Push approval without number matching</td><td><span class="tag tag-high">No</span></td><td>Vulnerable to MFA fatigue: attackers send prompts until someone taps Approve. Switch to number matching or a passkey.</td></tr>
+<tr><td>SMS or voice code</td><td><span class="tag tag-high">No</span></td><td>Better than nothing. Exposed to SIM swap, number porting and phishing. Use only when nothing else is offered.</td></tr>
+</tbody>
+</table>
+</div>
+<ul class="checklist">
+<li>Protect your password manager and main email with a passkey or security key first.</li>
+<li>Register at least two methods (for example a passkey on your phone and a security key) so losing one device does not lock you out.</li>
+<li>Save recovery codes offline: printed, or in the manager plus a paper copy for the manager itself.</li>
+<li>Ask your mobile carrier for a SIM or port-out PIN to make SIM swap harder.</li>
+<li>Review signed-in devices and app passwords in your main accounts and remove what you do not recognise.</li>
+<li>A login prompt you did not start means someone has your password: deny it, then change that password.</li>
+</ul>
+<div class="callout callout-danger"><p><strong>Never read out or forward a code:</strong> no bank, support desk or delivery company needs your one-time code, and no one legitimate will ask you to approve a sign-in for them.</p></div>
+</section>
+<section class="panel" id="devices-updates">
+<h2 class="panel-title">Devices and Updates</h2>
+<p class="panel-lead">Supported systems, automatic updates and a few hardening switches.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term">Windows 11</span><span class="definition-text">Current release is version 26H2 (September 2026). Home and Pro releases get 24 months of updates; 24H2 Home and Pro stopped on 13 October 2026, so move to 25H2 or 26H2.</span></div>
+<div class="definition"><span class="definition-term">Windows 10</span><span class="definition-text">Support ended 14 October 2025. Consumer ESU on version 22H2 now runs to 12 October 2027 (free with settings sync, 1,000 Rewards points, or a one-time purchase). Plan the move to Windows 11 or a different system.</span></div>
+<div class="definition"><span class="definition-term">macOS</span><span class="definition-text">Apple fully patches only the latest major release. macOS 26 Tahoe is the last release for Intel Macs; macOS 27 needs Apple silicon.</span></div>
+<div class="definition"><span class="definition-term">Ubuntu and Linux</span><span class="definition-text">Use a supported release, for example Ubuntu 26.04 LTS (April 2026) or 24.04 LTS. Check end-of-life dates for your distribution.</span></div>
+<div class="definition"><span class="definition-term">Phones and tablets</span><span class="definition-text">Stay on the newest major version your device supports. When the vendor stops security updates, replace the device.</span></div>
+<div class="definition"><span class="definition-term">Routers and IoT</span><span class="definition-text">End-of-life routers and cameras are a common entry point. Replace them when firmware updates stop.</span></div>
+</div>
+<h3>How fast to patch</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Update type</th><th>Target</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Actively exploited (zero-day, listed in the CISA KEV catalog)</td><td>Within 24 to 48 hours</td><td>Browsers, phones and VPN or remote access devices are the usual targets. Restart to finish the install.</td></tr>
+<tr><td>Critical and high severity</td><td>Within 7 days, at most 14</td><td>UK Cyber Essentials requires high and critical fixes within 14 days of release.</td></tr>
+<tr><td>Other updates and feature releases</td><td>Within 30 days</td><td>Move to new feature releases before the old one goes out of support.</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Hardening</h3>
+<ul class="checklist">
+<li>Turn on automatic updates for the OS, browser, Microsoft Store or App Store apps, and use <code>winget</code> or your package manager for the rest.</li>
+<li>Uninstall software you no longer use and anything that no longer gets updates.</li>
+<li>Use a standard account day to day and a separate admin account for installs (least privilege).</li>
+<li>Full disk encryption on: BitLocker or Device encryption on Windows, FileVault on macOS, LUKS on Linux. Store the recovery key somewhere other than the device.</li>
+<li>Keep UEFI Secure Boot and TPM on, and set a firmware (BIOS or UEFI) admin password on laptops.</li>
+<li>Windows: keep Microsoft Defender, Smart App Control (if available), Memory integrity and Windows Hello on.</li>
+<li>Lock the screen when you walk away: <kbd>Win</kbd>+<kbd>L</kbd> on Windows, <kbd>Ctrl</kbd>+<kbd>Cmd</kbd>+<kbd>Q</kbd> on macOS. Auto-lock after 5 to 10 minutes idle.</li>
+<li>Open untrusted files in a sandbox or VM first (Windows Sandbox on Pro and Enterprise, or a throwaway virtual machine).</li>
+<li>Turn on Find My or Find My Device so a lost laptop or phone can be located, locked and wiped.</li>
+</ul>
+</section>
+<section class="panel" id="phishing">
+<h2 class="panel-title">Email, Messages and Phishing</h2>
+<p class="panel-lead">Scams arrive by email, text, chat, QR code and phone call. Urgency is the tell.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Scam</th><th>What it looks like</th><th>What to do</th></tr></thead>
+<tbody>
+<tr><td>Credential phishing</td><td>Login page for Microsoft 365, Google, a bank or a parcel service, often on a lookalike domain (rnicrosoft, paypa1, extra words or odd endings)</td><td>Do not log in from links. Open the app or type the address you know. A password manager that does not autofill is a warning sign.</td></tr>
+<tr><td>QR code phishing (quishing)</td><td>QR codes in emails, PDFs, parking meters, posters or letters asking you to pay, verify or log in</td><td>Check the address before opening it. Pay parking and fines only through the official app or site. Watch for stickers placed over real codes.</td></tr>
+<tr><td>MFA fatigue</td><td>A stream of sign-in approval prompts, sometimes followed by a call from "IT"</td><td>Deny every prompt you did not start, change the password, and report it.</td></tr>
+<tr><td>Device code and consent phishing</td><td>A message asks you to enter a code on a real Microsoft or Google page, or to grant an app access to your mailbox</td><td>Only enter device codes for a device you are setting up yourself. Do not approve app permissions you did not ask for.</td></tr>
+<tr><td>AI voice and deepfake scams</td><td>A call, voice note or video from a "family member", boss or official asking for money, gift cards, crypto or secrecy</td><td>Hang up and call back on a number you already have. Agree a family safe word. In teams, require a second person to approve payments.</td></tr>
+<tr><td>Fake support calls and pop-ups</td><td>A "Microsoft", "Apple", bank or internet provider agent calls, or a browser page says your PC is infected and shows a phone number</td><td>Real companies do not cold call about viruses. Never install remote access tools (AnyDesk, TeamViewer, Quick Assist) for a caller you did not contact.</td></tr>
+<tr><td>Fake CAPTCHA (ClickFix)</td><td>A page asks you to press <kbd>Win</kbd>+<kbd>R</kbd>, or open Terminal, and paste something to "prove you are human" or "fix" an error</td><td>Never paste a command a website or message tells you to run. Close the tab.</td></tr>
+<tr><td>Invoice and bank detail change</td><td>A supplier or colleague email says bank details have changed, or a CEO asks for an urgent transfer</td><td>Confirm by phone using a number from your own records, not from the email.</td></tr>
+<tr><td>Malicious attachments</td><td>Unexpected ZIP, ISO, HTML, OneNote, PDF or Office files, or a "shared document" link</td><td>Do not open unexpected files, even from known senders whose accounts may be compromised. Ask the sender through another channel.</td></tr>
+<tr><td>Delivery, toll and tax texts</td><td>SMS or chat messages about a missed parcel, unpaid toll, refund or fine with a link</td><td>Ignore the link and check in the official app or site. Report the text (see Check and Report).</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Stop, check, report</h3>
+<ol class="steps">
+<li><strong>Stop:</strong> urgency, secrecy, threats, prizes and unusual payment methods are pressure tactics.</li>
+<li><strong>Check:</strong> verify through a channel you already trust (the official app, a saved number, walking over to a colleague). Look at the real sender address and the link target, not the display name.</li>
+<li><strong>Report:</strong> use the Report phishing button in your mail app, tell IT at work, then delete the message.</li>
+</ol>
+</section>
+<section class="panel" id="browsers">
+<h2 class="panel-title">Browsers and Extensions</h2>
+<p class="panel-lead">The browser is where most attacks land. Keep it current and lean.</p>
+<ul class="checklist">
+<li>Use a current, auto-updating browser (Chrome, Edge, Firefox, Safari, Brave) and restart it when it asks.</li>
+<li>Turn on HTTPS-only or always use secure connections, and Safe Browsing or SmartScreen protection.</li>
+<li>Install few extensions, only from the official store, from publishers you trust. Remove ones you have not used in a month; extensions get sold and turned malicious.</li>
+<li>Check extension permissions. "Read and change all your data on all websites" is a lot of trust.</li>
+<li>Block third-party cookies and use a content blocker (uBlock Origin on Firefox, uBlock Origin Lite on Chrome and Edge) to cut malvertising.</li>
+<li>Never allow notifications from sites you do not know. Fake "click Allow to continue" pages use them for scam pop-ups.</li>
+<li>Use separate browser profiles for work, personal and risky browsing. Clear site data on close in the risky profile.</li>
+<li>Search ads can lead to fake download pages. Download software from the vendor site you type yourself.</li>
+<li>If privacy matters, check that your browser or VPN does not leak your IP address over WebRTC.</li>
+</ul>
+</section>
+<section class="panel" id="home-network">
+<h2 class="panel-title">Home and Small Office Network</h2>
+<p class="panel-lead">Ten minutes on the router settings page covers most of it.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Setting</th><th>Do this</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>Admin password</td><td>Replace the default with a long unique password, and use the router app or local page only</td><td>Default and weak credentials are scanned for constantly</td></tr>
+<tr><td>Firmware</td><td>Turn on automatic updates; replace the router when the vendor ends support</td><td>Unpatched end-of-life routers are used in botnets and proxy networks</td></tr>
+<tr><td>Wi-Fi security</td><td>WPA3 Personal, or WPA2/WPA3 mixed mode for older devices; never WEP or open networks</td><td>Stops offline password cracking and casual access</td></tr>
+<tr><td>WPS</td><td>Turn off</td><td>The PIN method can be brute forced</td></tr>
+<tr><td>UPnP</td><td>Turn off unless a specific device needs it</td><td>Malware uses it to open ports silently</td></tr>
+<tr><td>Remote management</td><td>Turn off access to the admin page from the internet</td><td>Exposed admin pages are a top target</td></tr>
+<tr><td>Guest and IoT network</td><td>Put guests, smart TVs, cameras and speakers on a separate network</td><td>A compromised gadget cannot reach your laptops and NAS</td></tr>
+<tr><td>DNS filtering</td><td>Use a filtering resolver, for example Quad9 (<code>9.9.9.9</code>) or Cloudflare for Families (<code>1.1.1.2</code>)</td><td>Blocks known malware and phishing domains for every device</td></tr>
+<tr><td>Port forwarding</td><td>Remove rules you do not need; never expose RDP, SMB or camera admin pages</td><td>Open services are found within hours</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Public Wi-Fi</h3>
+<ul class="checklist">
+<li>Most sites use HTTPS, so public Wi-Fi is less risky than it was, but prefer your phone hotspot for banking and work.</li>
+<li>Never install anything a captive portal asks for, and ignore certificate warnings on public networks.</li>
+<li>A VPN helps on untrusted networks. Use your employer's or a reputable paid provider; free unknown VPN apps often sell your data.</li>
+<li>Turn off auto-join for open networks, and Wi-Fi and Bluetooth when you do not need them.</li>
+</ul>
+</section>
+<section class="panel" id="small-team">
+<h2 class="panel-title">Small Team Basics</h2>
+<p class="panel-lead">Extra controls for a small business, club or family office with shared accounts.</p>
+<ul class="checklist">
+<li>Require MFA for every account in Microsoft 365, Google Workspace and your other cloud tools, and use security keys or passkeys for admins.</li>
+<li>Separate admin accounts from daily accounts, and keep at least two admins so one lost phone is not a lockout.</li>
+<li>Use a business password manager with shared vaults instead of sharing passwords in chat or spreadsheets.</li>
+<li>Write down onboarding and offboarding: when someone leaves, disable their accounts, rotate the shared passwords they knew and recover company devices the same day.</li>
+<li>Set up SPF, DKIM and DMARC on your email domain so attackers cannot easily send mail as you.</li>
+<li>Require a callback and a second approver for payments and bank detail changes.</li>
+<li>Keep a short list of who to call for IT, the bank and insurance during an incident, printed and offline.</li>
+<li>Check free schemes such as UK Cyber Essentials or the CISA Cyber Essentials guide as a baseline.</li>
+</ul>
+</section>
+<section class="panel" id="mobile">
+<h2 class="panel-title">Mobile Devices</h2>
+<p class="panel-lead">Your phone holds your passkeys, MFA and email. Lock it down like a laptop.</p>
+<ul class="checklist">
+<li>Use a six digit or longer passcode, plus Face ID, Touch ID or fingerprint unlock. Auto-lock after 30 seconds to 1 minute.</li>
+<li>Install apps only from the official store, check the publisher and reviews, and avoid sideloading APK files or unknown profiles.</li>
+<li>Review app permissions (location, microphone, camera, contacts, accessibility) and revoke what an app does not need.</li>
+<li>Delete apps you do not use. Abandoned apps stop getting fixes.</li>
+<li>Turn on theft protection: Stolen Device Protection on iPhone, Theft Detection Lock and Offline Device Lock on Android.</li>
+<li>Turn on Find My (iPhone) or Find My Device (Android) and know how to erase the phone remotely.</li>
+<li>Optional erase after 10 failed passcode attempts, if you have reliable backups.</li>
+<li>High risk users (journalists, activists, executives): consider Lockdown Mode on iPhone or Advanced Protection on Android 16 and later.</li>
+<li>Restart your phone once a week; it clears some memory-only malware.</li>
+<li>Set a SIM PIN so a stolen SIM card cannot receive your texts in another phone.</li>
+</ul>
+</section>
+<section class="panel" id="backups-encryption">
+<h2 class="panel-title">Data, Backups and Encryption</h2>
+<p class="panel-lead">Backups are your answer to ransomware, theft and mistakes, but only if they restore.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term">3 copies</span><span class="definition-text">The original plus two backups.</span></div>
+<div class="definition"><span class="definition-term">2 media</span><span class="definition-text">For example the laptop disk and an external drive or NAS.</span></div>
+<div class="definition"><span class="definition-term">1 offsite</span><span class="definition-text">Cloud backup or a drive kept at another location.</span></div>
+<div class="definition"><span class="definition-term">1 offline or immutable</span><span class="definition-text">A drive you unplug after each backup, or cloud storage with versioning or object lock that ransomware cannot delete.</span></div>
+<div class="definition"><span class="definition-term">0 restore errors</span><span class="definition-text">Test a restore of real files regularly. An untested backup is a hope, not a backup.</span></div>
+</div>
+<ul class="checklist">
+<li>Cloud sync (OneDrive, iCloud Drive, Google Drive, Dropbox) is not a backup on its own: deletions and encrypted files sync too. Keep version history on and add a separate backup.</li>
+<li>Use the built-in tools: File History or Windows Backup on Windows, Time Machine on macOS, Deja Dup or rsync-based tools on Linux, iCloud or Google One backup on phones.</li>
+<li>Encrypt backup drives and cloud backups, and store the key or password in your manager plus an offline copy.</li>
+<li>Back up the things that are hard to replace: photos, documents, password manager export or database, MFA recovery codes, and any 2FA app backup.</li>
+<li>Use end-to-end encrypted messengers (Signal, WhatsApp, iMessage) for private conversations, and turn on disappearing messages where it suits you.</li>
+<li>For extra protection of iCloud data, turn on Advanced Data Protection where it is available in your country.</li>
+<li>To send a sensitive file, encrypt it (for example a 7-Zip AES-256 archive) and send the password through a different channel.</li>
+<li>Check file integrity with a SHA-256 hash when the publisher lists one (see Quick Commands).</li>
+<li>Before selling or recycling a device, sign out of all accounts, remove it from Find My, and do a full factory reset with encryption on.</li>
+</ul>
+</section>
+<section class="panel" id="privacy">
+<h2 class="panel-title">Privacy and Social Media</h2>
+<p class="panel-lead">What you post is reconnaissance for scammers. Share less, and share later.</p>
+<ul class="checklist">
+<li>Set profiles to friends or private, and review who can find you by phone number or email.</li>
+<li>Do not post routines, live locations, travel dates, boarding passes, tickets, ID documents, keys or car plates.</li>
+<li>Avoid quizzes like "your first pet plus your street name": they collect security question answers.</li>
+<li>Remove photo metadata (GPS location, device, date) before sharing files directly. Many platforms strip it, but email, cloud links and "send as file" usually do not.</li>
+<li>Limit location history and app location access to "while using" or off.</li>
+<li>Review connected apps and "Sign in with" grants in your Google, Apple, Microsoft and social accounts, and remove old ones.</li>
+<li>Do not paste personal, customer or company confidential data into AI chatbots unless your organisation approves that tool.</li>
+<li>Use a separate email address or aliases for shopping and newsletters to keep your main address out of breaches.</li>
+<li>Delete accounts you no longer use instead of leaving them to be breached.</li>
+<li>Consider opting out of people search and data broker sites, which feed targeted scams.</li>
+</ul>
+</section>
+<section class="panel" id="quick-commands">
+<h2 class="panel-title">Quick Commands</h2>
+<p class="panel-lead">Verify downloads, strip metadata and check that protections are on.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Task</th><th>Windows (PowerShell)</th><th>macOS</th><th>Linux</th></tr></thead>
+<tbody>
+<tr><td>SHA-256 hash of a file</td><td><code class="copy">Get-FileHash .\setup.exe -Algorithm SHA256</code></td><td><code class="copy">shasum -a 256 setup.dmg</code></td><td><code class="copy">sha256sum ubuntu.iso</code></td></tr>
+<tr><td>Check a hash against the published value</td><td><code class="copy">(Get-FileHash .\setup.exe).Hash -eq "PASTE_PUBLISHED_HASH"</code></td><td><code class="copy">echo "PASTE_PUBLISHED_HASH  setup.dmg" | shasum -a 256 -c</code></td><td><code class="copy">sha256sum -c SHA256SUMS --ignore-missing</code></td></tr>
+<tr><td>Hash without PowerShell</td><td><code class="copy">certutil -hashfile setup.exe SHA256</code></td><td><code class="copy">openssl dgst -sha256 setup.dmg</code></td><td><code class="copy">openssl dgst -sha256 ubuntu.iso</code></td></tr>
+<tr><td>Show file metadata</td><td><code class="copy">exiftool photo.jpg</code></td><td><code class="copy">mdls photo.jpg</code></td><td><code class="copy">exiftool photo.jpg</code></td></tr>
+<tr><td>Strip all metadata (ExifTool)</td><td><code class="copy">exiftool -all= -overwrite_original photo.jpg</code></td><td><code class="copy">exiftool -all= -overwrite_original photo.jpg</code></td><td><code class="copy">exiftool -all= -overwrite_original photo.jpg</code></td></tr>
+<tr><td>Strip metadata from documents</td><td>File Explorer: Properties, Details, Remove Properties and Personal Information</td><td>Preview: Tools, Show Inspector, remove location</td><td><code class="copy">mat2 report.pdf</code></td></tr>
+<tr><td>Disk encryption status</td><td><code class="copy">manage-bde -status C:</code></td><td><code class="copy">fdesetup status</code></td><td><code class="copy">lsblk -o NAME,FSTYPE,MOUNTPOINT</code></td></tr>
+<tr><td>Secure Boot status</td><td><code class="copy">Confirm-SecureBootUEFI</code></td><td>Recovery, Utilities, Startup Security Utility</td><td><code class="copy">mokutil --sb-state</code></td></tr>
+<tr><td>Firewall status</td><td><code class="copy">Get-NetFirewallProfile | Select-Object Name, Enabled</code></td><td><code class="copy">/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate</code></td><td><code class="copy">sudo ufw status verbose</code></td></tr>
+<tr><td>Install updates</td><td><code class="copy">winget upgrade --all</code></td><td><code class="copy">sudo softwareupdate --install --all</code></td><td><code class="copy">sudo apt update &amp;&amp; sudo apt full-upgrade</code></td></tr>
+<tr><td>Antivirus status and quick scan</td><td><code class="copy">Get-MpComputerStatus; Update-MpSignature; Start-MpScan -ScanType QuickScan</code></td><td>XProtect runs automatically; keep macOS updated</td><td><code class="copy">sudo clamscan -r --infected ~/Downloads</code></td></tr>
+<tr><td>List startup programs</td><td><code class="copy">Get-CimInstance Win32_StartupCommand | Select-Object Name, Command, Location</code></td><td>System Settings, General, Login Items and Extensions</td><td><code class="copy">systemctl list-unit-files --state=enabled</code></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout"><p><strong>Note:</strong> <code>manage-bde</code>, <code>Confirm-SecureBootUEFI</code> and <code>Start-MpScan</code> need an elevated (Run as administrator) prompt. ExifTool and mat2 are free downloads; on Linux install them with your package manager. On Linux, encrypted volumes show the <code>crypto_LUKS</code> file system type.</p></div>
+</section>
+<section class="panel" id="routines">
+<h2 class="panel-title">Routines</h2>
+<p class="panel-lead">Small habits on a schedule. No routine password rotation: change passwords when there is a reason.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Task</th><th>How often</th><th>Details</th></tr></thead>
+<tbody>
+<tr><td>Lock devices when you step away</td><td>Daily</td><td>Screen lock shortcut on computers, side button on phones.</td></tr>
+<tr><td>Treat unexpected links, files and calls with suspicion</td><td>Daily</td><td>Verify through a trusted channel before acting.</td></tr>
+<tr><td>Restart to finish updates</td><td>Weekly</td><td>Restart the computer, phone and browser when updates are waiting.</td></tr>
+<tr><td>Act on password manager alerts</td><td>Weekly</td><td>Change any password flagged as breached or reused.</td></tr>
+<tr><td>Check backups ran</td><td>Weekly</td><td>Look at the last successful backup date; reconnect the offline drive and run it.</td></tr>
+<tr><td>Check breach notifications</td><td>Monthly</td><td>Subscribe to Have I Been Pwned notifications instead of checking by hand.</td></tr>
+<tr><td>Review signed-in devices and sessions</td><td>Monthly</td><td>Email, cloud storage, social media and password manager. Remove unknown devices.</td></tr>
+<tr><td>Review extensions and apps</td><td>Monthly</td><td>Remove browser extensions and phone apps you no longer use.</td></tr>
+<tr><td>Update router and NAS firmware</td><td>Monthly</td><td>Or confirm automatic updates are on and working.</td></tr>
+<tr><td>Test a restore</td><td>Quarterly</td><td>Restore a few real files from each backup to a different folder and open them.</td></tr>
+<tr><td>Review privacy settings</td><td>Quarterly</td><td>Social media visibility, location sharing, connected apps and "Sign in with" grants.</td></tr>
+<tr><td>Audit startup items and services</td><td>Quarterly</td><td>Look for programs you do not recognise (see Quick Commands).</td></tr>
+<tr><td>Check device support dates</td><td>Yearly</td><td>Confirm every computer, phone and router still gets security updates; plan replacements.</td></tr>
+<tr><td>Check recovery options</td><td>Yearly</td><td>Recovery email, phone number, recovery codes and spare security key still work and are current.</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="incident-plan">
+<h2 class="panel-title">If You Clicked Something</h2>
+<p class="panel-lead">A short incident plan. Speed matters more than perfection.</p>
+<ol class="steps">
+<li><strong>Stop interacting:</strong> close the page or call. Do not enter more passwords, codes or card details, and deny any MFA prompts.</li>
+<li><strong>Disconnect:</strong> turn off Wi-Fi or unplug the cable if you opened a file or installed something. Leave the device on if your IT team may want to investigate.</li>
+<li><strong>Note what happened:</strong> time, sender, link or file name, what you typed and any screenshots. This helps IT, your bank and the police.</li>
+<li><strong>Tell someone:</strong> at work, call IT or security right away; nobody gets in trouble for reporting fast. At home, call your bank first if money or card details are involved.</li>
+<li><strong>Secure accounts from a clean device:</strong> change the password you entered and any account that used the same one, starting with email and the password manager. Sign out all sessions and check MFA methods, recovery email and mail forwarding rules.</li>
+<li><strong>Scan and check the device:</strong> run a full antivirus scan, remove remote access tools, unknown apps, browser extensions, startup items and scheduled tasks.</li>
+<li><strong>Protect your money and identity:</strong> freeze or replace cards, turn on transaction alerts, and consider a credit freeze if ID documents were shared.</li>
+<li><strong>Rebuild if in doubt:</strong> for confirmed malware, back up only your documents, wipe and reinstall the system, then restore from a backup made before the incident.</li>
+<li><strong>Report and learn:</strong> report the scam (see below), then fix what let it through: MFA, filters, a payment callback rule, or a conversation with the family.</li>
+</ol>
+<details class="disclosure"><summary>If you typed a password into a fake page</summary><div class="disclosure-body"><p>Change that password now on the real site, and on every site where you used it. Sign out of all sessions, check for new MFA methods, app passwords, forwarding rules and recovery details the attacker may have added, and add a passkey so a stolen password alone is not enough next time.</p></div></details>
+<details class="disclosure"><summary>If you gave a one-time code or approved a prompt</summary><div class="disclosure-body"><p>Assume the attacker is signed in. Change the password, use "sign out everywhere", remove unknown devices and authenticators, and check the account activity page. At work, report it immediately so IT can revoke sessions and tokens.</p></div></details>
+<details class="disclosure"><summary>If you let a caller onto your computer</summary><div class="disclosure-body"><p>Disconnect from the internet, uninstall the remote access tool, and do not log in to banking on that device until it has been checked or reinstalled. Call your bank using the number on your card, and change important passwords from another device.</p></div></details>
+<details class="disclosure"><summary>If you paid or sent money</summary><div class="disclosure-body"><p>Call your bank or card issuer at once; fast reports give the best chance of stopping or recalling a payment. For gift cards contact the card issuer, and for crypto report the receiving address to the exchange you used. Be wary of "recovery" services that contact you afterwards: they are usually a second scam.</p></div></details>
+<details class="disclosure"><summary>If files are encrypted (ransomware)</summary><div class="disclosure-body"><p>Disconnect the device and any connected backup drives, do not pay, and contact IT or a professional. Check No More Ransom for a free decryptor, report the attack, and restore from an offline or immutable backup after the system is clean.</p></div></details>
+</section>
+<section class="panel" id="check-report">
+<h2 class="panel-title">Check and Report</h2>
+<p class="panel-lead">Free tools to check links, files and breaches, and where to report a scam.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Tool</th><th>Use it to</th><th>Link</th></tr></thead>
+<tbody>
+<tr><td>Have I Been Pwned</td><td>Check whether your email appears in known breaches and subscribe to future alerts</td><td><a class="link-button" href="https://haveibeenpwned.com/">Open</a></td></tr>
+<tr><td>Pwned Passwords</td><td>Check whether a password appears in breach data (password managers can do this for you)</td><td><a class="link-button" href="https://haveibeenpwned.com/Passwords">Open</a></td></tr>
+<tr><td>VirusTotal</td><td>Scan a suspicious file, URL, domain or hash with many antivirus engines</td><td><a class="link-button" href="https://www.virustotal.com/">Open</a></td></tr>
+<tr><td>urlscan.io</td><td>See what a link loads, where it redirects and a screenshot, without opening it yourself</td><td><a class="link-button" href="https://urlscan.io/">Open</a></td></tr>
+<tr><td>Google Safe Browsing site status</td><td>Check whether Google currently flags a site as dangerous</td><td><a class="link-button" href="https://transparencyreport.google.com/safe-browsing/search">Open</a></td></tr>
+<tr><td>MXToolbox header analyzer</td><td>Read email headers: real sender, relays and SPF, DKIM and DMARC results</td><td><a class="link-button" href="https://mxtoolbox.com/EmailHeaders.aspx">Open</a></td></tr>
+<tr><td>2FA Directory</td><td>Find which sites support MFA and how to turn it on</td><td><a class="link-button" href="https://2fa.directory/">Open</a></td></tr>
+<tr><td>Passkeys Directory</td><td>Find which sites support passkeys</td><td><a class="link-button" href="https://passkeys.directory/">Open</a></td></tr>
+<tr><td>No More Ransom</td><td>Find free decryptors for some ransomware families</td><td><a class="link-button" href="https://www.nomoreransom.org/">Open</a></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-warning"><p><strong>Privacy:</strong> files uploaded to VirusTotal are shared with security vendors and researchers, and urlscan.io scans can be public. Never upload confidential documents; check a file by its SHA-256 hash first, and choose private or unlisted scans.</p></div>
+<h3>Where to report</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Situation</th><th>Report to</th></tr></thead>
+<tbody>
+<tr><td>Money, cards or bank login involved</td><td>Your bank or card issuer first, using the number on the card or in the official app.</td></tr>
+<tr><td>Phishing at work</td><td>Your IT or security team, through the Report button in your mail app or their usual contact.</td></tr>
+<tr><td>Scam message or fake account</td><td>The platform itself: Report phishing or Report junk in your mail app, Report in social media and chat apps, and block the sender.</td></tr>
+<tr><td>Fraud or cybercrime (general)</td><td>Your national police fraud or cybercrime reporting service, or the national CERT or cyber security agency in your country.</td></tr>
+<tr><td>United States</td><td><a href="https://www.ic3.gov/">FBI IC3</a> for internet crime, <a href="https://reportfraud.ftc.gov/">FTC ReportFraud</a> for scams, <a href="https://www.identitytheft.gov/">IdentityTheft.gov</a> for identity theft.</td></tr>
+<tr><td>United Kingdom</td><td><a href="https://www.reportfraud.police.uk/">Report Fraud</a> (replaced Action Fraud, England, Wales and Northern Ireland), Police Scotland on 101, forward scam emails to <code>report@phishing.gov.uk</code> and scam texts to <code>7726</code>.</td></tr>
+<tr><td>Ransomware or a business breach</td><td>Police or national cyber agency, your cyber insurer, and the data protection regulator if personal data was exposed.</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-tip"><p><strong>Tip:</strong> reporting helps even when the money is gone. Reports feed blocklists and takedowns that protect the next person.</p></div>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

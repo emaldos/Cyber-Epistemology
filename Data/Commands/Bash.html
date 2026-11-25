@@ -1,430 +1,918 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Bash — Commands</title>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="32x32"/>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="192x192"/>
-<link rel="apple-touch-icon" href="../../Image/Logo.png"/>
-<meta name="theme-color" content="#111"/>
-<style>
-:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--line:rgba(255,255,255,.10);--blue:#2196f3}
-*{box-sizing:border-box}
-html,body{height:100%}
-html{scroll-behavior:smooth}
-body{margin:0;font:16px/1.55 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111}
-.bg{position:fixed;inset:0;background:url("../../Image/Logo.png") center/cover no-repeat;z-index:-2}
-.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.80) 100%);z-index:-1}
-.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
-.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
-.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
-.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
-.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
-.homepill span{font-weight:700;letter-spacing:.15px}
-.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
-.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);cursor:pointer;user-select:none;flex:0 0 auto}
-.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
-.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0;max-width:none}
-.tabs.overflow{overflow:auto}
-.tabs::-webkit-scrollbar{display:none}
-.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
-.tab:hover{opacity:1}
-.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
-.tab.active{color:var(--blue)}
-.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
-.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
-.shell .h,.shell .sub{text-align:center}
-.page{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:16px;padding:96px 20px 28px}
-.shell{width:min(1200px,96%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
-.h{margin:0 0 2px;font-size:28px;font-weight:800;letter-spacing:.2px}
-.sub{margin:0 0 12px;color:var(--muted)}
-.quicknav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 18px}
-.qbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-weight:700}
-.qbtn:hover{background:rgba(255,255,255,.1)}
-.morewrap{display:flex;gap:10px;justify-content:center;margin-top:8px}
-.more{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px dashed var(--ring);background:rgba(255,255,255,.04);color:var(--text);text-decoration:none;font-weight:700;cursor:pointer}
-.section{margin:22px 0 0;scroll-margin-top:90px}
-.shell.split .section:first-child{margin-top:0}
-.section .title{margin:0 0 10px;font-size:20px;font-weight:800}
-.card{border:1px solid var(--tileBorder);background:var(--tile);border-radius:18px;box-shadow:0 12px 28px rgba(0,0,0,.3);overflow:hidden}
-.tablewrap{width:100%;overflow:auto}
-table{width:100%;border-collapse:separate;border-spacing:0}
-thead th{position:sticky;top:0;background:linear-gradient(180deg,rgba(33,150,243,.18),rgba(33,150,243,.14));backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid rgba(33,150,243,.35);text-align:left;padding:12px 14px;font-size:14px;color:var(--text);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
-tbody td{border-bottom:1px solid var(--line);padding:12px 14px;vertical-align:top}
-tbody tr:hover{background:rgba(255,255,255,.04)}
-th:first-child,td:first-child{border-left:none}
-th:last-child,td:last-child{border-right:none}
-th,td{word-break:break-word;overflow-wrap:anywhere}
-caption{caption-side:top;color:var(--text);padding:10px 4px 6px;font-weight:800}
-.bycat caption{caption-side:top;padding:10px 4px 6px;font-weight:800}
-.bycat .card+.card{margin-top:14px}
-.bycat thead th{background:linear-gradient(180deg,rgba(33,150,243,.18),rgba(33,150,243,.14));backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid rgba(33,150,243,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);color:var(--text)}
-.bycat table{table-layout:fixed;width:100%}
-.bycat th:nth-child(1),.bycat td:nth-child(1){width:220px}
-.bycat th:nth-child(2),.bycat td:nth-child(2){width:420px}
-.bycat th:nth-child(3),.bycat td:nth-child(3){width:auto}
-@media(max-width:900px){.bycat th:nth-child(1),.bycat td:nth-child(1){width:180px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:300px}}
-@media(max-width:640px){.bycat th:nth-child(1),.bycat td:nth-child(1){width:150px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:240px}}
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bash | Cyber Epistemology</title>
+<meta name="description" content="Bash and GNU/Linux command cheat sheet: files, text processing, permissions, users, processes, systemd, packages, networking, SSH, disks, scripting and security checks, with macOS differences.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../../Assets/Image/AppleTouchIcon.png">
+<link rel="stylesheet" href="../../Assets/Style/Site.css">
+<script src="../../Assets/Script/Site.js" defer></script>
 </head>
-<body>
-<div class="bg"></div>
-<nav class="topbar" id="topbar">
-  <div class="nav">
-    <a class="homepill" href="../../index.html" aria-label="Home"><img src="../../Image/Home.png" alt="Home"/><span>Home</span></a>
-    <div class="tabswrap">
-      <button class="navbtn" id="leftbtn" aria-label="Prev"><span>&lt;</span></button>
-      <div class="tabs" id="tabs">
-        <a class="tab" href="../Commands.html"><img src="../../Image/Command.png" alt="Commands"/>Commands</a>
-        <a class="tab" href="Bash.html"><img src="../../Image/Bash.png" alt="Bash"/>Bash</a>
-        <a class="tab" href="CMD.html"><img src="../../Image/CMD.png" alt="CMD"/>CMD</a>
-        <a class="tab" href="PS.html"><img src="../../Image/PS.png" alt="PowerShell"/>PowerShell</a>
-      </div>
-      <button class="navbtn" id="rightbtn" aria-label="Next"><span>&gt;</span></button>
-    </div>
-  </div>
-</nav>
-
-<div class="page">
-<main class="shell bycat">
-    <h1 class="h">Bash — Commands</h1>
-    <p class="sub">Click a section to jump</p>
-
-    <div class="quicknav" id="quicknav">
-      <a class="qbtn" href="#basics">Basics</a>
-      <a class="qbtn" href="#navfiles">Navigation & Files</a>
-      <a class="qbtn" href="#viewedit">Quick View & Editing</a>
-      <a class="qbtn" href="#search">Search & Discovery</a>
-      <a class="qbtn" href="#textfiles">Text / Files Analysis</a>
-      <a class="qbtn" href="#perms">Permissions</a>
-      <a class="qbtn extra" href="#users">Users & Sessions</a>
-      <a class="qbtn extra" href="#proc">Processes & Services</a>
-      <a class="qbtn extra" href="#net">Networking</a>
-      <a class="qbtn extra" href="#pkg">Packages & Binaries</a>
-      <a class="qbtn extra" href="#arch">Archives & Transfer</a>
-      <a class="qbtn extra" href="#sysinfo">System & Hardware</a>
-      <a class="qbtn extra" href="#script">Scripting Essentials</a>
-      <a class="qbtn extra" href="#pipe">Piping & Redirection</a>
-      <a class="qbtn extra" href="#compare">Comparing Files</a>
-      <a class="qbtn extra" href="#export">Exporting to File</a>
-      <a class="qbtn extra" href="#jobs">Process & Job Mgmt</a>
-      <a class="qbtn extra" href="#svc">Services & Logs</a>
-      <a class="qbtn extra" href="#firewall">Net & Firewall</a>
-      <a class="qbtn extra" href="#storage">Storage & FS</a>
-      <a class="qbtn extra" href="#auth">Users & Auth</a>
-      <a class="qbtn extra" href="#ssh">SSH & Remote</a>
-      <a class="qbtn extra" href="#perf">Performance</a>
-      <a class="qbtn extra" href="#time">Time & Scheduling</a>
-      <a class="qbtn extra" href="#apt">Packages/Updates</a>
-      <a class="qbtn extra" href="#webtls">Web, TLS & DB</a>
-      <a class="qbtn extra" href="#kernel">Kernel & Boot</a>
-      <a class="qbtn extra" href="#backup">Backup & Sync</a>
-      <a class="qbtn extra" href="#hardening">Security Hardening</a>
-    </div>
-    <div class="morewrap"><button class="more" id="morebtn">..show more</button></div>
-    <h3>if you want to check any command explain in details : <a href="https://explainshell.com/">explainshell</a></h3>
-    </main>
-<div class="shell bycat split"><section class="section" id="basics"><h2 class="title">Basics</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>pwd</code></td><td>Show current directory</td><td><code>pwd</code></td></tr>
-        <tr><td><code>cd</code></td><td>Change directory</td><td><code>cd /etc</code></td></tr>
-        <tr><td><code>ls -la</code></td><td>List (long, hidden)</td><td><code>ls -la</code></td></tr>
-        <tr><td><code>tree</code></td><td>Directory tree</td><td><code>tree -L 2</code></td></tr>
-        <tr><td><code>clear</code></td><td>Clear screen</td><td><code>clear</code></td></tr>
-        <tr><td><code>history</code></td><td>Show command history</td><td><code>history | tail -20</code></td></tr>
-        <tr><td><code>!!</code> / <code>!n</code></td><td>Re-run last / nth cmd</td><td><code>sudo !!</code></td></tr>
-        <tr><td><code>alias</code></td><td>Define shortcuts</td><td><code>alias ll='ls -la'</code></td></tr>
-        <tr><td><code>echo</code> / <code>printf</code></td><td>Print text</td><td><code>printf "%s\n" "hi"</code></td></tr>
-        <tr><td><code>read</code></td><td>Prompt input</td><td><code>read -p "Name: " n</code></td></tr>
-        <tr><td><code>man [options] [section] [cmd]</code></td><td>Read manual pages</td><td><code>man 2 open</code>, <code>man -k socket</code></td></tr>
-        <tr><td><code>whatis &lt;name&gt;</code></td><td>One-line description of a command</td><td><code>whatis chmod</code></td></tr>
-        <tr><td><code>apropos &lt;keywords&gt;</code></td><td>Find a command by what it does</td><td><code>apropos "compare files"</code></td></tr>
-        <tr><td><code>cmd --help</code></td><td>Built-in help for many tools</td><td><code>tar --help</code></td></tr>
-        <tr><td><code>echo $PATH</code></td><td>Directories searched for executables</td><td><code>echo $PATH</code></td></tr>
-      </tbody></table></div></section><section class="section" id="navfiles"><h2 class="title">Navigation & Files</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>touch</code></td><td>Create/refresh file</td><td><code>touch notes.txt</code></td></tr>
-        <tr><td><code>mkdir -p</code></td><td>Create dirs (parents)</td><td><code>mkdir -p a/b/c</code></td></tr>
-        <tr><td><code>rm -rf</code></td><td>Remove recursively</td><td><code>rm -rf build/</code></td></tr>
-        <tr><td><code>cp -a</code></td><td>Copy (preserve)</td><td><code>cp -a src/ dst/</code></td></tr>
-        <tr><td><code>mv</code></td><td>Move/rename</td><td><code>mv a b</code></td></tr>
-        <tr><td><code>ln -s</code></td><td>Symlink</td><td><code>ln -s /opt/app app</code></td></tr>
-        <tr><td><code>stat</code></td><td>File metadata</td><td><code>stat file</code></td></tr>
-        <tr><td><code>file</code></td><td>Detect file type</td><td><code>file dump.bin</code></td></tr>
-        <tr><td><code>du -sh *</code></td><td>Size of items</td><td><code>du -sh *</code></td></tr>
-        <tr><td><code>df -h</code></td><td>Disk free</td><td><code>df -h</code></td></tr>
-        <tr><td><code>mount</code> / <code>umount</code></td><td>Mount/umount FS</td><td><code>mount /dev/sdb1 /mnt</code></td></tr>
-      </tbody></table></div></section><section class="section" id="viewedit"><h2 class="title">Quick View & Editing</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>cat</code> / <code>nl</code></td><td>Print file / with line nums</td><td><code>nl script.sh</code></td></tr>
-        <tr><td><code>less</code></td><td>Pager</td><td><code>less /var/log/syslog</code></td></tr>
-        <tr><td><code>head</code> / <code>tail -f</code></td><td>First/last lines / follow</td><td><code>tail -f app.log</code></td></tr>
-        <tr><td><code>xxd</code> / <code>hexdump -C</code></td><td>Hex dump</td><td><code>hexdump -C bin</code></td></tr>
-        <tr><td><code>strings</code></td><td>Extract ASCII</td><td><code>strings core</code></td></tr>
-        <tr><td><code>nano</code> / <code>vim</code> / <code>micro</code></td><td>Terminal editors</td><td><code>nano conf</code></td></tr>
-      </tbody></table></div></section><section class="section" id="search"><h2 class="title">Search & Discovery</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>grep -Rin</code></td><td>Recursive text search</td><td><code>grep -Rin "token" .</code></td></tr>
-        <tr><td><code>egrep</code></td><td>Extended regex</td><td><code>egrep -i "(pass|secret)" *</code></td></tr>
-        <tr><td><code>find</code></td><td>Find by name/time/type</td><td><code>find . -type f -name "*.conf"</code></td></tr>
-        <tr><td><code>locate</code> / <code>updatedb</code></td><td>Fast filename search</td><td><code>locate sshd_config</code></td></tr>
-        <tr><td><code>which</code> / <code>whereis</code></td><td>Binary/man page location</td><td><code>which python3</code></td></tr>
-      </tbody></table></div></section><section class="section" id="textfiles"><h2 class="title">Text / Files Analysis</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>wc -lwm</code></td><td>Count lines/words/chars</td><td><code>wc -l access.log</code></td></tr>
-        <tr><td><code>sort</code> / <code>uniq -c</code></td><td>Sort & count uniques</td><td><code>sort ips.txt | uniq -c</code></td></tr>
-        <tr><td><code>cut</code> / <code>tr</code></td><td>Column/select & translate</td><td><code>cut -d: -f1 /etc/passwd</code></td></tr>
-        <tr><td><code>awk</code></td><td>Parse/transform</td><td><code>awk '{print $1}' file</code></td></tr>
-        <tr><td><code>sed</code></td><td>Stream edit</td><td><code>sed 's/old/new/g' file</code></td></tr>
-        <tr><td><code>paste</code> / <code>join</code> / <code>comm</code></td><td>Merge & set ops</td><td><code>comm -12 a b</code></td></tr>
-        <tr><td><code>iconv</code></td><td>Charset convert</td><td><code>iconv -f ISO-8859-1 -t UTF-8 in > out</code></td></tr>
-        <tr><td><code>base64 -d</code> / <code>xxd -r -p</code></td><td>Decode/hex→bin</td><td><code>base64 -d f.b64 > f</code></td></tr>
-        <tr><td><code>md5sum</code> / <code>sha256sum</code> / <code>b2sum</code></td><td>Hash files</td><td><code>sha256sum iso</code></td></tr>
-        <tr><td><code>zipinfo</code> / <code>tar tvf</code> / <code>7z l</code></td><td>List archive contents</td><td><code>tar tvf backup.tgz</code></td></tr>
-      </tbody></table></div></section><section class="section" id="perms"><h2 class="title">Permissions, Ownership & Attributes</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>chmod 640</code></td><td>Change mode</td><td><code>chmod -R 755 bin/</code></td></tr>
-        <tr><td><code>chown user:group</code></td><td>Change owner</td><td><code>chown root:root file</code></td></tr>
-        <tr><td><code>umask</code></td><td>Default perms mask</td><td><code>umask 027</code></td></tr>
-        <tr><td><code>getfacl</code> / <code>setfacl</code></td><td>POSIX ACLs</td><td><code>setfacl -m u:alice:r file</code></td></tr>
-        <tr><td><code>lsattr</code> / <code>chattr +i</code></td><td>FS attrs (ext)</td><td><code>chattr +i config</code></td></tr>
-        <tr><td><code>getcap</code> / <code>setcap</code></td><td>File caps</td><td><code>getcap /usr/bin/ping</code></td></tr>
-        <tr><td><code>sudo -l</code></td><td>List sudo rights</td><td><code>sudo -l</code></td></tr>
-      </tbody></table></div></section></div>
-<div class="shell bycat split"><section class="section" id="users"><h2 class="title">Users & Sessions</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>id</code> / <code>whoami</code></td><td>Identity info</td><td><code>id</code></td></tr>
-        <tr><td><code>groups</code></td><td>Group membership</td><td><code>groups alice</code></td></tr>
-        <tr><td><code>who</code> / <code>w</code></td><td>Logged-in users</td><td><code>w</code></td></tr>
-        <tr><td><code>last</code> / <code>lastlog</code></td><td>Login history</td><td><code>last -n 10</code></td></tr>
-        <tr><td><code>passwd</code></td><td>Change password</td><td><code>passwd</code></td></tr>
-        <tr><td><code>su - user</code></td><td>Switch user</td><td><code>su - postgres</code></td></tr>
-      </tbody></table></div></section><section class="section" id="proc"><h2 class="title">Processes, Jobs & Services</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>ps aux</code> / <code>ps -ef --forest</code></td><td>Process list/tree</td><td><code>ps -ef --forest</code></td></tr>
-        <tr><td><code>top</code> / <code>htop</code></td><td>Live monitor</td><td><code>htop</code></td></tr>
-        <tr><td><code>pgrep -a</code> / <code>pkill -f</code></td><td>Find/kill by name</td><td><code>pkill -f gunicorn</code></td></tr>
-        <tr><td><code>kill -9 PID</code></td><td>Force kill</td><td><code>kill -9 1234</code></td></tr>
-        <tr><td><code>lsof -i</code> / <code>lsof file</code></td><td>Open sockets/files</td><td><code>lsof -i :80</code></td></tr>
-        <tr><td><code>systemctl</code></td><td>Manage services</td><td><code>systemctl status ssh</code></td></tr>
-        <tr><td><code>journalctl -xeu</code></td><td>Service logs</td><td><code>journalctl -xeu ssh</code></td></tr>
-        <tr><td><code>crontab -e</code> / <code>-l</code></td><td>Cron jobs</td><td><code>crontab -l</code></td></tr>
-        <tr><td><code>at now+5min</code></td><td>One-off task</td><td><code>echo "touch /tmp/x" | at now+5min</code></td></tr>
-      </tbody></table></div></section><section class="section" id="net"><h2 class="title">Networking (core utilities)</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>ip a</code> / <code>ip r</code> / <code>ip -br a</code></td><td>IPs & routes</td><td><code>ip -br a</code></td></tr>
-        <tr><td><code>ss -tulnp</code></td><td>Listening sockets</td><td><code>ss -tulnp</code></td></tr>
-        <tr><td><code>ping</code> / <code>traceroute</code> / <code>mtr</code></td><td>Reachability/path</td><td><code>mtr -rw target</code></td></tr>
-        <tr><td><code>dig +short</code> / <code>host</code></td><td>DNS queries</td><td><code>dig +short A example.com</code></td></tr>
-        <tr><td><code>curl</code></td><td>HTTP(S) requests</td><td><code>curl -I https://example.com</code></td></tr>
-        <tr><td><code>wget</code></td><td>Download files</td><td><code>wget -c URL</code></td></tr>
-        <tr><td><code>scp</code> / <code>sftp</code> / <code>rsync -avzP</code></td><td>Remote copy/sync</td><td><code>rsync -avzP dir host:/dst</code></td></tr>
-        <tr><td><code>ssh -L/-R/-D</code></td><td>Tunnels/forwarding</td><td><code>ssh -L 8080:127.0.0.1:80 host</code></td></tr>
-      </tbody></table></div></section><section class="section" id="pkg"><h2 class="title">Packages & Binaries</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>apt update && apt full-upgrade</code></td><td>Update/upgrade</td><td><code>sudo apt full-upgrade</code></td></tr>
-        <tr><td><code>apt search</code> / <code>install</code> / <code>purge</code></td><td>Manage packages</td><td><code>sudo apt install jq</code></td></tr>
-        <tr><td><code>dpkg -i/-L/-S</code></td><td>Deb ops & lookup</td><td><code>dpkg -S /bin/ls</code></td></tr>
-        <tr><td><code>update-alternatives</code></td><td>Pick default tool</td><td><code>update-alternatives --config editor</code></td></tr>
-        <tr><td><code>ldd</code> / <code>readelf -h</code> / <code>strings</code></td><td>Inspect binaries</td><td><code>ldd /bin/ls</code></td></tr>
-      </tbody></table></div></section><section class="section" id="arch"><h2 class="title">Archives & Transfer</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>tar -czf</code> / <code>tar -xvf</code></td><td>Create/extract tar</td><td><code>tar -czf out.tgz dir/</code></td></tr>
-        <tr><td><code>zip -r</code> / <code>unzip</code></td><td>Zip ops</td><td><code>zip -r site.zip public/</code></td></tr>
-        <tr><td><code>7z a</code> / <code>7z x</code></td><td>7-Zip ops</td><td><code>7z a backup.7z dir/</code></td></tr>
-        <tr><td><code>scp</code> / <code>rsync</code></td><td>Copy/sync</td><td><code>scp file host:/tmp/</code></td></tr>
-      </tbody></table></div></section><section class="section" id="sysinfo"><h2 class="title">System & Hardware Info</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>uname -a</code></td><td>Kernel/arch</td><td><code>uname -a</code></td></tr>
-        <tr><td><code>lsb_release -a</code></td><td>Distro info</td><td><code>lsb_release -a</code></td></tr>
-        <tr><td><code>hostnamectl</code></td><td>Host settings</td><td><code>hostnamectl</code></td></tr>
-        <tr><td><code>lsusb</code> / <code>lspci</code> / <code>lscpu</code></td><td>HW inventory</td><td><code>lspci | grep -i net</code></td></tr>
-        <tr><td><code>free -h</code> / <code>lsmem</code></td><td>Memory stats</td><td><code>free -h</code></td></tr>
-        <tr><td><code>journalctl -p err -b</code></td><td>Boot error logs</td><td><code>journalctl -p err -b</code></td></tr>
-        <tr><td><code>dmesg -T</code></td><td>Kernel ring buffer</td><td><code>dmesg -T | tail</code></td></tr>
-      </tbody></table></div></section></div>
-<div class="shell bycat split"><section class="section" id="script"><h2 class="title">Scripting Essentials</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Item</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td>Shebang</td><td>Select interpreter</td><td><code>#!/usr/bin/env bash</code></td></tr>
-        <tr><td><code>set -euo pipefail</code></td><td>Safer scripts</td><td>In script top</td></tr>
-        <tr><td><code>for</code>/<code>while</code>/<code>case</code>/<code>if</code></td><td>Control flow</td><td><code>for f in *.log; do echo "$f"; done</code></td></tr>
-        <tr><td><code>trap 'cmd' EXIT</code></td><td>Cleanup hook</td><td><code>trap 'rm -f /tmp/x' EXIT</code></td></tr>
-        <tr><td><code>$(cmd)</code></td><td>Command substitution</td><td><code>hash=$(sha256sum f | cut -d' ' -f1)</code></td></tr>
-      </tbody></table></div></section><section class="section" id="pipe"><h2 class="title">Piping & Redirection</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td>Pipe <code>|</code></td><td>Pipe stdout to next cmd</td><td><code>cat access.log | grep 500 | wc -l</code></td></tr>
-        <tr><td><code>&gt;</code> / <code>&gt;&gt;</code></td><td>Write / append to file</td><td><code>echo ok &gt; out.txt; echo again &gt;&gt; out.txt</code></td></tr>
-        <tr><td><code>&lt;</code></td><td>Read file as stdin</td><td><code>sort &lt; unsorted.txt</code></td></tr>
-        <tr><td><code>2&gt;</code> / <code>2&gt;&gt;</code></td><td>Redirect stderr</td><td><code>cmd 2&gt; errors.log</code></td></tr>
-        <tr><td><code>&amp;&gt;</code> / <code>2&gt;&amp;1</code></td><td>stdout+stderr together</td><td><code>cmd &amp;&gt; all.log</code></td></tr>
-        <tr><td><code>tee</code> / <code>tee -a</code></td><td>Write file and pass through</td><td><code>grep ERR app.log | tee -a errs.log</code></td></tr>
-        <tr><td><code>xargs</code></td><td>Build args from stdin</td><td><code>cat list.txt | xargs -I{} cp {} /dst/</code></td></tr>
-        <tr><td>Process substitution</td><td>Treat pipe as file</td><td><code>diff &lt;(sort a) &lt;(sort b)</code></td></tr>
-      </tbody></table></div></section><section class="section" id="compare"><h2 class="title">Comparing Files</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>diff -u a b</code></td><td>Unified diff (text)</td><td><code>diff -u conf.old conf.new</code></td></tr>
-        <tr><td><code>sdiff -s a b</code></td><td>Side-by-side</td><td><code>sdiff -s a b</code></td></tr>
-        <tr><td><code>cmp -l a b</code></td><td>Binary compare</td><td><code>cmp -l a.bin b.bin</code></td></tr>
-        <tr><td><code>md5sum</code>/<code>sha256sum</code></td><td>Hash compare</td><td><code>sha256sum file1 file2</code></td></tr>
-        <tr><td><code>comm</code></td><td>Line-wise set ops</td><td><code>comm -12 &lt;(sort a) &lt;(sort b)</code></td></tr>
-        <tr><td><code>git diff --no-index</code></td><td>Git-style diff outside repo</td><td><code>git diff --no-index a b</code></td></tr>
-      </tbody></table></div></section><section class="section" id="export"><h2 class="title">Exporting to File</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>&gt;</code> / <code>&gt;&gt;</code></td><td>Save/append output</td><td><code>date &gt; run.txt; env &gt;&gt; run.txt</code></td></tr>
-        <tr><td><code>tee</code></td><td>Save while seeing output</td><td><code>ls -la | tee listing.txt</code></td></tr>
-        <tr><td><code>printf</code></td><td>Structured text export</td><td><code>printf "%s,%s\n" "$u" "$id" &gt;&gt; users.csv</code></td></tr>
-        <tr><td><code>tar -czf</code></td><td>Export dir to archive</td><td><code>tar -czf proj_$(date +%F).tgz proj/</code></td></tr>
-        <tr><td><code>zip -r</code></td><td>Zip export</td><td><code>zip -r logs.zip /var/log/app/</code></td></tr>
-        <tr><td><code>jq -r</code></td><td>Export filtered JSON</td><td><code>curl -s api | jq -r '.items[].id' &gt; ids.txt</code></td></tr>
-        <tr><td><code>sqlite3 -header -csv</code></td><td>Dump DB query</td><td><code>sqlite3 db.sqlite 'select * from t;' &gt; t.csv</code></td></tr>
-      </tbody></table></div></section><section class="section" id="jobs"><h2 class="title">Process & Job Management</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command / Key</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td>Prompt <code>$</code>/<code>#</code></td><td>User/root markers</td><td><code>sleep 300 &amp;</code></td></tr>
-        <tr><td><code>&amp;</code></td><td>Run in background</td><td><code>long_task &amp;</code></td></tr>
-        <tr><td><code>jobs -l</code></td><td>List background jobs</td><td><code>jobs -l</code></td></tr>
-        <tr><td><code>fg %N</code></td><td>Bring job to foreground</td><td><code>fg %1</code></td></tr>
-        <tr><td><code>bg %N</code></td><td>Resume stopped job in background</td><td><code>bg %1</code></td></tr>
-        <tr><td><code>CTRL+Z</code></td><td>Suspend current job</td><td><code>CTRL+Z</code> then <code>bg</code></td></tr>
-        <tr><td><code>disown [-h] %N</code></td><td>Detach job from shell</td><td><code>disown -h %1</code></td></tr>
-        <tr><td><code>nohup cmd &amp;</code></td><td>Immune to hangups</td><td><code>nohup python app.py &amp;</code></td></tr>
-        <tr><td><code>setsid cmd &amp;</code></td><td>New session</td><td><code>setsid mysvc &amp;</code></td></tr>
-        <tr><td><code>wait %N|PID</code></td><td>Wait for job/PID</td><td><code>wait %1; echo $?</code></td></tr>
-        <tr><td><code>echo $?</code></td><td>Exit code of last cmd</td><td><code>echo $?</code></td></tr>
-        <tr><td><code>kill -SIG PID</code></td><td>Send signal</td><td><code>kill -TERM 1234</code></td></tr>
-        <tr><td><code>pkill -f pat</code> / <code>pgrep -a pat</code></td><td>Kill / find by pattern</td><td><code>pgrep -a nginx</code></td></tr>
-        <tr><td><code>nice -n N cmd</code></td><td>Start with CPU priority</td><td><code>nice -n 10 ffmpeg …</code></td></tr>
-        <tr><td><code>renice -n N -p PID</code></td><td>Change proc priority</td><td><code>renice -n -5 -p 1234</code></td></tr>
-        <tr><td><code>ionice -c2 -n5 -p PID</code></td><td>Set I/O priority</td><td><code>ionice -c2 -n5 -p 1234</code></td></tr>
-        <tr><td><code>ps -eo cols --sort=…</code></td><td>Custom process list</td><td><code>ps -eo pid,ppid,stat,ni,%cpu,%mem,cmd --sort=-%cpu</code></td></tr>
-        <tr><td><code>top</code> / <code>htop</code></td><td>Live CPU/mem</td><td><code>htop</code></td></tr>
-        <tr><td><code>lsof -p PID</code></td><td>Open files of a process</td><td><code>lsof -p 1234</code></td></tr>
-        <tr><td><code>fuser -v -n tcp 80</code></td><td>Who uses a port</td><td><code>fuser -v -n tcp 80</code></td></tr>
-        <tr><td><code>timeout 30s cmd</code></td><td>Kill if exceeds duration</td><td><code>timeout 2m curl URL</code></td></tr>
-        <tr><td><code>watch -n1 'cmd'</code></td><td>Re-run on interval</td><td><code>watch -n1 'ps -C sshd -o pid,cmd'</code></td></tr>
-        <tr><td><code>pstree -p</code></td><td>Tree view</td><td><code>pstree -p</code></td></tr>
-      </tbody></table></div></section><section class="section" id="svc"><h2 class="title">Services & Logs (systemd/journal)</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>systemctl status|start|stop|restart &lt;svc&gt;</code></td><td>Manage service</td><td><code>systemctl restart ssh</code></td></tr>
-        <tr><td><code>systemctl enable|disable &lt;svc&gt;</code></td><td>Auto-start on boot</td><td><code>systemctl enable nginx</code></td></tr>
-        <tr><td><code>systemctl is-active|is-enabled &lt;svc&gt;</code></td><td>Quick state check</td><td><code>systemctl is-enabled docker</code></td></tr>
-        <tr><td><code>systemctl list-units --type=service</code></td><td>List running services</td><td><code>systemctl list-units --type=service</code></td></tr>
-        <tr><td><code>journalctl -u &lt;svc&gt;</code></td><td>Service logs</td><td><code>journalctl -u nginx -f</code></td></tr>
-        <tr><td><code>journalctl -p err -b</code></td><td>Errors since boot</td><td><code>journalctl -p warning -b</code></td></tr>
-        <tr><td><code>loginctl list-sessions|users</code></td><td>Active sessions/users</td><td><code>loginctl list-users</code></td></tr>
-      </tbody></table></div></section></div>
-<div class="shell bycat split"><section class="section" id="firewall"><h2 class="title">Networking & Firewall</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>ip a|r|neigh</code></td><td>IPs/routes/ARP</td><td><code>ip -br a</code></td></tr>
-        <tr><td><code>ss -tulnp</code></td><td>Listening sockets</td><td><code>ss -tulnp</code></td></tr>
-        <tr><td><code>hostnamectl</code></td><td>Set/get hostname</td><td><code>hostnamectl set-hostname web01</code></td></tr>
-        <tr><td><code>nmcli con show|up</code></td><td>NetworkManager connections</td><td><code>nmcli con up "Wired connection 1"</code></td></tr>
-        <tr><td><code>resolvectl status</code></td><td>DNS resolver status</td><td><code>resolvectl status</code></td></tr>
-        <tr><td><code>ufw enable|allow|deny</code></td><td>Simple firewall</td><td><code>ufw allow 22/tcp</code></td></tr>
-        <tr><td><code>nft list ruleset</code></td><td>nftables ruleset</td><td><code>nft list ruleset</code></td></tr>
-        <tr><td><code>iptables -L -n -v</code></td><td>Legacy firewall view</td><td><code>iptables -S</code></td></tr>
-        <tr><td><code>tcpdump -i eth0 port 443</code></td><td>Packet capture</td><td><code>tcpdump -nn -i any port 22</code></td></tr>
-      </tbody></table></div></section><section class="section" id="storage"><h2 class="title">Storage, RAID, LVM & Filesystems</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>lsblk -f</code></td><td>Block layout & FS</td><td><code>lsblk -f</code></td></tr>
-        <tr><td><code>blkid</code></td><td>UUID/label info</td><td><code>blkid /dev/sdb1</code></td></tr>
-        <tr><td><code>mount</code>/<code>umount</code></td><td>Mount/unmount</td><td><code>mount -o noatime /dev/sdb1 /data</code></td></tr>
-        <tr><td><code>df -h</code> / <code>du -sh *</code></td><td>Space usage</td><td><code>du -sh /var/*</code></td></tr>
-        <tr><td><code>mkfs.ext4</code>/<code>xfs</code></td><td>Make filesystem</td><td><code>mkfs.ext4 /dev/sdb1</code></td></tr>
-        <tr><td><code>tune2fs -l</code></td><td>ext* params</td><td><code>tune2fs -l /dev/sda1</code></td></tr>
-        <tr><td><code>mdadm --detail /dev/md0</code></td><td>Software RAID</td><td><code>mdadm --create /dev/md0 --level=1 --raid-devices=2 /dev/sdb /dev/sdc</code></td></tr>
-        <tr><td><code>pvcreate</code>/<code>vgcreate</code>/<code>lvcreate</code></td><td>LVM setup</td><td><code>lvcreate -L 50G -n data vg0</code></td></tr>
-        <tr><td><code>lvextend -r -L +10G /dev/vg0/data</code></td><td>Grow LV (+resize FS)</td><td><code>lvextend -r -l +100%FREE /dev/vg0/data</code></td></tr>
-        <tr><td><code>fsck -f /dev/sdXn</code></td><td>FS check (unmounted)</td><td><code>fsck -f /dev/sdb1</code></td></tr>
-      </tbody></table></div></section><section class="section" id="auth"><h2 class="title">Users, Auth & Access</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>adduser</code>/<code>deluser</code></td><td>Create/remove user</td><td><code>adduser ops</code></td></tr>
-        <tr><td><code>usermod -aG &lt;group&gt; &lt;user&gt;</code></td><td>Add to group</td><td><code>usermod -aG sudo ops</code></td></tr>
-        <tr><td><code>chage -l &lt;user&gt;</code></td><td>Password aging</td><td><code>chage -l ops</code></td></tr>
-        <tr><td><code>passwd &lt;user&gt;</code></td><td>Set/reset password</td><td><code>passwd ops</code></td></tr>
-        <tr><td><code>visudo</code></td><td>Edit sudoers safely</td><td><code>visudo</code></td></tr>
-        <tr><td><code>faillock --user &lt;u&gt;</code></td><td>Lockout info</td><td><code>faillock --user ops</code></td></tr>
-        <tr><td><code>getent passwd|group</code></td><td>NSS user/group view</td><td><code>getent group sudo</code></td></tr>
-      </tbody></table></div></section><section class="section" id="ssh"><h2 class="title">SSH & Remote</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>ssh-keygen -t ed25519</code></td><td>Create keypair</td><td><code>ssh-keygen -t ed25519 -C "ops@host"</code></td></tr>
-        <tr><td><code>ssh-copy-id user@host</code></td><td>Install pubkey</td><td><code>ssh-copy-id ops@server</code></td></tr>
-        <tr><td><code>sshd -t</code></td><td>Test sshd config</td><td><code>sshd -t</code></td></tr>
-        <tr><td><code>systemctl reload ssh</code></td><td>Apply sshd changes</td><td><code>systemctl reload ssh</code></td></tr>
-        <tr><td><code>scp</code>/<code>rsync -avzP</code></td><td>Copy/sync</td><td><code>rsync -avzP /data ops@host:/backup</code></td></tr>
-        <tr><td><code>ssh -L/-R/-D</code></td><td>Tunnels</td><td><code>ssh -L 8443:127.0.0.1:443 ops@bastion</code></td></tr>
-      </tbody></table></div></section><section class="section" id="perf"><h2 class="title">Performance & Monitoring</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>top</code>/<code>htop</code></td><td>Live CPU/mem</td><td><code>htop</code></td></tr>
-        <tr><td><code>vmstat 1</code></td><td>CPU/mem/IO overview</td><td><code>vmstat 1 10</code></td></tr>
-        <tr><td><code>iostat -x 1</code></td><td>Disk IO detail</td><td><code>iostat -x 1</code></td></tr>
-        <tr><td><code>dstat -tcmndry</code></td><td>All-in-one glance</td><td><code>dstat -tcmndry --top-io</code></td></tr>
-        <tr><td><code>free -h</code></td><td>RAM usage</td><td><code>free -h</code></td></tr>
-        <tr><td><code>sar -u 1 5</code></td><td>Historic perf</td><td><code>sar -n DEV 1 5</code></td></tr>
-        <tr><td><code>pidstat -p PID 1</code></td><td>Per-PID stats</td><td><code>pidstat -p 1234 1</code></td></tr>
-        <tr><td><code>lsof -p PID</code></td><td>Handles of proc</td><td><code>lsof -p 1234</code></td></tr>
-      </tbody></table></div></section><section class="section" id="time"><h2 class="title">Time & Scheduling</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>timedatectl</code></td><td>Timezone/NTP status</td><td><code>timedatectl set-timezone Asia/Dubai</code></td></tr>
-        <tr><td><code>chronyc sources|tracking</code></td><td>Chrony NTP</td><td><code>chronyc tracking</code></td></tr>
-        <tr><td><code>crontab -e|-l</code></td><td>User cron</td><td><code>crontab -e</code></td></tr>
-        <tr><td><code>/etc/cron.hourly,daily</code></td><td>System cron dirs</td><td><code>ls /etc/cron.daily</code></td></tr>
-        <tr><td><code>at now+10min</code></td><td>One-off job</td><td><code>echo "systemctl restart nginx" | at now+10min</code></td></tr>
-      </tbody></table></div></section></div>
-<div class="shell bycat split"><section class="section" id="apt"><h2 class="title">Packages, Repos & Updates (Debian/Ubuntu)</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>apt update && apt full-upgrade</code></td><td>Refresh & upgrade</td><td><code>apt update && apt full-upgrade</code></td></tr>
-        <tr><td><code>apt install|purge pkg</code></td><td>Install/remove</td><td><code>apt install fail2ban</code></td></tr>
-        <tr><td><code>apt-cache policy pkg</code></td><td>See versions/pin</td><td><code>apt-cache policy openssl</code></td></tr>
-        <tr><td><code>dpkg -i|-L|-S file</code></td><td>Deb ops/lookup</td><td><code>dpkg -S /usr/bin/ssh</code></td></tr>
-        <tr><td><code>apt-mark hold|unhold</code></td><td>Freeze package</td><td><code>apt-mark hold nginx</code></td></tr>
-      </tbody></table></div></section><section class="section" id="webtls"><h2 class="title">Web, TLS & DB (ops quickies)</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>nginx -t</code> / <code>apachectl configtest</code></td><td>Test config</td><td><code>nginx -t</code></td></tr>
-        <tr><td><code>systemctl reload nginx|apache2</code></td><td>Reload w/o drop</td><td><code>systemctl reload nginx</code></td></tr>
-        <tr><td><code>certbot --nginx -d domain</code></td><td>Get/renew certs</td><td><code>certbot renew --dry-run</code></td></tr>
-        <tr><td><code>openssl s_client -connect host:443 -servername host</code></td><td>TLS inspect</td><td><code>openssl s_client -connect ex.com:443 -servername ex.com</code></td></tr>
-        <tr><td><code>mysql -u root -p</code> / <code>psql -U postgres</code></td><td>DB shells</td><td><code>psql -U postgres</code></td></tr>
-        <tr><td><code>pg_isready</code> / <code>mysqladmin ping</code></td><td>DB liveness</td><td><code>pg_isready -h 127.0.0.1</code></td></tr>
-        <tr><td><code>systemctl status postgresql|mariadb</code></td><td>DB service</td><td><code>systemctl status postgresql</code></td></tr>
-      </tbody></table></div></section><section class="section" id="kernel"><h2 class="title">Kernel, Boot & Sysctl</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>uname -a</code></td><td>Kernel info</td><td><code>uname -a</code></td></tr>
-        <tr><td><code>sysctl -a</code> / <code>-w key=val</code></td><td>Kernel params live</td><td><code>sysctl -w net.ipv4.ip_forward=1</code></td></tr>
-        <tr><td><code>/etc/sysctl.d/*.conf</code></td><td>Persist sysctl</td><td><code>echo 'vm.swappiness=10' &gt; /etc/sysctl.d/99-tuning.conf</code></td></tr>
-        <tr><td><code>grub-mkconfig -o /boot/grub/grub.cfg</code></td><td>Rebuild GRUB</td><td><code>update-grub</code></td></tr>
-        <tr><td><code>dracut -f</code> / <code>update-initramfs -u</code></td><td>Initramfs build</td><td><code>update-initramfs -u -k all</code></td></tr>
-      </tbody></table></div></section><section class="section" id="backup"><h2 class="title">Backup, Snapshots & Sync</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>rsync -aHAX --delete</code></td><td>Mirror with attrs</td><td><code>rsync -aHAX --delete /data /bk/</code></td></tr>
-        <tr><td><code>tar --xattrs --acls -czf</code></td><td>Preserve meta</td><td><code>tar --xattrs --acls -czf etc_$(date +%F).tgz /etc</code></td></tr>
-        <tr><td><code>cp --reflink=auto</code></td><td>CoW copy</td><td><code>cp --reflink=auto big.img big.bak</code></td></tr>
-        <tr><td><code>btrfs subvolume snapshot</code></td><td>FS snapshots</td><td><code>btrfs subvolume snapshot /data /snap/data-$(date +%F)</code></td></tr>
-        <tr><td><code>sqlite3 .dump</code></td><td>DB export</td><td><code>sqlite3 app.db .dump &gt; app.sql</code></td></tr>
-      </tbody></table></div></section><section class="section" id="hardening"><h2 class="title">Security Hardening</h2><div class="card tablewrap"><table>
-      <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead><tbody>
-        <tr><td><code>sshd -t</code> + key-only auth</td><td>Verify sshd & disable password login</td><td>Edit <span class="kbd">/etc/ssh/sshd_config</span>: <code>PasswordAuthentication no</code></td></tr>
-        <tr><td><code>fail2ban-client status</code></td><td>Ban abusive IPs</td><td><code>fail2ban-client status sshd</code></td></tr>
-        <tr><td><code>chmod</code>/<code>chown</code> + <code>umask</code></td><td>Tighten perms</td><td><code>umask 027</code></td></tr>
-        <tr><td><code>setfacl</code>/<code>getfacl</code></td><td>Granular access</td><td><code>setfacl -m u:ops:r /secure</code></td></tr>
-        <tr><td><code>auditctl -w &lt;path&gt; -p wa -k tag</code></td><td>Audit critical files</td><td><code>auditctl -w /etc/passwd -p wa -k auth</code></td></tr>
-      </tbody></table></div></section></div>
+<body class="is-content-page" data-root="../../" data-section="commands">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><a href="../Commands.html">Commands</a><span class="breadcrumb-separator">/</span><span>Bash</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../../Assets/Icon/Bash.png" alt="">
+<div>
+<p class="hero-eyebrow">Commands</p>
+<h1 class="hero-title">Bash and Linux Commands</h1>
 </div>
-
-<script>
-let lastY=scrollY,hidden=false;
-addEventListener('scroll',()=>{const y=scrollY,tb=document.getElementById('topbar');if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
-const p=location.pathname.replace(/\/+$/,'');document.querySelectorAll('.tabs .tab').forEach(a=>{const h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');if(p.endsWith(h))a.classList.add('active')});
-const tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
-function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
-function updateArrows(){const o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;tabs.classList.toggle('overflow',o);leftbtn.style.display=o&&s>0?'inline-flex':'none';rightbtn.style.display=o&&s<max-1?'inline-flex':'none'}
-function scrollByStep(d){const step=Math.max(120,Math.floor(tabs.clientWidth*.6));tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})}
-leftbtn.addEventListener('click',()=>scrollByStep(-1));rightbtn.addEventListener('click',()=>scrollByStep(1));
-tabs.addEventListener('scroll',updateArrows,{passive:true});new ResizeObserver(updateArrows).observe(tabs);
-addEventListener('resize',updateArrows);
-tabs.addEventListener('wheel',e=>{if(!hasOverflow())return;const dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}});
-updateArrows();
-
-const morebtn=document.getElementById('morebtn');const extras=[...document.querySelectorAll('.quicknav .extra')];
-function setCollapsed(c){extras.forEach((el)=>{el.style.display=c?'none':''});morebtn.textContent=c?'..show more':'..show less'}
-setCollapsed(true);
-morebtn.addEventListener('click',()=>{const collapsed=extras[0].style.display==='none';setCollapsed(!collapsed)});
-</script>
-</body></html>
+</div>
+<p class="hero-lead">Everyday Bash and GNU/Linux commands grouped by task, from moving around the file system to services, networking, scripting and quick security checks. Examples target current Ubuntu, Debian, Fedora and Kali, with notes where macOS behaves differently.</p>
+<div class="hero-meta"><span class="badge">427 commands</span><span class="badge">Bash 5.x</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: ssh" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<nav class="sub-nav" aria-label="Shells">
+<a class="sub-nav-link" href="../Commands.html"><img src="../../Assets/Icon/Terminal.png" alt="">All shells</a>
+<a class="sub-nav-link is-active" href="Bash.html" aria-current="page"><img src="../../Assets/Icon/Bash.png" alt="">Bash</a>
+<a class="sub-nav-link" href="PS.html"><img src="../../Assets/Icon/PowerShell.png" alt="">PowerShell</a>
+<a class="sub-nav-link" href="CMD.html"><img src="../../Assets/Icon/CommandPrompt.png" alt="">CMD</a>
+</nav>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="shell-basics">
+<h2 class="panel-title">Shell Basics and Help</h2>
+<p class="panel-lead">Finding help, history, aliases and environment variables.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>man</code></td><td>Read a manual page, optionally from a given section (5 is config files)</td><td><code class="copy">man 5 sshd_config</code></td></tr>
+<tr><td><code>man -k</code> / <code>apropos</code></td><td>Search manual page descriptions by keyword</td><td><code class="copy">man -k socket</code></td></tr>
+<tr><td><code>whatis</code></td><td>One-line description of a command</td><td><code class="copy">whatis chmod</code></td></tr>
+<tr><td><code>--help</code></td><td>Short built in usage text for most tools</td><td><code class="copy">tar --help | less</code></td></tr>
+<tr><td><code>help</code></td><td>Help for Bash builtins such as <code>cd</code>, <code>read</code> and <code>set</code></td><td><code class="copy">help set</code></td></tr>
+<tr><td><code>type</code></td><td>Show whether a name is an alias, function, builtin or file</td><td><code class="copy">type -a ls</code></td></tr>
+<tr><td><code>command -v</code></td><td>Find the path of a command (portable replacement for <code>which</code>)</td><td><code class="copy">command -v python3</code></td></tr>
+<tr><td><code>history</code></td><td>Show numbered command history</td><td><code class="copy">history | tail -20</code></td></tr>
+<tr><td><code>!!</code></td><td>Repeat the previous command</td><td><code class="copy">sudo !!</code></td></tr>
+<tr><td><code>!$</code></td><td>Reuse the last argument of the previous command</td><td><code class="copy">less !$</code></td></tr>
+<tr><td><code>alias</code></td><td>Create a shortcut; add it to <code>~/.bashrc</code> to keep it</td><td><code class="copy">alias ll='ls -lah'</code></td></tr>
+<tr><td><code>printf</code> / <code>echo</code></td><td>Print text; <code>printf</code> formats predictably, <code>echo</code> is fine for simple lines</td><td><code class="copy">printf '%s\n' "hello"</code></td></tr>
+<tr><td><code>read</code></td><td>Read user input into a variable</td><td><code class="copy">read -rp "Name: " name</code></td></tr>
+<tr><td><code>export</code></td><td>Set an environment variable for child processes</td><td><code class="copy">export EDITOR=vim</code></td></tr>
+<tr><td><code>printenv</code> / <code>env</code></td><td>Show environment variables</td><td><code class="copy">printenv HOME</code></td></tr>
+<tr><td><code>$PATH</code></td><td>Directories searched for executables, one per line</td><td><code class="copy">echo "$PATH" | tr ':' '\n'</code></td></tr>
+<tr><td><code>source</code></td><td>Run a file in the current shell, for example after editing <code>~/.bashrc</code></td><td><code class="copy">source ~/.bashrc</code></td></tr>
+<tr><td><code>$BASH_VERSION</code></td><td>Check which Bash you are running</td><td><code class="copy">echo "$BASH_VERSION"</code></td></tr>
+<tr><td><code>chsh</code></td><td>Change your login shell (Kali defaults to zsh)</td><td><code class="copy">chsh -s /bin/bash</code></td></tr>
+<tr><td><code>clear</code></td><td>Clear the screen (same as <kbd>Ctrl</kbd>+<kbd>L</kbd>)</td><td><code class="copy">clear</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Keyboard shortcuts</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Keys</th><th>Action</th></tr></thead>
+<tbody>
+<tr><td><kbd>Tab</kbd></td><td>Complete a command, path or option; press twice to list choices</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>R</kbd></td><td>Search history backwards; press again for older matches</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>C</kbd></td><td>Interrupt the running command</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td><td>Suspend the running command (resume with <code>fg</code> or <code>bg</code>)</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>D</kbd></td><td>Send end of input; on an empty line it closes the shell</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>A</kbd> / <kbd>Ctrl</kbd>+<kbd>E</kbd></td><td>Jump to the start or end of the line</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>U</kbd> / <kbd>Ctrl</kbd>+<kbd>K</kbd></td><td>Cut from the cursor to the start or end of the line</td></tr>
+<tr><td><kbd>Ctrl</kbd>+<kbd>W</kbd></td><td>Delete the word before the cursor</td></tr>
+<tr><td><kbd>Alt</kbd>+<kbd>.</kbd></td><td>Insert the last argument of the previous command</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout"><p><strong>Distribution notes:</strong> Ubuntu 25.10 and 26.04 ship sudo-rs as <code>sudo</code> and the Rust rewrite of coreutils for most core tools; the options on this page work the same, and the original GNU tools are still packaged as a fallback. Kali and macOS use zsh as the default interactive shell, and macOS still ships Bash 3.2.</p></div>
+<p><a class="link-button" href="https://explainshell.com/">Explain a command line on explainshell</a></p>
+</section>
+<section class="panel" id="navigation-and-files">
+<h2 class="panel-title">Navigation and Files</h2>
+<p class="panel-lead">Move around the file system and create, copy, move and delete files.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>pwd</code></td><td>Print the current directory</td><td><code class="copy">pwd</code></td></tr>
+<tr><td><code>cd</code></td><td>Change directory; <code>cd -</code> goes back, <code>cd</code> alone goes home</td><td><code class="copy">cd -</code></td></tr>
+<tr><td><code>ls -lah</code></td><td>Long list with hidden files and readable sizes</td><td><code class="copy">ls -lah</code></td></tr>
+<tr><td><code>ls -ltr</code></td><td>Sort by modification time, newest last</td><td><code class="copy">ls -ltr /var/log</code></td></tr>
+<tr><td><code>tree</code></td><td>Show a directory tree (install the <code>tree</code> package)</td><td><code class="copy">tree -L 2 -a</code></td></tr>
+<tr><td><code>touch</code></td><td>Create an empty file or update its timestamp</td><td><code class="copy">touch notes.txt</code></td></tr>
+<tr><td><code>mkdir -p</code></td><td>Create directories including missing parents</td><td><code class="copy">mkdir -p project/{src,docs,tests}</code></td></tr>
+<tr><td><code>cp -a</code></td><td>Copy recursively and keep mode, owner and timestamps</td><td><code class="copy">cp -a site/ site.bak/</code></td></tr>
+<tr><td><code>mv</code></td><td>Move or rename; <code>-i</code> asks before overwriting</td><td><code class="copy">mv -i draft.txt final.txt</code></td></tr>
+<tr><td><code>rm</code></td><td>Delete files; <code>-r</code> for directories, <code>-f</code> without prompts. There is no recycle bin</td><td><code class="copy">rm -rf -- ./build</code></td></tr>
+<tr><td><code>rmdir</code></td><td>Remove an empty directory</td><td><code class="copy">rmdir old-empty-folder</code></td></tr>
+<tr><td><code>ln -s</code></td><td>Create a symbolic link (without <code>-s</code> it makes a hard link)</td><td><code class="copy">ln -s /opt/app/releases/2.4 /opt/app/current</code></td></tr>
+<tr><td><code>realpath</code></td><td>Resolve a path to its absolute form, following links</td><td><code class="copy">realpath ../config</code></td></tr>
+<tr><td><code>stat</code></td><td>Show size, inode, permissions and access, modify and change times</td><td><code class="copy">stat /etc/passwd</code></td></tr>
+<tr><td><code>file</code></td><td>Identify a file type from its content, not its extension</td><td><code class="copy">file dump.bin</code></td></tr>
+<tr><td><code>basename</code> / <code>dirname</code></td><td>Split a path into file name and directory</td><td><code class="copy">basename /var/log/nginx/access.log .log</code></td></tr>
+<tr><td><code>du</code></td><td>Size of each item in a folder, sorted</td><td><code class="copy">du -sh -- * | sort -h</code></td></tr>
+<tr><td><code>mktemp</code></td><td>Create a unique temporary file or directory safely</td><td><code class="copy">workdir=$(mktemp -d)</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="viewing-and-editing">
+<h2 class="panel-title">Viewing and Editing</h2>
+<p class="panel-lead">Read files, follow logs, inspect binary data and edit in the terminal.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>cat</code></td><td>Print a file (or join several)</td><td><code class="copy">cat /etc/os-release</code></td></tr>
+<tr><td><code>cat -n</code> / <code>nl</code></td><td>Print with line numbers</td><td><code class="copy">cat -n script.sh</code></td></tr>
+<tr><td><code>less</code></td><td>Page through a file: <kbd>/</kbd> searches, <kbd>F</kbd> follows, <kbd>q</kbd> quits</td><td><code class="copy">less -S /etc/services</code></td></tr>
+<tr><td><code>head</code></td><td>First lines of a file</td><td><code class="copy">head -n 20 access.log</code></td></tr>
+<tr><td><code>tail -F</code></td><td>Follow a growing file, and keep following after log rotation</td><td><code class="copy">tail -F /var/log/nginx/access.log</code></td></tr>
+<tr><td><code>tac</code></td><td>Print a file with the last line first</td><td><code class="copy">tac app.log | head</code></td></tr>
+<tr><td><code>wc</code></td><td>Count lines, words and bytes</td><td><code class="copy">wc -l access.log</code></td></tr>
+<tr><td><code>column -t</code></td><td>Align delimited text into columns</td><td><code class="copy">column -t -s: /etc/passwd | less -S</code></td></tr>
+<tr><td><code>xxd</code></td><td>Hex dump; <code>xxd -r -p</code> turns hex back into bytes</td><td><code class="copy">xxd file.bin | head</code></td></tr>
+<tr><td><code>hexdump -C</code></td><td>Canonical hex and ASCII dump</td><td><code class="copy">hexdump -C header.bin | head</code></td></tr>
+<tr><td><code>strings</code></td><td>Extract printable strings from a binary</td><td><code class="copy">strings -n 8 suspicious.bin | less</code></td></tr>
+<tr><td><code>base64</code></td><td>Encode or decode Base64</td><td><code class="copy">base64 -d payload.b64 &gt; payload.bin</code></td></tr>
+<tr><td><code>iconv</code></td><td>Convert text between character encodings</td><td><code class="copy">iconv -f ISO-8859-1 -t UTF-8 old.txt &gt; new.txt</code></td></tr>
+<tr><td><code>nano</code></td><td>Simple editor: <kbd>Ctrl</kbd>+<kbd>O</kbd> saves, <kbd>Ctrl</kbd>+<kbd>X</kbd> exits</td><td><code class="copy">nano notes.txt</code></td></tr>
+<tr><td><code>vim</code></td><td>Modal editor: <kbd>i</kbd> to insert, <kbd>Esc</kbd> then <code>:wq</code> to save and quit, <code>:q!</code> to quit without saving</td><td><code class="copy">vim +42 app.py</code></td></tr>
+<tr><td><code>sudoedit</code></td><td>Edit a root owned file with your own editor and settings</td><td><code class="copy">sudoedit /etc/ssh/sshd_config</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="search-and-text">
+<h2 class="panel-title">Search and Text Processing</h2>
+<p class="panel-lead">Find files, search inside them, and slice, filter, count and compare text.</p>
+<h3>Finding files</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>find -name</code></td><td>Find files by name pattern</td><td><code class="copy">find /etc -type f -name "*.conf"</code></td></tr>
+<tr><td><code>find -mtime</code></td><td>Files modified in the last N days (<code>-mmin</code> for minutes)</td><td><code class="copy">find /var/www -type f -mtime -1</code></td></tr>
+<tr><td><code>find -size</code></td><td>Large files on one file system</td><td><code class="copy">find / -xdev -type f -size +500M 2&gt;/dev/null</code></td></tr>
+<tr><td><code>find -exec</code></td><td>Run a command on every match (<code>+</code> batches them)</td><td><code class="copy">find ./logs -name "*.log" -mtime +30 -exec gzip {} +</code></td></tr>
+<tr><td><code>find -delete</code></td><td>Delete matches; run without <code>-delete</code> first to check the list</td><td><code class="copy">find /tmp -name "*.tmp" -user "$USER" -delete</code></td></tr>
+<tr><td><code>locate</code></td><td>Instant name search from a database (plocate on current distributions); refresh with <code>sudo updatedb</code></td><td><code class="copy">locate sshd_config</code></td></tr>
+<tr><td><code>whereis</code></td><td>Find the binary, source and man page of a command</td><td><code class="copy">whereis ssh</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Searching inside files</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>grep -rin</code></td><td>Recursive, case insensitive search with line numbers</td><td><code class="copy">grep -rin "password" /etc 2&gt;/dev/null</code></td></tr>
+<tr><td><code>grep -E</code></td><td>Extended regex (replaces the deprecated <code>egrep</code>)</td><td><code class="copy">grep -Ei "pass|secret|token" config.ini</code></td></tr>
+<tr><td><code>grep -v</code></td><td>Show lines that do not match, here hiding comments and blank lines</td><td><code class="copy">grep -Ev '^\s*(#|$)' /etc/ssh/sshd_config</code></td></tr>
+<tr><td><code>grep -c</code></td><td>Count matching lines</td><td><code class="copy">grep -c "Failed password" /var/log/auth.log</code></td></tr>
+<tr><td><code>grep -o</code></td><td>Print only the matched part, for example IPv4 addresses</td><td><code class="copy">grep -oE '([0-9]{1,3}\.){3}[0-9]{1,3}' access.log | sort -u</code></td></tr>
+<tr><td><code>grep -C</code></td><td>Show N lines of context around each match (<code>-A</code> after, <code>-B</code> before)</td><td><code class="copy">grep -C 3 "segfault" kern.log</code></td></tr>
+<tr><td><code>grep -l</code></td><td>List only the names of files that match</td><td><code class="copy">grep -rl "TODO" src/</code></td></tr>
+<tr><td><code>rg</code></td><td>ripgrep: fast recursive search that respects <code>.gitignore</code> (install <code>ripgrep</code>)</td><td><code class="copy">rg -n "api_key"</code></td></tr>
+<tr><td><code>zgrep</code></td><td>Search inside gzip compressed logs</td><td><code class="copy">zgrep "Failed password" /var/log/auth.log.*.gz</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Processing text</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>cut</code></td><td>Select fields by delimiter</td><td><code class="copy">cut -d: -f1,7 /etc/passwd</code></td></tr>
+<tr><td><code>tr</code></td><td>Translate, squeeze or delete characters</td><td><code class="copy">tr -s ' ' &lt; report.txt</code></td></tr>
+<tr><td><code>sort</code></td><td>Sort lines; <code>-n</code> numeric, <code>-h</code> human sizes, <code>-u</code> unique, <code>-t</code>/<code>-k</code> pick a field</td><td><code class="copy">sort -t: -k3 -n /etc/passwd</code></td></tr>
+<tr><td><code>uniq -c</code></td><td>Count repeated lines (input must be sorted)</td><td><code class="copy">sort ips.txt | uniq -c | sort -rn | head</code></td></tr>
+<tr><td><code>awk '{print}'</code></td><td>Print chosen columns</td><td><code class="copy">awk '{print $1, $9}' access.log</code></td></tr>
+<tr><td><code>awk -F</code></td><td>Filter rows by a condition on a field</td><td><code class="copy">awk -F: '$3 &gt;= 1000 {print $1}' /etc/passwd</code></td></tr>
+<tr><td><code>awk END</code></td><td>Sum a column</td><td><code class="copy">awk '{sum += $10} END {print sum}' access.log</code></td></tr>
+<tr><td><code>sed s///</code></td><td>Find and replace in a stream</td><td><code class="copy">sed 's/http:/https:/g' links.txt</code></td></tr>
+<tr><td><code>sed -i</code></td><td>Edit a file in place, keeping a backup (macOS needs <code>-i ''</code> or <code>-i .bak</code>)</td><td><code class="copy">sed -i.bak 's/^#\?PasswordAuthentication .*/PasswordAuthentication no/' sshd_config</code></td></tr>
+<tr><td><code>sed -n p</code></td><td>Print a range of lines</td><td><code class="copy">sed -n '10,20p' file.txt</code></td></tr>
+<tr><td><code>paste</code></td><td>Join lines side by side or into one line</td><td><code class="copy">paste -sd, ids.txt</code></td></tr>
+<tr><td><code>comm</code></td><td>Lines common to or unique to two sorted files</td><td><code class="copy">comm -12 &lt;(sort a.txt) &lt;(sort b.txt)</code></td></tr>
+<tr><td><code>jq .</code></td><td>Pretty print and validate JSON</td><td><code class="copy">jq . response.json</code></td></tr>
+<tr><td><code>jq -r</code></td><td>Extract raw values from JSON</td><td><code class="copy">jq -r '.items[].name' data.json</code></td></tr>
+<tr><td><code>jq select</code></td><td>Filter JSON objects by a field</td><td><code class="copy">jq -r '.[] | select(.severity == "high") | .id' findings.json</code></td></tr>
+<tr><td><code>jq -n</code></td><td>Build JSON safely from shell variables</td><td><code class="copy">jq -n --arg user "$USER" '{user: $user}'</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Comparing files</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>diff -u</code></td><td>Unified diff of two text files</td><td><code class="copy">diff -u sshd_config.orig sshd_config</code></td></tr>
+<tr><td><code>diff -rq</code></td><td>List files that differ between two directories</td><td><code class="copy">diff -rq site-old/ site-new/</code></td></tr>
+<tr><td><code>diff -y</code></td><td>Side by side view of differences only</td><td><code class="copy">diff -y --suppress-common-lines a.txt b.txt</code></td></tr>
+<tr><td><code>cmp</code></td><td>Compare binary files byte by byte</td><td><code class="copy">cmp -l a.bin b.bin | head</code></td></tr>
+<tr><td><code>git diff --no-index</code></td><td>Git style colored diff, word level, outside a repository</td><td><code class="copy">git diff --no-index --word-diff a.txt b.txt</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="pipes-and-redirection">
+<h2 class="panel-title">Pipes and Redirection</h2>
+<p class="panel-lead">Connect commands and send output to files.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Syntax</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>|</code></td><td>Send output of one command into the next</td><td><code class="copy">ls -l /etc | wc -l</code></td></tr>
+<tr><td><code>&gt;</code></td><td>Write output to a file, replacing it</td><td><code class="copy">date &gt; run.txt</code></td></tr>
+<tr><td><code>&gt;&gt;</code></td><td>Append output to a file</td><td><code class="copy">echo "done" &gt;&gt; run.txt</code></td></tr>
+<tr><td><code>&lt;</code></td><td>Read a file as input</td><td><code class="copy">sort &lt; names.txt</code></td></tr>
+<tr><td><code>2&gt;</code></td><td>Redirect errors only</td><td><code class="copy">make 2&gt; errors.log</code></td></tr>
+<tr><td><code>&gt; file 2&gt;&amp;1</code></td><td>Send output and errors to the same file (order matters)</td><td><code class="copy">./backup.sh &gt; backup.log 2&gt;&amp;1</code></td></tr>
+<tr><td><code>&amp;&gt;</code></td><td>Bash shorthand for output and errors together</td><td><code class="copy">./backup.sh &amp;&gt; backup.log</code></td></tr>
+<tr><td><code>|&amp;</code></td><td>Pipe output and errors together</td><td><code class="copy">make |&amp; tee build.log</code></td></tr>
+<tr><td><code>/dev/null</code></td><td>Discard output</td><td><code class="copy">command -v nmap &gt; /dev/null &amp;&amp; echo installed</code></td></tr>
+<tr><td><code>tee</code></td><td>Write to a file and still show the output</td><td><code class="copy">ls -la | tee listing.txt</code></td></tr>
+<tr><td><code>sudo tee -a</code></td><td>Append to a root owned file (<code>sudo echo ... &gt; file</code> fails because the shell opens the file)</td><td><code class="copy">echo "10.0.0.5 web01" | sudo tee -a /etc/hosts</code></td></tr>
+<tr><td><code>&amp;&amp;</code> / <code>||</code></td><td>Run the next command only on success, or only on failure</td><td><code class="copy">sudo apt update &amp;&amp; sudo apt full-upgrade</code></td></tr>
+<tr><td><code>;</code></td><td>Run commands one after another regardless of result</td><td><code class="copy">cd /tmp; ls</code></td></tr>
+<tr><td><code>xargs</code></td><td>Turn input lines into arguments; <code>-0</code> with <code>-print0</code> handles spaces</td><td><code class="copy">find . -name "*.bak" -print0 | xargs -0 rm --</code></td></tr>
+<tr><td><code>xargs -P</code></td><td>Run up to N jobs in parallel</td><td><code class="copy">xargs -P 4 -I{} -a hosts.txt ping -c 1 {}</code></td></tr>
+<tr><td><code>&lt;( )</code></td><td>Process substitution: use command output as a file</td><td><code class="copy">diff &lt;(ls dir1) &lt;(ls dir2)</code></td></tr>
+<tr><td><code>printf &gt;&gt;</code></td><td>Write structured lines, for example CSV</td><td><code class="copy">printf '%s,%s\n' "$USER" "$(id -u)" &gt;&gt; users.csv</code></td></tr>
+<tr><td><code>script</code></td><td>Record a whole terminal session to a file (useful for engagement notes)</td><td><code class="copy">script -a session-$(date +%F).log</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="permissions-and-ownership">
+<h2 class="panel-title">Permissions and Ownership</h2>
+<p class="panel-lead">Modes, owners, ACLs, attributes, capabilities and SUID discovery.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term">r=4 w=2 x=1</span><span class="definition-text">Add per digit: owner, group, others</span></div>
+<div class="definition"><span class="definition-term">600</span><span class="definition-text">Private file, for example an SSH private key</span></div>
+<div class="definition"><span class="definition-term">644</span><span class="definition-text">Readable by everyone, writable by owner</span></div>
+<div class="definition"><span class="definition-term">640</span><span class="definition-text">Config readable by a service group</span></div>
+<div class="definition"><span class="definition-term">700 / 755</span><span class="definition-text">Private directory / public directory or program</span></div>
+<div class="definition"><span class="definition-term">1777</span><span class="definition-text">Sticky bit: anyone writes, only owners delete (like <code>/tmp</code>)</span></div>
+</div>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>chmod</code> (numeric)</td><td>Set the full mode at once</td><td><code class="copy">chmod 640 app.conf</code></td></tr>
+<tr><td><code>chmod</code> (symbolic)</td><td>Add or remove single permissions</td><td><code class="copy">chmod u+x deploy.sh</code></td></tr>
+<tr><td><code>find</code> + <code>chmod</code></td><td>Different modes for files and directories (avoid blanket <code>chmod -R 755</code>)</td><td><code class="copy">find /var/www/site -type f -exec chmod 644 {} + -o -type d -exec chmod 755 {} +</code></td></tr>
+<tr><td><code>chown</code></td><td>Change owner and group</td><td><code class="copy">sudo chown -R www-data:www-data /var/www/site</code></td></tr>
+<tr><td><code>chgrp</code></td><td>Change only the group</td><td><code class="copy">chgrp developers report.txt</code></td></tr>
+<tr><td><code>umask</code></td><td>Default mask for new files (027 gives 640 files and 750 directories)</td><td><code class="copy">umask 027</code></td></tr>
+<tr><td><code>namei -l</code></td><td>Show permissions of every directory along a path</td><td><code class="copy">namei -l /var/www/site/index.html</code></td></tr>
+<tr><td><code>getfacl</code></td><td>Show POSIX ACLs (a <code>+</code> after the mode in <code>ls -l</code> means ACLs exist)</td><td><code class="copy">getfacl /srv/share</code></td></tr>
+<tr><td><code>setfacl -m</code></td><td>Grant one user or group access without changing the owner</td><td><code class="copy">sudo setfacl -m u:alice:rx /srv/share</code></td></tr>
+<tr><td><code>setfacl -d</code></td><td>Default ACL inherited by new files in a directory</td><td><code class="copy">sudo setfacl -d -m g:devs:rwx /srv/project</code></td></tr>
+<tr><td><code>lsattr</code></td><td>Show file attributes on ext4 and similar file systems</td><td><code class="copy">lsattr /etc/passwd</code></td></tr>
+<tr><td><code>chattr</code></td><td>Set attributes: <code>+i</code> immutable, <code>+a</code> append only</td><td><code class="copy">sudo chattr +i /etc/important.conf</code></td></tr>
+<tr><td><code>getcap -r</code></td><td>Find binaries with file capabilities</td><td><code class="copy">getcap -r / 2&gt;/dev/null</code></td></tr>
+<tr><td><code>setcap</code></td><td>Grant a single capability instead of root, here binding ports below 1024</td><td><code class="copy">sudo setcap cap_net_bind_service=+ep /usr/local/bin/app</code></td></tr>
+<tr><td>SUID files</td><td>Find programs that run as their owner (often root)</td><td><code class="copy">find / -perm -4000 -type f 2&gt;/dev/null</code></td></tr>
+<tr><td>SGID files</td><td>Find programs that run with their group</td><td><code class="copy">find / -perm -2000 -type f 2&gt;/dev/null</code></td></tr>
+<tr><td>World writable dirs</td><td>Directories anyone can write to that lack the sticky bit</td><td><code class="copy">find / -xdev -type d -perm -0002 ! -perm -1000 2&gt;/dev/null</code></td></tr>
+<tr><td><code>sudo -l</code></td><td>List what the current user may run with sudo</td><td><code class="copy">sudo -l</code></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-tip"><p><strong>Tip:</strong> unexpected SUID binaries, capabilities such as <code>cap_setuid</code> and broad <code>sudo -l</code> entries are classic privilege escalation paths. Check each one against <a href="https://gtfobins.org/">GTFOBins</a>.</p></div>
+</section>
+<section class="panel" id="users-and-groups">
+<h2 class="panel-title">Users and Groups</h2>
+<p class="panel-lead">Identity, sessions, login history and account management.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>whoami</code></td><td>Current user name</td><td><code class="copy">whoami</code></td></tr>
+<tr><td><code>id</code></td><td>UID, GID and all groups of a user</td><td><code class="copy">id alice</code></td></tr>
+<tr><td><code>groups</code></td><td>Group membership of a user</td><td><code class="copy">groups alice</code></td></tr>
+<tr><td><code>w</code> / <code>who</code></td><td>Who is logged in and what they are running</td><td><code class="copy">w</code></td></tr>
+<tr><td><code>loginctl</code></td><td>systemd login sessions and users</td><td><code class="copy">loginctl list-sessions</code></td></tr>
+<tr><td><code>last</code> / <code>wtmpdb last</code></td><td>Login history; Debian 13 replaced <code>last</code> with <code>wtmpdb last</code> (package <code>wtmpdb</code>)</td><td><code class="copy">last -n 10</code></td></tr>
+<tr><td><code>lastlog2</code></td><td>Last login per account; replaces <code>lastlog</code> on Debian 13 and other Y2038 safe systems</td><td><code class="copy">lastlog2</code></td></tr>
+<tr><td><code>lslogins</code></td><td>Account overview; <code>--failed</code> shows failed logins (replaces <code>lastb</code>)</td><td><code class="copy">sudo lslogins --failed</code></td></tr>
+<tr><td><code>getent</code></td><td>Look up users and groups from all sources (local, LDAP, SSSD)</td><td><code class="copy">getent passwd alice</code></td></tr>
+<tr><td><code>useradd</code></td><td>Create a user with a home directory and shell (all distributions)</td><td><code class="copy">sudo useradd -m -s /bin/bash alice</code></td></tr>
+<tr><td><code>adduser</code></td><td>Interactive user creation on Debian, Ubuntu and Kali</td><td><code class="copy">sudo adduser alice</code></td></tr>
+<tr><td><code>usermod -aG</code></td><td>Add a user to a group (<code>sudo</code> on Debian family, <code>wheel</code> on Fedora); log in again to apply</td><td><code class="copy">sudo usermod -aG sudo alice</code></td></tr>
+<tr><td><code>gpasswd -d</code></td><td>Remove a user from a group</td><td><code class="copy">sudo gpasswd -d alice docker</code></td></tr>
+<tr><td><code>groupadd</code></td><td>Create a group</td><td><code class="copy">sudo groupadd developers</code></td></tr>
+<tr><td><code>userdel -r</code></td><td>Delete a user and their home directory</td><td><code class="copy">sudo userdel -r olduser</code></td></tr>
+<tr><td><code>passwd</code></td><td>Change your password, or another user's as root</td><td><code class="copy">sudo passwd alice</code></td></tr>
+<tr><td><code>usermod -L</code></td><td>Lock an account's password; add <code>chage -E 0</code> to block key logins too</td><td><code class="copy">sudo usermod -L alice &amp;&amp; sudo chage -E 0 alice</code></td></tr>
+<tr><td><code>chage -l</code></td><td>Password aging and expiry details</td><td><code class="copy">sudo chage -l alice</code></td></tr>
+<tr><td><code>faillock</code></td><td>Show or reset failed login lockouts</td><td><code class="copy">sudo faillock --user alice --reset</code></td></tr>
+<tr><td><code>su -</code></td><td>Switch to another user with a full login environment</td><td><code class="copy">su - postgres</code></td></tr>
+<tr><td><code>sudo -u</code> / <code>sudo -i</code></td><td>Run one command as another user, or open a root login shell</td><td><code class="copy">sudo -u www-data whoami</code></td></tr>
+<tr><td><code>visudo</code></td><td>Edit sudoers with a syntax check; prefer a file in <code>/etc/sudoers.d/</code></td><td><code class="copy">sudo visudo -f /etc/sudoers.d/ops</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="processes-and-jobs">
+<h2 class="panel-title">Processes and Jobs</h2>
+<p class="panel-lead">Inspect, signal, prioritize and background processes.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>ps aux</code></td><td>All processes, here sorted by CPU</td><td><code class="copy">ps aux --sort=-%cpu | head</code></td></tr>
+<tr><td><code>ps -ef --forest</code></td><td>Processes as a parent and child tree</td><td><code class="copy">ps -ef --forest</code></td></tr>
+<tr><td><code>ps -eo</code></td><td>Choose your own columns</td><td><code class="copy">ps -eo pid,ppid,user,stat,etime,cmd --sort=-%mem | head</code></td></tr>
+<tr><td><code>pstree -p</code></td><td>Compact process tree with PIDs</td><td><code class="copy">pstree -p</code></td></tr>
+<tr><td><code>top</code> / <code>htop</code> / <code>btop</code></td><td>Live CPU and memory view (<code>htop</code> and <code>btop</code> may need installing)</td><td><code class="copy">htop</code></td></tr>
+<tr><td><code>pgrep -a</code></td><td>Find processes by name and show their command line</td><td><code class="copy">pgrep -a nginx</code></td></tr>
+<tr><td><code>pkill -f</code></td><td>Signal processes whose full command line matches</td><td><code class="copy">pkill -f "python3 app.py"</code></td></tr>
+<tr><td><code>kill</code></td><td>Send a signal: TERM by default, use <code>-9</code> (KILL) only if TERM fails</td><td><code class="copy">kill -TERM 1234</code></td></tr>
+<tr><td><code>kill -l</code></td><td>List signal names and numbers</td><td><code class="copy">kill -l</code></td></tr>
+<tr><td><code>&amp;</code></td><td>Start a command in the background</td><td><code class="copy">sleep 300 &amp;</code></td></tr>
+<tr><td><code>jobs -l</code></td><td>List background jobs of this shell</td><td><code class="copy">jobs -l</code></td></tr>
+<tr><td><code>fg</code> / <code>bg</code></td><td>Bring a job to the foreground, or resume a stopped job in the background</td><td><code class="copy">fg %1</code></td></tr>
+<tr><td><code>disown</code></td><td>Detach a job so closing the shell does not stop it</td><td><code class="copy">disown -h %1</code></td></tr>
+<tr><td><code>nohup</code></td><td>Run a command immune to hangups, output to <code>nohup.out</code></td><td><code class="copy">nohup ./long-task.sh &amp;</code></td></tr>
+<tr><td><code>setsid</code></td><td>Start a command in a new session, fully detached</td><td><code class="copy">setsid ./worker.sh &gt; worker.log 2&gt;&amp;1 &lt; /dev/null &amp;</code></td></tr>
+<tr><td><code>tmux</code></td><td>Terminal sessions that survive disconnects: detach with <kbd>Ctrl</kbd>+<kbd>B</kbd> then <kbd>D</kbd>, return with <code>tmux attach -t work</code></td><td><code class="copy">tmux new -s work</code></td></tr>
+<tr><td><code>wait</code></td><td>Wait for background jobs to finish</td><td><code class="copy">wait %1; echo $?</code></td></tr>
+<tr><td><code>nice</code></td><td>Start a command with lower CPU priority (19 is lowest)</td><td><code class="copy">nice -n 10 tar -czf backup.tar.gz /srv</code></td></tr>
+<tr><td><code>renice</code></td><td>Change the priority of a running process</td><td><code class="copy">sudo renice -n -5 -p 1234</code></td></tr>
+<tr><td><code>ionice</code></td><td>Set disk I/O priority</td><td><code class="copy">sudo ionice -c 3 -p 1234</code></td></tr>
+<tr><td><code>timeout</code></td><td>Kill a command that runs longer than a limit</td><td><code class="copy">timeout 30s curl -s https://example.com</code></td></tr>
+<tr><td><code>watch</code></td><td>Re-run a command every N seconds</td><td><code class="copy">watch -n 2 'ss -tn state established | wc -l'</code></td></tr>
+<tr><td><code>lsof -p</code></td><td>Open files and sockets of a process</td><td><code class="copy">sudo lsof -p 1234</code></td></tr>
+<tr><td><code>lsof -i</code></td><td>Which process uses a port</td><td><code class="copy">sudo lsof -nP -i :443</code></td></tr>
+<tr><td><code>fuser</code></td><td>PIDs using a file, mount or port</td><td><code class="copy">sudo fuser -v -n tcp 80</code></td></tr>
+<tr><td><code>strace</code></td><td>Trace system calls of a running process</td><td><code class="copy">sudo strace -f -e trace=openat,connect -p 1234</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="system-information">
+<h2 class="panel-title">System Information and Performance</h2>
+<p class="panel-lead">Distribution, kernel, hardware and resource usage.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>/etc/os-release</code></td><td>Distribution name and version (always present, unlike <code>lsb_release</code>)</td><td><code class="copy">cat /etc/os-release</code></td></tr>
+<tr><td><code>uname</code></td><td>Kernel release and architecture</td><td><code class="copy">uname -srm</code></td></tr>
+<tr><td><code>hostnamectl</code></td><td>Host name, OS, kernel and hardware summary; also sets the host name</td><td><code class="copy">sudo hostnamectl set-hostname web01</code></td></tr>
+<tr><td><code>uptime</code></td><td>Time since boot and load averages</td><td><code class="copy">uptime</code></td></tr>
+<tr><td><code>lscpu</code> / <code>nproc</code></td><td>CPU model, cores and flags</td><td><code class="copy">lscpu</code></td></tr>
+<tr><td><code>free -h</code></td><td>Memory and swap usage; look at the available column</td><td><code class="copy">free -h</code></td></tr>
+<tr><td><code>lspci -k</code></td><td>PCI devices and the kernel driver in use</td><td><code class="copy">lspci -k | grep -iA3 net</code></td></tr>
+<tr><td><code>lsusb</code></td><td>USB devices</td><td><code class="copy">lsusb -t</code></td></tr>
+<tr><td><code>lshw</code></td><td>Full hardware inventory</td><td><code class="copy">sudo lshw -short</code></td></tr>
+<tr><td><code>dmidecode</code></td><td>Firmware data: vendor, model, serial, BIOS version</td><td><code class="copy">sudo dmidecode -s system-product-name</code></td></tr>
+<tr><td><code>dmesg</code></td><td>Kernel messages with readable times (needs root on Debian and Ubuntu)</td><td><code class="copy">sudo dmesg -T --level=err,warn</code></td></tr>
+<tr><td><code>localectl</code></td><td>System locale and keyboard layout</td><td><code class="copy">localectl status</code></td></tr>
+<tr><td><code>fastfetch</code></td><td>System summary banner (replaces the archived <code>neofetch</code>)</td><td><code class="copy">fastfetch</code></td></tr>
+<tr><td><code>vmstat</code></td><td>CPU, memory, swap and I/O every second</td><td><code class="copy">vmstat 1 5</code></td></tr>
+<tr><td><code>iostat -x</code></td><td>Per disk utilization and latency (package <code>sysstat</code>)</td><td><code class="copy">iostat -xz 1</code></td></tr>
+<tr><td><code>sar</code></td><td>Live or historical CPU, memory and network stats (<code>sysstat</code>)</td><td><code class="copy">sar -n DEV 1 5</code></td></tr>
+<tr><td><code>pidstat</code></td><td>Per process CPU, memory and I/O over time (<code>sysstat</code>)</td><td><code class="copy">pidstat -p 1234 1</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="services-and-logs">
+<h2 class="panel-title">Services and Logs</h2>
+<p class="panel-lead">Manage systemd services and read the journal.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>systemctl status</code></td><td>State, PID and latest log lines of a service (SSH is <code>ssh</code> on Debian family, <code>sshd</code> on Fedora and Arch)</td><td><code class="copy">systemctl status ssh</code></td></tr>
+<tr><td><code>systemctl restart</code></td><td>Start, stop, restart or reload a service</td><td><code class="copy">sudo systemctl restart nginx</code></td></tr>
+<tr><td><code>systemctl enable --now</code></td><td>Start now and at every boot</td><td><code class="copy">sudo systemctl enable --now nginx</code></td></tr>
+<tr><td><code>systemctl disable --now</code></td><td>Stop now and do not start at boot</td><td><code class="copy">sudo systemctl disable --now cups</code></td></tr>
+<tr><td><code>systemctl mask</code></td><td>Block a unit from being started at all</td><td><code class="copy">sudo systemctl mask --now avahi-daemon</code></td></tr>
+<tr><td><code>systemctl is-active</code></td><td>Quick yes or no check, handy in scripts (also <code>is-enabled</code>)</td><td><code class="copy">systemctl is-active --quiet nginx &amp;&amp; echo up</code></td></tr>
+<tr><td><code>systemctl list-units</code></td><td>Running services</td><td><code class="copy">systemctl list-units --type=service --state=running</code></td></tr>
+<tr><td><code>systemctl list-unit-files</code></td><td>Services enabled at boot</td><td><code class="copy">systemctl list-unit-files --type=service --state=enabled</code></td></tr>
+<tr><td><code>systemctl --failed</code></td><td>Units that failed</td><td><code class="copy">systemctl --failed</code></td></tr>
+<tr><td><code>systemctl cat</code></td><td>Show a unit file and all its overrides</td><td><code class="copy">systemctl cat ssh.service</code></td></tr>
+<tr><td><code>systemctl edit</code></td><td>Create an override without touching the packaged unit</td><td><code class="copy">sudo systemctl edit nginx</code></td></tr>
+<tr><td><code>systemctl daemon-reload</code></td><td>Reload unit files after editing them by hand</td><td><code class="copy">sudo systemctl daemon-reload</code></td></tr>
+<tr><td><code>journalctl -u -f</code></td><td>Follow the logs of one service</td><td><code class="copy">journalctl -u nginx -f</code></td></tr>
+<tr><td><code>journalctl -xeu</code></td><td>Jump to the end of a service log with explanations, after a failed start</td><td><code class="copy">journalctl -xeu nginx</code></td></tr>
+<tr><td><code>journalctl -p err -b</code></td><td>Errors and worse since the current boot</td><td><code class="copy">journalctl -p err -b</code></td></tr>
+<tr><td><code>journalctl --since</code></td><td>Logs in a time window</td><td><code class="copy">journalctl --since "1 hour ago" --until "10 min ago"</code></td></tr>
+<tr><td><code>journalctl -b -1</code></td><td>Logs from the previous boot (list boots with <code>--list-boots</code>)</td><td><code class="copy">journalctl -b -1 -e</code></td></tr>
+<tr><td><code>journalctl -k</code></td><td>Kernel messages from the journal</td><td><code class="copy">journalctl -k -b</code></td></tr>
+<tr><td><code>journalctl -o</code></td><td>Output as JSON or other formats for tools</td><td><code class="copy">journalctl -u nginx -n 5 -o json-pretty</code></td></tr>
+<tr><td><code>journalctl --vacuum-time</code></td><td>Shrink the journal (check size with <code>--disk-usage</code>)</td><td><code class="copy">sudo journalctl --vacuum-time=14d</code></td></tr>
+<tr><td><code>logger</code></td><td>Write a test message to the system log</td><td><code class="copy">logger -t test "hello from logger"</code></td></tr>
+<tr><td><code>/var/log</code></td><td>Text log files where rsyslog is installed (Ubuntu); Debian 12 and later, and Fedora, log to the journal only by default</td><td><code class="copy">sudo tail -F /var/log/auth.log</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="scheduling-and-time">
+<h2 class="panel-title">Scheduling and Time</h2>
+<p class="panel-lead">cron, systemd timers, one-off jobs and clock settings.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>crontab -e</code> / <code>-l</code></td><td>Edit or list your cron jobs</td><td><code class="copy">crontab -l</code></td></tr>
+<tr><td>cron line</td><td>Minute, hour, day of month, month, day of week, command</td><td><code class="copy">*/15 * * * * /usr/local/bin/check.sh &gt;&gt; /var/log/check.log 2&gt;&amp;1</code></td></tr>
+<tr><td><code>/etc/cron.d</code></td><td>System cron files and the hourly, daily, weekly folders</td><td><code class="copy">ls /etc/cron.d /etc/cron.daily</code></td></tr>
+<tr><td><code>systemctl list-timers</code></td><td>systemd timers with next and last run</td><td><code class="copy">systemctl list-timers --all</code></td></tr>
+<tr><td><code>systemd-run</code></td><td>Run a command once after a delay as a transient timer</td><td><code class="copy">sudo systemd-run --on-active=10min systemctl restart nginx</code></td></tr>
+<tr><td><code>at</code></td><td>One-off job at a given time (package <code>at</code>); list with <code>atq</code>, remove with <code>atrm</code></td><td><code class="copy">echo "systemctl restart nginx" | sudo at now + 10 minutes</code></td></tr>
+<tr><td><code>date</code></td><td>Current time in ISO 8601 UTC</td><td><code class="copy">date -u +%Y-%m-%dT%H:%M:%SZ</code></td></tr>
+<tr><td><code>date -d</code></td><td>Convert a Unix timestamp or relative date (GNU only)</td><td><code class="copy">date -d @1700000000</code></td></tr>
+<tr><td><code>timedatectl</code></td><td>Time zone, NTP state and clock; also sets the zone</td><td><code class="copy">sudo timedatectl set-timezone Asia/Dubai</code></td></tr>
+<tr><td><code>chronyc</code></td><td>NTP sync status where chrony is the time client (Fedora, RHEL and others)</td><td><code class="copy">chronyc tracking</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="package-management">
+<h2 class="panel-title">Package Management</h2>
+<p class="panel-lead">apt, dnf, pacman, snap, flatpak and pipx.</p>
+<h3>Debian, Ubuntu and Kali (apt and dpkg)</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>apt update</code></td><td>Refresh package lists</td><td><code class="copy">sudo apt update</code></td></tr>
+<tr><td><code>apt full-upgrade</code></td><td>Upgrade everything, adding or removing packages if needed (the Kali recommended upgrade)</td><td><code class="copy">sudo apt full-upgrade</code></td></tr>
+<tr><td><code>apt install</code></td><td>Install packages, or a local <code>.deb</code> with its dependencies</td><td><code class="copy">sudo apt install ./package.deb</code></td></tr>
+<tr><td><code>apt purge</code></td><td>Remove a package and its config, then unused dependencies</td><td><code class="copy">sudo apt purge apache2 &amp;&amp; sudo apt autoremove</code></td></tr>
+<tr><td><code>apt search</code> / <code>apt show</code></td><td>Search packages and show details</td><td><code class="copy">apt show nmap</code></td></tr>
+<tr><td><code>apt list --upgradable</code></td><td>Packages waiting for an update</td><td><code class="copy">apt list --upgradable</code></td></tr>
+<tr><td><code>apt policy</code></td><td>Installed and candidate versions and their repositories</td><td><code class="copy">apt policy openssl</code></td></tr>
+<tr><td><code>apt-mark hold</code></td><td>Freeze a package at its current version</td><td><code class="copy">sudo apt-mark hold nginx</code></td></tr>
+<tr><td><code>dpkg -l</code></td><td>List installed packages</td><td><code class="copy">dpkg -l | grep openssh</code></td></tr>
+<tr><td><code>dpkg -L</code></td><td>Files installed by a package</td><td><code class="copy">dpkg -L openssh-server</code></td></tr>
+<tr><td><code>dpkg -S</code></td><td>Which package owns a file</td><td><code class="copy">dpkg -S /usr/bin/ssh</code></td></tr>
+<tr><td><code>update-alternatives</code></td><td>Choose the default program for a role</td><td><code class="copy">sudo update-alternatives --config editor</code></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-warning"><p><strong>Warning:</strong> <code>apt-key</code> is removed in Debian 13 and deprecated everywhere else. Store third party keys in <code>/etc/apt/keyrings/</code> and reference them with <code>Signed-By</code> in a <code>.sources</code> file; on Debian 13, <code>sudo apt modernize-sources</code> converts old <code>sources.list</code> files.</p></div>
+<h3>Fedora and RHEL (dnf and rpm)</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>dnf upgrade</code></td><td>Refresh metadata and upgrade everything</td><td><code class="copy">sudo dnf upgrade --refresh</code></td></tr>
+<tr><td><code>dnf install</code> / <code>remove</code></td><td>Install or remove packages</td><td><code class="copy">sudo dnf install nmap</code></td></tr>
+<tr><td><code>dnf search</code> / <code>info</code></td><td>Search and describe packages</td><td><code class="copy">dnf info wireshark</code></td></tr>
+<tr><td><code>dnf provides</code></td><td>Which package provides a file or command</td><td><code class="copy">dnf provides /usr/bin/dig</code></td></tr>
+<tr><td><code>dnf history</code></td><td>Past transactions, which can be undone</td><td><code class="copy">dnf history list</code></td></tr>
+<tr><td><code>rpm -qf</code> / <code>-ql</code></td><td>Package owning a file, or files in a package</td><td><code class="copy">rpm -qf /usr/bin/ssh</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Arch Linux (pacman)</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>pacman -Syu</code></td><td>Full system upgrade (Arch does not support partial upgrades)</td><td><code class="copy">sudo pacman -Syu</code></td></tr>
+<tr><td><code>pacman -S</code></td><td>Install a package</td><td><code class="copy">sudo pacman -S nmap</code></td></tr>
+<tr><td><code>pacman -Rns</code></td><td>Remove a package, its unused dependencies and config backups</td><td><code class="copy">sudo pacman -Rns nmap</code></td></tr>
+<tr><td><code>pacman -Ss</code> / <code>-Qs</code></td><td>Search the repositories or installed packages</td><td><code class="copy">pacman -Ss wireshark</code></td></tr>
+<tr><td><code>pacman -Qo</code></td><td>Which package owns a file</td><td><code class="copy">pacman -Qo /usr/bin/ssh</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Universal formats and tools</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>snap</code></td><td>Install and list snaps (default on Ubuntu); updates are automatic</td><td><code class="copy">sudo snap install code --classic</code></td></tr>
+<tr><td><code>flatpak</code></td><td>Install desktop apps from Flathub</td><td><code class="copy">flatpak install flathub org.wireshark.Wireshark</code></td></tr>
+<tr><td><code>pipx</code></td><td>Install Python command line tools in isolated environments (system <code>pip install</code> is blocked on current Debian and Ubuntu)</td><td><code class="copy">pipx install impacket</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="networking">
+<h2 class="panel-title">Networking</h2>
+<p class="panel-lead">Interfaces, routes, sockets, DNS, HTTP, firewalls and packet capture.</p>
+<h3>Interfaces and routes</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>ip -br addr</code></td><td>Brief list of interfaces and addresses (replaces <code>ifconfig</code>)</td><td><code class="copy">ip -br addr</code></td></tr>
+<tr><td><code>ip -br link</code></td><td>Interface names, state and MAC (names look like <code>enp0s3</code> or <code>wlan0</code>, not always <code>eth0</code>)</td><td><code class="copy">ip -br link</code></td></tr>
+<tr><td><code>ip addr add</code></td><td>Add a temporary address (lost at reboot)</td><td><code class="copy">sudo ip addr add 192.168.50.10/24 dev enp0s3</code></td></tr>
+<tr><td><code>ip link set</code></td><td>Bring an interface up or down</td><td><code class="copy">sudo ip link set enp0s3 down</code></td></tr>
+<tr><td><code>ip route</code></td><td>Routing table (replaces <code>route -n</code>)</td><td><code class="copy">ip route</code></td></tr>
+<tr><td><code>ip route get</code></td><td>Which interface and gateway reach an address</td><td><code class="copy">ip route get 1.1.1.1</code></td></tr>
+<tr><td><code>ip neigh</code></td><td>ARP and neighbor cache (replaces <code>arp -a</code>)</td><td><code class="copy">ip neigh</code></td></tr>
+<tr><td><code>nmcli device</code></td><td>NetworkManager devices and their state</td><td><code class="copy">nmcli device status</code></td></tr>
+<tr><td><code>nmcli con</code></td><td>List, bring up or edit saved connections</td><td><code class="copy">nmcli con up "Wired connection 1"</code></td></tr>
+<tr><td><code>nmcli device wifi</code></td><td>Scan and connect to Wi-Fi</td><td><code class="copy">nmcli device wifi list</code></td></tr>
+<tr><td><code>iw</code></td><td>Wireless interface details (replaces <code>iwconfig</code>)</td><td><code class="copy">iw dev</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Sockets and connectivity</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>ss -tulpn</code></td><td>Listening TCP and UDP ports with process names (replaces <code>netstat -tulpn</code>)</td><td><code class="copy">sudo ss -tulpn</code></td></tr>
+<tr><td><code>ss state established</code></td><td>Active TCP connections with owning processes</td><td><code class="copy">sudo ss -tnp state established</code></td></tr>
+<tr><td><code>ping</code></td><td>Basic reachability test</td><td><code class="copy">ping -c 4 1.1.1.1</code></td></tr>
+<tr><td><code>tracepath</code> / <code>traceroute</code></td><td>Path to a host (<code>traceroute</code> may need installing)</td><td><code class="copy">traceroute -n example.com</code></td></tr>
+<tr><td><code>mtr</code></td><td>Continuous traceroute with loss per hop</td><td><code class="copy">mtr -rwc 10 example.com</code></td></tr>
+<tr><td><code>nc -zv</code></td><td>Test whether a TCP port is open</td><td><code class="copy">nc -zv 10.0.0.5 22</code></td></tr>
+<tr><td><code>nc -l</code></td><td>Listen on a port, for quick transfers or catching a connection</td><td><code class="copy">nc -lvnp 4444</code></td></tr>
+<tr><td><code>/dev/tcp</code></td><td>Bash built in TCP test when no tools are installed</td><td><code class="copy">timeout 3 bash -c '&lt; /dev/tcp/10.0.0.5/443' &amp;&amp; echo open</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>DNS</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>dig</code></td><td>Query one record type</td><td><code class="copy">dig +short A example.com</code></td></tr>
+<tr><td><code>dig @server</code></td><td>Ask a specific resolver, answer section only</td><td><code class="copy">dig @1.1.1.1 example.com MX +noall +answer</code></td></tr>
+<tr><td><code>dig -x</code></td><td>Reverse lookup of an IP</td><td><code class="copy">dig -x 8.8.8.8 +short</code></td></tr>
+<tr><td><code>host</code></td><td>Simple lookups</td><td><code class="copy">host -t txt example.com</code></td></tr>
+<tr><td><code>getent hosts</code></td><td>Resolve the way applications do, including <code>/etc/hosts</code></td><td><code class="copy">getent hosts example.com</code></td></tr>
+<tr><td><code>resolvectl</code></td><td>systemd-resolved status, per link DNS servers and queries</td><td><code class="copy">resolvectl status</code></td></tr>
+<tr><td><code>resolvectl flush-caches</code></td><td>Clear the local DNS cache</td><td><code class="copy">sudo resolvectl flush-caches</code></td></tr>
+<tr><td><code>whois</code></td><td>Domain or IP registration data</td><td><code class="copy">whois example.com</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>HTTP and downloads</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>curl -I</code></td><td>Response headers only</td><td><code class="copy">curl -I https://example.com</code></td></tr>
+<tr><td><code>curl -w</code></td><td>Status code and timing without the body</td><td><code class="copy">curl -sS -o /dev/null -w "%{http_code} %{time_total}s\n" https://example.com</code></td></tr>
+<tr><td><code>curl -LO</code></td><td>Download a file, following redirects</td><td><code class="copy">curl -LO https://example.com/file.iso</code></td></tr>
+<tr><td><code>curl --json</code></td><td>POST JSON with the right headers (curl 7.82 and later)</td><td><code class="copy">curl --json '{"name":"test"}' https://api.example.com/items</code></td></tr>
+<tr><td><code>curl -v</code></td><td>Show the TLS handshake, request and response headers</td><td><code class="copy">curl -v https://example.com -o /dev/null</code></td></tr>
+<tr><td><code>wget -c</code></td><td>Resume an interrupted download (Fedora ships wget2 as <code>wget</code>)</td><td><code class="copy">wget -c https://example.com/file.iso</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Firewall and packet capture</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>ufw</code></td><td>Simple firewall on Ubuntu; allow SSH before <code>sudo ufw enable</code></td><td><code class="copy">sudo ufw allow 22/tcp</code></td></tr>
+<tr><td><code>ufw status</code></td><td>Show active rules</td><td><code class="copy">sudo ufw status verbose</code></td></tr>
+<tr><td><code>firewall-cmd</code></td><td>firewalld on Fedora and RHEL</td><td><code class="copy">sudo firewall-cmd --permanent --add-service=https &amp;&amp; sudo firewall-cmd --reload</code></td></tr>
+<tr><td><code>nft list ruleset</code></td><td>Show the complete nftables rule set (what ufw and firewalld build on)</td><td><code class="copy">sudo nft list ruleset</code></td></tr>
+<tr><td><code>iptables -S</code></td><td>Rules in iptables syntax; on current distributions this is the nftables backend</td><td><code class="copy">sudo iptables -S</code></td></tr>
+<tr><td><code>tcpdump</code></td><td>Capture and print packets</td><td><code class="copy">sudo tcpdump -nn -i any port 53</code></td></tr>
+<tr><td><code>tcpdump -w</code></td><td>Save a capture for Wireshark</td><td><code class="copy">sudo tcpdump -i enp0s3 -w capture.pcap host 10.0.0.5</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="ssh-and-file-transfer">
+<h2 class="panel-title">SSH and File Transfer</h2>
+<p class="panel-lead">Remote shells, keys, tunnels and copying files between hosts.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>ssh</code></td><td>Connect to a host</td><td><code class="copy">ssh alice@10.0.0.5</code></td></tr>
+<tr><td><code>ssh -i -p</code></td><td>Pick a key and port</td><td><code class="copy">ssh -i ~/.ssh/id_ed25519 -p 2222 alice@host</code></td></tr>
+<tr><td><code>ssh host 'cmd'</code></td><td>Run a command remotely and return</td><td><code class="copy">ssh alice@host 'uptime &amp;&amp; df -h /'</code></td></tr>
+<tr><td><code>ssh -J</code></td><td>Connect through a jump host</td><td><code class="copy">ssh -J alice@bastion alice@10.0.0.20</code></td></tr>
+<tr><td><code>ssh-keygen -t ed25519</code></td><td>Create a key pair (Ed25519 is the default in current OpenSSH)</td><td><code class="copy">ssh-keygen -t ed25519 -C "alice@laptop"</code></td></tr>
+<tr><td><code>ssh-copy-id</code></td><td>Install your public key on a server</td><td><code class="copy">ssh-copy-id alice@host</code></td></tr>
+<tr><td><code>ssh-keygen -lf</code></td><td>Show a key fingerprint</td><td><code class="copy">ssh-keygen -lf ~/.ssh/id_ed25519.pub</code></td></tr>
+<tr><td><code>ssh-keygen -R</code></td><td>Remove an old host key after a server was rebuilt</td><td><code class="copy">ssh-keygen -R 10.0.0.5</code></td></tr>
+<tr><td><code>ssh-add</code></td><td>Load a key into the agent so you type the passphrase once</td><td><code class="copy">eval "$(ssh-agent -s)" &amp;&amp; ssh-add ~/.ssh/id_ed25519</code></td></tr>
+<tr><td><code>ssh -L</code></td><td>Local forward: reach a remote service on a local port</td><td><code class="copy">ssh -L 8080:127.0.0.1:80 alice@host</code></td></tr>
+<tr><td><code>ssh -R</code></td><td>Remote forward: expose a local service on the server</td><td><code class="copy">ssh -R 9000:127.0.0.1:3000 alice@host</code></td></tr>
+<tr><td><code>ssh -D</code></td><td>Dynamic SOCKS proxy; <code>-N</code> means no remote command</td><td><code class="copy">ssh -D 1080 -N alice@host</code></td></tr>
+<tr><td><code>sshd -t</code></td><td>Check the server config for errors before reloading</td><td><code class="copy">sudo sshd -t</code></td></tr>
+<tr><td><code>sshd -T</code></td><td>Print the effective server settings</td><td><code class="copy">sudo sshd -T | grep -Ei 'passwordauthentication|permitrootlogin'</code></td></tr>
+<tr><td><code>systemctl reload ssh</code></td><td>Apply sshd changes (<code>sshd</code> on Fedora and Arch). On Ubuntu, after changing <code>Port</code> run <code>daemon-reload</code> and restart <code>ssh.socket</code></td><td><code class="copy">sudo sshd -t &amp;&amp; sudo systemctl reload ssh</code></td></tr>
+<tr><td><code>scp</code></td><td>Copy files over SSH (uses the SFTP protocol since OpenSSH 9.0)</td><td><code class="copy">scp report.pdf alice@host:/tmp/</code></td></tr>
+<tr><td><code>sftp</code></td><td>Interactive file transfer session</td><td><code class="copy">sftp alice@host</code></td></tr>
+<tr><td><code>rsync -avzP</code></td><td>Sync with progress and resume; a trailing <code>/</code> on the source copies its contents</td><td><code class="copy">rsync -avzP ./site/ alice@host:/var/www/site/</code></td></tr>
+<tr><td><code>rsync -n --delete</code></td><td>Dry run of a mirror that deletes extra files at the target</td><td><code class="copy">rsync -avn --delete src/ alice@host:/backup/src/</code></td></tr>
+<tr><td><code>python3 -m http.server</code></td><td>Serve the current folder over HTTP for a quick download in a lab</td><td><code class="copy">python3 -m http.server 8000 --bind 0.0.0.0</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Per host settings in ~/.ssh/config</h3>
+<pre><code>Host bastion
+HostName 203.0.113.10
+User alice
+IdentityFile ~/.ssh/id_ed25519
+Host web01
+HostName 10.0.0.20
+User alice
+ProxyJump bastion</code></pre>
+<p>With this file, <code>ssh web01</code> connects through the bastion automatically. Keep <code>~/.ssh</code> at 700 and private keys at 600.</p>
+<div class="callout"><p><strong>Note:</strong> OpenSSH 10 removed DSA keys and uses a post-quantum hybrid key exchange by default. Old <code>ssh-dss</code> keys no longer work; replace them with Ed25519.</p></div>
+</section>
+<section class="panel" id="archives-and-backup">
+<h2 class="panel-title">Archives, Compression and Backup</h2>
+<p class="panel-lead">tar, gzip, zstd, zip, 7-Zip, mirrors and snapshots.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>tar -czf</code></td><td>Create a gzip compressed archive</td><td><code class="copy">tar -czf backup-$(date +%F).tar.gz /srv/app</code></td></tr>
+<tr><td><code>tar -xf</code></td><td>Extract any tar archive (compression is detected), optionally into a folder</td><td><code class="copy">tar -xf archive.tar.gz -C /tmp/extract</code></td></tr>
+<tr><td><code>tar -tvf</code></td><td>List archive contents without extracting</td><td><code class="copy">tar -tvf backup.tar.gz</code></td></tr>
+<tr><td><code>tar --zstd</code></td><td>Create a fast zstd compressed archive (<code>-J</code> for xz)</td><td><code class="copy">tar --zstd -cf logs.tar.zst /var/log/app</code></td></tr>
+<tr><td><code>tar --xattrs --acls</code></td><td>Keep permissions, ACLs and extended attributes</td><td><code class="copy">sudo tar --xattrs --acls -cpzf etc-$(date +%F).tar.gz /etc</code></td></tr>
+<tr><td><code>gzip</code> / <code>gunzip</code></td><td>Compress or decompress one file; <code>-k</code> keeps the original</td><td><code class="copy">gzip -k access.log</code></td></tr>
+<tr><td><code>zcat</code></td><td>Read a compressed file without extracting it</td><td><code class="copy">zcat access.log.2.gz | head</code></td></tr>
+<tr><td><code>zstd</code> / <code>xz</code></td><td>Stronger single file compression</td><td><code class="copy">zstd -19 disk.img</code></td></tr>
+<tr><td><code>zip -r</code></td><td>Create a zip archive</td><td><code class="copy">zip -r site.zip public/</code></td></tr>
+<tr><td><code>unzip</code></td><td>List (<code>-l</code>) or extract a zip archive</td><td><code class="copy">unzip archive.zip -d out/</code></td></tr>
+<tr><td><code>7z</code></td><td>7-Zip archives, including encrypted ones (package <code>7zip</code>, <code>p7zip-full</code> on older releases)</td><td><code class="copy">7z x archive.7z</code></td></tr>
+<tr><td><code>split</code></td><td>Cut a large file into parts (join with <code>cat part_* &gt; file</code>)</td><td><code class="copy">split -b 1G big.tar.gz part_</code></td></tr>
+<tr><td><code>rsync -aHAX --delete</code></td><td>Exact local mirror with hard links, ACLs and attributes</td><td><code class="copy">sudo rsync -aHAX --delete /data/ /mnt/backup/data/</code></td></tr>
+<tr><td><code>cp --reflink</code></td><td>Instant copy-on-write clone on Btrfs and XFS</td><td><code class="copy">cp --reflink=auto disk.img disk.bak</code></td></tr>
+<tr><td><code>btrfs subvolume snapshot</code></td><td>Read-only Btrfs snapshot</td><td><code class="copy">sudo btrfs subvolume snapshot -r /home /snapshots/home-$(date +%F)</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="disks-and-filesystems">
+<h2 class="panel-title">Disks and Filesystems</h2>
+<p class="panel-lead">Devices, mounts, space, partitions, LVM, RAID, encryption and disk health.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>lsblk -f</code></td><td>Block devices with file system, label, UUID and mount point</td><td><code class="copy">lsblk -f</code></td></tr>
+<tr><td><code>df -hT</code></td><td>Free space per mounted file system with its type</td><td><code class="copy">df -hT</code></td></tr>
+<tr><td><code>du --max-depth</code></td><td>Find which folder fills a disk</td><td><code class="copy">sudo du -xh --max-depth=1 /var | sort -h</code></td></tr>
+<tr><td><code>ncdu</code></td><td>Interactive disk usage browser (install <code>ncdu</code>)</td><td><code class="copy">sudo ncdu -x /</code></td></tr>
+<tr><td><code>findmnt</code></td><td>Mounted file systems as a tree</td><td><code class="copy">findmnt -t ext4,xfs,btrfs</code></td></tr>
+<tr><td><code>blkid</code></td><td>UUID, label and type of a partition (for <code>/etc/fstab</code>)</td><td><code class="copy">sudo blkid /dev/sdb1</code></td></tr>
+<tr><td><code>mount</code></td><td>Mount a partition</td><td><code class="copy">sudo mount /dev/sdb1 /mnt/usb</code></td></tr>
+<tr><td><code>mount -o ro,loop</code></td><td>Mount a disk image read-only</td><td><code class="copy">sudo mount -o ro,loop disk.img /mnt/image</code></td></tr>
+<tr><td><code>umount</code></td><td>Unmount; <code>fuser -vm</code> shows what keeps it busy</td><td><code class="copy">sudo umount /mnt/usb</code></td></tr>
+<tr><td><code>findmnt --verify</code></td><td>Check <code>/etc/fstab</code> before rebooting, then <code>mount -a</code></td><td><code class="copy">sudo findmnt --verify &amp;&amp; sudo mount -a</code></td></tr>
+<tr><td><code>fdisk -l</code></td><td>Partition table of a disk</td><td><code class="copy">sudo fdisk -l /dev/sdb</code></td></tr>
+<tr><td><code>parted</code></td><td>Partition GPT disks, scriptable</td><td><code class="copy">sudo parted /dev/sdb print</code></td></tr>
+<tr><td><code>mkfs.ext4</code></td><td>Create a file system (also <code>mkfs.xfs</code>, <code>mkfs.btrfs</code>, <code>mkfs.vfat</code>); erases the partition</td><td><code class="copy">sudo mkfs.ext4 -L data /dev/sdb1</code></td></tr>
+<tr><td><code>fsck</code></td><td>Check and repair an unmounted file system</td><td><code class="copy">sudo fsck -f /dev/sdb1</code></td></tr>
+<tr><td><code>tune2fs -l</code></td><td>ext4 superblock details: mount count, last check, features</td><td><code class="copy">sudo tune2fs -l /dev/sda1</code></td></tr>
+<tr><td><code>swapon --show</code></td><td>Active swap devices and files</td><td><code class="copy">swapon --show</code></td></tr>
+<tr><td><code>pvs</code> / <code>vgs</code> / <code>lvs</code></td><td>LVM physical volumes, volume groups and logical volumes</td><td><code class="copy">sudo lvs</code></td></tr>
+<tr><td><code>lvcreate</code></td><td>Create a logical volume (after <code>pvcreate</code> and <code>vgcreate</code>)</td><td><code class="copy">sudo lvcreate -L 50G -n data vg0</code></td></tr>
+<tr><td><code>lvextend -r</code></td><td>Grow a logical volume and its file system in one step</td><td><code class="copy">sudo lvextend -r -l +100%FREE /dev/vg0/data</code></td></tr>
+<tr><td><code>mdadm --detail</code></td><td>Software RAID status (also <code>cat /proc/mdstat</code>)</td><td><code class="copy">sudo mdadm --detail /dev/md0</code></td></tr>
+<tr><td><code>cryptsetup</code></td><td>LUKS encryption: inspect, open and close volumes</td><td><code class="copy">sudo cryptsetup open /dev/sdb1 securedata</code></td></tr>
+<tr><td><code>smartctl</code></td><td>Disk health from SMART data (package <code>smartmontools</code>)</td><td><code class="copy">sudo smartctl -a /dev/sda</code></td></tr>
+<tr><td><code>nvme smart-log</code></td><td>NVMe health, wear and temperature (package <code>nvme-cli</code>)</td><td><code class="copy">sudo nvme smart-log /dev/nvme0</code></td></tr>
+<tr><td><code>dd</code></td><td>Raw copy of a disk or image, for example a forensic image or a bootable USB</td><td><code class="copy">sudo dd if=/dev/sdb of=evidence.img bs=4M conv=noerror,sync status=progress</code></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-danger"><p><strong>Danger:</strong> <code>dd</code>, <code>mkfs</code>, <code>fdisk</code> and <code>parted</code> overwrite whatever device you name. Confirm the target with <code>lsblk</code> first; swapping <code>if</code> and <code>of</code> destroys the source.</p></div>
+</section>
+<section class="panel" id="kernel-and-boot">
+<h2 class="panel-title">Kernel and Boot</h2>
+<p class="panel-lead">Modules, sysctl, boot loader, initramfs and boot time.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>lsmod</code></td><td>Loaded kernel modules</td><td><code class="copy">lsmod | grep -i usb</code></td></tr>
+<tr><td><code>modinfo</code></td><td>Details and parameters of a module</td><td><code class="copy">modinfo e1000e</code></td></tr>
+<tr><td><code>modprobe</code></td><td>Load a module, or unload with <code>-r</code></td><td><code class="copy">sudo modprobe br_netfilter</code></td></tr>
+<tr><td><code>sysctl</code></td><td>Read a kernel parameter</td><td><code class="copy">sysctl net.ipv4.ip_forward</code></td></tr>
+<tr><td><code>sysctl -w</code></td><td>Change a parameter until reboot</td><td><code class="copy">sudo sysctl -w net.ipv4.ip_forward=1</code></td></tr>
+<tr><td><code>/etc/sysctl.d/</code></td><td>Make a parameter permanent and apply all files</td><td><code class="copy">echo 'net.ipv4.ip_forward = 1' | sudo tee /etc/sysctl.d/99-forward.conf &amp;&amp; sudo sysctl --system</code></td></tr>
+<tr><td><code>/proc/cmdline</code></td><td>Kernel parameters of the current boot</td><td><code class="copy">cat /proc/cmdline</code></td></tr>
+<tr><td><code>update-grub</code></td><td>Rebuild the GRUB menu on Debian, Ubuntu and Kali after editing <code>/etc/default/grub</code></td><td><code class="copy">sudo update-grub</code></td></tr>
+<tr><td><code>grubby</code></td><td>Change kernel arguments on Fedora and RHEL</td><td><code class="copy">sudo grubby --update-kernel=ALL --args="audit=1"</code></td></tr>
+<tr><td><code>update-initramfs</code></td><td>Rebuild the initramfs on Debian, Kali and Ubuntu systems using initramfs-tools</td><td><code class="copy">sudo update-initramfs -u -k all</code></td></tr>
+<tr><td><code>dracut</code></td><td>Rebuild the initramfs on Fedora, RHEL and new Ubuntu desktop installs (25.10 and later)</td><td><code class="copy">sudo dracut -f --regenerate-all</code></td></tr>
+<tr><td><code>mokutil --sb-state</code></td><td>Check whether Secure Boot is enabled</td><td><code class="copy">mokutil --sb-state</code></td></tr>
+<tr><td><code>systemd-analyze</code></td><td>Boot time and the slowest units</td><td><code class="copy">systemd-analyze blame | head</code></td></tr>
+<tr><td><code>systemctl reboot</code></td><td>Reboot or power off (<code>shutdown -h +10</code> schedules it)</td><td><code class="copy">sudo systemctl reboot</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="web-tls-databases">
+<h2 class="panel-title">Web Servers, TLS and Databases</h2>
+<p class="panel-lead">Config checks, certificates and database shells.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>nginx -t</code></td><td>Test nginx config, then reload without dropping connections</td><td><code class="copy">sudo nginx -t &amp;&amp; sudo systemctl reload nginx</code></td></tr>
+<tr><td><code>apachectl configtest</code></td><td>Test Apache config</td><td><code class="copy">sudo apachectl configtest</code></td></tr>
+<tr><td><code>certbot</code></td><td>Get a Let's Encrypt certificate and configure nginx</td><td><code class="copy">sudo certbot --nginx -d example.com</code></td></tr>
+<tr><td><code>certbot renew</code></td><td>Test automatic renewal</td><td><code class="copy">sudo certbot renew --dry-run</code></td></tr>
+<tr><td><code>openssl s_client</code></td><td>Inspect a server certificate: subject, issuer and dates</td><td><code class="copy">openssl s_client -connect example.com:443 -servername example.com &lt; /dev/null 2&gt;/dev/null | openssl x509 -noout -subject -issuer -dates</code></td></tr>
+<tr><td><code>openssl x509</code></td><td>Decode a certificate file</td><td><code class="copy">openssl x509 -in cert.pem -noout -text</code></td></tr>
+<tr><td><code>openssl req -x509</code></td><td>Self-signed certificate for a lab</td><td><code class="copy">openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -noenc -subj "/CN=lab.local"</code></td></tr>
+<tr><td><code>openssl rand</code></td><td>Random secret or password</td><td><code class="copy">openssl rand -base64 32</code></td></tr>
+<tr><td><code>psql</code></td><td>PostgreSQL shell as the postgres user</td><td><code class="copy">sudo -u postgres psql</code></td></tr>
+<tr><td><code>pg_isready</code></td><td>Check that PostgreSQL accepts connections</td><td><code class="copy">pg_isready -h 127.0.0.1</code></td></tr>
+<tr><td><code>pg_dump</code></td><td>Dump a PostgreSQL database</td><td><code class="copy">sudo -u postgres pg_dump appdb &gt; appdb.sql</code></td></tr>
+<tr><td><code>mariadb</code> / <code>mysql</code></td><td>MariaDB or MySQL shell (MariaDB names its tools <code>mariadb-*</code>)</td><td><code class="copy">sudo mariadb -e "SHOW DATABASES;"</code></td></tr>
+<tr><td><code>mariadb-dump</code></td><td>Dump a MariaDB database (<code>mysqldump</code> on MySQL)</td><td><code class="copy">sudo mariadb-dump appdb &gt; appdb.sql</code></td></tr>
+<tr><td><code>sqlite3</code></td><td>Query a SQLite file and export CSV (<code>.dump</code> for full SQL)</td><td><code class="copy">sqlite3 -header -csv app.db "SELECT * FROM users;" &gt; users.csv</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="scripting-essentials">
+<h2 class="panel-title">Scripting Essentials</h2>
+<p class="panel-lead">Variables, quoting, tests, loops, functions and safer scripts.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Item</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>Shebang</td><td>First line: run the script with Bash found in <code>PATH</code></td><td><code class="copy">#!/usr/bin/env bash</code></td></tr>
+<tr><td>Strict mode</td><td>Stop on errors, unset variables and failures inside pipes</td><td><code class="copy">set -euo pipefail</code></td></tr>
+<tr><td>Variables</td><td>No spaces around <code>=</code>; use braces when text follows</td><td><code class="copy">name="alice"; echo "Hello, ${name}!"</code></td></tr>
+<tr><td>Quoting</td><td>Double quotes expand variables, single quotes keep text literal; always quote <code>"$var"</code></td><td><code class="copy">echo "Home: $HOME" 'Literal: $HOME'</code></td></tr>
+<tr><td><code>$( )</code></td><td>Command substitution</td><td><code class="copy">today=$(date +%F)</code></td></tr>
+<tr><td><code>$(( ))</code></td><td>Integer arithmetic</td><td><code class="copy">count=$((count + 1))</code></td></tr>
+<tr><td><code>$1</code> <code>$@</code> <code>$#</code></td><td>First argument, all arguments, argument count</td><td><code class="copy">echo "first=$1 count=$#"; printf '%s\n' "$@"</code></td></tr>
+<tr><td><code>$?</code></td><td>Exit status of the last command (0 is success)</td><td><code class="copy">grep -q root /etc/passwd; echo $?</code></td></tr>
+<tr><td><code>${var:-default}</code></td><td>Fallback value when a variable is unset or empty</td><td><code class="copy">port="${PORT:-8080}"</code></td></tr>
+<tr><td><code>${var%.*}</code> / <code>${var##*.}</code></td><td>Strip a suffix or keep only the extension</td><td><code class="copy">file="report.tar.gz"; echo "${file%%.*}" "${file##*.}"</code></td></tr>
+<tr><td><code>if [[ ]]</code></td><td>Tests: <code>-f</code> file, <code>-d</code> directory, <code>-z</code> empty, <code>-n</code> not empty, <code>-eq</code> <code>-lt</code> numbers, <code>==</code> strings</td><td><code class="copy">if [[ -f /etc/passwd ]]; then echo exists; fi</code></td></tr>
+<tr><td><code>for</code> (files)</td><td>Loop over a glob</td><td><code class="copy">for file in *.log; do gzip -- "$file"; done</code></td></tr>
+<tr><td><code>for</code> (range)</td><td>Loop over numbers</td><td><code class="copy">for i in {1..5}; do echo "$i"; done</code></td></tr>
+<tr><td><code>while read</code></td><td>Read a file line by line without mangling spaces or backslashes</td><td><code class="copy">while IFS= read -r host; do ping -c 1 "$host"; done &lt; hosts.txt</code></td></tr>
+<tr><td><code>case</code></td><td>Match a value against patterns</td><td><code class="copy">case "$1" in start) echo starting ;; stop) echo stopping ;; *) echo "usage: $0 start|stop" ;; esac</code></td></tr>
+<tr><td>Functions</td><td>Reusable blocks; <code>local</code> keeps variables inside</td><td><code class="copy">greet() { local name="$1"; echo "Hi $name"; }; greet alice</code></td></tr>
+<tr><td>Arrays</td><td>Lists; quote <code>"${array[@]}"</code> when expanding</td><td><code class="copy">hosts=(web01 db01); for host in "${hosts[@]}"; do echo "$host"; done</code></td></tr>
+<tr><td>Associative arrays</td><td>Key and value maps</td><td><code class="copy">declare -A ports=([ssh]=22 [https]=443); echo "${ports[ssh]}"</code></td></tr>
+<tr><td>Here-string</td><td>Feed a string as input</td><td><code class="copy">grep -o a &lt;&lt;&lt; "banana" | wc -l</code></td></tr>
+<tr><td><code>trap</code></td><td>Run cleanup when the script exits</td><td><code class="copy">trap 'rm -f "$tmpfile"' EXIT</code></td></tr>
+<tr><td><code>bash -n</code> / <code>bash -x</code></td><td>Syntax check only, or trace every command as it runs</td><td><code class="copy">bash -x ./deploy.sh</code></td></tr>
+<tr><td><code>shellcheck</code></td><td>Lint scripts for quoting bugs and pitfalls (package <code>shellcheck</code>)</td><td><code class="copy">shellcheck deploy.sh</code></td></tr>
+<tr><td><code>chmod +x</code></td><td>Make a script executable and run it</td><td><code class="copy">chmod +x deploy.sh &amp;&amp; ./deploy.sh</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Here-document</h3>
+<p>Write several lines at once. Quote the marker (<code>'EOF'</code>) to stop variable expansion inside.</p>
+<pre><code>cat &lt;&lt;'EOF' &gt; app.conf
+listen = 0.0.0.0:8080
+log_level = info
+EOF</code></pre>
+<h3>Script template</h3>
+<pre><code>#!/usr/bin/env bash
+set -euo pipefail
+readonly scriptName="$(basename "$0")"
+workDirectory="$(mktemp -d)"
+trap 'rm -rf "$workDirectory"' EXIT
+: &gt; "$workDirectory/results.txt"
+usage() {
+echo "usage: $scriptName &lt;host-file&gt;" &gt;&amp;2
+exit 1
+}
+checkHost() {
+local host="$1"
+if timeout 2 bash -c "&lt; /dev/tcp/$host/22" 2&gt;/dev/null; then
+echo "$host: ssh open"
+else
+echo "$host: ssh closed"
+fi
+}
+[[ $# -eq 1 &amp;&amp; -f "$1" ]] || usage
+while IFS= read -r host; do
+[[ -z "$host" ]] &amp;&amp; continue
+checkHost "$host" | tee -a "$workDirectory/results.txt"
+done &lt; "$1"
+echo "Checked $(wc -l &lt; "$workDirectory/results.txt") hosts"</code></pre>
+<p><a class="link-button" href="https://www.gnu.org/software/bash/manual/">GNU Bash manual</a> <a class="link-button" href="https://www.shellcheck.net/">ShellCheck online</a></p>
+</section>
+<section class="panel" id="security-and-forensics">
+<h2 class="panel-title">Security and Forensics Quick Checks</h2>
+<p class="panel-lead">First look triage on a Linux host, file integrity and hardening checks.</p>
+<h3>Accounts and persistence</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Check</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>UID 0 accounts</td><td>Only <code>root</code> should have UID 0</td><td><code class="copy">awk -F: '$3 == 0 {print $1}' /etc/passwd</code></td></tr>
+<tr><td>Login shells</td><td>Accounts that can log in interactively</td><td><code class="copy">grep -Ev '(nologin|false)$' /etc/passwd</code></td></tr>
+<tr><td>Empty passwords</td><td>Accounts with no password set</td><td><code class="copy">sudo awk -F: '$2 == "" {print $1}' /etc/shadow</code></td></tr>
+<tr><td>Admin groups</td><td>Members of the sudo and wheel groups</td><td><code class="copy">getent group sudo wheel</code></td></tr>
+<tr><td>Failed SSH logins</td><td>Password guessing attempts today (unit <code>sshd</code> on Fedora)</td><td><code class="copy">journalctl -u ssh --since today | grep -i "failed password"</code></td></tr>
+<tr><td>authorized_keys</td><td>Every SSH key that grants access</td><td><code class="copy">sudo find /root /home -name authorized_keys -exec ls -l {} + 2&gt;/dev/null</code></td></tr>
+<tr><td>Cron entries</td><td>System and per user cron jobs</td><td><code class="copy">sudo ls -la /etc/cron* /var/spool/cron 2&gt;/dev/null</code></td></tr>
+<tr><td>New systemd units</td><td>Service files created or changed in the last 7 days</td><td><code class="copy">sudo find /etc/systemd /usr/lib/systemd/system -name "*.service" -mtime -7 2&gt;/dev/null</code></td></tr>
+<tr><td>Recent system changes</td><td>Files changed in the last 2 days in config and binary folders</td><td><code class="copy">sudo find /etc /usr/bin /usr/sbin -xdev -type f -mtime -2 2&gt;/dev/null</code></td></tr>
+<tr><td>Immutable files</td><td>Files locked with <code>chattr +i</code>, a common persistence trick</td><td><code class="copy">sudo lsattr -R /etc 2&gt;/dev/null | grep -- '-i-'</code></td></tr>
+<tr><td>Temp folders</td><td>Look for scripts and binaries dropped in writable locations</td><td><code class="copy">ls -la /tmp /var/tmp /dev/shm</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Processes and binaries</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Check</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>Deleted executables</td><td>Processes still running from a binary that was deleted from disk</td><td><code class="copy">sudo ls -l /proc/*/exe 2&gt;/dev/null | grep deleted</code></td></tr>
+<tr><td>Process command line</td><td>Full command line and real executable of a PID</td><td><code class="copy">tr '\0' ' ' &lt; /proc/1234/cmdline; echo; sudo ls -l /proc/1234/exe</code></td></tr>
+<tr><td><code>readelf</code></td><td>ELF header and linked libraries without running the file (<code>ldd</code> can execute it, so avoid it on untrusted binaries)</td><td><code class="copy">readelf -d suspicious.bin | grep NEEDED</code></td></tr>
+<tr><td><code>sha256sum</code></td><td>Hash a file; <code>b2sum</code> is faster, <code>md5sum</code> only for legacy matching</td><td><code class="copy">sha256sum ubuntu.iso</code></td></tr>
+<tr><td><code>sha256sum -c</code></td><td>Verify files against a published checksum list</td><td><code class="copy">sha256sum -c SHA256SUMS --ignore-missing</code></td></tr>
+<tr><td><code>dpkg --verify</code></td><td>Compare installed files with package checksums (Debian family)</td><td><code class="copy">sudo dpkg --verify openssh-server</code></td></tr>
+<tr><td><code>rpm -V</code></td><td>Verify installed files on Fedora and RHEL</td><td><code class="copy">sudo rpm -V openssh-server</code></td></tr>
+<tr><td><code>gpg --verify</code></td><td>Check a detached signature on a download</td><td><code class="copy">gpg --verify SHA256SUMS.gpg SHA256SUMS</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Hardening and monitoring</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>aa-status</code></td><td>AppArmor profiles in enforce or complain mode (Ubuntu, Debian, Kali)</td><td><code class="copy">sudo aa-status</code></td></tr>
+<tr><td><code>getenforce</code> / <code>sestatus</code></td><td>SELinux mode on Fedora and RHEL</td><td><code class="copy">sestatus</code></td></tr>
+<tr><td><code>auditctl -w</code></td><td>Watch a file for writes and attribute changes (package <code>auditd</code>)</td><td><code class="copy">sudo auditctl -w /etc/passwd -p wa -k passwd-changes</code></td></tr>
+<tr><td><code>ausearch</code></td><td>Search audit events by key</td><td><code class="copy">sudo ausearch -k passwd-changes -i</code></td></tr>
+<tr><td><code>fail2ban-client</code></td><td>Status and banned IPs of a jail</td><td><code class="copy">sudo fail2ban-client status sshd</code></td></tr>
+<tr><td><code>lynis</code></td><td>Local security audit with hardening suggestions (package <code>lynis</code>)</td><td><code class="copy">sudo lynis audit system</code></td></tr>
+<tr><td><code>gpg -c</code></td><td>Encrypt a file with a passphrase</td><td><code class="copy">gpg -c --cipher-algo AES256 secrets.txt</code></td></tr>
+<tr><td><code>shred</code></td><td>Overwrite and delete a file; not reliable on SSDs, Btrfs or journaled data, where full disk encryption is the real answer</td><td><code class="copy">shred -u -n 3 old-secret.txt</code></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-warning"><p><strong>Authorization:</strong> run offensive and discovery commands only on systems you own or have written permission to test. On a compromised host, collect evidence (memory, logs, hashes) before you change anything.</p></div>
+</section>
+<section class="panel" id="legacy-to-modern">
+<h2 class="panel-title">Legacy to Modern</h2>
+<p class="panel-lead">Older commands you still see in guides, and what replaces them today.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Legacy</th><th>Use today</th><th>Note</th></tr></thead>
+<tbody>
+<tr><td><code>ifconfig</code></td><td><code class="copy">ip -br addr</code></td><td>net-tools is not installed by default on most distributions</td></tr>
+<tr><td><code>netstat -tulpn</code></td><td><code class="copy">ss -tulpn</code></td><td>Same flags, faster, part of iproute2</td></tr>
+<tr><td><code>route -n</code></td><td><code class="copy">ip route</code></td><td>Also <code>ip route get</code> for a single destination</td></tr>
+<tr><td><code>arp -a</code></td><td><code class="copy">ip neigh</code></td><td>Covers IPv6 neighbors too</td></tr>
+<tr><td><code>iwconfig</code></td><td><code class="copy">iw dev</code></td><td>Wireless tools are deprecated</td></tr>
+<tr><td><code>service nginx restart</code></td><td><code class="copy">sudo systemctl restart nginx</code></td><td><code>service</code> is a compatibility wrapper</td></tr>
+<tr><td><code>egrep</code> / <code>fgrep</code></td><td><code class="copy">grep -E</code></td><td>GNU grep prints a warning since 3.8; <code>grep -F</code> for fixed strings</td></tr>
+<tr><td><code>which</code></td><td><code class="copy">command -v</code></td><td>Builtin, portable and aware of aliases and functions</td></tr>
+<tr><td><code>lsb_release -a</code></td><td><code class="copy">cat /etc/os-release</code></td><td><code>lsb_release</code> is often not installed</td></tr>
+<tr><td><code>last</code> / <code>lastlog</code> / <code>lastb</code></td><td><code class="copy">wtmpdb last</code></td><td>Debian 13 dropped the old non Y2038 safe tools; use <code>lastlog2</code> and <code>lslogins --failed</code> too</td></tr>
+<tr><td><code>apt-key add</code></td><td><code class="copy">sudo install -d -m 0755 /etc/apt/keyrings</code></td><td>Put the key there and use <code>Signed-By</code> in the repository file</td></tr>
+<tr><td><code>scp -O</code></td><td><code class="copy">sftp</code></td><td><code>-O</code> forces the old SCP protocol; avoid unless a server needs it</td></tr>
+<tr><td><code>neofetch</code></td><td><code class="copy">fastfetch</code></td><td>neofetch is archived and unmaintained</td></tr>
+<tr><td><code>openssl req -nodes</code></td><td><code class="copy">openssl req -noenc</code></td><td><code>-nodes</code> is deprecated since OpenSSL 3.0</td></tr>
+<tr><td><code>screen</code></td><td><code class="copy">tmux</code></td><td>screen still works; tmux is the common choice now</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="macos-differences">
+<h2 class="panel-title">macOS (BSD) Differences</h2>
+<p class="panel-lead">Where the same task needs a different command on a Mac.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Task</th><th>GNU/Linux</th><th>macOS</th></tr></thead>
+<tbody>
+<tr><td>Edit a file in place</td><td><code class="copy">sed -i 's/old/new/' file.txt</code></td><td><code class="copy">sed -i '' 's/old/new/' file.txt</code></td></tr>
+<tr><td>File size and name</td><td><code class="copy">stat -c '%s %n' file.txt</code></td><td><code class="copy">stat -f '%z %N' file.txt</code></td></tr>
+<tr><td>Date two days ago</td><td><code class="copy">date -d '2 days ago' +%F</code></td><td><code class="copy">date -v -2d +%F</code></td></tr>
+<tr><td>Listening ports</td><td><code class="copy">sudo ss -tulpn</code></td><td><code class="copy">sudo lsof -nP -iTCP -sTCP:LISTEN</code></td></tr>
+<tr><td>IP addresses</td><td><code class="copy">ip -br addr</code></td><td><code class="copy">ifconfig</code></td></tr>
+<tr><td>Routing table</td><td><code class="copy">ip route</code></td><td><code class="copy">netstat -rn</code></td></tr>
+<tr><td>SHA-256 hash</td><td><code class="copy">sha256sum file.iso</code></td><td><code class="copy">shasum -a 256 file.iso</code></td></tr>
+<tr><td>Services</td><td><code class="copy">systemctl list-units --type=service</code></td><td><code class="copy">launchctl list</code></td></tr>
+<tr><td>System logs</td><td><code class="copy">journalctl --since "1 hour ago"</code></td><td><code class="copy">log show --last 1h</code></td></tr>
+<tr><td>Flush DNS cache</td><td><code class="copy">sudo resolvectl flush-caches</code></td><td><code class="copy">sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder</code></td></tr>
+<tr><td>Install a package</td><td><code class="copy">sudo apt install jq</code></td><td><code class="copy">brew install jq</code></td></tr>
+<tr><td>Copy to clipboard</td><td><code class="copy">wl-copy &lt; file.txt</code></td><td><code class="copy">pbcopy &lt; file.txt</code></td></tr>
+<tr><td>Perl regex in grep</td><td><code class="copy">grep -P '\d{3}' file.txt</code></td><td><code class="copy">grep -E '[0-9]{3}' file.txt</code></td></tr>
+<tr><td>Current Bash</td><td>Bash 5.x is the default</td><td><code class="copy">brew install bash</code></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-tip"><p><strong>Tip:</strong> <code>brew install coreutils gnu-sed grep</code> installs the GNU versions on a Mac with a <code>g</code> prefix, for example <code>gsed</code>, <code>gdate</code> and <code>gstat</code>.</p></div>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

@@ -1,139 +1,63 @@
-# 🔐 CYBER-EPISTEMOLOGY — v2
-
-A minimalist, dark-themed static site that organizes practical cyber/IT knowledge into focused, fast pages. Pure HTML/CSS. No build. No frameworks.
-
----
-URL : https://emaldos.github.io/Cyber-Epistemology/
----
-
-## 🪟 Quick Start (Windows)
-
-1. **Download** the repository ZIP from GitHub.
-2. **Unzip** anywhere (e.g., `Desktop\Cyber-Epistemology\`).
-3. **Double-click** `Home.html` → you’re in.
-
----
-
-## 🐧 Optional Local Server (macOS/Linux)
-
+# Cyber Epistemology V3
+A free, practical cyber security knowledge base. Plain HTML, CSS and JavaScript: no build step, no frameworks and no online dependencies.
+Live site: https://emaldos.github.io/Cyber-Epistemology/
+## Quick start
+1. Download the repository ZIP from GitHub, or clone it.
+2. Open `index.html` in your browser. Everything works straight from disk.
+To serve it locally instead:
 ```bash
 git clone https://github.com/emaldos/Cyber-Epistemology.git
 cd Cyber-Epistemology
 python -m http.server 8080
-# Open: http://localhost:8080/Home.html
-````
-
-*(You can also just open `Home.html` directly in your browser.)*
-
----
-
-## 🧭 What You Get
-
-* **Home** → entry hub to all sections
-* **Commands** → quick refs for **Bash**, **PowerShell**, **CMD**
-* **Operating Systems** → Windows 11/Server, macOS, Ubuntu Server, Kali Linux, Android, iOS
-* **Kali Tools** → categorized tools
-* **System Files Info** → OS paths and artifacts
-* **Awareness** → security best practices & guidance
-* **Cyber Roadmap** → learning path and milestones
-* **Cyber Websites** → curated external resources
-* **About** → project mission and back-to-Home
-
----
-
-## 📂 Project Structure
-
 ```
-│   Home.html
-│   README.md
-│
-├─── Data
-│    │   About.html
-│    │   Commands.html
-│    │   cyber_roadmap.html
-│    │   Cyber_Websites.html
-│    │   Kali_Tools.html
-│    │   Maximum_Security.html
-│    │   System_Files_Info.html
-│    │
-│    ├─── Commands
-│    │       Bash.html
-│    │       CMD.html
-│    │       PS.html
-│    │
-│    └─── OS
-│           Android.html
-│           IOS.html
-│           Kali_Linux.html
-│           macOS.html
-│           Ubuntu_Server.html
-│           Windows_11.html
-│           Windows_Server.html
-│
-└─── Image
-        Android.png
-        Awareness.png
-        Bash.png
-        CMD.png
-        Command.png
-        Commands.png
-        Home.png
-        IOS.png
-        KaliLinux.png
-        Logo.png
-        MacOS.png
-        Nav.png
-        PS.png
-        roadmap.png
-        UbuntuServer.png
-        URL.png
-        Version.png
-        Websites.png
-        Win11.png
-        WinServer.png
+Then open http://localhost:8080/
+## What is inside
+| Section | Page | Content |
+| --- | --- | --- |
+| Home | `index.html` | Site search, sections and platforms |
+| System Files | `Data/System_Files_Info.html` | Cross platform quick map and links to each platform |
+| Platforms | `Data/OS/*.html` | Windows 11, Windows Server, macOS, iOS, Android, Ubuntu Server, Kali Linux |
+| Commands | `Data/Commands.html` | Same task in three shells |
+| Shells | `Data/Commands/*.html` | Bash, PowerShell, CMD |
+| Kali Tools | `Data/Kali_Tools.html` | Tools by assessment phase |
+| Roadmap | `Data/cyber_roadmap.html` | Interactive certification roadmap |
+| Websites | `Data/Cyber_Websites.html` | Checked links to labs, intel, sandboxes and knowledge bases |
+| Awareness | `Data/Maximum_Security.html` | Personal security habits |
+| About | `Data/About.html` | Mission, review process, contributing |
+## New in V3
+- Site wide search on every page (press `/` or `Ctrl K`), plus a filter on each page.
+- One shared top bar, footer, design system and script instead of copies in every page.
+- Automatic table of contents with scroll tracking, copy buttons, tables that stack on phones.
+- All content reviewed and updated for November 2026.
+- Images optimized: the background went from 1.4 MB to 42 KB.
+## Project structure
 ```
-
----
-
-## ▶️ Open the Main Pages
-
-* `Home.html`
-* `Data/Commands.html`
-
-  * `Data/Commands/Bash.html`
-  * `Data/Commands/PS.html`
-  * `Data/Commands/CMD.html`
-* `Data/System_Files_Info.html`
-* `Data/Kali_Tools.html`
-* `Data/Maximum_Security.html`  ← Awareness
-* `Data/cyber_roadmap.html`     ← Cyber Roadmap
-* `Data/Cyber_Websites.html`    ← Cyber Websites
-* `Data/OS/Windows_11.html`
-* `Data/OS/Windows_Server.html`
-* `Data/OS/macOS.html`
-* `Data/OS/Ubuntu_Server.html`
-* `Data/OS/Kali_Linux.html`
-* `Data/OS/Android.html`
-* `Data/OS/IOS.html`
-* `Data/About.html`
-
----
-
-## 🎨 Design
-
-* Dark mode by default
-* Glassy tiles, soft borders, high-contrast text
-* Responsive layout, keyboard-friendly focus outlines
-* Zero JS required for navigation
-* Optional top-right version badge image inside the Home glass box: `Image/Version.png`
-
-  * Adjust size via `.versionWrap{width:45px}` (works great on HiDPI if exported @2–3×)
-
----
-
-## 📌 Conventions
-
-* **Language**: English
-* **Assets**: all icons in `Image/` (use relative paths)
-* **Keep it simple**: short pages, scannable sections, practical content
-
+index.html
+Data/                 pages
+  Commands/           Bash, PowerShell, CMD
+  OS/                 one page per platform
+Assets/
+  Style/Site.css      shared design system
+  Style/Roadmap.css   roadmap only styles
+  Script/Site.js      top bar, footer, search, filter, table of contents, copy buttons
+  Script/SearchIndex.js   generated search index
+  Script/Roadmap.js, RoadmapData.js
+  Icon/               local icons
+  Image/              logo, favicon, background
+Tools/
+  BuildSearchIndex.py rebuilds Assets/Script/SearchIndex.js
+  CheckSite.py        checks links, anchors, classes and code style
+```
+## Editing content
+1. Copy the structure of an existing page in `Data/`. Every page sets `data-root` (path back to the root) and `data-section` (which top bar item is active) on `<body>`.
+2. Use only the components in `Assets/Style/Site.css`: `panel`, `data-table`, `tag`, `callout`, `checklist`, `steps`, `disclosure`, `card-grid`, `definition-grid`. Put commands in `<code class="copy">` to get a copy button.
+3. To add a top bar item, edit `navigationItems` in `Assets/Script/Site.js`.
+4. Rebuild the search index and run the checks:
+```bash
+python Tools/BuildSearchIndex.py
+python Tools/CheckSite.py
+```
+## Code style
+No blank lines, no comments, one CSS rule per line, HTML, CSS and JS in separate files, local assets only, and no em dash or en dash characters.
+## License
+GNU General Public License v3.0. See `LICENSE`.

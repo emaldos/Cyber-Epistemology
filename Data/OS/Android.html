@@ -1,241 +1,267 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Android — System Files</title>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="32x32"/>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="192x192"/>
-<link rel="apple-touch-icon" href="../../Image/Logo.png"/>
-<meta name="theme-color" content="#111"/>
-<style>
-:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--line:rgba(255,255,255,.10);--blue:#2196f3}
-*{box-sizing:border-box}
-html,body{height:100%}
-html{scroll-behavior:smooth}
-body{margin:0;font:16px/1.55 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111}
-.bg{position:fixed;inset:0;background:url("../../Image/Logo.png") center/cover no-repeat;z-index:-2}
-.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.80) 100%);z-index:-1}
-.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
-.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
-.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
-.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
-.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
-.homepill span{font-weight:700;letter-spacing:.15px}
-.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
-.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);cursor:pointer;user-select:none;flex:0 0 auto}
-.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
-.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0;max-width:none}
-.tabs.overflow{overflow:auto}
-.tabs::-webkit-scrollbar{display:none}
-.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
-.tab:hover{opacity:1}
-.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
-.tab.active{color:var(--blue)}
-.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
-.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
-.shell .h,.shell .sub{text-align:center}
-.page{position:relative;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:96px 20px 28px}
-.shell{width:min(1200px,96%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
-.h{margin:0 0 2px;font-size:28px;font-weight:800;letter-spacing:.2px}
-.sub{margin:0 0 12px;color:var(--muted)}
-.quicknav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 18px}
-.qbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-weight:700}
-.qbtn:hover{background:rgba(255,255,255,.1)}
-.section{margin:22px 0 0;scroll-margin-top:90px}
-.section .title{margin:0 0 10px;font-size:20px;font-weight:800}
-.card{border:1px solid var(--tileBorder);background:var(--tile);border-radius:18px;box-shadow:0 12px 28px rgba(0,0,0,.3);overflow:hidden}
-.codewrap{padding:0;margin:0;border-top-left-radius:18px;border-top-right-radius:18px}
-pre{margin:0;max-height:480px;overflow:auto;padding:18px;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;background:rgba(0,0,0,.35);border-top-left-radius:18px;border-top-right-radius:18px;border-bottom:1px solid var(--line);white-space:pre}
-pre code{color:#e6eaff}
-.tablewrap{width:100%;overflow:auto}
-table{width:100%;border-collapse:separate;border-spacing:0}
-thead th{position:sticky;top:0;background:rgba(20,24,44,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);text-align:left;padding:12px 14px;font-size:14px}
-tbody td{border-bottom:1px solid var(--line);padding:12px 14px;vertical-align:top}
-tbody tr:hover{background:rgba(255,255,255,.04)}
-th:first-child,td:first-child{border-left:none}
-th:last-child,td:last-child{border-right:none}
-th,td{word-break:break-word;overflow-wrap:anywhere}
-caption{caption-side:bottom;color:var(--muted);padding:10px 4px 0}
-.kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.06);font:12px/1.2 ui-monospace,monospace}
-.bycat caption{caption-side:top;padding:10px 4px 6px;font-weight:800}
-.bycat .card+.card{margin-top:14px}
-.bycat thead th{background:linear-gradient(180deg,rgba(33,150,243,.18),rgba(33,150,243,.14));backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid rgba(33,150,243,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);color:var(--text)}
-.bycat table{table-layout:fixed;width:100%}
-.bycat th:nth-child(1),.bycat td:nth-child(1){width:220px}
-.bycat th:nth-child(2),.bycat td:nth-child(2){width:420px}
-.bycat th:nth-child(3),.bycat td:nth-child(3){width:auto}
-@media(max-width:900px){.bycat th:nth-child(1),.bycat td:nth-child(1){width:180px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:300px}}
-@media(max-width:640px){.tab{padding:6px 10px}.shell{width:98%}.bycat th:nth-child(1),.bycat td:nth-child(1){width:150px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:240px}}
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Android | Cyber Epistemology</title>
+<meta name="description" content="Android 17 security and forensics reference: adb and AndroidQF acquisition, bug reports, MVT, keystore and app sandbox paths, /data/system, package lists, Play Protect, Private Space, Advanced Protection, triage commands and hardening.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../../Assets/Image/AppleTouchIcon.png">
+<link rel="stylesheet" href="../../Assets/Style/Site.css">
+<script src="../../Assets/Script/Site.js" defer></script>
 </head>
-<body>
-<div class="bg"></div>
-<nav class="topbar" id="topbar">
-  <div class="nav">
-    <a class="homepill" href="../../index.html" title="Home" aria-label="Home"><img src="../../Image/Home.png" alt="Home"/><span>Home</span></a>
-    <div class="tabswrap">
-      <button class="navbtn" id="leftbtn" aria-label="Prev"><span>&lt;</span></button>
-      <div class="tabs" id="tabs">
-        <a class="tab" href="../System_Files_Info.html"><img src="../../Image/Nav.png" alt="System Files"/>System Files</a>
-        <a class="tab" href="Kali_Linux.html"><img src="../../Image/KaliLinux.png" alt="Kali"/>Kali</a>
-        <a class="tab" href="Ubuntu_Server.html"><img src="../../Image/UbuntuServer.png" alt="Ubuntu Server"/>Ubuntu Server</a>
-        <a class="tab" href="Windows_11.html"><img src="../../Image/Win11.png" alt="Windows 11"/>Windows 11</a>
-        <a class="tab" href="Windows_Server.html"><img src="../../Image/WinServer.png" alt="Windows Server"/>Windows Server</a>
-        <a class="tab" href="macOS.html"><img src="../../Image/MacOS.png" alt="macOS"/>macOS</a>
-        <a class="tab" href="IOS.html"><img src="../../Image/IOS.png" alt="iOS"/>iOS</a>
-        <a class="tab" href="Android.html"><img src="../../Image/Android.png" alt="Android"/>Android</a>
-      </div>
-      <button class="navbtn" id="rightbtn" aria-label="Next"><span>&gt;</span></button>
-    </div>
-  </div>
-</nav>
-
-<div class="page">
-  <main class="shell">
-    <h1 class="h">Android — System Files</h1>
-    <p class="sub">Click to navigate to a section</p>
-    <div class="quicknav">
-      <a class="qbtn" href="#fsmap">High-Value Paths</a>
-      <a class="qbtn" href="#bycat">Important Files</a>
-    </div>
-
-    <section class="section" id="fsmap">
-      <h2 class="title">Filesystem map and high-value paths for threats/defense</h2>
-
-      <h3 class="title">Critical paths</h3>
-      <div class="card"><div class="codewrap">
-<pre><code>/data/misc/keystore/                                   # Android Keystore blobs (TEE/StrongBox backed)
-/data/system/                                         # System policies; users, gatekeeper, locksettings
-/data/system_ce/0/locksettings.db                     # Credential metadata (CE: credential-encrypted)
-/data/system_de/0/                                    # DE data (device-encrypted, early boot)
-/system/etc/security/cacerts/                         # System trust anchors (read-only)
-/data/misc/user/0/cacerts-added/                      # User-added CAs (per-user)
-/vendor/etc/selinux/ ; /system/etc/selinux/           # SELinux policies (baseline)
-/system/etc/init/ ; /vendor/etc/init/                 # init rc services; boot-time execution (readonly A/B)
-/data/adb/modules/ (rooted/Magisk)                    # Root persistence modules
-</code></pre>
-      </div></div>
-
-      <h3 class="title">High-risk paths</h3>
-      <div class="card"><div class="codewrap">
-<pre><code>/data/data/&lt;pkg&gt;/                                     # App sandboxes (DBs, tokens, WebView, files)
-/data/user/0/&lt;pkg&gt;/                                   # Multi-user path equivalent of above
-/data/misc/wifi/WifiConfigStore.xml                   # Saved Wi-Fi profiles/PSKs (varies by version)
-/data/misc/vpn/                                       # VPN profiles/state
-/system/etc/hosts ; /etc/hosts                        # Name overrides (system or overlay)
-/sdcard/Android/data/&lt;pkg&gt;/                           # App external storage (often sensitive exports)
-/data/local/tmp/                                      # Staging for exploits/tools (rooted/dev mode)
-/data/tombstones/                                     # Native crash dumps with memory snippets
-</code></pre>
-      </div></div>
-
-      <h3 class="title">Medium-risk paths</h3>
-      <div class="card"><div class="codewrap">
-<pre><code>/sdcard/DCIM/ , /sdcard/Download/ , /storage/emulated/0/  # User files; exfil target
-/data/misc/logd/ ; logcat buffers                       # System/app logs (volatile)
-/sys/fs/pstore/                                         # Last-kmsg/panic logs after crash
-/data/misc/bluetooth/                                   # Pairings/keys (varies by stack)
-/data/misc/ethernet/ , /data/misc/net/                  # Network configs/state
-/data/system/packages.xml                               # Package inventory/signatures
-</code></pre>
-      </div></div>
-      <p class="sub">Note: Access to most paths requires root/adb with appropriate privileges; CE/DE encryption and SELinux confine data at rest and during boot.</p>
-    </section>
-
-    <section class="section bycat" id="bycat">
-      <h2 class="title">Important files — by Category</h2>
-
-      <div class="card tablewrap"><table>
-        <caption>Accounts, Keys & Trust (Critical first)</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Keystore</td><td><span class="kbd">/data/misc/keystore/</span></td><td>Per-UID key blobs; TEE/StrongBox backed; app secrets.</td></tr>
-          <tr><td>Gatekeeper</td><td><span class="kbd">/data/system/</span> (gatekeeper.*)</td><td>Auth throttling and password verifiers (TEE-bound).</td></tr>
-          <tr><td>Lock settings</td><td><span class="kbd">/data/system_ce/0/locksettings.db</span></td><td>Credential metadata; policy checks.</td></tr>
-          <tr><td>System CAs</td><td><span class="kbd">/system/etc/security/cacerts/</span></td><td>Trusted roots; baseline interception risks if modified.</td></tr>
-          <tr><td>User CAs</td><td><span class="kbd">/data/misc/user/0/cacerts-added/</span></td><td>User-added trust; rogue roots ⇒ TLS interception.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Persistence & Startup</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>init services</td><td><span class="kbd">/system/etc/init/*.rc</span> ; <span class="kbd">/vendor/etc/init/*.rc</span></td><td>Boot services; verify Exec/start conditions.</td></tr>
-          <tr><td>Magisk (rooted)</td><td><span class="kbd">/data/adb/modules/</span></td><td>Module-based persistence.</td></tr>
-          <tr><td>userinit (legacy)</td><td><span class="kbd">/data/local/userinit.sh</span> (if present)</td><td>Simple startup script on rooted devices.</td></tr>
-          <tr><td>pm installs</td><td><span class="kbd">/data/app/</span></td><td>APK code paths; signature/enforcement checks.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Apps & Sandboxes</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>App data (int)</td><td><span class="kbd">/data/data/&lt;pkg&gt;/</span></td><td>Databases, tokens, WebView data, files, prefs.</td></tr>
-          <tr><td>App data (ext)</td><td><span class="kbd">/sdcard/Android/data/&lt;pkg&gt;/</span></td><td>Exports/cache; weaker controls on older versions.</td></tr>
-          <tr><td>Chrome</td><td><span class="kbd">/data/data/com.android.chrome/app_chrome/Default/</span></td><td>Login Data, Cookies, History (profile DBs).</td></tr>
-          <tr><td>WebView</td><td><span class="kbd">/data/data/&lt;pkg&gt;/app_webview/</span></td><td>Cookies/local storage for embedded web.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Network, VPN & Wireless</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Wi-Fi config</td><td><span class="kbd">/data/misc/wifi/WifiConfigStore.xml</span> (varies)</td><td>Saved SSIDs, PSKs/EAP profiles.</td></tr>
-          <tr><td>VPN</td><td><span class="kbd">/data/misc/vpn/</span></td><td>Profiles/state; enterprise creds.</td></tr>
-          <tr><td>Hosts</td><td><span class="kbd">/system/etc/hosts</span> ; <span class="kbd">/etc/hosts</span></td><td>Redirection/hijack checks.</td></tr>
-          <tr><td>Bluetooth</td><td><span class="kbd">/data/misc/bluedroid/</span> or <span class="kbd">/data/misc/bluetooth/</span></td><td>Pairings/keys (stack-dependent).</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>User Data & Media</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Media</td><td><span class="kbd">/sdcard/DCIM/</span> ; <span class="kbd">/sdcard/Pictures/</span></td><td>Photos/videos; EXIF & timeline.</td></tr>
-          <tr><td>Downloads</td><td><span class="kbd">/sdcard/Download/</span></td><td>Payload staging/user artifacts.</td></tr>
-          <tr><td>Documents</td><td><span class="kbd">/sdcard/Documents/</span></td><td>Exports/backups; quick wins.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Logs & Forensics</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>logcat</td><td><span class="kbd">/data/misc/logd/</span> + buffers</td><td>Runtime telemetry; app errors/URLs/tokens.</td></tr>
-          <tr><td>tombstones</td><td><span class="kbd">/data/tombstones/</span></td><td>Crash dumps with stacks/memory.</td></tr>
-          <tr><td>pstore</td><td><span class="kbd">/sys/fs/pstore/</span></td><td>Kernel panic traces after reboot.</td></tr>
-          <tr><td>packages</td><td><span class="kbd">/data/system/packages.xml</span></td><td>Installed apps, signers, shared UIDs.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Security Model Notes</caption>
-        <thead><tr><th>Topic</th><th>Location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>SELinux</td><td><span class="kbd">Enforcing</span> (policies under <span class="kbd">/vendor/etc/selinux</span>)</td><td>Confinement; permissive ⇒ high risk.</td></tr>
-          <tr><td>CE/DE storage</td><td><span class="kbd">_ce</span>/<span class="kbd">_de</span> trees</td><td>Credential vs device encrypted lifecycles.</td></tr>
-          <tr><td>TEE/StrongBox</td><td><span class="kbd">Keystore</span></td><td>Hardware-bound keys; extraction resistance.</td></tr>
-          <tr><td>Verified Boot</td><td><span class="kbd">vbmeta/AVB</span></td><td>RO partitions verification; disable ⇒ persistence.</td></tr>
-        </tbody>
-      </table></div>
-
-    </section>
-  </main>
+<body class="is-content-page" data-root="../../" data-section="system-files">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><a href="../System_Files_Info.html">System Files</a><span class="breadcrumb-separator">/</span><span>Android</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../../Assets/Icon/Android.png" alt="">
+<div>
+<p class="hero-eyebrow">System Files</p>
+<h1 class="hero-title">Android Security Reference</h1>
 </div>
-
-<script>
-let lastY=scrollY,hidden=false;
-addEventListener('scroll',()=>{const y=scrollY,tb=document.getElementById('topbar');if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
-const p=location.pathname.replace(/\/+$/,'');document.querySelectorAll('.tabs .tab').forEach(a=>{const h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');if(p.endsWith(h))a.classList.add('active')});
-const tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
-function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
-function updateArrows(){const o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;tabs.classList.toggle('overflow',o);leftbtn.style.display=o&&s>0?'inline-flex':'none';rightbtn.style.display=o&&s<max-1?'inline-flex':'none'}
-function scrollByStep(d){const step=Math.max(120,Math.floor(tabs.clientWidth*.6));tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})}
-leftbtn.addEventListener('click',()=>scrollByStep(-1));rightbtn.addEventListener('click',()=>scrollByStep(1));
-tabs.addEventListener('scroll',updateArrows,{passive:true});new ResizeObserver(updateArrows).observe(tabs);
-addEventListener('resize',updateArrows);
-tabs.addEventListener('wheel',e=>{if(!hasOverflow())return;const dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}});
-updateArrows();
-</script>
-</body></html>
+</div>
+<p class="hero-lead">How to collect data from an Android phone, which paths hold secrets and evidence, and how to check for stalkerware and spyware. Without root you work through <code>adb</code>, bug reports and AndroidQF; the <code>/data</code> paths below need root or a full file system extraction.</p>
+<div class="hero-meta"><span class="badge">Android 17</span><span class="badge">88 entries</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: keystore" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<nav class="sub-nav" aria-label="Operating systems">
+<a class="sub-nav-link" href="../System_Files_Info.html"><img src="../../Assets/Icon/Folder.png" alt="">All systems</a>
+<a class="sub-nav-link" href="Windows_11.html"><img src="../../Assets/Icon/Windows11.png" alt="">Windows 11</a>
+<a class="sub-nav-link" href="Windows_Server.html"><img src="../../Assets/Icon/WindowsServer.png" alt="">Windows Server</a>
+<a class="sub-nav-link" href="macOS.html"><img src="../../Assets/Icon/MacOs.png" alt="">macOS</a>
+<a class="sub-nav-link" href="IOS.html"><img src="../../Assets/Icon/Ios.png" alt="">iOS</a>
+<a class="sub-nav-link is-active" href="Android.html" aria-current="page"><img src="../../Assets/Icon/Android.png" alt="">Android</a>
+<a class="sub-nav-link" href="Ubuntu_Server.html"><img src="../../Assets/Icon/UbuntuServer.png" alt="">Ubuntu Server</a>
+<a class="sub-nav-link" href="Kali_Linux.html"><img src="../../Assets/Icon/KaliLinux.png" alt="">Kali Linux</a>
+</nav>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="overview">
+<h2 class="panel-title">Overview</h2>
+<p class="panel-lead">Key facts about the current release and how its protections shape what you can collect.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term">Current release</span><span class="definition-text">Android 17, stable since June 2026. Pixels received the QPR2 feature update with the November 2026 security patch.</span></div>
+<div class="definition"><span class="definition-term">Support status</span><span class="definition-text">Depends on the vendor. Google publishes a monthly security bulletin; Pixel 8 and later and recent Samsung flagships get seven years of updates. Check <code>ro.build.version.security_patch</code>.</span></div>
+<div class="definition"><span class="definition-term">File system</span><span class="definition-text">Read-only, dm-verity protected system partitions (ext4 or EROFS) and a <code>/data</code> partition (ext4 or F2FS) with file-based encryption split into credential encrypted (CE) and device encrypted (DE) storage.</span></div>
+<div class="definition"><span class="definition-term">Built-in security features</span><span class="definition-text">Verified Boot, SELinux, app sandbox per UID, Keystore with TEE or StrongBox, Google Play Protect, Advanced Protection, Private Space, theft protection, Identity Check, developer verification.</span></div>
+<div class="definition"><span class="definition-term">Where logs live</span><span class="definition-text">In memory logcat buffers (logd), bug reports, <code>/data/system/dropbox/</code>, <code>/data/tombstones/</code> and, with Advanced Protection, optional Intrusion Logging.</span></div>
+<div class="definition"><span class="definition-term">Access reality</span><span class="definition-text">The <code>adb shell</code> user can read <code>/sdcard</code>, <code>dumpsys</code> and settings, not <code>/data/data</code> or <code>/data/system</code>. Unlocking the bootloader to root wipes the device.</span></div>
+</div>
+<div class="callout callout-warning"><p><strong>Authorized use only:</strong> collect from devices you own or have documented consent or legal authority to examine.</p></div>
+</section>
+<section class="panel" id="acquisition">
+<h2 class="panel-title">Acquisition</h2>
+<p class="panel-lead">Ways to get data off an Android phone, from least to most invasive.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Method</th><th>What you get</th><th>Requirements</th></tr></thead>
+<tbody>
+<tr><td>adb logical collection</td><td>Package list, <code>dumpsys</code> of every service, settings, processes, logcat, shared storage</td><td>Developer options and USB debugging on, host key accepted on the unlocked phone</td></tr>
+<tr><td>Bug report</td><td>Zip with dumpstate: logcat, dumpsys, system properties, tombstones, ANR traces, network state</td><td><code>adb bugreport</code> or Developer options, Take bug report</td></tr>
+<tr><td>AndroidQF</td><td>Packages and APKs, dumpsys, settings, processes, logcat, files from shared storage, optional SMS backup</td><td>Free tool from MVT maintainers; runs on the host over adb and is the input MVT now expects</td></tr>
+<tr><td>MVT (Mobile Verification Toolkit)</td><td>Checks AndroidQF output, bug reports and backups against spyware indicators</td><td><code>mvt-android check-adb</code> was removed; collect with AndroidQF, then run <code>check-androidqf</code></td></tr>
+<tr><td>Intrusion Logging</td><td>Encrypted, tamper resistant security and network event logs stored in the cloud</td><td>Android 17 with Advanced Protection and a separate opt-in; download and share from the Advanced Protection settings</td></tr>
+<tr><td>Android Enterprise management</td><td>App inventory, policy state and, for fully managed devices, security and network logs</td><td>Device owner or work profile enrolled in your EMM</td></tr>
+<tr><td>Full file system extraction</td><td>All of <code>/data</code>, including CE storage, app sandboxes and keystore</td><td>Root on an unlocked bootloader (wipes data first) or commercial forensic tools using exploits</td></tr>
+<tr><td><code>adb backup</code></td><td>Very little: apps targeting Android 12 and later are excluded by default</td><td>Deprecated; use AndroidQF or Google backup data instead</td></tr>
+<tr><td>Google account data</td><td>Device backups, Messages, Photos, Chrome sync, location timeline (if enabled)</td><td>Account access or legal process; Takeout for your own account</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="credentials-secrets">
+<h2 class="panel-title">Credentials and Secrets</h2>
+<p class="panel-lead">Lock screen data, keystore, account tokens and trust settings. Root needed for everything under <code>/data</code>.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/data/misc/keystore/persistent.sqlite</code></td><td>Keystore2 database of app key blobs (Android 12 and later)</td><td>Key material stays bound to the TEE or StrongBox, but the database shows which apps hold which keys</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/data/system/locksettings.db</code></td><td>Lock screen settings and credential metadata</td><td>Removing or editing entries was a classic lock bypass on older versions</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/data/system_de/0/spblob/</code></td><td>Synthetic password blobs that protect CE storage keys</td><td>Combined with the PIN and the TEE, these unlock user data; target of brute force tools</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/data/system_ce/0/accounts_ce.db</code></td><td>Account manager database with auth tokens</td><td>Tokens for Google and other accounts can allow access from another device</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/data/system_de/0/accounts_de.db</code></td><td>Account list available before first unlock</td><td>Shows which accounts are on the device</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/data/misc/user/0/cacerts-added/</code></td><td>User installed CA certificates</td><td>Apps targeting Android 7 and later ignore them by default, but browsers and some apps do not; a rogue CA enables interception</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/apex/com.android.conscrypt/cacerts/</code></td><td>System root CAs, updatable through Google Play since Android 14</td><td>Replaced <code>/system/etc/security/cacerts/</code> as the active store; root tools that inject CAs must target it</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/data/data/&lt;package&gt;/shared_prefs/</code></td><td>App preference XML files</td><td>Common place for API keys, session tokens and feature flags in poorly written apps</td><td><span class="tag tag-high">High</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="persistence">
+<h2 class="panel-title">Persistence and Autostart</h2>
+<p class="panel-lead">How apps and implants stay on a device and keep running. Stalkerware relies on accessibility, notification access and device admin.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/data/system/users/0/settings_secure.xml</code></td><td>Secure settings: <code>enabled_accessibility_services</code>, <code>enabled_notification_listeners</code>, default input method</td><td>Accessibility and notification access let an app read the screen, messages and codes; check with <code>settings get secure</code></td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/data/system/device_policies.xml</code></td><td>Active device admins, device owner and profile owner</td><td>Device admin blocks uninstall; an unexpected owner means someone else manages the phone</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/data/adb/modules/</code>, <code>/data/adb/service.d/</code>, <code>/data/adb/post-fs-data.d/</code></td><td>Magisk, KernelSU or APatch modules and boot scripts</td><td>Root level persistence that survives app removal; only exists on rooted devices</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/data/app/</code></td><td>Installed APKs in randomized folders (<code>~~xxxx/&lt;package&gt;-yyyy/base.apk</code>)</td><td>Pull suspect APKs for analysis; apps can start on boot via <code>RECEIVE_BOOT_COMPLETED</code></td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/data/system/job/jobs.xml</code></td><td>Persisted JobScheduler jobs</td><td>Apps use jobs to wake up regularly after reboot</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/data/local/tmp/</code></td><td>Shell user writable staging folder</td><td>Exploit binaries and agents such as frida-server are dropped here</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/system/etc/init/</code>, <code>/vendor/etc/init/</code></td><td>init <code>.rc</code> service definitions</td><td>Read-only and checked by Verified Boot; changes mean a modified system image</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="security-features">
+<h2 class="panel-title">Modern Security Features</h2>
+<p class="panel-lead">Platform features to verify during triage and to enable when hardening.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Feature</th><th>What it does</th><th>How to check</th></tr></thead>
+<tbody>
+<tr><td>Google Play Protect</td><td>Scans installed and sideloaded apps; live threat detection watches app behavior on device</td><td>Play Store, profile icon, Play Protect. A disabled Play Protect is a common stalkerware install step</td></tr>
+<tr><td>Advanced Protection</td><td>One switch for the strongest settings: blocks sideloading, forces Play Protect, USB protection, theft protections, restricts accessibility to verified tools (Android 17)</td><td>Settings, Security and privacy, Advanced Protection</td></tr>
+<tr><td>Intrusion Logging</td><td>Encrypted forensic log of security and network events kept off the device</td><td>Separate opt-in inside Advanced Protection on Android 17</td></tr>
+<tr><td>Private Space</td><td>Hidden, separately locked profile for apps (Android 15 and later); runs as its own user</td><td><code>adb shell pm list users</code> shows it; data lives under its own user ID in <code>/data/user/</code></td></tr>
+<tr><td>Work profile</td><td>Managed profile separated from personal apps</td><td><code>adb shell pm list users</code> and Settings, Passwords and accounts</td></tr>
+<tr><td>Theft protection and Identity Check</td><td>Theft detection lock, offline device lock, biometric check for sensitive settings away from trusted places</td><td>Settings, Security and privacy, Device unlock or Theft protection</td></tr>
+<tr><td>Developer verification</td><td>Certified devices only install apps from verified developers; enforced since September 30, 2026 in Brazil, Indonesia, Singapore and Thailand, global in 2027</td><td>Installs over <code>adb</code> and the advanced sideloading flow remain possible</td></tr>
+<tr><td>Verified Boot</td><td>Verifies boot, system and vendor partitions; state shown at boot as green, yellow or orange</td><td><code>adb shell getprop ro.boot.verifiedbootstate</code> (green means locked and verified)</td></tr>
+<tr><td>SELinux</td><td>Mandatory access control for every process</td><td><code>adb shell getenforce</code> must return <code>Enforcing</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="logs-artifacts">
+<h2 class="panel-title">Logs and Forensic Artifacts</h2>
+<p class="panel-lead">Runtime logs, crash data and usage timelines.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td>logcat buffers (<code>main</code>, <code>system</code>, <code>crash</code>, <code>events</code>, <code>radio</code>)</td><td>In memory ring buffers managed by logd; persisted to <code>/data/misc/logd/</code> only if enabled</td><td>App errors, URLs and sometimes leaked tokens; lost on reboot, collect first</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/data/system/dropbox/</code></td><td>DropBoxManager entries: crashes, ANRs, kernel and system server events</td><td>Survives reboots and holds weeks of crash history</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/data/system/usagestats/</code></td><td>App usage events per user (foreground, background, notifications)</td><td>Timeline of which apps ran and when; also via <code>dumpsys usagestats</code></td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/data/tombstones/</code></td><td>Native crash dumps with registers, stack and memory maps</td><td>Failed exploits and unstable implants leave tombstones</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/data/anr/</code></td><td>Application Not Responding traces</td><td>Shows hung processes and their threads at the time</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/data/system/netstats/</code></td><td>Network usage per UID over time</td><td>An app that should be idle but moves data is suspicious</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/data/system_ce/0/recent_tasks/</code>, <code>/data/system_ce/0/snapshots/</code></td><td>Recent apps list and their screenshots</td><td>Snapshots can show screens the user saw, even of deleted chats</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/sys/fs/pstore/</code></td><td>Kernel log from the previous boot after a panic</td><td>Kernel exploit crashes and unexpected reboots</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="network-remote">
+<h2 class="panel-title">Network and Remote Access</h2>
+<p class="panel-lead">Wi-Fi, VPN, Bluetooth and debugging access.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/data/misc/adb/adb_keys</code></td><td>Public keys of computers allowed to use adb</td><td>An authorized host can install apps and read data whenever USB or wireless debugging is on</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/data/misc/apexdata/com.android.wifi/WifiConfigStore.xml</code></td><td>Saved Wi-Fi networks with PSKs and EAP settings in clear text (Android 11 and later; older at <code>/data/misc/wifi/</code>)</td><td>Gives access to every network the phone has joined</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/data/system/users/0/settings_global.xml</code></td><td>Global settings: <code>adb_enabled</code>, <code>private_dns_mode</code>, developer options, airplane mode</td><td>Shows whether debugging was left on and which DNS resolver is forced</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/data/misc/bluedroid/bt_config.conf</code></td><td>Paired Bluetooth devices and link keys (location can vary by vendor)</td><td>Link keys allow impersonating a paired device</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/data/misc/vpn/</code></td><td>State for the built-in VPN client</td><td>Most VPNs are now apps using <code>VpnService</code>; check always-on VPN with <code>settings get secure always_on_vpn_app</code></td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/system/etc/hosts</code></td><td>Static host entries</td><td>Read-only; a changed file means root, often through a systemless hosts module</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="user-data">
+<h2 class="panel-title">User Data and Browsers</h2>
+<p class="panel-lead">App sandboxes, messages, contacts, browser profiles and shared storage.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/data/data/&lt;package&gt;/</code></td><td>Private app storage (same as <code>/data/user/0/&lt;package&gt;/</code>): <code>databases</code>, <code>files</code>, <code>shared_prefs</code>, <code>cache</code></td><td>Each app's own data in CE storage; available only after first unlock</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/data/user/&lt;user-id&gt;/&lt;package&gt;/</code></td><td>App data for secondary users, work profile and Private Space</td><td>Hidden apps and data often sit under a user ID other than 0</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/data/user_de/0/&lt;package&gt;/</code></td><td>Device encrypted app storage, readable before first unlock</td><td>Alarm, messaging and boot time data that is available in BFU state</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/data/data/com.android.providers.telephony/databases/mmssms.db</code></td><td>SMS and MMS</td><td>Messages and one time codes; Google Messages also keeps <code>bugle_db</code> in its own sandbox</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/data/data/com.android.providers.contacts/databases/</code></td><td><code>contacts2.db</code> and <code>calllog.db</code></td><td>Contacts and call history</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/data/data/com.android.chrome/app_chrome/Default/</code></td><td><code>Login Data</code>, <code>Cookies</code>, <code>History</code>, <code>Web Data</code></td><td>Browsing history and sessions; saved passwords are usually in Google Password Manager</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/data/data/&lt;package&gt;/app_webview/</code></td><td>WebView cookies, local storage and cache for embedded browsers</td><td>Session tokens for in-app web logins</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/data/data/com.whatsapp/databases/msgstore.db</code></td><td>WhatsApp messages</td><td>Encrypted backups also sit in <code>/storage/emulated/0/Android/media/com.whatsapp/WhatsApp/Databases/</code></td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/storage/emulated/0/</code> (<code>/sdcard</code>)</td><td>Shared storage: <code>DCIM</code>, <code>Pictures</code>, <code>Download</code>, <code>Documents</code></td><td>Readable over adb without root; payload downloads and exported data land here</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/storage/emulated/0/Android/data/&lt;package&gt;/</code>, <code>/storage/emulated/0/Android/media/</code></td><td>App specific external storage</td><td>Scoped storage blocks other apps since Android 11, but exports and media caches still leak here</td><td><span class="tag tag-medium">Medium</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="system-config">
+<h2 class="panel-title">System Binaries and Configuration</h2>
+<p class="panel-lead">Partitions, package inventory and user configuration.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/data/system/packages.xml</code>, <code>/data/system/packages.list</code></td><td>Installed packages, signing certificates, install source, granted permissions, UIDs</td><td>Shows the installer of each app (Play Store or sideloaded); binary ABX format on recent versions, so use <code>pm</code> and <code>dumpsys package</code></td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/data/system/users/</code></td><td><code>userlist.xml</code> and one XML file per user or profile</td><td>Reveals secondary users, work profiles and Private Space</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/system/</code>, <code>/system_ext/</code>, <code>/product/</code>, <code>/vendor/</code>, <code>/odm/</code></td><td>Read-only OS, OEM and hardware partitions</td><td>Protected by dm-verity and Verified Boot; preinstalled apps here cannot be fully removed</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/apex/</code></td><td>Mounted Mainline modules updated through Google Play system updates</td><td>Wi-Fi, Conscrypt, media and other components patch outside the monthly OS update</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/system/build.prop</code>, <code>/vendor/build.prop</code></td><td>Build fingerprint, version and security patch properties</td><td>Read with <code>getprop</code>; a mismatched fingerprint points to a custom or modified ROM</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/system/etc/selinux/</code>, <code>/vendor/etc/selinux/</code></td><td>SELinux policy</td><td>Baseline; a permissive device is wide open to app escapes</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="triage-commands">
+<h2 class="panel-title">Triage Commands</h2>
+<p class="panel-lead">Run from a computer with Android platform tools. Unless noted, no root is needed.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Task</th><th>Command</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>List connected devices</td><td><code class="copy">adb devices -l</code></td><td><code>unauthorized</code> means the phone has not accepted this computer</td></tr>
+<tr><td>Android version and patch level</td><td><code class="copy">adb shell getprop ro.build.version.release; adb shell getprop ro.build.version.security_patch</code></td><td>Compare the patch date with the current bulletin</td></tr>
+<tr><td>Bootloader and Verified Boot state</td><td><code class="copy">adb shell getprop ro.boot.verifiedbootstate</code></td><td><code>orange</code> means unlocked bootloader</td></tr>
+<tr><td>SELinux mode</td><td><code class="copy">adb shell getenforce</code></td><td>Anything but <code>Enforcing</code> is a finding</td></tr>
+<tr><td>Users and profiles</td><td><code class="copy">adb shell pm list users</code></td><td>Shows work profile and Private Space</td></tr>
+<tr><td>Third party apps with installer</td><td><code class="copy">adb shell pm list packages -3 -i</code></td><td>Installer other than <code>com.android.vending</code> means sideloaded or another store</td></tr>
+<tr><td>Apps in another user or profile</td><td><code class="copy">adb shell pm list packages -3 --user 10</code></td><td>Use the user ID from <code>pm list users</code></td></tr>
+<tr><td>Details of one app</td><td><code class="copy">adb shell dumpsys package com.example.app</code></td><td>Permissions, install time, signer, installer</td></tr>
+<tr><td>Pull an APK</td><td><code class="copy">adb shell pm path com.example.app</code></td><td>Then <code>adb pull</code> the printed path</td></tr>
+<tr><td>Accessibility services</td><td><code class="copy">adb shell settings get secure enabled_accessibility_services</code></td><td>The top stalkerware and banking trojan indicator</td></tr>
+<tr><td>Notification listeners</td><td><code class="copy">adb shell settings get secure enabled_notification_listeners</code></td><td>Apps that can read every notification and code</td></tr>
+<tr><td>Device admins and owners</td><td><code class="copy">adb shell dumpsys device_policy</code></td><td><code>adb shell dpm list-owners</code> for owners only</td></tr>
+<tr><td>Runtime permissions of an app</td><td><code class="copy">adb shell appops get com.example.app</code></td><td>Shows recent use of camera, microphone, location</td></tr>
+<tr><td>App usage history</td><td><code class="copy">adb shell dumpsys usagestats</code></td><td>Recent foreground and background events</td></tr>
+<tr><td>Running processes</td><td><code class="copy">adb shell ps -A</code></td><td>Look for unknown names and binaries in <code>/data/local/tmp</code></td></tr>
+<tr><td>Network connections</td><td><code class="copy">adb shell netstat -tunp</code></td><td>Process names may be hidden without root</td></tr>
+<tr><td>Saved Wi-Fi networks</td><td><code class="copy">adb shell cmd wifi list-networks</code></td><td>Network names only, no passwords</td></tr>
+<tr><td>Private DNS and always-on VPN</td><td><code class="copy">adb shell settings get global private_dns_specifier; adb shell settings get secure always_on_vpn_app</code></td><td>Unexpected values redirect traffic</td></tr>
+<tr><td>Dump all logs</td><td><code class="copy">adb logcat -d -b all &gt; logcat.txt</code></td><td>Collect before any reboot</td></tr>
+<tr><td>Full bug report</td><td><code class="copy">adb bugreport bugreport.zip</code></td><td>Takes a few minutes; contains personal data</td></tr>
+<tr><td>Collect with AndroidQF</td><td><code class="copy">./androidqf</code></td><td>Run the release binary for your OS on the host and follow the prompts</td></tr>
+<tr><td>Update MVT indicators</td><td><code class="copy">mvt-android download-iocs</code></td><td>Public spyware indicators from Amnesty and others</td></tr>
+<tr><td>Check AndroidQF output</td><td><code class="copy">mvt-android check-androidqf --output ./results ./androidqf-folder</code></td><td>Also runs intrusion log checks when present</td></tr>
+<tr><td>Check a bug report</td><td><code class="copy">mvt-android check-bugreport --output ./results bugreport.zip</code></td><td>Useful when AndroidQF cannot run</td></tr>
+<tr><td>Root module check (rooted only)</td><td><code class="copy">adb shell su -c "ls -la /data/adb/modules"</code></td><td>Lists Magisk or KernelSU modules</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="hardening">
+<h2 class="panel-title">Hardening Checklist</h2>
+<p class="panel-lead">Settings that block most real world attacks on Android phones.</p>
+<ul class="checklist">
+<li>Buy devices with a long, published update policy and install the monthly patch and Google Play system updates.</li>
+<li>Keep the bootloader locked and never root a production device.</li>
+<li>Use a six digit or longer PIN or a password; patterns are easy to shoulder surf.</li>
+<li>Keep Google Play Protect on and do not sideload apps from links in messages.</li>
+<li>Turn on Advanced Protection on Android 16 and later for at-risk users, and opt in to Intrusion Logging on Android 17.</li>
+<li>Turn on theft protection and Identity Check.</li>
+<li>Review Accessibility, Notification access, Device admin apps and Special app access regularly.</li>
+<li>Turn off USB debugging and wireless debugging when not in use, and revoke USB debugging authorizations.</li>
+<li>Set Private DNS to a resolver you trust.</li>
+<li>Remove user installed CA certificates you do not recognize.</li>
+<li>Use a work profile or Android Enterprise management for corporate data.</li>
+<li>Restart the phone regularly; it clears non persistent exploits and returns data to the encrypted BFU state.</li>
+</ul>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

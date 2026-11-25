@@ -1,300 +1,572 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Windows CMD — Commands</title>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="32x32"/>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="192x192"/>
-<link rel="apple-touch-icon" href="../../Image/Logo.png"/>
-<meta name="theme-color" content="#111"/>
-<style>
-:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--line:rgba(255,255,255,.10);--blue:#2196f3}
-*{box-sizing:border-box}
-html,body{height:100%}
-html{scroll-behavior:smooth}
-body{margin:0;font:16px/1.55 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111}
-.bg{position:fixed;inset:0;background:url("../../Image/Logo.png") center/cover no-repeat;z-index:-2}
-.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.80) 100%);z-index:-1}
-.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
-.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
-.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
-.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
-.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
-.homepill span{font-weight:700;letter-spacing:.15px}
-.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
-.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);cursor:pointer;user-select:none;flex:0 0 auto}
-.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
-.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0;max-width:none}
-.tabs.overflow{overflow:auto}
-.tabs::-webkit-scrollbar{display:none}
-.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
-.tab:hover{opacity:1}
-.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
-.tab.active{color:var(--blue)}
-.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
-.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
-.shell .h,.shell .sub{text-align:center}
-.page{position:relative;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:96px 20px 28px}
-.shell{width:min(1200px,96%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
-.h{margin:0 0 2px;font-size:28px;font-weight:800;letter-spacing:.2px}
-.sub{margin:0 0 12px;color:var(--muted)}
-.quicknav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 18px}
-.qbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-weight:700}
-.qbtn:hover{background:rgba(255,255,255,.1)}
-.morewrap{display:flex;gap:10px;justify-content:center;margin-top:8px}
-.more{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;border:1px dashed var(--ring);background:rgba(255,255,255,.04);color:var(--text);text-decoration:none;font-weight:700;cursor:pointer}
-.section{margin:22px 0 0;scroll-margin-top:90px}
-.section .title{margin:0 0 10px;font-size:20px;font-weight:800}
-.card{border:1px solid var(--tileBorder);background:var(--tile);border-radius:18px;box-shadow:0 12px 28px rgba(0,0,0,.3);overflow:hidden}
-.tablewrap{width:100%;overflow:auto}
-table{width:100%;border-collapse:separate;border-spacing:0}
-thead th{position:sticky;top:0;background:linear-gradient(180deg,rgba(33,150,243,.18),rgba(33,150,243,.14));backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid rgba(33,150,243,.35);text-align:left;padding:12px 14px;font-size:14px;color:var(--text);box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}
-tbody td{border-bottom:1px solid var(--line);padding:12px 14px;vertical-align:top}
-tbody tr:hover{background:rgba(255,255,255,.04)}
-th:first-child,td:first-child{border-left:none}
-th:last-child,td:last-child{border-right:none}
-th,td{word-break:break-word;overflow-wrap:anywhere}
-caption{caption-side:top;color:var(--text);padding:10px 4px 6px;font-weight:800}
-.kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.06);font:12px/1.2 ui-monospace,monospace}
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Windows CMD | Cyber Epistemology</title>
+<meta name="description" content="Windows Command Prompt cheat sheet: built-ins, files, robocopy, icacls, findstr, processes, services, scheduled tasks, networking, curl and tar, users, wevtutil, registry, certutil, repair, Group Policy, BitLocker and batch scripting.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../../Assets/Image/AppleTouchIcon.png">
+<link rel="stylesheet" href="../../Assets/Style/Site.css">
+<script src="../../Assets/Script/Site.js" defer></script>
 </head>
-<body>
-<div class="bg"></div>
-<nav class="topbar" id="topbar">
-  <div class="nav">
-    <a class="homepill" href="../../index.html" title="Home" aria-label="Home"><img src="../../Image/Home.png" alt="Home"/><span>Home</span></a>
-    <div class="tabswrap">
-      <button class="navbtn" id="leftbtn" aria-label="Prev"><span>&lt;</span></button>
-      <div class="tabs" id="tabs">
-        <a class="tab" href="../Commands.html"><img src="../../Image/Command.png" alt="Commands"/>Commands</a>
-        <a class="tab" href="Bash.html"><img src="../../Image/Bash.png" alt="Bash"/>Bash</a>
-        <a class="tab active" href="CMD.html"><img src="../../Image/CMD.png" alt="CMD"/>CMD</a>
-        <a class="tab" href="PS.html"><img src="../../Image/PS.png" alt="PowerShell"/>PowerShell</a>
-      </div>
-      <button class="navbtn" id="rightbtn" aria-label="Next"><span>&gt;</span></button>
-    </div>
-  </div>
-</nav>
-
-<div class="page">
-  <main class="shell">
-    <h1 class="h">Windows CMD — Cheat Sheet</h1>
-    <p class="sub">Click a section. Use the toggle to reveal more.</p>
-
-    <div class="quicknav" id="quicknav">
-      <a class="qbtn" href="#basics">Basics</a>
-      <a class="qbtn" href="#files">Navigation & Files</a>
-      <a class="qbtn" href="#view">Viewing & Editing</a>
-      <a class="qbtn" href="#search">Search & Filters</a>
-      <a class="qbtn" href="#proc">Processes & Tasks</a>
-      <a class="qbtn" href="#net">Networking</a>
-      <a class="qbtn extra" href="#vars">Variables & Scripting</a>
-      <a class="qbtn extra" href="#system">System Info</a>
-      <a class="qbtn extra" href="#archive">Compression</a>
-      <a class="qbtn extra" href="#time">Date & Time</a>
-      <a class="qbtn extra" href="#reg">Registry</a>
-      <a class="qbtn extra" href="#power">Power & Sessions</a>
-    </div>
-    <div class="morewrap"><button class="more" id="morebtn">..show more</button></div>
-
-    <section class="section" id="basics">
-      <h2 class="title">Basics</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command / Syntax</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">help</span></td><td>List built-ins and topics</td><td><span class="kbd">help</span></td></tr>
-          <tr><td><span class="kbd">help cmd</span></td><td>Help for a command</td><td><span class="kbd">help robocopy</span></td></tr>
-          <tr><td><span class="kbd">cmd /?</span></td><td>Command interpreter help</td><td><span class="kbd">xcopy /?</span></td></tr>
-          <tr><td><span class="kbd">cls</span></td><td>Clear screen</td><td><span class="kbd">cls</span></td></tr>
-          <tr><td><span class="kbd">doskey /history</span></td><td>Show history</td><td><span class="kbd">doskey /history</span></td></tr>
-          <tr><td><span class="kbd">doskey alias=command</span></td><td>Create macro alias</td><td><span class="kbd">doskey ll=dir /a</span></td></tr>
-          <tr><td><span class="kbd">echo</span></td><td>Print text/vars</td><td><span class="kbd">echo %USERNAME%</span></td></tr>
-          <tr><td><span class="kbd">set</span></td><td>List/set env vars</td><td><span class="kbd">set PATH</span></td></tr>
-          <tr><td><span class="kbd">where</span></td><td>Find executable on PATH</td><td><span class="kbd">where ping</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="files">
-      <h2 class="title">Navigation & Files</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">cd</span></td><td>Change directory</td><td><span class="kbd">cd C:\Windows\System32</span></td></tr>
-          <tr><td><span class="kbd">cd /d</span></td><td>Change drive and dir</td><td><span class="kbd">cd /d D:\Projects</span></td></tr>
-          <tr><td><span class="kbd">dir</span></td><td>List directory</td><td><span class="kbd">dir /a /o:n</span></td></tr>
-          <tr><td><span class="kbd">tree</span></td><td>Folder tree</td><td><span class="kbd">tree /f | more</span></td></tr>
-          <tr><td><span class="kbd">type</span></td><td>Print file</td><td><span class="kbd">type README.txt</span></td></tr>
-          <tr><td><span class="kbd">copy</span></td><td>Copy files</td><td><span class="kbd">copy a.txt b.txt</span></td></tr>
-          <tr><td><span class="kbd">move</span></td><td>Move/rename</td><td><span class="kbd">move a.txt D:\tmp\</span></td></tr>
-          <tr><td><span class="kbd">del</span></td><td>Delete file</td><td><span class="kbd">del /f /q *.log</span></td></tr>
-          <tr><td><span class="kbd">rmdir</span></td><td>Remove directory</td><td><span class="kbd">rmdir /s /q build</span></td></tr>
-          <tr><td><span class="kbd">mklink</span></td><td>Make link</td><td><span class="kbd">mklink /d link D:\Data</span></td></tr>
-          <tr><td><span class="kbd">attrib</span></td><td>File attributes</td><td><span class="kbd">attrib +h +s secret.txt</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="view">
-      <h2 class="title">Viewing & Editing</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">more</span></td><td>Pager</td><td><span class="kbd">type big.txt | more</span></td></tr>
-          <tr><td><span class="kbd">find</span></td><td>Search text (literal)</td><td><span class="kbd">find /i "error" log.txt</span></td></tr>
-          <tr><td><span class="kbd">findstr</span></td><td>Regex search</td><td><span class="kbd">findstr /i /r "fail|error" *.log</span></td></tr>
-          <tr><td><span class="kbd">fc</span></td><td>Compare files</td><td><span class="kbd">fc /n a.txt b.txt</span></td></tr>
-          <tr><td><span class="kbd">notepad</span></td><td>Quick edit</td><td><span class="kbd">notepad hosts</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="search">
-      <h2 class="title">Search & Filters</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">dir /s /b</span></td><td>Recursive bare list</td><td><span class="kbd">dir /s /b *.config</span></td></tr>
-          <tr><td><span class="kbd">for /r</span></td><td>Loop files recursively</td><td><span class="kbd">for /r %i in (*.log) do @echo %i</span></td></tr>
-          <tr><td><span class="kbd">for /f</span></td><td>Loop lines from file/cmd</td><td><span class="kbd">for /f "tokens=1" %i in (list.txt) do @echo %i</span></td></tr>
-          <tr><td><span class="kbd">sort</span></td><td>Sort lines</td><td><span class="kbd">type a.txt | sort</span></td></tr>
-          <tr><td><span class="kbd">uniq (findstr)</span></td><td>Unique-like via regex</td><td><span class="kbd">sort a.txt | findstr /v /r "^$" | findstr /r /c:"^.*$"</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="proc">
-      <h2 class="title">Processes & Tasks</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">tasklist</span></td><td>List processes</td><td><span class="kbd">tasklist /v | more</span></td></tr>
-          <tr><td><span class="kbd">taskkill</span></td><td>Kill process</td><td><span class="kbd">taskkill /im notepad.exe /f</span></td></tr>
-          <tr><td><span class="kbd">start</span></td><td>Launch in new window</td><td><span class="kbd">start cmd /k ipconfig</span></td></tr>
-          <tr><td><span class="kbd">schtasks</span></td><td>Scheduled tasks</td><td><span class="kbd">schtasks /query /fo list /v</span></td></tr>
-          <tr><td><span class="kbd">wmic process</span></td><td>Legacy WMI view</td><td><span class="kbd">wmic process get name,commandline</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="net">
-      <h2 class="title">Networking</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">ipconfig /all</span></td><td>Interfaces & DNS</td><td><span class="kbd">ipconfig /all</span></td></tr>
-          <tr><td><span class="kbd">ipconfig /flushdns</span></td><td>Clear DNS cache</td><td><span class="kbd">ipconfig /flushdns</span></td></tr>
-          <tr><td><span class="kbd">ping</span></td><td>ICMP reachability</td><td><span class="kbd">ping -n 5 8.8.8.8</span></td></tr>
-          <tr><td><span class="kbd">tracert</span></td><td>Route path</td><td><span class="kbd">tracert example.com</span></td></tr>
-          <tr><td><span class="kbd">netstat -ano</span></td><td>Sockets with PIDs</td><td><span class="kbd">netstat -ano | find ":443"</span></td></tr>
-          <tr><td><span class="kbd">nslookup</span></td><td>DNS query</td><td><span class="kbd">nslookup -type=txt example.com</span></td></tr>
-          <tr><td><span class="kbd">route print</span></td><td>Routing table</td><td><span class="kbd">route print</span></td></tr>
-          <tr><td><span class="kbd">arp -a</span></td><td>ARP cache</td><td><span class="kbd">arp -a</span></td></tr>
-          <tr><td><span class="kbd">net use</span></td><td>Map network drive</td><td><span class="kbd">net use Z: \\srv\share /user:dom\me *</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="vars">
-      <h2 class="title">Variables & Scripting</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Syntax</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">%VAR%</span></td><td>Expand env var</td><td><span class="kbd">echo %PATH%</span></td></tr>
-          <tr><td><span class="kbd">set VAR=value</span></td><td>Set env var</td><td><span class="kbd">set APP_ENV=prod</span></td></tr>
-          <tr><td><span class="kbd">if</span></td><td>Conditional</td><td><span class="kbd">if exist file.txt echo OK</span></td></tr>
-          <tr><td><span class="kbd">for %%A in</span></td><td>Batch loop</td><td><span class="kbd">for %%A in (*.log) do echo %%A</span></td></tr>
-          <tr><td><span class="kbd">call</span></td><td>Call another cmd/bat</td><td><span class="kbd">call build.bat</span></td></tr>
-          <tr><td><span class="kbd">setlocal enabledelayedexpansion</span></td><td>Delayed expansion</td><td><span class="kbd">!var!</span></td></tr>
-          <tr><td><span class="kbd">^ | &gt; &gt;&gt; 2&gt;&amp;1</span></td><td>Pipes & redirection</td><td><span class="kbd">dir | find "cfg" &gt;&gt; out.txt 2&gt;&amp;1</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="system">
-      <h2 class="title">System Info</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">ver</span></td><td>CMD version</td><td><span class="kbd">ver</span></td></tr>
-          <tr><td><span class="kbd">systeminfo</span></td><td>Detailed system info</td><td><span class="kbd">systeminfo | more</span></td></tr>
-          <tr><td><span class="kbd">hostname</span></td><td>Computer name</td><td><span class="kbd">hostname</span></td></tr>
-          <tr><td><span class="kbd">driverquery</span></td><td>Drivers list</td><td><span class="kbd">driverquery /v</span></td></tr>
-          <tr><td><span class="kbd">sc query</span></td><td>Services state</td><td><span class="kbd">sc query type= service state= all</span></td></tr>
-          <tr><td><span class="kbd">wevtutil qe</span></td><td>Query event logs</td><td><span class="kbd">wevtutil qe Application /c:10 /rd:true</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="archive">
-      <h2 class="title">Compression & Archives</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">tar</span></td><td>Zip/tar (Win10+)</td><td><span class="kbd">tar -a -c -f site.zip site\</span></td></tr>
-          <tr><td><span class="kbd">tar</span></td><td>Extract</td><td><span class="kbd">tar -xf site.zip -C out</span></td></tr>
-          <tr><td><span class="kbd">compact</span></td><td>NTFS compression</td><td><span class="kbd">compact /c /s:logs</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="time">
-      <h2 class="title">Date & Time</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">time</span> , <span class="kbd">date</span></td><td>Show/set clock</td><td><span class="kbd">time /t</span></td></tr>
-          <tr><td><span class="kbd">w32tm /query /status</span></td><td>Time service</td><td><span class="kbd">w32tm /query /peers</span></td></tr>
-          <tr><td><span class="kbd">timeout</span></td><td>Sleep</td><td><span class="kbd">timeout /t 5 /nobreak</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="reg">
-      <h2 class="title">Registry</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">reg query</span></td><td>Read key/value</td><td><span class="kbd">reg query HKLM\Software\Microsoft\Windows\CurrentVersion\Run</span></td></tr>
-          <tr><td><span class="kbd">reg add</span></td><td>Add/modify value</td><td><span class="kbd">reg add HKCU\Env /v FOO /t REG_SZ /d bar /f</span></td></tr>
-          <tr><td><span class="kbd">reg delete</span></td><td>Delete value/key</td><td><span class="kbd">reg delete HKCU\Env /v FOO /f</span></td></tr>
-          <tr><td><span class="kbd">reg export</span></td><td>Export branch</td><td><span class="kbd">reg export HKLM\Software out.reg</span></td></tr>
-          <tr><td><span class="kbd">reg import</span></td><td>Import .reg</td><td><span class="kbd">reg import tweak.reg</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-    <section class="section" id="power">
-      <h2 class="title">Power & Sessions</h2>
-      <div class="card tablewrap"><table>
-        <thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
-        <tbody>
-          <tr><td><span class="kbd">shutdown</span></td><td>Shutdown/restart</td><td><span class="kbd">shutdown /r /t 0</span></td></tr>
-          <tr><td><span class="kbd">logoff</span></td><td>Log off session</td><td><span class="kbd">logoff</span></td></tr>
-          <tr><td><span class="kbd">runas</span></td><td>Run as another user</td><td><span class="kbd">runas /user:DOMAIN\user cmd</span></td></tr>
-          <tr><td><span class="kbd">query session</span></td><td>RDS sessions</td><td><span class="kbd">query session</span></td></tr>
-        </tbody>
-      </table></div>
-    </section>
-
-  </main>
+<body class="is-content-page" data-root="../../" data-section="commands">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><a href="../Commands.html">Commands</a><span class="breadcrumb-separator">/</span><span>CMD</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../../Assets/Icon/CommandPrompt.png" alt="">
+<div>
+<p class="hero-eyebrow">Commands</p>
+<h1 class="hero-title">Windows CMD Cheat Sheet</h1>
 </div>
-
-<script>
-let lastY=scrollY,hidden=false;
-addEventListener('scroll',()=>{const y=scrollY,tb=document.getElementById('topbar');if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
-const p=location.pathname.replace(/\/+$/,'');document.querySelectorAll('.tabs .tab').forEach(a=>{const h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');if(p.endsWith(h))a.classList.add('active')});
-const tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
-function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
-function updateArrows(){const o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;tabs.classList.toggle('overflow',o);leftbtn.style.display=o&&s>0?'inline-flex':'none';rightbtn.style.display=o&&s<max-1?'inline-flex':'none'}
-function scrollByStep(d){const step=Math.max(120,Math.floor(tabs.clientWidth*.6));tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})}
-leftbtn.addEventListener('click',()=>scrollByStep(-1));rightbtn.addEventListener('click',()=>scrollByStep(1));
-tabs.addEventListener('scroll',updateArrows,{passive:true});new ResizeObserver(updateArrows).observe(tabs);
-addEventListener('resize',updateArrows);
-tabs.addEventListener('wheel',e=>{if(!hasOverflow())return;const dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}});
-updateArrows();
-
-const morebtn=document.getElementById('morebtn');const extras=[...document.querySelectorAll('.quicknav .extra')];
-function setCollapsed(c){extras.forEach((el,i)=>{el.style.display=c?'none':''});morebtn.textContent=c?'..show more':'..show less'}
-setCollapsed(true);
-morebtn.addEventListener('click',()=>{const collapsed=extras[0].style.display==='none';setCollapsed(!collapsed)});
-</script>
-</body></html>
+</div>
+<p class="hero-lead">Command Prompt and batch files on Windows 11 and Windows Server. Built-in tools that work on every machine, even where PowerShell is locked down.</p>
+<div class="hero-meta"><span class="badge">275 commands</span><span class="badge">Windows 11 and Server 2025</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: robocopy" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<nav class="sub-nav" aria-label="Shells">
+<a class="sub-nav-link" href="../Commands.html"><img src="../../Assets/Icon/Terminal.png" alt="">All shells</a>
+<a class="sub-nav-link" href="Bash.html"><img src="../../Assets/Icon/Bash.png" alt="">Bash</a>
+<a class="sub-nav-link" href="PS.html"><img src="../../Assets/Icon/PowerShell.png" alt="">PowerShell</a>
+<a class="sub-nav-link is-active" href="CMD.html" aria-current="page"><img src="../../Assets/Icon/CommandPrompt.png" alt="">CMD</a>
+</nav>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="built-ins-and-help">
+<h2 class="panel-title">Built-ins and Help</h2>
+<p class="panel-lead">Get help, reuse history and set up the session.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>help</code></td><td>List built-in commands with a one-line description</td><td><code class="copy">help</code></td></tr>
+<tr><td><code>help NAME</code></td><td>Help for a built-in command such as dir, for or set</td><td><code class="copy">help for</code></td></tr>
+<tr><td><code>NAME /?</code></td><td>Help for any tool. External tools such as robocopy only answer to /?</td><td><code class="copy">robocopy /?</code></td></tr>
+<tr><td><code>where</code></td><td>Find which executable runs for a name on PATH</td><td><code class="copy">where curl</code></td></tr>
+<tr><td><code>echo</code></td><td>Print text or a variable</td><td><code class="copy">echo %USERNAME% on %COMPUTERNAME%</code></td></tr>
+<tr><td><code>set</code></td><td>List variables, or those starting with a prefix</td><td><code class="copy">set PROCESSOR</code></td></tr>
+<tr><td><code>doskey /history</code></td><td>Commands typed in this window</td><td><code class="copy">doskey /history</code></td></tr>
+<tr><td><code>doskey macro</code></td><td>Create a session alias</td><td><code class="copy">doskey ll=dir /a /o:gn $*</code></td></tr>
+<tr><td><code>cmd /c</code></td><td>Run one command in a new CMD and exit (<code>/k</code> keeps it open)</td><td><code class="copy">cmd /c "ipconfig /all &gt; C:\Temp\ip.txt"</code></td></tr>
+<tr><td><code>start</code></td><td>Open a program, folder or URL. The first quoted argument is the window title</td><td><code class="copy">start "" "C:\Program Files\Wireshark\Wireshark.exe"</code></td></tr>
+<tr><td><code>title</code></td><td>Name the window, handy with many consoles open</td><td><code class="copy">title Incident 42 triage</code></td></tr>
+<tr><td><code>cls</code></td><td>Clear the screen</td><td><code class="copy">cls</code></td></tr>
+<tr><td><code>exit</code></td><td>Close CMD, or leave a batch file with a code (<code>exit /b 1</code>)</td><td><code class="copy">exit</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>Keys: <kbd>Tab</kbd> completes paths, <kbd>F7</kbd> shows a history list, <kbd>F3</kbd> repeats the last command, <kbd>Ctrl</kbd> + <kbd>C</kbd> stops a running command.</p>
+<div class="callout"><p><strong>From PowerShell:</strong> <code>sc</code> is an alias for <code>Set-Content</code> in Windows PowerShell 5.1, so type <code>sc.exe</code>. Use <code>curl.exe</code> in 5.1 too, because there <code>curl</code> means <code>Invoke-WebRequest</code>.</p></div>
+</section>
+<section class="panel" id="navigation-and-files">
+<h2 class="panel-title">Navigation and Files</h2>
+<p class="panel-lead">Move around, list, copy, delete and link files.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>cd</code></td><td>Change directory, or print the current one</td><td><code class="copy">cd C:\Windows\System32</code></td></tr>
+<tr><td><code>cd /d</code></td><td>Change drive and directory in one step</td><td><code class="copy">cd /d D:\Projects</code></td></tr>
+<tr><td><code>pushd</code></td><td>Change directory and remember the old one. A UNC path gets a temporary drive letter</td><td><code class="copy">pushd \\fs01\Data &amp; dir &amp; popd</code></td></tr>
+<tr><td><code>dir</code></td><td>List all files including hidden, sorted by name</td><td><code class="copy">dir /a /o:n</code></td></tr>
+<tr><td><code>dir /s /b</code></td><td>Find files by name below a folder, full paths only</td><td><code class="copy">dir C:\ /s /b *.kdbx 2&gt;nul</code></td></tr>
+<tr><td><code>dir /o:-s</code></td><td>Largest files first</td><td><code class="copy">dir /a-d /o:-s D:\Downloads</code></td></tr>
+<tr><td><code>dir /r</code></td><td>Show alternate data streams</td><td><code class="copy">dir /r download.exe</code></td></tr>
+<tr><td><code>tree</code></td><td>Folder tree with files</td><td><code class="copy">tree /f /a C:\Projects | more</code></td></tr>
+<tr><td><code>mkdir</code></td><td>Create a folder and any missing parents</td><td><code class="copy">mkdir C:\Lab\Logs\2026</code></td></tr>
+<tr><td><code>type</code></td><td>Print a text file</td><td><code class="copy">type C:\Windows\System32\drivers\etc\hosts</code></td></tr>
+<tr><td><code>copy</code></td><td>Copy files</td><td><code class="copy">copy report.txt D:\Backup\</code></td></tr>
+<tr><td><code>xcopy</code></td><td>Older folder copy. Prefer robocopy</td><td><code class="copy">xcopy C:\Source D:\Backup /e /i /h</code></td></tr>
+<tr><td><code>move</code></td><td>Move files or rename a folder</td><td><code class="copy">move report.txt D:\Archive\</code></td></tr>
+<tr><td><code>ren</code></td><td>Rename files, wildcards allowed</td><td><code class="copy">ren *.log *.log.bak</code></td></tr>
+<tr><td><code>del</code></td><td>Delete files, quietly and forced</td><td><code class="copy">del /f /q C:\Temp\*.tmp</code></td></tr>
+<tr><td><code>rmdir</code></td><td>Delete a folder and everything in it</td><td><code class="copy">rmdir /s /q build</code></td></tr>
+<tr><td><code>mklink</code></td><td>Symbolic link (<code>/d</code>), junction (<code>/j</code>) or hard link (<code>/h</code>)</td><td><code class="copy">mklink /j C:\Data D:\Data</code></td></tr>
+<tr><td><code>compact</code></td><td>NTFS compression for a folder</td><td><code class="copy">compact /c /s:C:\Logs</code></td></tr>
+<tr><td><code>fc</code></td><td>Compare two files with line numbers (<code>/b</code> for binary)</td><td><code class="copy">fc /n before.txt after.txt</code></td></tr>
+<tr><td><code>clip</code></td><td>Copy command output to the clipboard</td><td><code class="copy">ipconfig /all | clip</code></td></tr>
+<tr><td><code>notepad</code></td><td>Quick edit of a file</td><td><code class="copy">notepad C:\Windows\System32\drivers\etc\hosts</code></td></tr>
+<tr><td><code>start .</code></td><td>Open the current folder in File Explorer</td><td><code class="copy">start .</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="robocopy">
+<h2 class="panel-title">Robocopy</h2>
+<p class="panel-lead">Robust folder copy with retries, logging, ACLs and multithreading.</p>
+<div class="callout callout-warning"><p><strong>Warning:</strong> <code>/mir</code> deletes files in the destination that are not in the source. Run it with <code>/l</code> first to see what would change.</p></div>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>robocopy /e</code></td><td>Copy a folder with all subfolders, including empty ones</td><td><code class="copy">robocopy C:\Source D:\Backup /e</code></td></tr>
+<tr><td><code>robocopy /l</code></td><td>Dry run: list what would be copied or deleted</td><td><code class="copy">robocopy C:\Source D:\Backup /mir /l</code></td></tr>
+<tr><td><code>robocopy /mir</code></td><td>Mirror source to destination, with short retries and a log</td><td><code class="copy">robocopy C:\Source D:\Backup /mir /r:1 /w:1 /log:C:\Logs\mirror.log</code></td></tr>
+<tr><td><code>robocopy /copyall</code></td><td>Keep NTFS permissions, owner and timestamps (run elevated)</td><td><code class="copy">robocopy D:\Shares E:\Shares /e /copyall /dcopy:DAT /r:1 /w:1</code></td></tr>
+<tr><td><code>robocopy /zb</code></td><td>Restartable mode, falling back to backup mode for locked or denied files</td><td><code class="copy">robocopy \\fs01\Data D:\Data /e /zb</code></td></tr>
+<tr><td><code>robocopy /mt</code></td><td>Copy with 16 threads, much faster for many small files</td><td><code class="copy">robocopy C:\Source \\nas\Backup /e /mt:16 /np</code></td></tr>
+<tr><td><code>robocopy /xd /xf</code></td><td>Exclude folders and file patterns</td><td><code class="copy">robocopy C:\Projects D:\Backup /e /xd node_modules .git /xf *.tmp</code></td></tr>
+<tr><td><code>robocopy /move</code></td><td>Move files older than 30 days and remove them from the source</td><td><code class="copy">robocopy C:\Inbox D:\Archive /s /move /minage:30</code></td></tr>
+<tr><td><code>robocopy /tee</code></td><td>Show progress on screen and append to a log</td><td><code class="copy">robocopy C:\Source D:\Backup /e /tee /log+:C:\Logs\copy.log</code></td></tr>
+<tr><td><code>robocopy exit codes</code></td><td>0 to 7 mean success, 8 or higher means at least one failure</td><td><code class="copy">robocopy C:\Source D:\Backup /e &amp; if errorlevel 8 echo Copy failed</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="permissions">
+<h2 class="panel-title">Permissions and Attributes</h2>
+<p class="panel-lead">NTFS ACLs with icacls, ownership with takeown, flags with attrib.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>icacls</code></td><td>Show the ACL of a file or folder</td><td><code class="copy">icacls D:\Shares\Finance</code></td></tr>
+<tr><td><code>icacls /grant</code></td><td>Grant Modify, inherited by subfolders (OI) and files (CI)</td><td><code class="copy">icacls D:\Shares\Finance /grant "CORP\Finance:(OI)(CI)M"</code></td></tr>
+<tr><td><code>icacls /grant *SID</code></td><td>Grant by SID, which works on any language version of Windows</td><td><code class="copy">icacls C:\Tools /grant *S-1-5-32-544:(OI)(CI)F</code></td></tr>
+<tr><td><code>icacls /remove</code></td><td>Remove every entry for a user or group</td><td><code class="copy">icacls D:\Shares\Finance /remove "CORP\Interns"</code></td></tr>
+<tr><td><code>icacls /inheritance</code></td><td>Stop inheriting and keep a copy of inherited entries (<code>:r</code> removes them)</td><td><code class="copy">icacls D:\Shares\Finance /inheritance:d</code></td></tr>
+<tr><td><code>icacls /reset</code></td><td>Replace explicit ACLs with inherited defaults, recursively</td><td><code class="copy">icacls D:\Shares\Finance /reset /t /c</code></td></tr>
+<tr><td><code>icacls /setowner</code></td><td>Set the owner recursively</td><td><code class="copy">icacls D:\Shares\Finance /setowner "CORP\File Admins" /t /c</code></td></tr>
+<tr><td><code>icacls /save</code></td><td>Back up ACLs of everything in a folder</td><td><code class="copy">icacls D:\Shares\Finance\* /save C:\Backup\finance-acl.txt /t /c</code></td></tr>
+<tr><td><code>icacls /restore</code></td><td>Restore saved ACLs, run against the same folder</td><td><code class="copy">icacls D:\Shares\Finance /restore C:\Backup\finance-acl.txt</code></td></tr>
+<tr><td><code>icacls with findstr</code></td><td>Spot entries for broad groups, then look for (F), (M) or (W)</td><td><code class="copy">icacls "C:\Program Files\Vendor" | findstr /i "Everyone Users"</code></td></tr>
+<tr><td><code>takeown</code></td><td>Take ownership of a folder tree as an administrator</td><td><code class="copy">takeown /f D:\Old\Profile /r /d y</code></td></tr>
+<tr><td><code>attrib</code></td><td>Hide a file and mark it as a system file</td><td><code class="copy">attrib +h +s secret.txt</code></td></tr>
+<tr><td><code>attrib -h -s</code></td><td>Unhide files on a USB stick after a malware infection</td><td><code class="copy">attrib -h -s -r /s /d E:\*</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="text-search">
+<h2 class="panel-title">Text Search and Filters</h2>
+<p class="panel-lead">find for literal strings, findstr for several words, phrases and a limited regex.</p>
+<div class="callout"><p><strong>findstr syntax:</strong> there is no <code>|</code> alternation. Words separated by spaces are matched as OR, so <code>"fail error"</code> finds either word. Use <code>/c:"literal phrase"</code> for a phrase with spaces. The regex mode (<code>/r</code>) knows <code>. * ^ $ [ ]</code> and little else.</p></div>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>find</code></td><td>Lines that contain a literal string, case insensitive</td><td><code class="copy">find /i "error" app.log</code></td></tr>
+<tr><td><code>find /c</code></td><td>Count matching lines</td><td><code class="copy">find /c /i "failed" app.log</code></td></tr>
+<tr><td><code>find /c /v ""</code></td><td>Count all lines in a file, like wc -l</td><td><code class="copy">find /c /v "" app.log</code></td></tr>
+<tr><td><code>find /v</code></td><td>Drop lines that contain a string</td><td><code class="copy">type app.log | find /v "DEBUG"</code></td></tr>
+<tr><td><code>findstr</code></td><td>Lines that contain any of several words</td><td><code class="copy">findstr /i "fail error" *.log</code></td></tr>
+<tr><td><code>findstr /c:</code></td><td>Search for an exact phrase with spaces</td><td><code class="copy">findstr /i /c:"access denied" *.log</code></td></tr>
+<tr><td><code>findstr /s /m</code></td><td>Recursive search, print only the names of matching files</td><td><code class="copy">findstr /s /i /m "password" *.config *.xml *.ini</code></td></tr>
+<tr><td><code>findstr /r</code></td><td>Regex with line numbers, here lines that start with ERROR and a digit</td><td><code class="copy">findstr /n /r /c:"^ERROR [0-9]" app.log</code></td></tr>
+<tr><td><code>findstr /g:</code></td><td>Take the search strings from a file, one per line, for example a list of IOCs</td><td><code class="copy">findstr /i /g:iocs.txt proxy.log</code></td></tr>
+<tr><td><code>sort</code></td><td>Sort lines, reverse with <code>/r</code>, write with <code>/o</code></td><td><code class="copy">sort /r names.txt /o sorted.txt</code></td></tr>
+<tr><td>Remove duplicate lines</td><td>CMD has no uniq. Call PowerShell for it</td><td><code class="copy">powershell -NoProfile -Command "Get-Content names.txt | Sort-Object -Unique"</code></td></tr>
+<tr><td><code>more</code></td><td>Page through output, or start at a line</td><td><code class="copy">more +100 big.log</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="processes-and-services">
+<h2 class="panel-title">Processes and Services</h2>
+<p class="panel-lead">tasklist and taskkill for processes, sc and net for services.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>tasklist</code></td><td>Processes with user, status and window title</td><td><code class="copy">tasklist /v</code></td></tr>
+<tr><td><code>tasklist /svc</code></td><td>Services hosted in each process</td><td><code class="copy">tasklist /svc /fi "imagename eq svchost.exe"</code></td></tr>
+<tr><td><code>tasklist /fi</code></td><td>Filter by name, PID, user or status</td><td><code class="copy">tasklist /fi "username eq CORP\jdoe"</code></td></tr>
+<tr><td><code>tasklist /m</code></td><td>DLLs loaded by a process</td><td><code class="copy">tasklist /m /fi "pid eq 1234"</code></td></tr>
+<tr><td><code>tasklist /s</code></td><td>Processes on a remote computer</td><td><code class="copy">tasklist /s SRV01 /u CORP\admin</code></td></tr>
+<tr><td><code>taskkill /im</code></td><td>Kill every process with a name</td><td><code class="copy">taskkill /im notepad.exe /f</code></td></tr>
+<tr><td><code>taskkill /pid /t</code></td><td>Kill a process and its children</td><td><code class="copy">taskkill /pid 1234 /t /f</code></td></tr>
+<tr><td><code>taskkill /fi</code></td><td>Kill hung programs</td><td><code class="copy">taskkill /fi "status eq not responding" /f</code></td></tr>
+<tr><td><code>start /wait</code></td><td>Run an installer and wait for it to finish</td><td><code class="copy">start /wait msiexec /i app.msi /qn /norestart</code></td></tr>
+<tr><td><code>sc query</code></td><td>Every service with its state (the space after = is required)</td><td><code class="copy">sc query type= service state= all</code></td></tr>
+<tr><td><code>sc queryex</code></td><td>Service state with its PID</td><td><code class="copy">sc queryex Spooler</code></td></tr>
+<tr><td><code>sc qc</code></td><td>Binary path, start type and account of a service</td><td><code class="copy">sc qc Spooler</code></td></tr>
+<tr><td><code>sc config</code></td><td>Change the start type</td><td><code class="copy">sc config RemoteRegistry start= disabled</code></td></tr>
+<tr><td><code>sc stop</code></td><td>Stop a service (<code>sc start</code> starts it)</td><td><code class="copy">sc stop Spooler</code></td></tr>
+<tr><td><code>sc create</code></td><td>Register a new service</td><td><code class="copy">sc create AgentSvc binPath= "C:\Program Files\Agent\agent.exe" start= auto</code></td></tr>
+<tr><td><code>sc delete</code></td><td>Remove a service</td><td><code class="copy">sc delete AgentSvc</code></td></tr>
+<tr><td><code>sc sdshow</code></td><td>Service permissions in SDDL, useful for privilege escalation reviews</td><td><code class="copy">sc sdshow Spooler</code></td></tr>
+<tr><td><code>sc \\host</code></td><td>Query a service on a remote computer</td><td><code class="copy">sc \\SRV01 query WinRM</code></td></tr>
+<tr><td><code>net start</code></td><td>List running services, or start one by display name (<code>net stop</code> stops it)</td><td><code class="copy">net stop "Print Spooler"</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="scheduled-tasks">
+<h2 class="panel-title">Scheduled Tasks</h2>
+<p class="panel-lead">Create, run and audit tasks with schtasks.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>schtasks /query</code></td><td>Every task with full details</td><td><code class="copy">schtasks /query /fo list /v | more</code></td></tr>
+<tr><td><code>schtasks /query /fo csv</code></td><td>Export all tasks for review in a spreadsheet</td><td><code class="copy">schtasks /query /fo csv /v &gt; C:\IR\tasks.csv</code></td></tr>
+<tr><td><code>schtasks /query /xml</code></td><td>Full XML definition of one task</td><td><code class="copy">schtasks /query /tn NightlyBackup /xml</code></td></tr>
+<tr><td><code>schtasks /create /sc daily</code></td><td>Run a script every night as SYSTEM</td><td><code class="copy">schtasks /create /tn NightlyBackup /tr "C:\Scripts\backup.cmd" /sc daily /st 03:00 /ru SYSTEM /rl highest</code></td></tr>
+<tr><td><code>schtasks /create /sc onlogon</code></td><td>Run at every user logon</td><td><code class="copy">schtasks /create /tn MapDrives /tr "C:\Scripts\map.cmd" /sc onlogon</code></td></tr>
+<tr><td><code>schtasks /run</code></td><td>Start a task now (<code>/end</code> stops it)</td><td><code class="copy">schtasks /run /tn NightlyBackup</code></td></tr>
+<tr><td><code>schtasks /change</code></td><td>Disable a task without deleting it</td><td><code class="copy">schtasks /change /tn NightlyBackup /disable</code></td></tr>
+<tr><td><code>schtasks /delete</code></td><td>Delete a task without a prompt</td><td><code class="copy">schtasks /delete /tn NightlyBackup /f</code></td></tr>
+<tr><td><code>schtasks /s</code></td><td>Tasks on a remote computer</td><td><code class="copy">schtasks /query /s SRV01 /fo table</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="networking">
+<h2 class="panel-title">Networking</h2>
+<p class="panel-lead">Addresses, DNS, sockets, routes, firewall, shares and the built-in curl and tar.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>ipconfig /all</code></td><td>Addresses, MAC, gateway, DNS and DHCP lease</td><td><code class="copy">ipconfig /all</code></td></tr>
+<tr><td><code>ipconfig /flushdns</code></td><td>Clear the DNS client cache</td><td><code class="copy">ipconfig /flushdns</code></td></tr>
+<tr><td><code>ipconfig /displaydns</code></td><td>Show cached DNS answers</td><td><code class="copy">ipconfig /displaydns | more</code></td></tr>
+<tr><td><code>ipconfig /renew</code></td><td>Get a new DHCP lease</td><td><code class="copy">ipconfig /release &amp; ipconfig /renew</code></td></tr>
+<tr><td><code>ping</code></td><td>ICMP reachability, 4 packets</td><td><code class="copy">ping -n 4 10.0.0.1</code></td></tr>
+<tr><td><code>tracert</code></td><td>Trace the path, no name lookups</td><td><code class="copy">tracert -d 1.1.1.1</code></td></tr>
+<tr><td><code>pathping</code></td><td>Trace plus packet loss per hop</td><td><code class="copy">pathping -n example.com</code></td></tr>
+<tr><td><code>nslookup</code></td><td>DNS query for a record type against a chosen server</td><td><code class="copy">nslookup -type=mx example.com 1.1.1.1</code></td></tr>
+<tr><td><code>netstat -ano</code></td><td>Listening ports with PIDs</td><td><code class="copy">netstat -ano | findstr LISTENING</code></td></tr>
+<tr><td><code>netstat -anob</code></td><td>Connections with the executable name (run elevated)</td><td><code class="copy">netstat -anob</code></td></tr>
+<tr><td><code>route print</code></td><td>Routing table</td><td><code class="copy">route print -4</code></td></tr>
+<tr><td><code>route add -p</code></td><td>Add a persistent static route</td><td><code class="copy">route -p add 10.20.0.0 mask 255.255.0.0 10.0.0.254</code></td></tr>
+<tr><td><code>arp -a</code></td><td>ARP cache, IP to MAC</td><td><code class="copy">arp -a</code></td></tr>
+<tr><td><code>getmac</code></td><td>MAC address of every adapter</td><td><code class="copy">getmac /v</code></td></tr>
+<tr><td><code>netsh interface ipv4 show</code></td><td>IP configuration per interface</td><td><code class="copy">netsh interface ipv4 show config</code></td></tr>
+<tr><td><code>netsh interface ipv4 set address</code></td><td>Set a static address and gateway</td><td><code class="copy">netsh interface ipv4 set address name="Ethernet" static 10.0.0.20 255.255.255.0 10.0.0.1</code></td></tr>
+<tr><td><code>netsh interface ipv4 set dnsservers</code></td><td>Set the DNS server</td><td><code class="copy">netsh interface ipv4 set dnsservers name="Ethernet" static 10.0.0.10 primary</code></td></tr>
+<tr><td><code>netsh advfirewall show</code></td><td>Firewall state for every profile</td><td><code class="copy">netsh advfirewall show allprofiles state</code></td></tr>
+<tr><td><code>netsh advfirewall firewall add rule</code></td><td>Allow an inbound TCP port</td><td><code class="copy">netsh advfirewall firewall add rule name="Web HTTPS" dir=in action=allow protocol=TCP localport=443</code></td></tr>
+<tr><td><code>netsh wlan show profile</code></td><td>Saved Wi-Fi profile, including the key (run elevated)</td><td><code class="copy">netsh wlan show profile name="Office" key=clear</code></td></tr>
+<tr><td><code>netsh winhttp show proxy</code></td><td>System proxy used by services</td><td><code class="copy">netsh winhttp show proxy</code></td></tr>
+<tr><td><code>netsh trace</code></td><td>Packet capture without installing anything (<code>netsh trace stop</code> ends it)</td><td><code class="copy">netsh trace start capture=yes tracefile=C:\Temp\capture.etl maxsize=512</code></td></tr>
+<tr><td><code>netsh winsock reset</code></td><td>Reset the network stack, then reboot</td><td><code class="copy">netsh winsock reset &amp; netsh int ip reset</code></td></tr>
+<tr><td><code>net use</code></td><td>Map a drive with a prompted password (<code>net use Z: /delete</code> removes it)</td><td><code class="copy">net use Z: \\fs01\Data * /user:CORP\jdoe /persistent:yes</code></td></tr>
+<tr><td><code>net share</code></td><td>List shares, or create one</td><td><code class="copy">net share Data=D:\Data /grant:CORP\Staff,CHANGE</code></td></tr>
+<tr><td><code>net view</code></td><td>Shares offered by a server</td><td><code class="copy">net view \\fs01 /all</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Built-in curl.exe and tar</h3>
+<p>Both ship with Windows 10 and 11 and Windows Server 2019 and later.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>curl -I</code></td><td>Show HTTP response headers only</td><td><code class="copy">curl -I https://example.com</code></td></tr>
+<tr><td><code>curl -L -o</code></td><td>Download a file, following redirects</td><td><code class="copy">curl -L -o tool.zip https://example.com/tool.zip</code></td></tr>
+<tr><td><code>curl -d @file</code></td><td>POST a JSON file to an API</td><td><code class="copy">curl -X POST -H "Content-Type: application/json" -d @body.json https://api.example.com/items</code></td></tr>
+<tr><td><code>curl -v</code></td><td>Verbose TLS handshake and headers for troubleshooting</td><td><code class="copy">curl -v https://intranet.corp.example.com</code></td></tr>
+<tr><td><code>tar -a -cf</code></td><td>Create a zip file (the format follows the extension)</td><td><code class="copy">tar -a -cf site.zip site</code></td></tr>
+<tr><td><code>tar -xf</code></td><td>Extract zip, tar, tar.gz and other archives into a folder</td><td><code class="copy">mkdir out &amp; tar -xf site.zip -C out</code></td></tr>
+<tr><td><code>tar -tf</code></td><td>List the contents of an archive</td><td><code class="copy">tar -tf backup.tar.gz</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="users-and-groups">
+<h2 class="panel-title">Users and Groups</h2>
+<p class="panel-lead">Identity, local accounts and domain lookups with whoami and net.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>whoami</code></td><td>Current user as DOMAIN\user</td><td><code class="copy">whoami</code></td></tr>
+<tr><td><code>whoami /all</code></td><td>User SID, groups, integrity level and privileges</td><td><code class="copy">whoami /all</code></td></tr>
+<tr><td><code>whoami /groups</code></td><td>Group memberships and the integrity level</td><td><code class="copy">whoami /groups</code></td></tr>
+<tr><td><code>whoami /priv</code></td><td>Privileges of the current token</td><td><code class="copy">whoami /priv</code></td></tr>
+<tr><td><code>net user</code></td><td>List local accounts, or show one in detail</td><td><code class="copy">net user labadmin</code></td></tr>
+<tr><td><code>net user /add</code></td><td>Create a local account, prompting for the password</td><td><code class="copy">net user labadmin * /add</code></td></tr>
+<tr><td><code>net user /active</code></td><td>Disable or enable an account</td><td><code class="copy">net user Guest /active:no</code></td></tr>
+<tr><td><code>net user /delete</code></td><td>Delete a local account</td><td><code class="copy">net user olduser /delete</code></td></tr>
+<tr><td><code>net localgroup</code></td><td>Members of a local group</td><td><code class="copy">net localgroup Administrators</code></td></tr>
+<tr><td><code>net localgroup /add</code></td><td>Add a user to a local group</td><td><code class="copy">net localgroup "Remote Desktop Users" CORP\jdoe /add</code></td></tr>
+<tr><td><code>net user /domain</code></td><td>Domain account details, including last logon and groups</td><td><code class="copy">net user jdoe /domain</code></td></tr>
+<tr><td><code>net group /domain</code></td><td>Members of a domain group</td><td><code class="copy">net group "Domain Admins" /domain</code></td></tr>
+<tr><td><code>net accounts</code></td><td>Password and lockout policy (add <code>/domain</code> for the domain)</td><td><code class="copy">net accounts</code></td></tr>
+<tr><td><code>net session</code></td><td>Sessions on this server. Also a quick check for elevation</td><td><code class="copy">net session &gt;nul 2&gt;&amp;1 &amp;&amp; echo Elevated || echo Not elevated</code></td></tr>
+<tr><td><code>cmdkey /list</code></td><td>Saved credentials in Credential Manager</td><td><code class="copy">cmdkey /list</code></td></tr>
+<tr><td><code>klist</code></td><td>Kerberos tickets of this logon session (<code>klist purge</code> clears them)</td><td><code class="copy">klist</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="system-information">
+<h2 class="panel-title">System Information</h2>
+<p class="panel-lead">OS build, hardware, drivers, time and boot configuration.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>systeminfo</code></td><td>OS, build, boot time, hotfixes and domain</td><td><code class="copy">systeminfo | findstr /b /c:"OS Name" /c:"OS Version" /c:"System Boot Time"</code></td></tr>
+<tr><td><code>hostname</code></td><td>Computer name</td><td><code class="copy">hostname</code></td></tr>
+<tr><td><code>ver</code></td><td>Windows version and build number</td><td><code class="copy">ver</code></td></tr>
+<tr><td><code>driverquery</code></td><td>Installed drivers, with signature status using <code>/si</code></td><td><code class="copy">driverquery /v /fo csv &gt; C:\IR\drivers.csv</code></td></tr>
+<tr><td><code>msinfo32 /report</code></td><td>Full system report to a text file</td><td><code class="copy">msinfo32 /report C:\Temp\msinfo.txt</code></td></tr>
+<tr><td><code>fsutil volume diskfree</code></td><td>Free space on a volume</td><td><code class="copy">fsutil volume diskfree C:</code></td></tr>
+<tr><td><code>w32tm /query</code></td><td>Time source and sync status (<code>w32tm /resync</code> forces a sync)</td><td><code class="copy">w32tm /query /status</code></td></tr>
+<tr><td><code>date /t</code></td><td>Print the date without a prompt (<code>time /t</code> for the time)</td><td><code class="copy">date /t &amp; time /t</code></td></tr>
+<tr><td><code>bcdedit</code></td><td>Boot configuration entries (run elevated)</td><td><code class="copy">bcdedit /enum</code></td></tr>
+<tr><td><code>reagentc /info</code></td><td>Status of the Windows Recovery Environment</td><td><code class="copy">reagentc /info</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>WMIC is gone: use PowerShell CIM</h3>
+<div class="callout callout-warning"><p><strong>Legacy:</strong> <code>wmic</code> was deprecated for years and is now removed from supported Windows 11 releases, without a Feature on Demand to add it back. WMI itself still works. Old scripts should call PowerShell with <code>Get-CimInstance</code> instead. Avoid <code>Win32_Product</code>: querying it is slow and triggers MSI consistency checks.</p></div>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>wmic os get caption,version</code></td><td>OS name and version</td><td><code class="copy">powershell -NoProfile -Command "Get-CimInstance Win32_OperatingSystem | Select-Object Caption,Version,LastBootUpTime"</code></td></tr>
+<tr><td><code>wmic process get name,commandline</code></td><td>Processes with command lines and parent PID</td><td><code class="copy">powershell -NoProfile -Command "Get-CimInstance Win32_Process | Select-Object Name,ProcessId,ParentProcessId,CommandLine"</code></td></tr>
+<tr><td><code>wmic service get name,pathname</code></td><td>Service binaries and accounts</td><td><code class="copy">powershell -NoProfile -Command "Get-CimInstance Win32_Service | Select-Object Name,StartName,PathName"</code></td></tr>
+<tr><td><code>wmic qfe list</code></td><td>Installed updates</td><td><code class="copy">powershell -NoProfile -Command "Get-HotFix | Sort-Object InstalledOn"</code></td></tr>
+<tr><td><code>wmic bios get serialnumber</code></td><td>Device serial number</td><td><code class="copy">powershell -NoProfile -Command "(Get-CimInstance Win32_BIOS).SerialNumber"</code></td></tr>
+<tr><td><code>wmic logicaldisk get caption,freespace</code></td><td>Drives and free space</td><td><code class="copy">powershell -NoProfile -Command "Get-CimInstance Win32_LogicalDisk | Select-Object DeviceID,FreeSpace,Size"</code></td></tr>
+<tr><td><code>wmic product get name</code></td><td>Installed applications, without Win32_Product</td><td><code class="copy">winget list</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="event-logs">
+<h2 class="panel-title">Event Logs</h2>
+<p class="panel-lead">Query, export and size logs with wevtutil.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>wevtutil el</code></td><td>List log names</td><td><code class="copy">wevtutil el | findstr /i "powershell sysmon defender"</code></td></tr>
+<tr><td><code>wevtutil gli</code></td><td>Size, record count and last write of a log</td><td><code class="copy">wevtutil gli Security</code></td></tr>
+<tr><td><code>wevtutil qe</code></td><td>Newest 20 events as text</td><td><code class="copy">wevtutil qe System /c:20 /rd:true /f:text</code></td></tr>
+<tr><td><code>wevtutil qe /q: EventID</code></td><td>Failed logons (4625) with an XPath query</td><td><code class="copy">wevtutil qe Security /q:"*[System[(EventID=4625)]]" /c:20 /rd:true /f:text</code></td></tr>
+<tr><td><code>wevtutil qe /q: timediff</code></td><td>New services (7045) in the last 24 hours</td><td><code class="copy">wevtutil qe System /q:"*[System[(EventID=7045) and TimeCreated[timediff(@SystemTime) &lt;= 86400000]]]" /f:text</code></td></tr>
+<tr><td><code>wevtutil epl</code></td><td>Export a log to .evtx for offline analysis</td><td><code class="copy">wevtutil epl Security C:\IR\Security.evtx</code></td></tr>
+<tr><td><code>wevtutil sl /ms:</code></td><td>Set the maximum log size, here 1 GB</td><td><code class="copy">wevtutil sl Security /ms:1073741824</code></td></tr>
+<tr><td><code>wevtutil cl</code></td><td>Clear a log. Export first. Clearing Security writes event 1102</td><td><code class="copy">wevtutil cl Application</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="registry">
+<h2 class="panel-title">Registry</h2>
+<p class="panel-lead">Read, change, back up and load hives with reg.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>reg query</code></td><td>Autostart entries for all users</td><td><code class="copy">reg query HKLM\Software\Microsoft\Windows\CurrentVersion\Run</code></td></tr>
+<tr><td><code>reg query /s /f</code></td><td>Search keys, value names and data below a key</td><td><code class="copy">reg query HKCU\Software /s /f "proxy"</code></td></tr>
+<tr><td><code>reg add</code></td><td>Create or change a value</td><td><code class="copy">reg add HKCU\Software\Lab /v Mode /t REG_DWORD /d 1 /f</code></td></tr>
+<tr><td><code>reg delete</code></td><td>Delete a value (leave out <code>/v</code> to delete the key)</td><td><code class="copy">reg delete HKCU\Software\Lab /v Mode /f</code></td></tr>
+<tr><td><code>reg export</code></td><td>Back up a key to a .reg file</td><td><code class="copy">reg export HKLM\Software\Vendor C:\Backup\vendor.reg /y</code></td></tr>
+<tr><td><code>reg import</code></td><td>Import a .reg file</td><td><code class="copy">reg import C:\Backup\vendor.reg</code></td></tr>
+<tr><td><code>reg save</code></td><td>Save a hive as a binary file (run elevated)</td><td><code class="copy">reg save HKLM\SOFTWARE C:\Backup\software.hiv /y</code></td></tr>
+<tr><td><code>reg load</code></td><td>Mount an offline hive, such as another user's NTUSER.DAT (<code>reg unload</code> detaches it)</td><td><code class="copy">reg load HKU\Offline D:\Users\jdoe\NTUSER.DAT</code></td></tr>
+<tr><td><code>reg query \\host</code></td><td>Read the registry of a remote computer (Remote Registry service required)</td><td><code class="copy">reg query \\SRV01\HKLM\Software\Microsoft\Windows\CurrentVersion\Run</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="hashing-and-certutil">
+<h2 class="panel-title">Hashing and certutil</h2>
+<p class="panel-lead">File hashes, Base64 and certificate checks with certutil.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>certutil -hashfile</code></td><td>Hash a file with MD5, SHA1, SHA256 or SHA512</td><td><code class="copy">certutil -hashfile installer.iso SHA256</code></td></tr>
+<tr><td><code>certutil -hashfile with findstr</code></td><td>Print only the hash line, for scripts</td><td><code class="copy">certutil -hashfile installer.iso SHA256 | findstr /v /i "hash certutil"</code></td></tr>
+<tr><td><code>certutil -encode</code></td><td>Base64 encode a file (<code>-decode</code> reverses)</td><td><code class="copy">certutil -encode report.pdf report.b64</code></td></tr>
+<tr><td><code>certutil -dump</code></td><td>Show the fields of a certificate file</td><td><code class="copy">certutil -dump server.cer</code></td></tr>
+<tr><td><code>certutil -store</code></td><td>Certificates in the machine Personal store</td><td><code class="copy">certutil -store My</code></td></tr>
+<tr><td><code>certutil -verify</code></td><td>Build the chain and check revocation</td><td><code class="copy">certutil -verify -urlfetch server.cer</code></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout"><p><strong>Detection note:</strong> <code>certutil -urlcache</code> and <code>-decode</code> are well known living off the land techniques. Defenders alert on them, so use <code>curl.exe</code> for downloads.</p></div>
+</section>
+<section class="panel" id="repair">
+<h2 class="panel-title">System Repair</h2>
+<p class="panel-lead">Repair the component store with DISM first, then system files with sfc, then the disk with chkdsk.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>DISM /CheckHealth</code></td><td>Quick check whether the image is flagged as corrupt</td><td><code class="copy">DISM /Online /Cleanup-Image /CheckHealth</code></td></tr>
+<tr><td><code>DISM /ScanHealth</code></td><td>Deeper scan of the component store</td><td><code class="copy">DISM /Online /Cleanup-Image /ScanHealth</code></td></tr>
+<tr><td><code>DISM /RestoreHealth</code></td><td>Repair the component store from Windows Update</td><td><code class="copy">DISM /Online /Cleanup-Image /RestoreHealth</code></td></tr>
+<tr><td><code>DISM /Source</code></td><td>Repair from mounted install media when there is no internet</td><td><code class="copy">DISM /Online /Cleanup-Image /RestoreHealth /Source:wim:D:\sources\install.wim:1 /LimitAccess</code></td></tr>
+<tr><td><code>DISM /StartComponentCleanup</code></td><td>Remove superseded components to free space</td><td><code class="copy">DISM /Online /Cleanup-Image /StartComponentCleanup</code></td></tr>
+<tr><td><code>DISM /Get-Features</code></td><td>Optional features and their state</td><td><code class="copy">DISM /Online /Get-Features /Format:Table</code></td></tr>
+<tr><td><code>DISM /Enable-Feature</code></td><td>Turn an optional feature on</td><td><code class="copy">DISM /Online /Enable-Feature /FeatureName:Microsoft-Windows-Subsystem-Linux /All</code></td></tr>
+<tr><td><code>sfc /scannow</code></td><td>Verify and repair protected system files</td><td><code class="copy">sfc /scannow</code></td></tr>
+<tr><td><code>sfc /verifyonly</code></td><td>Verify without repairing</td><td><code class="copy">sfc /verifyonly</code></td></tr>
+<tr><td><code>CBS.log</code></td><td>Extract what sfc found and fixed</td><td><code class="copy">findstr /c:"[SR]" %windir%\Logs\CBS\CBS.log &gt; "%userprofile%\Desktop\sfcdetails.txt"</code></td></tr>
+<tr><td><code>chkdsk /scan</code></td><td>Online scan of an NTFS volume, no reboot</td><td><code class="copy">chkdsk C: /scan</code></td></tr>
+<tr><td><code>chkdsk /f</code></td><td>Fix file system errors (for C: it runs at the next boot)</td><td><code class="copy">chkdsk D: /f</code></td></tr>
+<tr><td><code>chkdsk /r</code></td><td>Also locate bad sectors. Slow on large disks</td><td><code class="copy">chkdsk C: /r</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="group-policy">
+<h2 class="panel-title">Group Policy and Audit Policy</h2>
+<p class="panel-lead">Refresh and report applied policy, and check what is being audited.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>gpupdate /force</code></td><td>Reapply all computer and user policy now</td><td><code class="copy">gpupdate /force</code></td></tr>
+<tr><td><code>gpupdate /target</code></td><td>Refresh only the computer part</td><td><code class="copy">gpupdate /target:computer /force</code></td></tr>
+<tr><td><code>gpresult /r</code></td><td>Summary of applied GPOs and group memberships</td><td><code class="copy">gpresult /r</code></td></tr>
+<tr><td><code>gpresult /scope</code></td><td>Computer policy only (run elevated)</td><td><code class="copy">gpresult /scope computer /r</code></td></tr>
+<tr><td><code>gpresult /h</code></td><td>Full HTML report</td><td><code class="copy">gpresult /h C:\Temp\gpresult.html /f</code></td></tr>
+<tr><td><code>gpresult /s /user</code></td><td>Report for another user on a remote computer</td><td><code class="copy">gpresult /s PC01 /user CORP\jdoe /h C:\Temp\pc01.html</code></td></tr>
+<tr><td><code>auditpol /get</code></td><td>Effective audit policy for every subcategory</td><td><code class="copy">auditpol /get /category:*</code></td></tr>
+<tr><td><code>auditpol /set</code></td><td>Turn on process creation auditing (event 4688)</td><td><code class="copy">auditpol /set /subcategory:"Process Creation" /success:enable</code></td></tr>
+<tr><td><code>secedit /export</code></td><td>Export local security policy to review</td><td><code class="copy">secedit /export /cfg C:\Temp\secpol.inf</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="bitlocker">
+<h2 class="panel-title">BitLocker and Encryption</h2>
+<p class="panel-lead">manage-bde for BitLocker, cipher for EFS and wiping free space. Run elevated.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>manage-bde -status</code></td><td>Encryption state, method and protection of every volume</td><td><code class="copy">manage-bde -status</code></td></tr>
+<tr><td><code>manage-bde -protectors -get</code></td><td>Protectors and the recovery password with its ID</td><td><code class="copy">manage-bde -protectors -get C:</code></td></tr>
+<tr><td><code>manage-bde -protectors -add</code></td><td>Add a recovery password protector</td><td><code class="copy">manage-bde -protectors -add C: -RecoveryPassword</code></td></tr>
+<tr><td><code>manage-bde -on</code></td><td>Encrypt used space with XTS-AES 256 and a recovery password</td><td><code class="copy">manage-bde -on C: -UsedSpaceOnly -EncryptionMethod xts_aes256 -RecoveryPassword</code></td></tr>
+<tr><td><code>manage-bde -protectors -adbackup</code></td><td>Escrow a recovery password to Active Directory</td><td><code class="copy">manage-bde -protectors -adbackup C: -id {RECOVERY-PASSWORD-ID}</code></td></tr>
+<tr><td><code>manage-bde -protectors -disable</code></td><td>Suspend for one reboot, for firmware updates (<code>-enable</code> resumes)</td><td><code class="copy">manage-bde -protectors -disable C: -RebootCount 1</code></td></tr>
+<tr><td><code>manage-bde -unlock</code></td><td>Unlock a data drive with the recovery password</td><td><code class="copy">manage-bde -unlock E: -RecoveryPassword 111111-222222-333333-444444-555555-666666-777777-888888</code></td></tr>
+<tr><td><code>manage-bde -lock</code></td><td>Lock a data drive again</td><td><code class="copy">manage-bde -lock E:</code></td></tr>
+<tr><td><code>manage-bde -off</code></td><td>Decrypt a volume</td><td><code class="copy">manage-bde -off E:</code></td></tr>
+<tr><td><code>cipher /e</code></td><td>Encrypt a folder with EFS for the current user</td><td><code class="copy">cipher /e /s:C:\Users\jdoe\Private</code></td></tr>
+<tr><td><code>cipher /w</code></td><td>Overwrite free space so deleted files cannot be recovered</td><td><code class="copy">cipher /w:D:\</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="power-and-sessions">
+<h2 class="panel-title">Power and Sessions</h2>
+<p class="panel-lead">Shutdown, restart, sign out, run as another user and manage RDP sessions.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>shutdown /r</code></td><td>Restart now</td><td><code class="copy">shutdown /r /t 0</code></td></tr>
+<tr><td><code>shutdown /s</code></td><td>Shut down in 60 seconds with a message (<code>shutdown /a</code> cancels)</td><td><code class="copy">shutdown /s /t 60 /c "Maintenance shutdown"</code></td></tr>
+<tr><td><code>shutdown /m</code></td><td>Restart a remote computer</td><td><code class="copy">shutdown /r /m \\SRV01 /t 30 /c "Patch reboot"</code></td></tr>
+<tr><td><code>shutdown /r /o</code></td><td>Restart into the advanced startup menu</td><td><code class="copy">shutdown /r /o /t 0</code></td></tr>
+<tr><td><code>shutdown /r /fw</code></td><td>Restart into UEFI firmware settings</td><td><code class="copy">shutdown /r /fw /t 0</code></td></tr>
+<tr><td><code>logoff</code></td><td>Sign out this session, or a session by ID</td><td><code class="copy">logoff</code></td></tr>
+<tr><td><code>rundll32 LockWorkStation</code></td><td>Lock the screen</td><td><code class="copy">rundll32.exe user32.dll,LockWorkStation</code></td></tr>
+<tr><td><code>runas</code></td><td>Start a program as another user</td><td><code class="copy">runas /user:CORP\admin cmd</code></td></tr>
+<tr><td><code>runas /netonly</code></td><td>Use other credentials only for network access, for example a separate admin account</td><td><code class="copy">runas /netonly /user:CORP\admin "mmc dsa.msc"</code></td></tr>
+<tr><td><code>query user</code></td><td>Signed in users and idle time, local or remote (<code>quser</code>)</td><td><code class="copy">query user /server:SRV01</code></td></tr>
+<tr><td><code>query session</code></td><td>Sessions with IDs and state (<code>qwinsta</code>)</td><td><code class="copy">query session /server:SRV01</code></td></tr>
+<tr><td><code>logoff ID /server</code></td><td>Sign out a disconnected session on a server</td><td><code class="copy">logoff 3 /server:SRV01</code></td></tr>
+<tr><td><code>msg</code></td><td>Send a message to every session</td><td><code class="copy">msg * "Server restarts at 18:00"</code></td></tr>
+<tr><td><code>mstsc</code></td><td>Open Remote Desktop to a host</td><td><code class="copy">mstsc /v:SRV01</code></td></tr>
+<tr><td><code>powercfg /a</code></td><td>Sleep states this hardware supports</td><td><code class="copy">powercfg /a</code></td></tr>
+<tr><td><code>powercfg /batteryreport</code></td><td>Battery health report as HTML</td><td><code class="copy">powercfg /batteryreport /output C:\Temp\battery.html</code></td></tr>
+<tr><td><code>powercfg /requests</code></td><td>What keeps the machine awake (run elevated)</td><td><code class="copy">powercfg /requests</code></td></tr>
+<tr><td><code>powercfg /lastwake</code></td><td>What woke the computer last</td><td><code class="copy">powercfg /lastwake</code></td></tr>
+<tr><td><code>powercfg /hibernate</code></td><td>Turn hibernation off and delete hiberfil.sys</td><td><code class="copy">powercfg /hibernate off</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="batch-scripting">
+<h2 class="panel-title">Batch Scripting Essentials</h2>
+<p class="panel-lead">Variables, conditions, loops, error codes and redirection for .cmd and .bat files.</p>
+<div class="callout callout-warning"><p><strong>For loop variables:</strong> type <code>%i</code> at the prompt, but <code>%%i</code> inside a batch file. The same command fails if you copy it between the two without changing this.</p></div>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Command</th><th>Purpose</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td><code>@echo off</code></td><td>Do not print each command as it runs (first line of most scripts)</td><td><code class="copy">@echo off</code></td></tr>
+<tr><td><code>setlocal</code></td><td>Keep variable changes inside the script (<code>endlocal</code> ends the scope)</td><td><code class="copy">setlocal</code></td></tr>
+<tr><td><code>set "NAME=value"</code></td><td>Set a variable. Quotes guard against trailing spaces. No spaces around =</td><td><code class="copy">set "LOGDIR=C:\Logs"</code></td></tr>
+<tr><td><code>set /a</code></td><td>Integer arithmetic</td><td><code class="copy">set /a COUNT+=1</code></td></tr>
+<tr><td><code>set /p</code></td><td>Ask the user for a value</td><td><code class="copy">set /p TARGET=Host to test: </code></td></tr>
+<tr><td><code>setx</code></td><td>Save a user variable permanently. Only new windows see it</td><td><code class="copy">setx APP_ENV production</code></td></tr>
+<tr><td><code>%1 %*</code></td><td>First argument, or all arguments</td><td><code class="copy">echo First: %1 All: %*</code></td></tr>
+<tr><td><code>%~dp0</code></td><td>Folder of the running script, ending in a backslash</td><td><code class="copy">cd /d "%~dp0"</code></td></tr>
+<tr><td><code>%~nx1</code></td><td>File name and extension of the first argument (<code>%~f1</code> is the full path)</td><td><code class="copy">echo Processing %~nx1</code></td></tr>
+<tr><td><code>if exist</code></td><td>Test whether a file or folder exists</td><td><code class="copy">if not exist "%LOGDIR%" mkdir "%LOGDIR%"</code></td></tr>
+<tr><td><code>if /i ==</code></td><td>Case insensitive string compare</td><td><code class="copy">if /i "%~1"=="--help" goto :usage</code></td></tr>
+<tr><td><code>if defined</code></td><td>Test whether a variable is set</td><td><code class="copy">if not defined TARGET set "TARGET=127.0.0.1"</code></td></tr>
+<tr><td><code>%errorlevel%</code></td><td>Exit code of the last command. Stop the script on failure</td><td><code class="copy">if %errorlevel% neq 0 exit /b %errorlevel%</code></td></tr>
+<tr><td><code>if errorlevel N</code></td><td>True when the exit code is N or higher, not only equal</td><td><code class="copy">if errorlevel 1 echo Something failed</code></td></tr>
+<tr><td><code>&amp;&amp; and ||</code></td><td>Run the next command only on success, or only on failure</td><td><code class="copy">ping -n 1 -w 500 10.0.0.1 &gt;nul &amp;&amp; echo up || echo down</code></td></tr>
+<tr><td><code>&amp;</code></td><td>Run commands one after another on one line</td><td><code class="copy">cd /d C:\Logs &amp; dir</code></td></tr>
+<tr><td><code>goto :label</code></td><td>Jump to a label (<code>goto :eof</code> ends the script or a subroutine)</td><td><code class="copy">goto :cleanup</code></td></tr>
+<tr><td><code>call :label</code></td><td>Run a subroutine with arguments and come back</td><td><code class="copy">call :log "Backup started"</code></td></tr>
+<tr><td><code>call file.cmd</code></td><td>Run another batch file and return (without call, control never comes back)</td><td><code class="copy">call "%~dp0settings.cmd"</code></td></tr>
+<tr><td><code>exit /b</code></td><td>Leave the script or subroutine with an exit code, without closing the window</td><td><code class="copy">exit /b 0</code></td></tr>
+<tr><td><code>enabledelayedexpansion</code></td><td>Read variables with <code>!var!</code> so values change inside loops and blocks</td><td><code class="copy">setlocal enabledelayedexpansion</code></td></tr>
+<tr><td><code>for</code></td><td>Loop over files (at the prompt)</td><td><code class="copy">for %i in (*.log) do @echo %i</code></td></tr>
+<tr><td><code>for %%i</code></td><td>The same loop inside a batch file</td><td><code class="copy">for %%i in (*.log) do echo %%i</code></td></tr>
+<tr><td><code>for /l</code></td><td>Count from start to end, here a ping sweep of a /24</td><td><code class="copy">for /l %i in (1,1,254) do @ping -n 1 -w 200 10.0.0.%i | find "TTL="</code></td></tr>
+<tr><td><code>for /r</code></td><td>Walk a folder tree</td><td><code class="copy">for /r C:\Logs %i in (*.log) do @echo %~zi %i</code></td></tr>
+<tr><td><code>for /d</code></td><td>Loop over folders</td><td><code class="copy">for /d %i in (C:\Users\*) do @echo %i</code></td></tr>
+<tr><td><code>for /f tokens</code></td><td>Split lines of a file into fields</td><td><code class="copy">for /f "tokens=1,2 delims=," %a in (users.csv) do @echo %a is %b</code></td></tr>
+<tr><td><code>for /f command</code></td><td>Capture the output of a command into a variable</td><td><code class="copy">for /f "delims=" %a in ('hostname') do @set "HOST=%a"</code></td></tr>
+<tr><td><code>&gt; and &gt;&gt;</code></td><td>Write output to a file, or append to it</td><td><code class="copy">ipconfig /all &gt;&gt; C:\IR\network.txt</code></td></tr>
+<tr><td><code>2&gt;&amp;1</code></td><td>Send errors to the same place as output</td><td><code class="copy">robocopy C:\Source D:\Backup /e &gt; C:\Logs\copy.txt 2&gt;&amp;1</code></td></tr>
+<tr><td><code>&gt;nul 2&gt;&amp;1</code></td><td>Discard all output</td><td><code class="copy">del C:\Temp\*.tmp &gt;nul 2&gt;&amp;1</code></td></tr>
+<tr><td><code>&lt;</code></td><td>Read input from a file</td><td><code class="copy">sort &lt; names.txt</code></td></tr>
+<tr><td><code>^</code></td><td>Escape a special character, or continue a command on the next line</td><td><code class="copy">echo Tom ^&amp; Jerry ^&gt; Spike</code></td></tr>
+<tr><td><code>timeout</code></td><td>Wait a number of seconds</td><td><code class="copy">timeout /t 5 /nobreak &gt;nul</code></td></tr>
+<tr><td><code>choice</code></td><td>Ask yes or no, the answer lands in errorlevel</td><td><code class="copy">choice /c yn /m "Continue"</code></td></tr>
+<tr><td><code>pause</code></td><td>Wait for a key press</td><td><code class="copy">pause</code></td></tr>
+</tbody>
+</table>
+</div>
+<h3>Template batch file</h3>
+<p>Delayed expansion, a loop that counts, a subroutine and a checked exit code. <code>%date%</code> and <code>%time%</code> depend on the regional format, so the log name is built in PowerShell.</p>
+<pre><code>@echo off
+setlocal enabledelayedexpansion
+cd /d "%~dp0"
+for /f "delims=" %%a in ('powershell -NoProfile -Command "Get-Date -Format yyyyMMdd-HHmmss"') do set "STAMP=%%a"
+set "LOG=%~dp0backup-%STAMP%.log"
+set /a FILES=0
+for %%f in (*.cfg) do (
+    set /a FILES+=1
+    call :log "Copying %%f as file !FILES!"
+    copy /y "%%f" "D:\Backup\" &gt;nul || goto :failed
+)
+robocopy "C:\Data" "D:\Backup\Data" /e /r:1 /w:1 &gt;&gt; "%LOG%" 2&gt;&amp;1
+if errorlevel 8 goto :failed
+call :log "Done, !FILES! config files copied"
+exit /b 0
+:failed
+call :log "Backup failed with code %errorlevel%"
+exit /b 1
+:log
+echo [%time%] %~1
+echo [%time%] %~1 &gt;&gt; "%LOG%"
+goto :eof</code></pre>
+</section>
+<section class="panel" id="references">
+<h2 class="panel-title">References</h2>
+<p class="panel-lead">Official command reference and a note on safe use.</p>
+<div class="callout callout-danger"><p><strong>Authorization:</strong> use account enumeration, credential and Wi-Fi key commands only on systems you own or are authorized to assess.</p></div>
+<p><a class="link-button" href="https://learn.microsoft.com/windows-server/administration/windows-commands/windows-commands">Windows commands reference</a> <a class="link-button" href="https://learn.microsoft.com/windows-server/administration/windows-commands/robocopy">Robocopy</a> <a class="link-button" href="https://learn.microsoft.com/windows-server/administration/windows-commands/icacls">icacls</a> <a class="link-button" href="https://learn.microsoft.com/windows-server/administration/windows-commands/findstr">findstr</a></p>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

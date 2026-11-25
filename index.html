@@ -1,66 +1,69 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Cyber Epistemology</title>
-<link rel="icon" href="Image/Logo.png" type="image/png" sizes="32x32"/><link rel="icon" href="Image/Logo.png" type="image/png" sizes="192x192"/><link rel="apple-touch-icon" href="Image/Logo.png"/><meta name="theme-color" content="#111"/>
-<style>
-:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--accent1:#3a7bfd;--accent2:#1f4fd6;--glow1:rgba(72,132,255,.55);--glow2:rgba(40,100,255,.35);--btnw:260px;--gap:12px}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{margin:0;font:15px/1.55 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111;text-align:center}
-.bg{position:fixed;inset:0;background:url("Image/Logo.png") center/cover no-repeat;z-index:-2}
-.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.78) 100%);z-index:-1}
-.buttons{position:relative;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:28px}
-.left{display:flex;align-items:center;justify-content:center;width:100%}
-.box{position:relative;width:min(900px,92%);padding:32px 26px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);box-shadow:0 24px 70px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
-.versionWrap{position:absolute;top:10px;right:10px;width:42px;aspect-ratio:1/1;pointer-events:none;user-select:none}
-.versionWrap::after{content:"";position:absolute;inset:-8px;border-radius:16px;background:radial-gradient(80% 60% at 100% 0%,var(--glow1),transparent 60%),radial-gradient(90% 80% at 0% 100%,var(--glow2),transparent 60%);filter:blur(14px);opacity:.55;z-index:-1}
-.versionImg{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 18px rgba(0,0,0,.45))}
-@media(max-width:560px){.versionWrap{width:72px}}
-.h{margin:0 0 10px;font-size:32px;letter-spacing:.2px}
-.p{margin:2px 16px 20px;color:var(--muted)}
-.sectionTitle{margin:12px 0 8px;font-size:13px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);opacity:.9}
-.actions{display:grid;gap:16px;justify-items:center}
-.actions .row{display:flex;flex-wrap:wrap;gap:var(--gap);justify-content:center;align-items:stretch}
-.btn{position:relative;isolation:isolate;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:var(--btnw);min-height:52px;padding:12px 18px;border-radius:16px;text-decoration:none;font-weight:800;letter-spacing:.2px;transition:transform .12s ease,box-shadow .22s ease,filter .22s ease;white-space:nowrap}
-@media(max-width:620px){:root{--btnw:240px}}
-@media(max-width:520px){:root{--btnw:100%}.actions .row{max-width:440px;margin:0 auto}}
-.btn img{width:24px;height:24px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
-.btn::before{content:"";position:absolute;inset:-8px;border-radius:inherit;background:radial-gradient(90% 140% at 50% 0%,var(--glow1),transparent 60%),radial-gradient(120% 120% at 50% 100%,var(--glow2),transparent 60%);filter:blur(12px);opacity:.75;z-index:-1;transition:opacity .22s ease,filter .22s ease}
-.btn:hover{transform:translateY(-1px)}
-.btn:hover::before{opacity:.95;filter:blur(14px)}
-.btn:active{transform:translateY(0)}
-.btn:focus-visible{outline:2px solid rgba(80,150,255,.8);outline-offset:3px;border-radius:20px}
-.btn--primary{color:#ecf3ff;background:linear-gradient(180deg,rgba(90,150,255,.28),rgba(45,95,220,.18));border:1px solid rgba(140,180,255,.5);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 26px rgba(40,100,255,.35),0 0 0 1px rgba(25,70,170,.22);backdrop-filter:blur(10px) saturate(160%);-webkit-backdrop-filter:blur(10px) saturate(160%)}
-.btn--secondary{color:#e7efff;background:linear-gradient(180deg,rgba(72,132,255,.18),rgba(40,100,255,.12));border:1px solid rgba(120,170,255,.45);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 8px 20px rgba(40,100,255,.28)}
-.btn--ghost{color:#cfe0ff;background:rgba(255,255,255,.04);border:1px solid rgba(160,190,255,.28);box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
-.copy{margin-top:10px;font-size:12px;color:var(--muted);opacity:.85}
-hr.line{height:1px;border:0;background:rgba(255,255,255,.12);border-radius:1px;margin:8px 0 6px}
-</style></head><body>
-<div class="bg"></div>
-<div class="buttons">
-<section class="left">
-<div class="box">
-<div class="versionWrap" aria-hidden="true"><img class="versionImg" src="Image/Version.png" alt=""/></div>
-<h1 class="h">Welcome</h1>
-<p class="p">Choose a section to navigate</p>
-<div class="actions" role="navigation" aria-label="Main actions">
-<div class="sectionTitle">Main Categories</div>
-<div class="row">
-<a class="btn btn--primary" href="Data/System_Files_Info.html"><img src="Image/Nav.png" alt="" aria-hidden="true"><span>System Files</span></a>
-<a class="btn btn--secondary" href="Data/Commands.html"><img src="Image/Commands.png" alt="" aria-hidden="true"><span>Commands</span></a>
-<a class="btn btn--secondary" href="Data/Kali_Tools.html"><img src="Image/KaliLinux.png" alt="" aria-hidden="true"><span>Kali Tools</span></a>
-<a class="btn btn--secondary" href="Data/cyber_roadmap.html"><img src="Image/roadmap.png" alt="" aria-hidden="true"><span>Road Map</span></a>
-<a class="btn btn--secondary" href="Data/Cyber_Websites.html"><img src="Image/Awareness.png" alt="" aria-hidden="true"><span>Cyber Websites</span></a>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cyber Epistemology | Practical Cyber Security Knowledge</title>
+<meta name="description" content="Free, practical cyber security reference: system file locations, Bash, PowerShell and CMD commands, Kali tools, a certification roadmap, curated websites and personal security advice.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="Assets/Image/AppleTouchIcon.png">
+<link rel="stylesheet" href="Assets/Style/Site.css">
+<script src="Assets/Script/Site.js" defer></script>
+</head>
+<body data-root="" data-section="home">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<section class="home-hero">
+<span class="version-badge home-version">V3</span>
+<img class="home-logo" src="Assets/Image/Logo.webp" alt="Cyber Epistemology logo" width="190" height="190">
+<div>
+<p class="hero-eyebrow">Cyber security knowledge base</p>
+<h1 class="home-title">Cyber Epistemology</h1>
+<p class="home-tagline">Practical, reviewed knowledge for IT and security work: where systems keep their secrets, the commands you need, the tools to use and the path to grow your skills.</p>
+<div class="search home-search" data-search>
+<label class="search-field"><img src="Assets/Icon/Search.svg" alt=""><input class="search-input" type="search" placeholder="Search commands, paths, tools, certifications" autocomplete="off" spellcheck="false" aria-label="Search the site" aria-controls="home-search-results" aria-expanded="false"><kbd class="search-hint">/</kbd></label>
+<div class="search-results" id="home-search-results" role="listbox" hidden></div>
 </div>
-<hr class="line"/>
-<div class="sectionTitle">Awareness</div>
-<div class="row">
-<a class="btn btn--secondary" href="Data/Maximum_Security.html"><img src="Image/Websites.png" alt="" aria-hidden="true"><span>Cyber Awareness</span></a>
-</div>
-<hr class="line"/>
-<div class="row">
-<a class="btn btn--ghost" href="Data/About.html"><img src="Image/Logo.png" alt="" aria-hidden="true"><span>About Us</span></a>
-</div>
-<div class="copy">© Cyber Epistemology 2025</div>
+<nav class="home-quick" aria-label="Popular pages">
+<a class="sub-nav-link" href="Data/Commands/Bash.html"><img src="Assets/Icon/Bash.png" alt="">Bash</a>
+<a class="sub-nav-link" href="Data/Commands/PS.html"><img src="Assets/Icon/PowerShell.png" alt="">PowerShell</a>
+<a class="sub-nav-link" href="Data/OS/Windows_11.html"><img src="Assets/Icon/Windows11.png" alt="">Windows 11 paths</a>
+<a class="sub-nav-link" href="Data/Kali_Tools.html"><img src="Assets/Icon/KaliLinux.png" alt="">Kali tools</a>
+</nav>
 </div>
 </section>
+<div class="section-heading"><h2>Explore</h2><p>Six sections, all reviewed November 2026</p></div>
+<div class="card-grid card-grid-wide">
+<a class="card" href="Data/System_Files_Info.html"><img class="card-icon" src="Assets/Icon/Folder.png" alt=""><span class="card-title">System Files</span><span class="card-text">High value paths, secrets, persistence and forensic artifacts for Windows, macOS, Linux, Android and iOS.</span><span class="card-meta">7 platforms</span></a>
+<a class="card" href="Data/Commands.html"><img class="card-icon" src="Assets/Icon/Terminal.png" alt=""><span class="card-title">Commands</span><span class="card-text">Cheat sheets for Bash, PowerShell and CMD, grouped by task, with one click copy.</span><span class="card-meta">3 shells</span></a>
+<a class="card" href="Data/Kali_Tools.html"><img class="card-icon" src="Assets/Icon/KaliLinux.png" alt=""><span class="card-title">Kali Tools</span><span class="card-text">The tools that matter in each phase of an assessment, with working example commands.</span><span class="card-meta">By attack phase</span></a>
+<a class="card" href="Data/cyber_roadmap.html"><img class="card-icon" src="Assets/Icon/Roadmap.png" alt=""><span class="card-title">Certification Roadmap</span><span class="card-text">Current certifications by career track and level, from first steps to expert.</span><span class="card-meta">Interactive</span></a>
+<a class="card" href="Data/Cyber_Websites.html"><img class="card-icon" src="Assets/Icon/Globe.png" alt=""><span class="card-title">Cyber Websites</span><span class="card-text">Checked links to labs, CTFs, threat intelligence, sandboxes, OSINT and knowledge bases.</span><span class="card-meta">Links verified</span></a>
+<a class="card" href="Data/Maximum_Security.html"><img class="card-icon" src="Assets/Icon/Awareness.png" alt=""><span class="card-title">Awareness</span><span class="card-text">Personal cyber security that works: passwords, passkeys, phishing, updates, backups and what to do after a click.</span><span class="card-meta">For everyone</span></a>
 </div>
-</body></html>
+<div class="section-heading"><h2>System files by platform</h2><p>Where each operating system keeps what matters</p></div>
+<div class="card-grid card-grid-compact">
+<a class="card" href="Data/OS/Windows_11.html"><img class="card-icon" src="Assets/Icon/Windows11.png" alt=""><span class="card-title">Windows 11</span></a>
+<a class="card" href="Data/OS/Windows_Server.html"><img class="card-icon" src="Assets/Icon/WindowsServer.png" alt=""><span class="card-title">Windows Server</span></a>
+<a class="card" href="Data/OS/macOS.html"><img class="card-icon" src="Assets/Icon/MacOs.png" alt=""><span class="card-title">macOS</span></a>
+<a class="card" href="Data/OS/IOS.html"><img class="card-icon" src="Assets/Icon/Ios.png" alt=""><span class="card-title">iOS</span></a>
+<a class="card" href="Data/OS/Android.html"><img class="card-icon" src="Assets/Icon/Android.png" alt=""><span class="card-title">Android</span></a>
+<a class="card" href="Data/OS/Ubuntu_Server.html"><img class="card-icon" src="Assets/Icon/UbuntuServer.png" alt=""><span class="card-title">Ubuntu Server</span></a>
+<a class="card" href="Data/OS/Kali_Linux.html"><img class="card-icon" src="Assets/Icon/KaliLinux.png" alt=""><span class="card-title">Kali Linux</span></a>
+</div>
+<div class="section-heading"><h2>New in V3</h2><p>What changed since V2</p></div>
+<section class="panel">
+<ul class="checklist">
+<li>Search the whole site from any page. Press <kbd>/</kbd> or <kbd>Ctrl</kbd> <kbd>K</kbd> to start typing.</li>
+<li>Every page reviewed and updated for November 2026, with wrong and outdated entries removed.</li>
+<li>One top bar on every page, a table of contents that follows your scroll, and a filter on each page.</li>
+<li>Copy buttons on commands, tables that stay readable on phones, and much faster loading.</li>
+</ul>
+<div class="button-row"><a class="link-button" href="Data/About.html">About the project</a><a class="link-button" href="https://github.com/emaldos/Cyber-Epistemology">Source on GitHub</a></div>
+</section>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

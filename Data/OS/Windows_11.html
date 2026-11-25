@@ -1,284 +1,289 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Windows 11 — System Files</title>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="32x32"/>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="192x192"/>
-<link rel="apple-touch-icon" href="../../Image/Logo.png"/>
-<meta name="theme-color" content="#111"/>
-<style>
-:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--line:rgba(255,255,255,.10);--blue:#2196f3}
-*{box-sizing:border-box}
-html,body{height:100%}
-html{scroll-behavior:smooth}
-body{margin:0;font:16px/1.55 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111}
-.bg{position:fixed;inset:0;background:url("../../Image/Logo.png") center/cover no-repeat;z-index:-2}
-.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.80) 100%);z-index:-1}
-.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
-.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
-.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
-.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
-.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
-.homepill span{font-weight:700;letter-spacing:.15px}
-.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
-.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);cursor:pointer;user-select:none;flex:0 0 auto}
-.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
-.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0;max-width:none}
-.tabs.overflow{overflow:auto}
-.tabs::-webkit-scrollbar{display:none}
-.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
-.tab:hover{opacity:1}
-.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
-.tab.active{color:var(--blue)}
-.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
-.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
-.shell .h,.shell .sub{text-align:center}
-.page{position:relative;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:96px 20px 28px}
-.shell{width:min(1200px,96%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
-.h{margin:0 0 2px;font-size:28px;font-weight:800;letter-spacing:.2px}
-.sub{margin:0 0 12px;color:var(--muted)}
-.quicknav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 18px}
-.qbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-weight:700}
-.qbtn:hover{background:rgba(255,255,255,.1)}
-.section{margin:22px 0 0;scroll-margin-top:90px}
-.section .title{margin:0 0 10px;font-size:20px;font-weight:800}
-.card{border:1px solid var(--tileBorder);background:var(--tile);border-radius:18px;box-shadow:0 12px 28px rgba(0,0,0,.3);overflow:hidden}
-.codewrap{padding:0;margin:0;border-top-left-radius:18px;border-top-right-radius:18px}
-pre{margin:0;max-height:480px;overflow:auto;padding:18px;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;background:rgba(0,0,0,.35);border-top-left-radius:18px;border-top-right-radius:18px;border-bottom:1px solid var(--line);white-space:pre}
-pre code{color:#e6eaff}
-.tablewrap{width:100%;overflow:auto}
-table{width:100%;border-collapse:separate;border-spacing:0}
-thead th{position:sticky;top:0;background:rgba(20,24,44,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);text-align:left;padding:12px 14px;font-size:14px}
-tbody td{border-bottom:1px solid var(--line);padding:12px 14px;vertical-align:top}
-tbody tr:hover{background:rgba(255,255,255,.04)}
-th:first-child,td:first-child{border-left:none}
-th:last-child,td:last-child{border-right:none}
-th,td{word-break:break-word;overflow-wrap:anywhere}
-caption{caption-side:bottom;color:var(--muted);padding:10px 4px 0}
-.kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.06);font:12px/1.2 ui-monospace,monospace}
-.bycat caption{caption-side:top;padding:10px 4px 6px;font-weight:800}
-.bycat .card+.card{margin-top:14px}
-.bycat thead th{background:linear-gradient(180deg,rgba(33,150,243,.18),rgba(33,150,243,.14));backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid rgba(33,150,243,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);color:var(--text)}
-.bycat table{table-layout:fixed;width:100%}
-.bycat th:nth-child(1),.bycat td:nth-child(1){width:220px}
-.bycat th:nth-child(2),.bycat td:nth-child(2){width:420px}
-.bycat th:nth-child(3),.bycat td:nth-child(3){width:auto}
-@media(max-width:900px){.bycat th:nth-child(1),.bycat td:nth-child(1){width:180px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:300px}}
-@media(max-width:640px){.tab{padding:6px 10px}.shell{width:98%}.bycat th:nth-child(1),.bycat td:nth-child(1){width:150px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:240px}}
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Windows 11 | Cyber Epistemology</title>
+<meta name="description" content="Windows 11 high value paths for defenders and testers: credentials and DPAPI, persistence, event logs and forensic artifacts, remote access, browsers, system configuration, triage commands and a hardening checklist.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../../Assets/Image/AppleTouchIcon.png">
+<link rel="stylesheet" href="../../Assets/Style/Site.css">
+<script src="../../Assets/Script/Site.js" defer></script>
 </head>
-<body>
-<div class="bg"></div>
-<nav class="topbar" id="topbar">
-  <div class="nav">
-    <a class="homepill" href="../../index.html" title="Home" aria-label="Home"><img src="../../Image/Home.png" alt="Home"/><span>Home</span></a>
-    <div class="tabswrap">
-      <button class="navbtn" id="leftbtn" aria-label="Prev"><span>&lt;</span></button>
-      <div class="tabs" id="tabs">
-        <a class="tab" href="../System_Files_Info.html"><img src="../../Image/Nav.png" alt="System Files"/>System Files</a>
-        <a class="tab" href="Kali_Linux.html"><img src="../../Image/KaliLinux.png" alt="Kali"/>Kali</a>
-        <a class="tab" href="Ubuntu_Server.html"><img src="../../Image/UbuntuServer.png" alt="Ubuntu Server"/>Ubuntu Server</a>
-        <a class="tab" href="Windows_11.html"><img src="../../Image/Win11.png" alt="Windows 11"/>Windows 11</a>
-        <a class="tab" href="Windows_Server.html"><img src="../../Image/WinServer.png" alt="Windows Server"/>Windows Server</a>
-        <a class="tab" href="macOS.html"><img src="../../Image/MacOS.png" alt="macOS"/>macOS</a>
-        <a class="tab" href="IOS.html"><img src="../../Image/IOS.png" alt="iOS"/>iOS</a>
-        <a class="tab" href="Android.html"><img src="../../Image/Android.png" alt="Android"/>Android</a>
-      </div>
-      <button class="navbtn" id="rightbtn" aria-label="Next"><span>&gt;</span></button>
-    </div>
-  </div>
-</nav>
-
-<div class="page">
-  <main class="shell">
-    <h1 class="h">Windows 11 — System Files</h1>
-    <p class="sub">Click to navigate to a section</p>
-    <div class="quicknav">
-      <a class="qbtn" href="#fsmap">High-Value Paths</a>
-      <a class="qbtn" href="#bycat">Important Files</a>
-    </div>
-
-    <section class="section" id="fsmap">
-      <h2 class="title">Filesystem map and high-value paths for threats/defense</h2>
-
-      <h3 class="title">Critical paths</h3>
-      <div class="card"><div class="codewrap">
-<pre><code>C:\Windows\System32\config\SAM                        # Local account hashes; offline crack ⇒ escalation
-C:\Windows\System32\config\SYSTEM                     # Boot/system keys; needed with SAM for hash extraction
-C:\Windows\System32\config\SECURITY                   # LSA secrets context; pointer to DPAPI_SYSTEM
-HKLM\SECURITY\Policy\Secrets\*                        # LSA secrets (service creds, cached secrets)
-HKLM\SECURITY\Policy\Secrets\DPAPI_SYSTEM             # System DPAPI master key; decrypt machine secrets
-HKLM\SOFTWARE\Microsoft\Cryptography\Protect\System   # DPAPI machine key material
-%APPDATA%\Microsoft\Credentials\*                     # Credential Manager items (user)
-%LOCALAPPDATA%\Microsoft\Credentials\*                # Credential Manager (local)
-%LOCALAPPDATA%\Microsoft\Vault\*                      # Windows Vault creds/tokens
-%ProgramData%\ssh\ssh_host_*_key                      # OpenSSH host private keys (if enabled)
-C:\Windows\System32\drivers\*.sys                     # Kernel drivers; unsigned/malicious = ring0 control
-</code></pre>
-      </div></div>
-
-      <h3 class="title">High-risk paths</h3>
-      <div class="card"><div class="codewrap">
-<pre><code>HKLM\SYSTEM\CurrentControlSet\Services\*              # Service persistence; image paths, autostart
-C:\Windows\System32\Tasks\*                           # Scheduled Tasks (XML); beacon/persistence
-HKLM\Software\Microsoft\Windows\CurrentVersion\Run*   # Autoruns (machine)
-HKCU\Software\Microsoft\Windows\CurrentVersion\Run*   # Autoruns (user)
-C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\   # All-users startup
-%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\        # Per-user startup
-C:\Windows\System32\wbem\Repository\*                 # WMI repo; event consumer persistence
-C:\Windows\System32\drivers\etc\hosts                 # Hostname overrides; redirection
-C:\ProgramData\Microsoft\Wlansvc\Profiles\Interfaces\* # WLAN profiles; Wi-Fi keys
-%ProgramData%\Microsoft\Network\Connections\Pbk\rasphone.pbk     # VPN phonebook (machine)
-%APPDATA%\Microsoft\Network\Connections\Pbk\rasphone.pbk         # VPN phonebook (user)
-HKCU\Software\Microsoft\Terminal Server Client\Servers           # RDP target history
-C:\Users\&lt;User&gt;\.ssh\*                               # User SSH keys/configs
-</code></pre>
-      </div></div>
-
-      <h3 class="title">Medium-risk paths</h3>
-      <div class="card"><div class="codewrap">
-<pre><code>C:\Windows\System32\winevt\Logs\*.evtx                # Event logs; primary telemetry
-C:\ProgramData\Microsoft\Windows Defender\Support\*   # Defender telemetry; bypass attempts
-C:\Windows\SoftwareDistribution\*                     # Windows Update cache DB; change timeline
-C:\Windows\Prefetch\*.pf                              # Execution traces; triage
-C:\Windows\AppCompat\Programs\Amcache.hve             # Program inventory/execution
-HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\AppCompatCache  # ShimCache
-C:\Windows\System32\sru\SRUDB.dat                     # SRUM network/app patterns
-%APPDATA%\Microsoft\Windows\Recent\*                  # Recent files; LNK artifacts
-%APPDATA%\Microsoft\Windows\Recent\AutomaticDestinations\*      # Jump Lists
-C:\$Recycle.Bin\*                                     # Deleted tools/data
-C:\System Volume Information\*                        # VSS snapshots; recover/deleted hives
-C:\Users\&lt;User&gt;\AppData\Local\Temp\*                 # User temp staging
-C:\Windows\Temp\*                                     # OS temp staging
-</code></pre>
-      </div></div>
-    </section>
-
-    <section class="section bycat" id="bycat">
-      <h2 class="title">Important files — by Category</h2>
-
-      <div class="card tablewrap"><table>
-        <caption>Accounts, Secrets & DPAPI (Critical first)</caption>
-        <thead><tr><th>Category</th><th>Path / File</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>OS account DB</td><td><span class="kbd">C:\Windows\System32\config\SAM</span></td><td>Local hashes; offline crack ⇒ escalation.</td></tr>
-          <tr><td>System config</td><td><span class="kbd">C:\Windows\System32\config\SYSTEM</span></td><td>With SAM enables hash extraction.</td></tr>
-          <tr><td>Security hive</td><td><span class="kbd">C:\Windows\System32\config\SECURITY</span></td><td>LSA secrets context.</td></tr>
-          <tr><td>LSA secrets</td><td><span class="kbd">HKLM\SECURITY\Policy\Secrets\*</span></td><td>Service creds, cached secrets.</td></tr>
-          <tr><td>DPAPI (system)</td><td><span class="kbd">HKLM\SECURITY\Policy\Secrets\DPAPI_SYSTEM</span></td><td>Decrypt machine-protected secrets.</td></tr>
-          <tr><td>DPAPI keys</td><td><span class="kbd">HKLM\SOFTWARE\Microsoft\Cryptography\Protect\System</span></td><td>DPAPI material.</td></tr>
-          <tr><td>User registry</td><td><span class="kbd">C:\Users\&lt;User&gt;\NTUSER.DAT</span></td><td>Per-user settings; autoruns, traces.</td></tr>
-          <tr><td>User classes</td><td><span class="kbd">C:\Users\&lt;User&gt;\AppData\Local\Microsoft\Windows\USRCLASS.DAT</span></td><td>Shellbags/jumplists mapping.</td></tr>
-          <tr><td>Cred Manager</td><td><span class="kbd">%APPDATA%\Microsoft\Credentials\*</span> ; <span class="kbd">%LOCALAPPDATA%\Microsoft\Credentials\*</span></td><td>Saved creds/tokens.</td></tr>
-          <tr><td>Windows Vault</td><td><span class="kbd">%LOCALAPPDATA%\Microsoft\Vault\*</span></td><td>Web/enterprise creds (DPAPI).</td></tr>
-          <tr><td>OpenSSH (host)</td><td><span class="kbd">%ProgramData%\ssh\ssh_host_*_key</span></td><td>Host private keys; impersonation risk.</td></tr>
-          <tr><td>OpenSSH (user)</td><td><span class="kbd">C:\Users\&lt;User&gt;\.ssh\*</span></td><td>User keys/configs; lateral movement.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Autoruns & Persistence</caption>
-        <thead><tr><th>Category</th><th>Path / File</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Run keys (HKLM)</td><td><span class="kbd">HKLM\Software\Microsoft\Windows\CurrentVersion\Run(Once)</span></td><td>Machine autoruns.</td></tr>
-          <tr><td>Run keys (HKCU)</td><td><span class="kbd">HKCU\Software\Microsoft\Windows\CurrentVersion\Run(Once)</span></td><td>User autoruns.</td></tr>
-          <tr><td>Startup (all)</td><td><span class="kbd">C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\</span></td><td>Shortcut persistence.</td></tr>
-          <tr><td>Startup (user)</td><td><span class="kbd">%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\</span></td><td>Per-user autoruns.</td></tr>
-          <tr><td>Services</td><td><span class="kbd">HKLM\SYSTEM\CurrentControlSet\Services\*</span></td><td>ImagePath, autostart.</td></tr>
-          <tr><td>Scheduled Tasks</td><td><span class="kbd">C:\Windows\System32\Tasks\*</span></td><td>Task-based beacons.</td></tr>
-          <tr><td>WMI</td><td><span class="kbd">C:\Windows\System32\wbem\Repository\*</span></td><td>Subscription persistence.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Network, Remote & VPN</caption>
-        <thead><tr><th>Category</th><th>Path / File</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Hosts</td><td><span class="kbd">C:\Windows\System32\drivers\etc\hosts</span></td><td>Traffic redirection.</td></tr>
-          <tr><td>Wi-Fi</td><td><span class="kbd">%ProgramData%\Microsoft\Wlansvc\Profiles\Interfaces\*</span></td><td>Saved WLAN keys.</td></tr>
-          <tr><td>VPN (machine)</td><td><span class="kbd">%ProgramData%\Microsoft\Network\Connections\Pbk\rasphone.pbk</span></td><td>Endpoints/auth methods.</td></tr>
-          <tr><td>VPN (user)</td><td><span class="kbd">%APPDATA%\Microsoft\Network\Connections\Pbk\rasphone.pbk</span></td><td>User VPNs.</td></tr>
-          <tr><td>RDP history</td><td><span class="kbd">HKCU\Software\Microsoft\Terminal Server Client\Servers</span></td><td>Targets list.</td></tr>
-          <tr><td>Default RDP</td><td><span class="kbd">C:\Users\&lt;User&gt;\Documents\Default.rdp</span></td><td>Settings, hints.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Logs & Forensics</caption>
-        <thead><tr><th>Category</th><th>Path / File</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Event Logs</td><td><span class="kbd">C:\Windows\System32\winevt\Logs\*.evtx</span></td><td>Auth, Sysmon, PS logs.</td></tr>
-          <tr><td>Defender</td><td><span class="kbd">C:\ProgramData\Microsoft\Windows Defender\Support\*</span></td><td>Detections/telemetry.</td></tr>
-          <tr><td>Windows Update</td><td><span class="kbd">C:\Windows\SoftwareDistribution\*</span></td><td>Change timeline.</td></tr>
-          <tr><td>Prefetch</td><td><span class="kbd">C:\Windows\Prefetch\*.pf</span></td><td>Execution traces.</td></tr>
-          <tr><td>Amcache</td><td><span class="kbd">C:\Windows\AppCompat\Programs\Amcache.hve</span></td><td>Program inventory.</td></tr>
-          <tr><td>ShimCache</td><td><span class="kbd">HKLM\...\Session Manager\AppCompatCache</span></td><td>Historical execution.</td></tr>
-          <tr><td>SRUM</td><td><span class="kbd">C:\Windows\System32\sru\SRUDB.dat</span></td><td>App/network patterns.</td></tr>
-          <tr><td>Jump Lists</td><td><span class="kbd">%APPDATA%\Microsoft\Windows\Recent\AutomaticDestinations\*</span></td><td>File/app usage.</td></tr>
-          <tr><td>Recent</td><td><span class="kbd">%APPDATA%\Microsoft\Windows\Recent\*</span></td><td>LNK artifacts.</td></tr>
-          <tr><td>Perf Logs</td><td><span class="kbd">C:\PerfLogs\*</span></td><td>Performance traces.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Browsers (Passwords & Sessions)</caption>
-        <thead><tr><th>Category</th><th>Path / File</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Chrome</td><td><span class="kbd">%LOCALAPPDATA%\Google\Chrome\User Data\Default\Login Data</span></td><td>DPAPI-protected passwords.</td></tr>
-          <tr><td>Edge</td><td><span class="kbd">%LOCALAPPDATA%\Microsoft\Edge\User Data\Default\Login Data</span></td><td>Saved passwords/sessions.</td></tr>
-          <tr><td>Firefox</td><td><span class="kbd">%APPDATA%\Mozilla\Firefox\Profiles\*\logins.json</span> + <span class="kbd">key4.db</span></td><td>Saved creds (NSS).</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Web & IIS</caption>
-        <thead><tr><th>Category</th><th>Path / File</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>IIS webroot</td><td><span class="kbd">C:\inetpub\wwwroot\*</span></td><td>Webshell landing; integrity.</td></tr>
-          <tr><td>IIS config</td><td><span class="kbd">%windir%\System32\inetsrv\config\applicationHost.config</span></td><td>Sites, modules, creds.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>System, Drivers & Stores</caption>
-        <thead><tr><th>Category</th><th>Path / File</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Drivers</td><td><span class="kbd">C:\Windows\System32\drivers\*.sys</span></td><td>Rootkits/unsigned binaries.</td></tr>
-          <tr><td>DriverStore</td><td><span class="kbd">C:\Windows\System32\DriverStore\*</span></td><td>Driver packages.</td></tr>
-          <tr><td>WinSxS</td><td><span class="kbd">C:\Windows\WinSxS\*</span></td><td>DLL versions; hijack checks.</td></tr>
-          <tr><td>ProgramData</td><td><span class="kbd">C:\ProgramData\&lt;Vendor&gt;\&lt;App&gt;\*</span></td><td>App configs/caches; creds.</td></tr>
-          <tr><td>Program Files</td><td><span class="kbd">C:\Program Files\*</span> ; <span class="kbd">C:\Program Files (x86)\*</span></td><td>Installed apps; LOLBins.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Temp, Recovery & Artifacts</caption>
-        <thead><tr><th>Category</th><th>Path / File</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>OS Temp</td><td><span class="kbd">C:\Windows\Temp\*</span></td><td>Payload staging (system).</td></tr>
-          <tr><td>User Temp</td><td><span class="kbd">C:\Users\&lt;User&gt;\AppData\Local\Temp\*</span></td><td>Per-user staging.</td></tr>
-          <tr><td>Recycle Bin</td><td><span class="kbd">C:\$Recycle.Bin\*</span></td><td>Deleted loot/tools.</td></tr>
-          <tr><td>System Volume Info</td><td><span class="kbd">C:\System Volume Information\*</span></td><td>VSS snapshots; recovery.</td></tr>
-          <tr><td>USB history</td><td><span class="kbd">HKLM\SYSTEM\CurrentControlSet\Enum\USBSTOR\*</span></td><td>Exfil vector evidence.</td></tr>
-          <tr><td>Recovery</td><td><span class="kbd">C:\Recovery\*</span></td><td>WinRE artifacts.</td></tr>
-        </tbody>
-      </table></div>
-
-    </section>
-  </main>
+<body class="is-content-page" data-root="../../" data-section="system-files">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><a href="../System_Files_Info.html">System Files</a><span class="breadcrumb-separator">/</span><span>Windows 11</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../../Assets/Icon/Windows11.png" alt="">
+<div>
+<p class="hero-eyebrow">System Files</p>
+<h1 class="hero-title">Windows 11 System Files</h1>
 </div>
-
-<script>
-let lastY=scrollY,hidden=false;
-addEventListener('scroll',()=>{const y=scrollY,tb=document.getElementById('topbar');if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
-const p=location.pathname.replace(/\/+$/,'');document.querySelectorAll('.tabs .tab').forEach(a=>{const h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');if(p.endsWith(h))a.classList.add('active')});
-const tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
-function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
-function updateArrows(){const o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;tabs.classList.toggle('overflow',o);leftbtn.style.display=o&&s>0?'inline-flex':'none';rightbtn.style.display=o&&s<max-1?'inline-flex':'none'}
-function scrollByStep(d){const step=Math.max(120,Math.floor(tabs.clientWidth*.6));tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})}
-leftbtn.addEventListener('click',()=>scrollByStep(-1));rightbtn.addEventListener('click',()=>scrollByStep(1));
-tabs.addEventListener('scroll',updateArrows,{passive:true});new ResizeObserver(updateArrows).observe(tabs);
-addEventListener('resize',updateArrows);
-tabs.addEventListener('wheel',e=>{if(!hasOverflow())return;const dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}});
-updateArrows();
-</script>
-</body></html>
+</div>
+<p class="hero-lead">The files, registry keys and logs that matter most on a Windows 11 workstation: where secrets live, where attackers persist, and where defenders find the evidence.</p>
+<div class="hero-meta"><span class="badge">Windows 11 26H2</span><span class="badge">103 paths</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: DPAPI" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<nav class="sub-nav" aria-label="Operating systems">
+<a class="sub-nav-link" href="../System_Files_Info.html"><img src="../../Assets/Icon/Folder.png" alt="">All systems</a>
+<a class="sub-nav-link is-active" href="Windows_11.html" aria-current="page"><img src="../../Assets/Icon/Windows11.png" alt="">Windows 11</a>
+<a class="sub-nav-link" href="Windows_Server.html"><img src="../../Assets/Icon/WindowsServer.png" alt="">Windows Server</a>
+<a class="sub-nav-link" href="macOS.html"><img src="../../Assets/Icon/MacOs.png" alt="">macOS</a>
+<a class="sub-nav-link" href="IOS.html"><img src="../../Assets/Icon/Ios.png" alt="">iOS</a>
+<a class="sub-nav-link" href="Android.html"><img src="../../Assets/Icon/Android.png" alt="">Android</a>
+<a class="sub-nav-link" href="Ubuntu_Server.html"><img src="../../Assets/Icon/UbuntuServer.png" alt="">Ubuntu Server</a>
+<a class="sub-nav-link" href="Kali_Linux.html"><img src="../../Assets/Icon/KaliLinux.png" alt="">Kali Linux</a>
+</nav>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="overview">
+<h2 class="panel-title">Overview</h2>
+<p class="panel-lead">Key facts about the current Windows 11 release and where its security data lives.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term">Current release</span><span class="definition-text">Windows 11 version 26H2 (2026 Update), generally available since September 29, 2026 as an enablement package on top of 24H2 and 25H2. Version 26H1 is a separate release that ships only on select new devices.</span></div>
+<div class="definition"><span class="definition-term">Support status</span><span class="definition-text">26H2: 24 months for Home and Pro, 36 months for Enterprise and Education. 25H2 Home and Pro: until October 12, 2027. 24H2 Home and Pro ended October 13, 2026. Windows 10 ended October 14, 2025; consumer ESU was extended to October 12, 2027 (Windows 10 22H2), commercial ESU runs to October 2028.</span></div>
+<div class="definition"><span class="definition-term">File system</span><span class="definition-text">NTFS on the system volume, ReFS for Dev Drive volumes, FAT32 and exFAT for removable media. The EFI System Partition is FAT32.</span></div>
+<div class="definition"><span class="definition-term">Built-in security features</span><span class="definition-text">TPM 2.0 and Secure Boot required, VBS and memory integrity (HVCI), Credential Guard (on by default on qualifying Enterprise and Education devices), LSA protection, Microsoft Defender Antivirus, Smart App Control, BitLocker and device encryption, Windows Hello and passkeys, Windows LAPS, Administrator protection (policy enabled), built-in Sysmon (off by default).</span></div>
+<div class="definition"><span class="definition-term">Where logs live</span><span class="definition-text"><code>C:\Windows\System32\winevt\Logs\*.evtx</code> for event logs, <code>C:\ProgramData\Microsoft\Windows Defender\</code> for Defender, <code>C:\Windows\Logs\</code> for servicing logs.</span></div>
+<div class="definition"><span class="definition-term">Registry hives</span><span class="definition-text">Machine hives in <code>C:\Windows\System32\config\</code>, user hives in <code>NTUSER.DAT</code> and <code>UsrClass.dat</code> inside each profile.</span></div>
+</div>
+<div class="callout"><p><strong>Note:</strong> paths use environment variables where Windows does: <code>%APPDATA%</code> is <code>C:\Users\&lt;User&gt;\AppData\Roaming</code> and <code>%LOCALAPPDATA%</code> is <code>C:\Users\&lt;User&gt;\AppData\Local</code>. Most files below are locked while Windows runs and need admin rights, a shadow copy or an offline image to read.</p></div>
+</section>
+<section class="panel" id="credentials-secrets">
+<h2 class="panel-title">Credentials and Secrets</h2>
+<p class="panel-lead">Account databases, LSA secrets, DPAPI keys and saved credentials, the first targets after local admin.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>C:\Windows\System32\config\SAM</code></td><td>Local account database with NT hashes</td><td>With the SYSTEM hive it gives every local hash for cracking or pass the hash. Copies are made with <code>reg save</code> or from shadow copies, which defenders should alert on.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>C:\Windows\System32\config\SYSTEM</code></td><td>System hive, including the boot key</td><td>The boot key decrypts SAM and LSA secrets, so SAM and SECURITY are useless offline without it.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>C:\Windows\System32\config\SECURITY</code></td><td>LSA policy, LSA secrets and cached domain logons</td><td>Holds service account passwords, the machine account secret and <code>DPAPI_SYSTEM</code>.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>HKLM\SECURITY\Policy\Secrets</code></td><td>LSA secrets: <code>$MACHINE.ACC</code>, <code>DPAPI_SYSTEM</code>, <code>_SC_&lt;service&gt;</code>, <code>DefaultPassword</code></td><td>Plain text service passwords and the key that unlocks system DPAPI. Only SYSTEM can read the key.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>HKLM\SECURITY\Cache</code></td><td>Cached domain credentials (DCC2, 10 by default)</td><td>Lets users log on without a domain controller. Hashes are slow to crack but weak passwords fall.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>lsass.exe</code> process memory</td><td>Credentials of logged on users: NT hashes, Kerberos tickets, sometimes clear text</td><td>Memory dumps (procdump, comsvcs.dll MiniDump, Task Manager) are a top attack technique. LSA protection and Credential Guard (secrets moved to <code>LsaIso.exe</code>) block most of it.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>%APPDATA%\Microsoft\Protect\&lt;SID&gt;\</code></td><td>User DPAPI master keys, protected by the user password and, on domain machines, the domain backup key</td><td>Unlocks everything the user protected with DPAPI: browser keys, Credential Manager, Wi-Fi in user context, app secrets.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>C:\Windows\System32\Microsoft\Protect\S-1-5-18\</code></td><td>System DPAPI master keys (and the <code>User</code> subfolder)</td><td>Decrypted with the <code>DPAPI_SYSTEM</code> LSA secret. Protects Wi-Fi keys, scheduled task credentials and machine certificates.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>%LOCALAPPDATA%\Microsoft\Credentials\</code> and <code>%APPDATA%\Microsoft\Credentials\</code></td><td>Credential Manager blobs</td><td>Saved RDP, SMB and app passwords. Decrypt with the user DPAPI master key.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>%LOCALAPPDATA%\Microsoft\Vault\</code> and <code>C:\ProgramData\Microsoft\Vault\</code></td><td>Windows Vault (web credentials and system vault)</td><td>Old Internet Explorer and Edge web passwords and some app tokens, DPAPI protected.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>%APPDATA%\Microsoft\Crypto\</code> and <code>C:\ProgramData\Microsoft\Crypto\RSA\MachineKeys\</code></td><td>User and machine private keys for certificates</td><td>Exported keys allow certificate based authentication as the user or machine, including VPN and Wi-Fi EAP-TLS.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>C:\Windows\Panther\Unattend.xml</code></td><td>Setup answer file (also <code>C:\Windows\Panther\Unattend\</code> and <code>C:\Windows\System32\Sysprep\</code>)</td><td>Often keeps the local admin password in base64. A classic privilege escalation find on imaged machines.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon</code> (<code>DefaultPassword</code>)</td><td>Auto logon user name and, if set the old way, a clear text password</td><td>Readable by any local user when stored here. Sysinternals Autologon stores it as an LSA secret instead.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>C:\Windows\ServiceProfiles\LocalService\AppData\Local\Microsoft\Ngc\</code></td><td>Windows Hello key containers (PIN, face, fingerprint)</td><td>Keys are bound to the TPM, so copying the folder is not enough. Tampering here breaks Hello sign in. SYSTEM only.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>\\?\GLOBALROOT\Device\HarddiskVolumeShadowCopy&lt;N&gt;\Windows\System32\config\</code></td><td>Registry hives inside Volume Shadow Copies</td><td>Lets an admin, or a user on badly configured ACLs (HiveNightmare, CVE-2021-36934), copy SAM and SYSTEM without touching the live files.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td>BitLocker recovery key escrow</td><td>48 digit recovery password stored in the Microsoft account, Entra ID or Active Directory</td><td>Anyone with the key can unlock the disk offline. Check where it is escrowed and who can read it.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>HKLM\SOFTWARE\Microsoft\Policies\LAPS</code></td><td>Windows LAPS policy (backup target, rotation, complexity)</td><td>Shows whether the local admin password is unique and rotated, and whether it is backed up to Entra ID or AD.</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="persistence">
+<h2 class="panel-title">Persistence and Autostart</h2>
+<p class="panel-lead">Places that run code at boot or logon. Check them with Autoruns before anything else.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>HKLM\SYSTEM\CurrentControlSet\Services\</code></td><td>Services and drivers: <code>ImagePath</code>, <code>Start</code>, <code>Parameters\ServiceDll</code></td><td>Runs as SYSTEM at boot. New services log event 7045 in System.evtx. Weak ACLs on a service key or binary are a common escalation path.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>C:\Windows\System32\Tasks\</code></td><td>Scheduled task XML definitions</td><td>Popular for beacons and updaters. Also check <code>HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Schedule\TaskCache\Tree</code>: a task with its <code>SD</code> value removed is hidden from schtasks.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run</code> and <code>RunOnce</code></td><td>Machine wide logon autoruns</td><td>Runs for every user at logon. Needs admin to write. Also check the <code>WOW6432Node</code> copy.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>HKCU\Software\Microsoft\Windows\CurrentVersion\Run</code> and <code>RunOnce</code></td><td>Per user logon autoruns</td><td>No admin needed, so it is the first choice for commodity malware and infostealers.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp\</code></td><td>All users Startup folder</td><td>Shortcuts and scripts run at every logon.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup\</code></td><td>Per user Startup folder</td><td>Easy user level persistence, often an <code>.lnk</code> or <code>.vbs</code> file.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\Windows\System32\wbem\Repository\</code></td><td>WMI repository (<code>OBJECTS.DATA</code>) with event filters, consumers and bindings</td><td>Fileless persistence that survives reboots. Watch WMI-Activity Operational event 5861 and Sysmon events 19 to 21.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon</code> (<code>Userinit</code>, <code>Shell</code>)</td><td>Programs Winlogon starts at logon</td><td>Default values are <code>C:\Windows\system32\userinit.exe,</code> and <code>explorer.exe</code>. Anything appended runs for every user.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>HKLM\SYSTEM\CurrentControlSet\Control\Lsa</code></td><td><code>Security Packages</code>, <code>Authentication Packages</code>, <code>Notification Packages</code></td><td>A rogue password filter or SSP DLL loaded into LSASS sees clear text passwords. Also holds <code>RunAsPPL</code> and <code>LsaCfgFlags</code>.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\</code></td><td><code>Debugger</code> values and <code>GlobalFlag</code> with <code>SilentProcessExit</code></td><td>Hijacks the launch or exit of any named program, for example <code>sethc.exe</code> at the logon screen.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>C:\Windows\System32\sethc.exe</code>, <code>utilman.exe</code>, <code>osk.exe</code></td><td>Accessibility tools reachable from the logon screen</td><td>Replaced with <code>cmd.exe</code> they give a SYSTEM shell before logon. Verify hashes and signatures.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>HKCU\Software\Classes\CLSID\</code></td><td>Per user COM registrations</td><td>COM hijacking: a user key overrides the machine one, so a DLL loads inside trusted processes without admin.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\Windows\System32\WindowsPowerShell\v1.0\profile.ps1</code> and <code>%USERPROFILE%\Documents\WindowsPowerShell\</code></td><td>PowerShell profiles (PowerShell 7 uses <code>Documents\PowerShell\</code>)</td><td>Runs every time PowerShell starts, including admin sessions.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\ProgramData\Microsoft\Network\Downloader\qmgr.db</code></td><td>BITS job database</td><td>BITS jobs can download and run payloads on a schedule and survive reboots. Check with <code>bitsadmin /list /allusers</code>.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>%APPDATA%\Microsoft\Word\STARTUP\</code> and <code>%APPDATA%\Microsoft\Excel\XLSTART\</code></td><td>Office startup templates and add-ins</td><td>Macro or add-in persistence that runs whenever the user opens Office.</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="logs-artifacts">
+<h2 class="panel-title">Logs and Forensic Artifacts</h2>
+<p class="panel-lead">Event logs, execution evidence and file system metadata used to build a timeline.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>C:\Windows\System32\winevt\Logs\Security.evtx</code></td><td>Logons 4624 and 4625, special logon 4672, process creation 4688, account and group changes 4720 and 4732, log cleared 1102</td><td>Main audit trail. Attackers clear it, so forward it to a SIEM. Enable command line logging for 4688.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>C:\Windows\System32\winevt\Logs\System.evtx</code></td><td>Service installs 7045, log cleared 104, startup and shutdown, driver errors</td><td>New services and cleared logs are high signal events.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\Windows\System32\winevt\Logs\Microsoft-Windows-PowerShell%4Operational.evtx</code></td><td>Script block logging 4104, module logging 4103</td><td>Records decoded script content, even obfuscated or in memory. PowerShell 7 writes to <code>PowerShellCore%4Operational.evtx</code>.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>%APPDATA%\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</code></td><td>Interactive PowerShell command history for the user</td><td>Shows what an attacker or admin typed, and often contains passwords passed on the command line.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>C:\Windows\System32\winevt\Logs\Microsoft-Windows-Sysmon%4Operational.evtx</code></td><td>Sysmon events: process create 1, network 3, image load 7, file create 11, registry 12 to 14, DNS 22</td><td>The richest free endpoint telemetry. Built-in Sysmon is an optional Windows feature, off by default, and cannot run next to standalone Sysmon.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>C:\Windows\System32\winevt\Logs\Microsoft-Windows-Windows Defender%4Operational.evtx</code></td><td>Detections 1116 and 1117, real time protection off 5001, configuration change 5007</td><td>Event 5007 reveals new exclusions and tampering attempts.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>C:\ProgramData\Microsoft\Windows Defender\Support\</code></td><td><code>MPLog-*.log</code> and <code>MPDetection-*.log</code></td><td>Plain text scan and detection history that often outlives the event log.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\ProgramData\Microsoft\Windows Defender\Quarantine\</code> and <code>Scans\History\</code></td><td>Quarantined files (encrypted) and detection history records</td><td>Recover the original malware sample for analysis.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\ProgramData\Microsoft\Windows Defender Advanced Threat Protection\</code></td><td>Microsoft Defender for Endpoint sensor data, logged in <code>Microsoft-Windows-SENSE%4Operational.evtx</code></td><td>Shows onboarding state and sensor health. Attackers try to stop or blind the Sense service.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\Windows\System32\winevt\Logs\Microsoft-Windows-TaskScheduler%4Operational.evtx</code></td><td>Task registered 106, updated 140, deleted 141, run 200 and 201</td><td>Confirms when a malicious task was created and every time it ran.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\Windows\Prefetch\*.pf</code></td><td>Program name, run count, last 8 run times, loaded files</td><td>Strong evidence of execution on workstations. Holds up to 1024 entries.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\Windows\AppCompat\Programs\Amcache.hve</code></td><td>Installed programs, executable paths and SHA-1 hashes</td><td>Gives a hash for a deleted tool. Presence suggests but does not prove execution.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\AppCompatCache</code></td><td>ShimCache entries: path and last modified time</td><td>Shows files that existed on disk. Written at shutdown, so live entries can be missing.</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>HKLM\SYSTEM\CurrentControlSet\Services\bam\State\UserSettings\&lt;SID&gt;</code></td><td>Background Activity Moderator: last run time per executable per user</td><td>Ties execution to a specific user account.</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>C:\Windows\System32\sru\SRUDB.dat</code></td><td>System Resource Usage Monitor: bytes sent and received per app, about 30 to 60 days</td><td>Spots exfiltration by a specific process even after the tool is deleted.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\$MFT</code> and <code>C:\$Extend\$UsnJrnl:$J</code></td><td>NTFS master file table and change journal</td><td>Timestamps for every file, plus create, rename and delete history. Detects timestomping.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\System Volume Information\</code></td><td>Volume Shadow Copies and restore point data</td><td>Older versions of files and hives. Ransomware runs <code>vssadmin delete shadows</code> first, so that command is a strong alert.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>HKLM\SYSTEM\CurrentControlSet\Enum\USBSTOR\</code></td><td>USB storage devices by vendor, product and serial</td><td>Evidence of removable media use and possible exfiltration.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\Windows\INF\setupapi.dev.log</code></td><td>Driver installation log with timestamps</td><td>First connection time of each USB device.</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>C:\ProgramData\Microsoft\Windows\WER\</code></td><td>Windows Error Reporting reports and dumps</td><td>Crashes of exploited processes. Dumps can contain secrets from memory.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\Windows\Logs\</code></td><td>CBS, DISM and Windows Update logs (Windows Update writes ETL, read with <code>Get-WindowsUpdateLog</code>)</td><td>Timeline of patches and component changes.</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>C:\Windows\System32\winevt\Logs\Microsoft-Windows-LAPS%4Operational.evtx</code></td><td>Windows LAPS rotation and backup events</td><td>Confirms that the local admin password rotates and reaches its backup target.</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="network-remote">
+<h2 class="panel-title">Network and Remote Access</h2>
+<p class="panel-lead">Name resolution, Wi-Fi, VPN, RDP, SSH and WinRM traces used for redirection and lateral movement.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>C:\Windows\System32\drivers\etc\hosts</code></td><td>Static name to IP mappings</td><td>Used to redirect traffic or block security updates. Defender flags known tampering.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>C:\ProgramData\Microsoft\Wlansvc\Profiles\Interfaces\{GUID}\*.xml</code></td><td>Saved Wi-Fi profiles with keys protected by system DPAPI</td><td>An admin can show keys in clear text with <code>netsh wlan show profile name="SSID" key=clear</code>.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>%APPDATA%\Microsoft\Network\Connections\Pbk\rasphone.pbk</code> and <code>C:\ProgramData\Microsoft\Network\Connections\Pbk\</code></td><td>Built-in VPN phonebooks (user and all users)</td><td>Reveals VPN servers and authentication methods for pivoting.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>HKCU\Software\Microsoft\Terminal Server Client\Servers</code> and <code>\Default</code></td><td>RDP client history (MRU list and user name hints)</td><td>Maps which servers a user connects to: a ready made lateral movement list.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>%LOCALAPPDATA%\Microsoft\Terminal Server Client\Cache\</code></td><td>RDP bitmap cache (<code>bcache*.bmc</code>, <code>Cache*.bin</code>)</td><td>Tiles can be rebuilt into screenshots of remote sessions.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>%USERPROFILE%\Documents\Default.rdp</code></td><td>Hidden default RDP connection file</td><td>Last server and settings used by the RDP client.</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>C:\Windows\System32\winevt\Logs\Microsoft-Windows-TerminalServices-RemoteConnectionManager%4Operational.evtx</code></td><td>Inbound RDP authentication 1149; session events 21, 24 and 25 sit in <code>LocalSessionManager%4Operational.evtx</code></td><td>Who connected over RDP, from which IP, and when.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\ProgramData\ssh\</code></td><td>OpenSSH Server files: <code>sshd_config</code>, <code>ssh_host_*_key</code>, <code>administrators_authorized_keys</code>, <code>logs\</code></td><td>OpenSSH Server is an optional feature. Keys for admin accounts go in <code>administrators_authorized_keys</code>, not the user folder, which is a common persistence spot.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>%USERPROFILE%\.ssh\</code></td><td><code>id_*</code> private keys, <code>authorized_keys</code>, <code>known_hosts</code>, <code>config</code></td><td>Private keys and host lists for lateral movement to Linux and network gear.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>HKLM\SYSTEM\CurrentControlSet\Services\PortProxy\v4tov4\tcp</code></td><td>netsh port proxy rules</td><td>A built-in way to relay traffic through a compromised host. Rarely legitimate on a workstation.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>HKLM\SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\FirewallRules</code></td><td>Windows Firewall rules</td><td>Attackers add allow rules for their listeners. Firewall changes are logged in <code>Microsoft-Windows-Windows Firewall With Advanced Security%4Firewall.evtx</code>.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\Windows\System32\LogFiles\Firewall\pfirewall.log</code></td><td>Firewall connection log (off by default)</td><td>Allowed and dropped connections when logging is enabled per profile.</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>C:\Windows\System32\winevt\Logs\Microsoft-Windows-WinRM%4Operational.evtx</code></td><td>WinRM client and server sessions</td><td>Evidence of PowerShell remoting in or out of the machine.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles</code></td><td>Known networks with first and last connection dates</td><td>Places the device on specific networks at specific times.</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>HKCU\Network</code> and <code>HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\MountPoints2</code></td><td>Mapped drives and mounted shares</td><td>Shows file servers the user reaches, a target list for ransomware.</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="user-data">
+<h2 class="panel-title">User Data and Browsers</h2>
+<p class="panel-lead">Profile hives, browser stores, recent files and the newer Windows 11 artifacts.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>C:\Users\&lt;User&gt;\NTUSER.DAT</code></td><td>User registry hive (HKCU)</td><td>User autoruns, recent documents, typed paths, RDP history and app settings in one file.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>%LOCALAPPDATA%\Microsoft\Windows\UsrClass.dat</code></td><td>User classes hive with Shellbags</td><td>Shellbags prove folder access, including folders on USB drives and shares that no longer exist.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>%LOCALAPPDATA%\Google\Chrome\User Data\Default\Network\Cookies</code></td><td>Chrome session cookies</td><td>Stolen cookies replay a signed in session and skip MFA. Chrome 127 and later use app-bound encryption to make theft harder, which infostealers keep working around.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>%LOCALAPPDATA%\Google\Chrome\User Data\Default\Login Data</code> and <code>..\Local State</code></td><td>Saved passwords (SQLite) and the encrypted master key</td><td>Prime infostealer target. Prefer a password manager and passkeys over browser saved passwords.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>%LOCALAPPDATA%\Google\Chrome\User Data\Default\History</code></td><td>Browsing and download history (SQLite)</td><td>Shows where a payload was downloaded from and when.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>%LOCALAPPDATA%\Microsoft\Edge\User Data\Default\</code></td><td>Edge <code>Login Data</code>, <code>Network\Cookies</code>, <code>History</code></td><td>Same Chromium layout and same risks as Chrome. Edge is present on every Windows 11 device.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>%APPDATA%\Mozilla\Firefox\Profiles\&lt;profile&gt;\</code></td><td><code>logins.json</code>, <code>key4.db</code>, <code>cookies.sqlite</code>, <code>places.sqlite</code></td><td>Saved logins decrypt offline unless a primary password is set.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>%APPDATA%\Microsoft\Windows\Recent\</code></td><td>LNK shortcut files for opened files</td><td>Original path, volume serial and timestamps of opened documents, even after deletion.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>%APPDATA%\Microsoft\Windows\Recent\AutomaticDestinations\</code> and <code>CustomDestinations\</code></td><td>Jump Lists per application</td><td>Per app history of opened files and RDP targets.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\UserAssist</code></td><td>GUI program launches (ROT13 encoded) with counts and times</td><td>Execution evidence for programs started from Explorer and the Start menu.</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>%LOCALAPPDATA%\Packages\Microsoft.WindowsNotepad_8wekyb3d8bbwe\LocalState\TabState\</code></td><td>Notepad tab state, including unsaved text</td><td>Notes and pasted secrets that were never saved to a file.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>%LOCALAPPDATA%\CoreAIPlatform.00\UKP\{GUID}\</code></td><td>Recall index <code>ukg.db</code> and <code>ImageStore\</code> snapshots (Copilot+ PCs only)</td><td>Opt-in. Current builds encrypt the data and gate access with Windows Hello, but a compromised user session can still read it. Early previews stored it in clear text.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>%USERPROFILE%\Downloads\</code> (<code>Zone.Identifier</code> streams)</td><td>Mark of the Web: zone, <code>ReferrerUrl</code>, <code>HostUrl</code></td><td>Shows where a file came from. Attackers ship payloads in ISO, VHD or archive formats to strip it.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\$Recycle.Bin\&lt;SID&gt;\</code></td><td><code>$I</code> metadata and <code>$R</code> content files</td><td>Original path and deletion time of removed tools and documents.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>%LOCALAPPDATA%\Microsoft\Windows\Explorer\thumbcache_*.db</code></td><td>Thumbnail cache</td><td>Thumbnails of images that were viewed, even after the originals are gone.</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>%LOCALAPPDATA%\Microsoft\Windows\Notifications\wpndatabase.db</code></td><td>Toast notification history (SQLite)</td><td>Message previews, including chat text and one-time codes.</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>%LOCALAPPDATA%\Microsoft\OneDrive\</code></td><td>OneDrive client settings and logs</td><td>Sync activity and accounts, a common exfiltration channel.</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>C:\ProgramData\Microsoft\Search\Data\Applications\Windows\</code></td><td>Windows Search index database</td><td>Can hold content and metadata of files that were later deleted.</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="system-config">
+<h2 class="panel-title">System Binaries and Configuration</h2>
+<p class="panel-lead">Boot chain, drivers, code integrity policy and folders where payloads are staged.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>\EFI\Microsoft\Boot\</code> on the EFI System Partition</td><td><code>bootmgfw.efi</code> and the <code>BCD</code> store</td><td>Bootkits such as BlackLotus live here, below the OS. Keep Secure Boot on and the 2023 Secure Boot certificates applied.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>C:\Windows\System32\drivers\</code></td><td>Kernel drivers (<code>*.sys</code>)</td><td>Bring your own vulnerable driver (BYOVD) attacks load a signed but flawed driver to kill EDR from the kernel.</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>C:\Windows\System32\CodeIntegrity\</code></td><td>App Control for Business (WDAC) policies in <code>CiPolicies\Active\</code>, the vulnerable driver blocklist</td><td>Defines which code may run. Tampering here disables application control.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>HKLM\SYSTEM\CurrentControlSet\Control\DeviceGuard</code></td><td>VBS, memory integrity (HVCI) and Credential Guard settings</td><td>Confirms that the protections in the overview are really on.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>C:\Windows\System32\config\SOFTWARE</code></td><td>Machine software hive (HKLM\SOFTWARE)</td><td>Installed programs, Run keys, Defender settings and policy, all in one offline file.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\Windows\System32\</code></td><td>Core binaries, including LOLBins such as <code>certutil.exe</code>, <code>mshta.exe</code>, <code>rundll32.exe</code>, <code>regsvr32.exe</code></td><td>Signed tools abused to download and run code. Copies of these outside System32 are suspicious.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\Windows\System32\DriverStore\FileRepository\</code></td><td>Staged driver packages</td><td>Drivers can be installed from here without media. Check for unexpected packages.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\ProgramData\</code></td><td>Machine wide app data and configs</td><td>Any user can create folders here, so it is a favorite staging and DLL planting location.</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>C:\Program Files\</code> and <code>C:\Program Files (x86)\</code></td><td>Installed applications</td><td>Third party folders with weak ACLs or unquoted service paths give privilege escalation.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\Windows\Temp\</code> and <code>%LOCALAPPDATA%\Temp\</code></td><td>System and user temporary files</td><td>Common drop location for payloads, installers and archives of stolen data.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\Windows\WinSxS\</code></td><td>Component store with side by side DLL versions</td><td>Reference copies for checking hijacked or patched system DLLs. Do not delete by hand.</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>C:\Windows\System32\GroupPolicy\</code> and <code>GroupPolicyUsers\</code></td><td>Local Group Policy and cached policy files</td><td>Local policy can disable Defender or logging on machines that are not domain managed.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>C:\Recovery\</code> and the WinRE partition</td><td>Windows Recovery Environment image</td><td>WinRE can reach the disk before Windows starts. Keep it patched, since WinRE flaws have bypassed BitLocker.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>%LOCALAPPDATA%\wsl\{GUID}\ext4.vhdx</code> or <code>%LOCALAPPDATA%\Packages\&lt;distro&gt;\LocalState\ext4.vhdx</code></td><td>WSL 2 Linux disk images, listed under <code>HKCU\Software\Microsoft\Windows\CurrentVersion\Lxss</code></td><td>A full Linux userland with its own shell history and tools, partly outside Windows EDR visibility.</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>*.wsb</code> files</td><td>Windows Sandbox configuration (mapped folders, networking, logon command)</td><td>A mapped folder with <code>ReadOnly</code> set to false lets sandboxed code write to the host.</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>C:\inetpub\</code></td><td>IIS web root if IIS is installed; otherwise an empty folder created by the April 2025 security update</td><td>The empty folder is part of the fix for CVE-2025-21204 and should not be deleted.</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="triage-commands">
+<h2 class="panel-title">Triage Commands</h2>
+<p class="panel-lead">Quick checks from an elevated PowerShell prompt during an investigation or audit.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Task</th><th>Command</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Version and build</td><td><code class="copy">Get-ComputerInfo -Property OsName, OsDisplayVersion, OsBuildNumber</code></td><td>Display version shows 25H2 or 26H2</td></tr>
+<tr><td>Current user, groups and privileges</td><td><code class="copy">whoami /all</code></td><td>Check for SeDebugPrivilege and high integrity</td></tr>
+<tr><td>Local administrators</td><td><code class="copy">Get-LocalGroupMember -Group Administrators</code></td><td>Unexpected members are a persistence sign</td></tr>
+<tr><td>Logon autoruns</td><td><code class="copy">Get-CimInstance Win32_StartupCommand | Select-Object Name, Command, Location, User</code></td><td>Run keys and Startup folders; use Sysinternals <code>autorunsc -a * -c -h -s</code> for full coverage</td></tr>
+<tr><td>Scheduled tasks</td><td><code class="copy">Get-ScheduledTask | Where-Object TaskPath -notlike "\Microsoft\*" | Select-Object TaskName, TaskPath, State</code></td><td>Non Microsoft tasks first</td></tr>
+<tr><td>Services outside Windows</td><td><code class="copy">Get-CimInstance Win32_Service | Where-Object PathName -notlike "*\Windows\*" | Select-Object Name, StartMode, PathName</code></td><td>Look for unquoted paths and user writable folders</td></tr>
+<tr><td>WMI persistence</td><td><code class="copy">Get-CimInstance -Namespace root\subscription -ClassName __EventConsumer</code></td><td>Also query <code>__EventFilter</code> and <code>__FilterToConsumerBinding</code></td></tr>
+<tr><td>Listening ports with process</td><td><code class="copy">Get-NetTCPConnection -State Listen | Select-Object LocalAddress, LocalPort, OwningProcess, @{n="Process";e={(Get-Process -Id $_.OwningProcess).Name}}</code></td><td>Match unknown listeners to binaries</td></tr>
+<tr><td>Port proxy rules</td><td><code class="copy">netsh interface portproxy show all</code></td><td>Should be empty on a workstation</td></tr>
+<tr><td>Recent logons</td><td><code class="copy">Get-WinEvent -FilterHashtable @{LogName="Security"; Id=4624} -MaxEvents 20 | Format-List TimeCreated, Message</code></td><td>Logon type 10 is RDP, 3 is network</td></tr>
+<tr><td>New services</td><td><code class="copy">Get-WinEvent -FilterHashtable @{LogName="System"; Id=7045} -MaxEvents 20</code></td><td>Pairs with the services check above</td></tr>
+<tr><td>PowerShell script blocks</td><td><code class="copy">Get-WinEvent -FilterHashtable @{LogName="Microsoft-Windows-PowerShell/Operational"; Id=4104} -MaxEvents 20</code></td><td>Needs script block logging enabled</td></tr>
+<tr><td>PowerShell history</td><td><code class="copy">Get-Content (Get-PSReadLineOption).HistorySavePath</code></td><td>Current user only; check each profile folder for others</td></tr>
+<tr><td>Defender status</td><td><code class="copy">Get-MpComputerStatus | Select-Object AMRunningMode, RealTimeProtectionEnabled, IsTamperProtected, AntivirusSignatureLastUpdated</code></td><td>Running mode should be Normal</td></tr>
+<tr><td>Defender detections and exclusions</td><td><code class="copy">Get-MpThreatDetection; (Get-MpPreference).ExclusionPath</code></td><td>Exclusions are hidden from non admins</td></tr>
+<tr><td>BitLocker state and protectors</td><td><code class="copy">manage-bde -status C:; manage-bde -protectors -get C:</code></td><td>Shows the recovery password ID used for escrow lookups</td></tr>
+<tr><td>Secure Boot</td><td><code class="copy">Confirm-SecureBootUEFI</code></td><td>Returns True when Secure Boot is on</td></tr>
+<tr><td>VBS and Credential Guard</td><td><code class="copy">Get-CimInstance -Namespace root\Microsoft\Windows\DeviceGuard -ClassName Win32_DeviceGuard | Select-Object VirtualizationBasedSecurityStatus, SecurityServicesRunning</code></td><td>Service 1 is Credential Guard, 2 is memory integrity</td></tr>
+<tr><td>LSA protection</td><td><code class="copy">reg query HKLM\SYSTEM\CurrentControlSet\Control\Lsa /v RunAsPPL</code></td><td>1 or 2 means LSASS runs as a protected process</td></tr>
+<tr><td>Windows LAPS state</td><td><code class="copy">Get-LapsDiagnostics</code></td><td>Collects LAPS logs and state into a zip</td></tr>
+<tr><td>Saved Wi-Fi networks</td><td><code class="copy">netsh wlan show profiles</code></td><td>Add <code>name="SSID" key=clear</code> as admin to show a key</td></tr>
+<tr><td>Shadow copies</td><td><code class="copy">vssadmin list shadows</code></td><td>Missing copies after an incident suggest deliberate deletion</td></tr>
+<tr><td>WSL distributions</td><td><code class="copy">wsl --list --verbose</code></td><td>Run as the user; distributions are per user</td></tr>
+<tr><td>File signature</td><td><code class="copy">Get-AuthenticodeSignature C:\Windows\System32\sethc.exe | Format-List Status, SignerCertificate</code></td><td>Status should be Valid with a Microsoft signer</td></tr>
+<tr><td>File hash for lookup</td><td><code class="copy">Get-FileHash C:\Users\Public\suspect.exe -Algorithm SHA256</code></td><td>Search the hash in your threat intel or VirusTotal</td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-warning"><p><strong>Warning:</strong> only collect credentials or run offensive tools on systems you own or have written permission to test. Work on a copy or image when you can, since live triage changes timestamps.</p></div>
+</section>
+<section class="panel" id="hardening">
+<h2 class="panel-title">Hardening Checklist</h2>
+<p class="panel-lead">Settings that close the paths above on a Windows 11 fleet.</p>
+<ul class="checklist">
+<li>Stay on a supported release (25H2 or 26H2) and install monthly cumulative updates.</li>
+<li>Keep Secure Boot on, confirm the 2023 Secure Boot certificates are applied (the 2011 certificates expired in June and October 2026), and keep TPM 2.0 enabled.</li>
+<li>Turn on memory integrity (HVCI), Credential Guard and LSA protection, and keep the vulnerable driver blocklist enabled.</li>
+<li>Use standard user accounts day to day and enable Administrator protection where supported.</li>
+<li>Deploy Windows LAPS so every local admin password is unique and rotated, backed up to Entra ID or AD.</li>
+<li>Encrypt with BitLocker using TPM plus PIN on laptops, and escrow recovery keys to Entra ID or AD with restricted read access.</li>
+<li>Keep Defender real time protection, cloud protection and tamper protection on; enable attack surface reduction rules, including blocking credential theft from LSASS.</li>
+<li>Use App Control for Business or Smart App Control to stop unknown binaries.</li>
+<li>Enable PowerShell script block logging, command line process auditing (4688) and Sysmon, and forward logs to a SIEM.</li>
+<li>Increase Security.evtx size from the default so evidence is not overwritten in hours.</li>
+<li>Remove leftover <code>Unattend.xml</code> files and never store auto logon passwords in the registry.</li>
+<li>Require SMB signing (on by default since 24H2), keep SMB1 removed, and block NTLM where possible.</li>
+<li>Disable RDP unless needed; when used, require Network Level Authentication and restrict it with the firewall.</li>
+<li>Prefer Windows Hello for Business and passkeys over passwords, and discourage saving passwords in the browser.</li>
+<li>Leave Recall off on managed devices unless policy allows it, and exclude sensitive apps and sites if it is used.</li>
+</ul>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

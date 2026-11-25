@@ -1,107 +1,86 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Commands</title>
-<link rel="icon" href="../Image/Logo.png" type="image/png" sizes="32x32"/><link rel="icon" href="../Image/Logo.png" type="image/png" sizes="192x192"/><link rel="apple-touch-icon" href="../Image/Logo.png"/><meta name="theme-color" content="#111"/>
-<style>
-:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--blue:#2196f3}
-*{box-sizing:border-box}html,body{height:100%}
-body{margin:0;font:16px/1.55 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111;text-align:center}
-.bg{position:fixed;inset:0;background:url("../Image/Logo.png") center/cover no-repeat;z-index:-2}
-.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.78) 100%);z-index:-1}
-
-.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
-.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
-.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
-.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
-.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
-.homepill span{font-weight:700;letter-spacing:.15px}
-.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
-.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);cursor:pointer;user-select:none;flex:0 0 auto}
-.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
-.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0}
-.tabs.overflow{overflow:auto}
-.tabs::-webkit-scrollbar{display:none}
-.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
-.tab:hover{opacity:1}
-.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
-.tab.active{color:var(--blue)}
-.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
-.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
-
-.page{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:96px 28px 28px}
-.shell{width:min(1000px,94%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
-.h{margin:0 0 8px;font-size:28px;font-weight:800;letter-spacing:.2px}
-.p{margin:0 0 22px;color:var(--muted)}
-.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
-.tile{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;padding:12px;height:200px;text-decoration:none;color:var(--text);background:var(--tile);border:1px solid var(--tileBorder);border-radius:18px;transition:transform .08s ease,box-shadow .18s ease,background .2s ease}
-.tile:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(0,0,0,.35)}
-.imgbox{height:80%;width:100%;display:flex;align-items:center;justify-content:center}
-.imgbox img{max-height:100%;max-width:100%;object-fit:contain;filter:drop-shadow(0 6px 16px rgba(0,0,0,.35))}
-.tile span{display:flex;align-items:center;justify-content:center;height:20%;width:100%;font-weight:700;letter-spacing:.15px}
-</style></head><body>
-<div class="bg"></div>
-
-<nav class="topbar" id="topbar">
-  <div class="nav">
-    <a class="homepill" href="../index.html" aria-label="Home"><img src="../Image/Home.png" alt="Home"/><span>Home</span></a>
-    <div class="tabswrap">
-      <button class="navbtn" id="leftbtn"><span>&lt;</span></button>
-      <div class="tabs" id="tabs">
-        <a class="tab" href="System_Files_Info.html"><img src="../Image/Nav.png" alt="System Files"/>System Files</a>
-        <a class="tab active" href="Commands.html"><img src="../Image/Command.png" alt="Commands"/>Commands</a>
-        <a class="tab" href="Kali_Tools.html"><img src="../Image/KaliLinux.png" alt="Kali Tools"/>Kali Tools</a>
-        <a class="tab" href="cyber_roadmap.html"><img src="../Image/roadmap.png" alt="RoadMap"/>RoadMap</a>
-        <a class="tab" href="Cyber_Websites.html"><img src="../Image/Awareness.png" alt="Websites"/>Cyber Websites</a>
-      </div>
-      <button class="navbtn" id="rightbtn"><span>&gt;</span></button>
-    </div>
-  </div>
-</nav>
-
-<div class="page">
-  <main class="shell">
-    <h1 class="h">Commands — Bash, CMD, PowerShell</h1>
-    <p class="p">Pick a shell to view core commands, tips, and security-focused usage.</p>
-    <section class="grid">
-      <a class="tile" href="Commands/Bash.html"><div class="imgbox"><img src="../Image/Bash.png" alt="Bash"></div><span>Bash</span></a>
-      <a class="tile" href="Commands/CMD.html"><div class="imgbox"><img src="../Image/CMD.png" alt="CMD"></div><span>CMD</span></a>
-      <a class="tile" href="Commands/PS.html"><div class="imgbox"><img src="../Image/PS.png" alt="PowerShell"></div><span>PowerShell</span></a>
-    </section>
-  </main>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commands | Cyber Epistemology</title>
+<meta name="description" content="Command line cheat sheets for Bash, PowerShell and Windows CMD, plus a side by side table of the same task in each shell.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../Assets/Image/AppleTouchIcon.png">
+<link rel="stylesheet" href="../Assets/Style/Site.css">
+<script src="../Assets/Script/Site.js" defer></script>
+</head>
+<body class="is-content-page" data-root="../" data-section="commands">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-separator">/</span><span>Commands</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../Assets/Icon/Terminal.png" alt="">
+<div>
+<p class="hero-eyebrow">Commands</p>
+<h1 class="hero-title">Command Line Cheat Sheets</h1>
 </div>
-
-<script>
-(function(){
-  var tb=document.getElementById('topbar'),lastY=window.scrollY||0,hidden=false;
-  window.addEventListener('scroll',function(){if(!tb)return;var y=window.scrollY||0;if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
-
-  var p=location.pathname.replace(/\/+$/,'');
-  document.querySelectorAll('.tabs .tab').forEach(function(a){
-    var h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');
-    if(p.endsWith(h))a.classList.add('active')
-  });
-
-  var tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
-  function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
-  function updateArrows(){
-    var o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;
-    tabs.classList.toggle('overflow',o);
-    leftbtn.style.display=o&&s>0?'inline-flex':'none';
-    rightbtn.style.display=o&&s<max-1?'inline-flex':'none'
-  }
-  function scrollByStep(d){
-    var step=Math.max(120,Math.floor(tabs.clientWidth*.6));
-    tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})
-  }
-  leftbtn.addEventListener('click',function(){scrollByStep(-1)});
-  rightbtn.addEventListener('click',function(){scrollByStep(1)});
-  tabs.addEventListener('scroll',updateArrows,{passive:true});
-  new ResizeObserver(updateArrows).observe(tabs);
-  window.addEventListener('resize',updateArrows);
-  tabs.addEventListener('wheel',function(e){
-    if(!hasOverflow())return;
-    var dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);
-    if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}
-  });
-  updateArrows();
-})();
-</script>
-</body></html>
+</div>
+<p class="hero-lead">Practical commands for the three shells you meet most in IT and security work. Pick a shell below, or use the table to translate a task from one shell to another.</p>
+<div class="hero-meta"><span class="badge">3 shells</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: processes" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="shells">
+<h2 class="panel-title">Choose a Shell</h2>
+<p class="panel-lead">Each sheet is grouped by task, with a copy button on every example.</p>
+<div class="card-grid">
+<a class="card" href="Commands/Bash.html"><img class="card-icon" src="../Assets/Icon/Bash.png" alt=""><span class="card-title">Bash</span><span class="card-text">Linux and macOS shell: files, text processing, processes, networking, permissions and scripting.</span><span class="card-meta">Open Bash sheet</span></a>
+<a class="card" href="Commands/PS.html"><img class="card-icon" src="../Assets/Icon/PowerShell.png" alt=""><span class="card-title">PowerShell</span><span class="card-text">Object based shell for Windows, Windows Server, Active Directory and remote administration.</span><span class="card-meta">Open PowerShell sheet</span></a>
+<a class="card" href="Commands/CMD.html"><img class="card-icon" src="../Assets/Icon/CommandPrompt.png" alt=""><span class="card-title">Windows CMD</span><span class="card-text">Classic Command Prompt and batch files: built in commands, networking, registry and services.</span><span class="card-meta">Open CMD sheet</span></a>
+</div>
+</section>
+<section class="panel" id="equivalents">
+<h2 class="panel-title">Same Task, Three Shells</h2>
+<p class="panel-lead">Quick translation for everyday tasks.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Task</th><th>Bash</th><th>PowerShell</th><th>CMD</th></tr></thead>
+<tbody>
+<tr><td>List files, including hidden</td><td><code class="copy">ls -la</code></td><td><code class="copy">Get-ChildItem -Force</code></td><td><code class="copy">dir /a</code></td></tr>
+<tr><td>Change directory</td><td><code class="copy">cd /var/log</code></td><td><code class="copy">Set-Location C:\Windows</code></td><td><code class="copy">cd /d C:\Windows</code></td></tr>
+<tr><td>Print a file</td><td><code class="copy">cat notes.txt</code></td><td><code class="copy">Get-Content notes.txt</code></td><td><code class="copy">type notes.txt</code></td></tr>
+<tr><td>Follow a log</td><td><code class="copy">tail -f app.log</code></td><td><code class="copy">Get-Content app.log -Tail 20 -Wait</code></td><td>Not available</td></tr>
+<tr><td>Search text in files</td><td><code class="copy">grep -rin "error" .</code></td><td><code class="copy">Select-String -Path *.log -Pattern "error"</code></td><td><code class="copy">findstr /s /i "error" *.log</code></td></tr>
+<tr><td>Find files by name</td><td><code class="copy">find / -name "*.conf" 2&gt;/dev/null</code></td><td><code class="copy">Get-ChildItem -Recurse -Filter *.conf -ErrorAction SilentlyContinue</code></td><td><code class="copy">dir /s /b *.conf</code></td></tr>
+<tr><td>Copy a folder</td><td><code class="copy">cp -r site backup</code></td><td><code class="copy">Copy-Item site backup -Recurse</code></td><td><code class="copy">robocopy site backup /e</code></td></tr>
+<tr><td>Delete a folder</td><td><code class="copy">rm -rf build</code></td><td><code class="copy">Remove-Item build -Recurse -Force</code></td><td><code class="copy">rmdir /s /q build</code></td></tr>
+<tr><td>List processes</td><td><code class="copy">ps aux</code></td><td><code class="copy">Get-Process</code></td><td><code class="copy">tasklist</code></td></tr>
+<tr><td>Stop a process</td><td><code class="copy">kill -9 1234</code></td><td><code class="copy">Stop-Process -Id 1234 -Force</code></td><td><code class="copy">taskkill /pid 1234 /f</code></td></tr>
+<tr><td>Show IP addresses</td><td><code class="copy">ip -br addr</code></td><td><code class="copy">Get-NetIPAddress -AddressFamily IPv4</code></td><td><code class="copy">ipconfig</code></td></tr>
+<tr><td>Listening ports</td><td><code class="copy">ss -tulpn</code></td><td><code class="copy">Get-NetTCPConnection -State Listen</code></td><td><code class="copy">netstat -ano | findstr LISTENING</code></td></tr>
+<tr><td>Test a TCP port</td><td><code class="copy">nc -zv example.com 443</code></td><td><code class="copy">Test-NetConnection example.com -Port 443</code></td><td>Not available</td></tr>
+<tr><td>DNS lookup</td><td><code class="copy">dig example.com +short</code></td><td><code class="copy">Resolve-DnsName example.com</code></td><td><code class="copy">nslookup example.com</code></td></tr>
+<tr><td>File hash (SHA-256)</td><td><code class="copy">sha256sum file.iso</code></td><td><code class="copy">Get-FileHash file.iso -Algorithm SHA256</code></td><td><code class="copy">certutil -hashfile file.iso SHA256</code></td></tr>
+<tr><td>Environment variable</td><td><code class="copy">echo $PATH</code></td><td><code class="copy">$env:Path</code></td><td><code class="copy">echo %PATH%</code></td></tr>
+<tr><td>Current user and groups</td><td><code class="copy">id</code></td><td><code class="copy">whoami /groups</code></td><td><code class="copy">whoami /all</code></td></tr>
+<tr><td>Command help</td><td><code class="copy">man ssh</code></td><td><code class="copy">Get-Help Get-Process -Online</code></td><td><code class="copy">robocopy /?</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="safety">
+<h2 class="panel-title">Run Commands Safely</h2>
+<ul class="checklist">
+<li>Read a command before you paste it. Copy buttons copy exactly what is shown.</li>
+<li>Test destructive commands (delete, format, registry, firewall) in a lab or VM first.</li>
+<li>Prefer a normal user shell. Elevate only for the single command that needs it.</li>
+<li>Only run offensive tools against systems you own or have written permission to test.</li>
+</ul>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

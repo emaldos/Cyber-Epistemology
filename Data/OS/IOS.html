@@ -1,237 +1,251 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>iOS — System Files</title>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="32x32"/>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="192x192"/>
-<link rel="apple-touch-icon" href="../../Image/Logo.png"/>
-<meta name="theme-color" content="#111"/>
-<style>
-:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--line:rgba(255,255,255,.10);--blue:#2196f3}
-*{box-sizing:border-box}
-html,body{height:100%}
-html{scroll-behavior:smooth}
-body{margin:0;font:16px/1.55 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111}
-.bg{position:fixed;inset:0;background:url("../../Image/Logo.png") center/cover no-repeat;z-index:-2}
-.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.80) 100%);z-index:-1}
-.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
-.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
-.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
-.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
-.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
-.homepill span{font-weight:700;letter-spacing:.15px}
-.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
-.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);cursor:pointer;user-select:none;flex:0 0 auto}
-.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
-.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0;max-width:none}
-.tabs.overflow{overflow:auto}
-.tabs::-webkit-scrollbar{display:none}
-.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
-.tab:hover{opacity:1}
-.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
-.tab.active{color:var(--blue)}
-.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
-.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
-.shell .h,.shell .sub{text-align:center}
-.page{position:relative;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:96px 20px 28px}
-.shell{width:min(1200px,96%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
-.h{margin:0 0 2px;font-size:28px;font-weight:800;letter-spacing:.2px}
-.sub{margin:0 0 12px;color:var(--muted)}
-.quicknav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 18px}
-.qbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-weight:700}
-.qbtn:hover{background:rgba(255,255,255,.1)}
-.section{margin:22px 0 0;scroll-margin-top:90px}
-.section .title{margin:0 0 10px;font-size:20px;font-weight:800}
-.card{border:1px solid var(--tileBorder);background:var(--tile);border-radius:18px;box-shadow:0 12px 28px rgba(0,0,0,.3);overflow:hidden}
-.codewrap{padding:0;margin:0;border-top-left-radius:18px;border-top-right-radius:18px}
-pre{margin:0;max-height:480px;overflow:auto;padding:18px;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;background:rgba(0,0,0,.35);border-top-left-radius:18px;border-top-right-radius:18px;border-bottom:1px solid var(--line);white-space:pre}
-pre code{color:#e6eaff}
-.tablewrap{width:100%;overflow:auto}
-table{width:100%;border-collapse:separate;border-spacing:0}
-thead th{position:sticky;top:0;background:rgba(20,24,44,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);text-align:left;padding:12px 14px;font-size:14px}
-tbody td{border-bottom:1px solid var(--line);padding:12px 14px;vertical-align:top}
-tbody tr:hover{background:rgba(255,255,255,.04)}
-th:first-child,td:first-child{border-left:none}
-th:last-child,td:last-child{border-right:none}
-th,td{word-break:break-word;overflow-wrap:anywhere}
-caption{caption-side:bottom;color:var(--muted);padding:10px 4px 0}
-.kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.06);font:12px/1.2 ui-monospace,monospace}
-.bycat caption{caption-side:top;padding:10px 4px 6px;font-weight:800}
-.bycat .card+.card{margin-top:14px}
-.bycat thead th{background:linear-gradient(180deg,rgba(33,150,243,.18),rgba(33,150,243,.14));backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid rgba(33,150,243,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);color:var(--text)}
-.bycat table{table-layout:fixed;width:100%}
-.bycat th:nth-child(1),.bycat td:nth-child(1){width:220px}
-.bycat th:nth-child(2),.bycat td:nth-child(2){width:420px}
-.bycat th:nth-child(3),.bycat td:nth-child(3){width:auto}
-@media(max-width:900px){.bycat th:nth-child(1),.bycat td:nth-child(1){width:180px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:300px}}
-@media(max-width:640px){.tab{padding:6px 10px}.shell{width:98%}.bycat th:nth-child(1),.bycat td:nth-child(1){width:150px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:240px}}
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>iOS | Cyber Epistemology</title>
+<meta name="description" content="iOS 27 security and forensics reference: acquisition with Finder and iTunes backups, sysdiagnose and MVT, keychain and app container paths, logs, shutdown.log, Biome, network artifacts, triage commands and hardening.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../../Assets/Image/AppleTouchIcon.png">
+<link rel="stylesheet" href="../../Assets/Style/Site.css">
+<script src="../../Assets/Script/Site.js" defer></script>
 </head>
-<body>
-<div class="bg"></div>
-<nav class="topbar" id="topbar">
-  <div class="nav">
-    <a class="homepill" href="../../index.html" title="Home" aria-label="Home"><img src="../../Image/Home.png" alt="Home"/><span>Home</span></a>
-    <div class="tabswrap">
-      <button class="navbtn" id="leftbtn" aria-label="Prev"><span>&lt;</span></button>
-      <div class="tabs" id="tabs">
-        <a class="tab" href="../System_Files_Info.html"><img src="../../Image/Nav.png" alt="System Files"/>System Files</a>
-        <a class="tab" href="Kali_Linux.html"><img src="../../Image/KaliLinux.png" alt="Kali"/>Kali</a>
-        <a class="tab" href="Ubuntu_Server.html"><img src="../../Image/UbuntuServer.png" alt="Ubuntu Server"/>Ubuntu Server</a>
-        <a class="tab" href="Windows_11.html"><img src="../../Image/Win11.png" alt="Windows 11"/>Windows 11</a>
-        <a class="tab" href="Windows_Server.html"><img src="../../Image/WinServer.png" alt="Windows Server"/>Windows Server</a>
-        <a class="tab" href="macOS.html"><img src="../../Image/MacOS.png" alt="macOS"/>macOS</a>
-        <a class="tab" href="IOS.html"><img src="../../Image/IOS.png" alt="iOS"/>iOS</a>
-        <a class="tab" href="Android.html"><img src="../../Image/Android.png" alt="Android"/>Android</a>
-      </div>
-      <button class="navbtn" id="rightbtn" aria-label="Next"><span>&gt;</span></button>
-    </div>
-  </div>
-</nav>
-
-<div class="page">
-  <main class="shell">
-    <h1 class="h">iOS — System Files</h1>
-    <p class="sub">Click to navigate to a section</p>
-    <div class="quicknav">
-      <a class="qbtn" href="#fsmap">High-Value Paths</a>
-      <a class="qbtn" href="#bycat">Important Files</a>
-    </div>
-
-    <section class="section" id="fsmap">
-      <h2 class="title">Filesystem map and high-value paths for threats/defense</h2>
-
-      <h3 class="title">Critical paths</h3>
-      <div class="card"><div class="codewrap">
-<pre><code>/private/var/Keychains/keychain-2.db                     # System keychain DB; device & app secrets (file exists, access gated by SEP)
-/private/var/mobile/Library/ConfigurationProfiles/*      # MDM/config profiles; trust, VPN, certs
-/Library/LaunchDaemons/*.plist (jailbroken)              # Root persistence (launchd); verify owners/paths
-/Library/LaunchAgents/*.plist (jailbroken)               # Global user-session persistence
-/private/var/containers/Shared/SystemGroup/*             # System groups/shared containers; tokens/configs
-/private/var/mobile/Library/Accounts/Accounts*.sqlite    # iCloud & account tokens (entitlement protected)
-/private/var/managed/* (Supervised/MDM)                  # Managed settings/apps; policy scope
-</code></pre>
-      </div></div>
-
-      <h3 class="title">High-risk paths</h3>
-      <div class="card"><div class="codewrap">
-<pre><code>/private/var/mobile/Containers/Data/Application/&lt;UUID&gt;/ # App sandboxes (Documents, Library, tmp)
-/private/var/mobile/Containers/Shared/AppGroup/&lt;UUID&gt;/   # App Groups shared data between apps
-/private/var/mobile/Library/Preferences/*.plist          # Per-app/system prefs; tokens/endpoints
-/private/var/preferences/SystemConfiguration/*           # Wi-Fi, DHCP, DNS, proxies
-/private/var/mobile/Library/Safari/*                     # History, bookmarks, tabs
-/private/var/mobile/Library/WebKit/*                     # WebKit caches, WebsiteData
-/private/var/mobile/Library/Keyboard/*                   # User dictionaries; sensitive words
-/private/var/mobile/Media/DCIM/*                         # Photos/videos (exfil target)
-/private/var/mobile/Library/MobileDocuments/*            # iCloud Drive synced data
-/private/var/mobile/Library/CallHistoryDB/CallHistory.storedata   # Call history DB
-/private/var/mobile/Library/SMS/sms.db                   # Messages DB (unencrypted on device; backup-encrypted)
-</code></pre>
-      </div></div>
-
-      <h3 class="title">Medium-risk paths</h3>
-      <div class="card"><div class="codewrap">
-<pre><code>/private/var/mobile/Library/Logs/CrashReporter/*         # Crash logs; execution traces
-/private/var/db/diagnostics/*                            # Unified logging tracev3 (via log show)
-/private/var/mobile/Library/AddressBook/AddressBook.sqlitedb (older)  # Contacts (legacy path)
-/System/Volumes/Data/*                                   # Writable data volume (modern iOS layout)
-/private/var/tmp , /private/var/mobile/Library/Caches/*  # Staging/caches; loot & OPSEC leaks
-/private/etc/hosts (jailbroken)                          # Traffic redirection if modified
-/private/etc/ssh/sshd_config (jailbroken)                # Remote entry policy
-</code></pre>
-      </div></div>
-      <p class="sub">Note: On stock iOS, access to many paths is restricted by sandbox, entitlements, and the Secure Enclave; full file access typically requires a device backup (iTunes/USB) or a jailbroken device.</p>
-    </section>
-
-    <section class="section bycat" id="bycat">
-      <h2 class="title">Important files — by Category</h2>
-
-      <div class="card tablewrap"><table>
-        <caption>Accounts, Keychain & Trust (Critical first)</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>System Keychain</td><td><span class="kbd">/private/var/Keychains/keychain-2.db</span></td><td>Device/app secrets; SEP-gated but critical target.</td></tr>
-          <tr><td>Accounts</td><td><span class="kbd">/private/var/mobile/Library/Accounts/Accounts*.sqlite</span></td><td>Apple/3rd-party account tokens; lateral risk.</td></tr>
-          <tr><td>Certificates</td><td><span class="kbd">/private/var/Keychains/TrustStore.sqlite3</span></td><td>Trust store; rogue roots ⇒ interception.</td></tr>
-          <tr><td>MDM Profiles</td><td><span class="kbd">/private/var/mobile/Library/ConfigurationProfiles/*</span></td><td>Device management, VPN, Wi-Fi, certs.</td></tr>
-          <tr><td>App Groups</td><td><span class="kbd">/private/var/mobile/Containers/Shared/AppGroup/&lt;UUID&gt;/</span></td><td>Shared secrets between apps.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Persistence & Startup</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>LaunchDaemons</td><td><span class="kbd">/Library/LaunchDaemons/*.plist</span> (jailbroken)</td><td>Root persistence; verify ProgramArguments.</td></tr>
-          <tr><td>LaunchAgents</td><td><span class="kbd">/Library/LaunchAgents/*.plist</span> (jailbroken)</td><td>User-session autostart.</td></tr>
-          <tr><td>App Background</td><td><span class="kbd">App sandbox &rarr; Library/*</span></td><td>Background tasks, push, URL schemes.</td></tr>
-          <tr><td>Profiles</td><td><span class="kbd">ConfigurationProfiles</span></td><td>Install/removal of conf profiles = major policy shift.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Network, VPN & Wi-Fi</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>System Config</td><td><span class="kbd">/private/var/preferences/SystemConfiguration/*</span></td><td>Interfaces, DNS, proxies; hijack ⇒ redirection.</td></tr>
-          <tr><td>Wi-Fi</td><td><span class="kbd">.../com.apple.wifi.plist</span></td><td>Known networks; pivot surface.</td></tr>
-          <tr><td>VPN</td><td><span class="kbd">ConfigurationProfiles/Payloads/*</span></td><td>IPSec/IKE/OpenVPN profiles; creds/certs.</td></tr>
-          <tr><td>Hosts (JB)</td><td><span class="kbd">/private/etc/hosts</span></td><td>Redirection on jailbroken devices.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>User Data & App Sandboxes</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>App Data</td><td><span class="kbd">/private/var/mobile/Containers/Data/Application/&lt;UUID&gt;/</span></td><td>Documents, Library, tmp; per-app secrets/tokens.</td></tr>
-          <tr><td>Shared Data</td><td><span class="kbd">/private/var/mobile/Containers/Shared/AppGroup/&lt;UUID&gt;/</span></td><td>Cross-app shared state.</td></tr>
-          <tr><td>Safari</td><td><span class="kbd">/private/var/mobile/Library/Safari/</span></td><td>History, bookmarks, sessions.</td></tr>
-          <tr><td>WebKit</td><td><span class="kbd">/private/var/mobile/Library/WebKit/</span></td><td>WebsiteData, caches.</td></tr>
-          <tr><td>Messages</td><td><span class="kbd">/private/var/mobile/Library/SMS/sms.db</span></td><td>SMS/iMessage DB (device accessible with proper rights).</td></tr>
-          <tr><td>Calls</td><td><span class="kbd">/private/var/mobile/Library/CallHistoryDB/CallHistory.storedata</span></td><td>Call logs.</td></tr>
-          <tr><td>Photos</td><td><span class="kbd">/private/var/mobile/Media/DCIM/</span></td><td>Camera roll; EXIF/location clues.</td></tr>
-          <tr><td>iCloud Drive</td><td><span class="kbd">/private/var/mobile/Library/MobileDocuments/</span></td><td>Synced docs; lateral exfil.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Logs & Forensics</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Unified Logs</td><td><span class="kbd">/private/var/db/diagnostics/*</span></td><td>tracev3 stores; analyze via <span class="kbd">log show</span>.</td></tr>
-          <tr><td>Crash Logs</td><td><span class="kbd">/private/var/mobile/Library/Logs/CrashReporter/*</span></td><td>App crashes; exploit traces.</td></tr>
-          <tr><td>Caches</td><td><span class="kbd">/private/var/mobile/Library/Caches/*</span></td><td>Tokens, last-used artifacts.</td></tr>
-          <tr><td>Tmp</td><td><span class="kbd">/private/var/tmp</span></td><td>Staging; periodic cleanup needed.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Security Model Notes</caption>
-        <thead><tr><th>Topic</th><th>Location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>SEP</td><td><span class="kbd">Secure Enclave</span></td><td>Protects keybags/Touch ID/Face ID; blocks raw key extraction.</td></tr>
-          <tr><td>Code Signing</td><td><span class="kbd">AMFI</span></td><td>Unsigned binaries blocked; jailbreak disables/patches.</td></tr>
-          <tr><td>Data Protection</td><td><span class="kbd">NSFileProtection* classes</span></td><td>Per-file crypto tied to passcode state.</td></tr>
-          <tr><td>Backups</td><td><span class="kbd">iTunes / Finder backups</span></td><td>Primary forensic access path; can be encrypted.</td></tr>
-        </tbody>
-      </table></div>
-
-    </section>
-  </main>
+<body class="is-content-page" data-root="../../" data-section="system-files">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><a href="../System_Files_Info.html">System Files</a><span class="breadcrumb-separator">/</span><span>iOS</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../../Assets/Icon/Ios.png" alt="">
+<div>
+<p class="hero-eyebrow">System Files</p>
+<h1 class="hero-title">iOS Security Reference</h1>
 </div>
-
-<script>
-let lastY=scrollY,hidden=false;
-addEventListener('scroll',()=>{const y=scrollY,tb=document.getElementById('topbar');if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
-const p=location.pathname.replace(/\/+$/,'');document.querySelectorAll('.tabs .tab').forEach(a=>{const h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');if(p.endsWith(h))a.classList.add('active')});
-const tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
-function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
-function updateArrows(){const o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;tabs.classList.toggle('overflow',o);leftbtn.style.display=o&&s>0?'inline-flex':'none';rightbtn.style.display=o&&s<max-1?'inline-flex':'none'}
-function scrollByStep(d){const step=Math.max(120,Math.floor(tabs.clientWidth*.6));tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})}
-leftbtn.addEventListener('click',()=>scrollByStep(-1));rightbtn.addEventListener('click',()=>scrollByStep(1));
-tabs.addEventListener('scroll',updateArrows,{passive:true});new ResizeObserver(updateArrows).observe(tabs);
-addEventListener('resize',updateArrows);
-tabs.addEventListener('wheel',e=>{if(!hasOverflow())return;const dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}});
-updateArrows();
-</script>
-</body></html>
+</div>
+<p class="hero-lead">How to get data off an iPhone, which on-device files matter, and how to check a phone for spyware. On a stock iPhone you cannot browse these paths: you work from backups, sysdiagnose archives and full file system extractions.</p>
+<div class="hero-meta"><span class="badge">iOS 27</span><span class="badge">73 entries</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: sms.db" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<nav class="sub-nav" aria-label="Operating systems">
+<a class="sub-nav-link" href="../System_Files_Info.html"><img src="../../Assets/Icon/Folder.png" alt="">All systems</a>
+<a class="sub-nav-link" href="Windows_11.html"><img src="../../Assets/Icon/Windows11.png" alt="">Windows 11</a>
+<a class="sub-nav-link" href="Windows_Server.html"><img src="../../Assets/Icon/WindowsServer.png" alt="">Windows Server</a>
+<a class="sub-nav-link" href="macOS.html"><img src="../../Assets/Icon/MacOs.png" alt="">macOS</a>
+<a class="sub-nav-link is-active" href="IOS.html" aria-current="page"><img src="../../Assets/Icon/Ios.png" alt="">iOS</a>
+<a class="sub-nav-link" href="Android.html"><img src="../../Assets/Icon/Android.png" alt="">Android</a>
+<a class="sub-nav-link" href="Ubuntu_Server.html"><img src="../../Assets/Icon/UbuntuServer.png" alt="">Ubuntu Server</a>
+<a class="sub-nav-link" href="Kali_Linux.html"><img src="../../Assets/Icon/KaliLinux.png" alt="">Kali Linux</a>
+</nav>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="overview">
+<h2 class="panel-title">Overview</h2>
+<p class="panel-lead">Key facts about the current release and how its protections shape what you can collect.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term">Current release</span><span class="definition-text">iOS and iPadOS 27.2.1 (November 2026). iOS 27 supports iPhone 11 and later.</span></div>
+<div class="definition"><span class="definition-term">Support status</span><span class="definition-text">iOS 26.7.3 and iOS 18.7.12 still received security fixes in November 2026. iPhone XS, XR and older are not supported by iOS 27.</span></div>
+<div class="definition"><span class="definition-term">File system</span><span class="definition-text">APFS with a signed, read-only system volume and a data volume at <code>/private/var</code>. Every file is encrypted with a Data Protection class tied to the passcode.</span></div>
+<div class="definition"><span class="definition-term">Built-in security features</span><span class="definition-text">Secure Enclave, Data Protection, code signing and sandboxing, BlastDoor, Lockdown Mode, Stolen Device Protection, USB Restricted Mode, inactivity reboot, Memory Integrity Enforcement on A19 and newer chips, Advanced Data Protection for iCloud.</span></div>
+<div class="definition"><span class="definition-term">Where logs live</span><span class="definition-text">Unified log in <code>/private/var/db/diagnostics/</code>, collected through a sysdiagnose or a paired Mac. Crash reports appear in Settings, Privacy and Security, Analytics and Improvements, Analytics Data.</span></div>
+<div class="definition"><span class="definition-term">Access reality</span><span class="definition-text">On-device paths below are only readable in a full file system extraction (commercial tools or a jailbreak). Backups and sysdiagnose give a large subset without either.</span></div>
+</div>
+<div class="callout callout-warning"><p><strong>Lock state matters:</strong> after a restart the phone is in Before First Unlock (BFU) state and most data stays encrypted. Since iOS 18.1 a locked iPhone restarts itself after about 72 hours without unlock, which returns it to BFU. Acquire early and keep the device charged.</p></div>
+</section>
+<section class="panel" id="acquisition">
+<h2 class="panel-title">Acquisition</h2>
+<p class="panel-lead">Ways to get data off an iPhone, from easiest to most invasive, and where backups land on host computers.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Method</th><th>What you get</th><th>Requirements</th></tr></thead>
+<tbody>
+<tr><td>Encrypted local backup (Finder, iTunes, Apple Devices app, <code>idevicebackup2</code>)</td><td>Logical copy: messages, call history, photos, Safari, Health, keychain items, app data that apps allow to be backed up</td><td>Unlocked phone, Trust this computer, passcode. Set a backup password: without encryption, keychain, Health and call history are left out</td></tr>
+<tr><td>sysdiagnose</td><td>Unified logs, <code>shutdown.log</code>, crash and Jetsam reports, process and network state, install logs</td><td>Press both volume buttons and the side button for about one second; the archive appears in Analytics Data after up to 10 minutes</td></tr>
+<tr><td>Crash and analytics logs</td><td><code>.ips</code> crash reports, panics, Jetsam events</td><td>Settings, Analytics Data, or pull over USB with <code>idevicecrashreport</code> or <code>pymobiledevice3 crash pull</code></td></tr>
+<tr><td>Live syslog over USB</td><td>Streaming unified log while you reproduce behavior</td><td>Paired host; <code>idevicesyslog</code>, <code>pymobiledevice3 syslog live</code> or Console on a Mac</td></tr>
+<tr><td>Full file system extraction</td><td>Everything in <code>/private/var</code>, including keychain and app containers excluded from backups</td><td>Commercial forensic tools or a jailbreak. The checkm8 bootrom exploit only covers A11 and older chips, so it does not apply to iOS 27 devices</td></tr>
+<tr><td>iCloud backup and synced data</td><td>Device backups, Messages in iCloud, Photos, iCloud Drive from Apple's servers</td><td>Account credentials or legal process; Advanced Data Protection makes most of it end-to-end encrypted</td></tr>
+<tr><td>MDM inventory</td><td>Installed apps, profiles, OS version, supervision and security state</td><td>Device enrolled in your MDM; no access to personal data</td></tr>
+<tr><td>MVT (Mobile Verification Toolkit)</td><td>Checks backups and file system dumps against published spyware indicators</td><td>Python tool by Amnesty International Security Lab; works best on an encrypted backup</td></tr>
+</tbody>
+</table>
+</div>
+<h3>Backup and pairing locations on host computers</h3>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>~/Library/Application Support/MobileSync/Backup/&lt;UDID&gt;/</code></td><td>Finder backups on macOS</td><td>A full logical copy of the phone sitting on a laptop; needs Full Disk Access to read</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>%APPDATA%\Apple Computer\MobileSync\Backup\&lt;UDID&gt;\</code></td><td>Backups made by iTunes installed from Apple's website on Windows</td><td>Often forgotten on old PCs; unencrypted backups are readable by anyone with the disk</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>%USERPROFILE%\Apple\MobileSync\Backup\&lt;UDID&gt;\</code></td><td>Backups made by the Apple Devices app or iTunes from the Microsoft Store</td><td>Current default location on Windows 10 and 11</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>Manifest.db</code>, <code>Manifest.plist</code>, <code>Info.plist</code>, <code>Status.plist</code></td><td>Backup index (domain, relative path, SHA-1 file name), encryption state, device info and backup time</td><td>Files are stored as SHA-1 of <code>domain-path</code>, for example <code>3d/3d0d7e5fb2ce288813306e4d4636395e047a3d28</code> is <code>sms.db</code></td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/db/lockdown/</code> (macOS), <code>%ProgramData%\Apple\Lockdown\</code> (Windows)</td><td>Pairing records for every trusted iPhone</td><td>A stolen pairing record lets another computer talk to the phone as a trusted host while it is unlocked</td><td><span class="tag tag-critical">Critical</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="credentials-secrets">
+<h2 class="panel-title">Credentials and Secrets</h2>
+<p class="panel-lead">Keychain, account tokens and trust settings. Full file system extraction needed unless noted.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/private/var/Keychains/keychain-2.db</code></td><td>Keychain: Wi-Fi, website and app passwords, tokens, passkeys</td><td>Items are wrapped by Secure Enclave keys; extraction tools decrypt what the lock state allows. Encrypted backups carry the items marked as migratable</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/Accounts/Accounts3.sqlite</code></td><td>Apple Account and third party accounts (mail, calendar, social)</td><td>Lists every account on the device and its identifiers</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/protected/trustd/private/TrustStore.sqlite3</code></td><td>User installed and trusted root certificates</td><td>A trusted rogue CA allows TLS interception; also check Settings, General, About, Certificate Trust Settings</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/keybags/systembag.kb</code></td><td>System keybag wrapping the Data Protection class keys</td><td>Needed with the passcode to decrypt files in a raw extraction</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/mobile/Containers/Data/Application/&lt;UUID&gt;/Library/Preferences/</code></td><td>App preference plists</td><td>Poorly written apps store API keys and session tokens here instead of the keychain</td><td><span class="tag tag-medium">Medium</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="persistence">
+<h2 class="panel-title">Persistence and Autostart</h2>
+<p class="panel-lead">Stock iOS gives users no autostart folders. Persistence comes from profiles, management, installed apps and, on jailbroken phones, launchd.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/private/var/containers/Shared/SystemGroup/systemgroup.com.apple.configurationprofiles/Library/ConfigurationProfiles/</code></td><td>Installed configuration profiles and MDM enrollment</td><td>A profile can add a root CA, VPN, proxy or MDM control; the most common stalkerware foothold on unjailbroken phones</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/private/var/containers/Bundle/Application/&lt;UUID&gt;/</code></td><td>Installed app bundles</td><td>Look for enterprise or developer signed apps outside the App Store and apps installed by alternative marketplaces</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/FrontBoard/applicationState.db</code></td><td>Installed app inventory with bundle IDs and container paths</td><td>Maps app container UUIDs to apps and reveals hidden or removed apps</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/Shortcuts/</code></td><td>Shortcuts and personal automations</td><td>Automations run on triggers such as time, location or opening an app</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/var/jb/Library/LaunchDaemons/</code></td><td>launchd daemons on rootless jailbreaks (for example Dopamine)</td><td>Jailbreak tools and implants run as root from here; the folder should not exist on a stock phone</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/Library/LaunchDaemons/</code></td><td>launchd daemons on older rootful jailbreaks</td><td>On stock iOS the system volume is sealed, so anything here means a compromised device</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/System/Library/LaunchDaemons/</code></td><td>Apple daemons on the sealed system volume</td><td>Baseline only; cannot change without breaking the seal</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout"><p><strong>Spyware and reboots:</strong> most modern iOS exploit chains are not persistent and are lost on restart, so attackers reinfect. A daily restart is a cheap mitigation, and the infection traces live in logs and databases, not in startup items.</p></div>
+</section>
+<section class="panel" id="logs-artifacts">
+<h2 class="panel-title">Logs and Forensic Artifacts</h2>
+<p class="panel-lead">Execution, network use and timeline artifacts, many of them used by MVT spyware checks.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/private/var/db/diagnostics/</code></td><td>Unified log <code>.tracev3</code> files and <code>uuidtext</code></td><td>Process launches, network events and errors; included in sysdiagnose as <code>system_logs.logarchive</code></td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/db/diagnostics/shutdown.log</code></td><td>Processes still running at each shutdown</td><td>Known Pegasus and Predator indicator. iOS 26.0 and 26.1 overwrote it on every reboot; 26.2 and later keep history again</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/Logs/CrashReporter/</code></td><td>Crash, panic and Jetsam reports</td><td>Exploit attempts often crash processes such as <code>imagent</code> or <code>MessagesBlastDoorService</code></td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/wireless/Library/Databases/DataUsage.sqlite</code></td><td>Cellular and Wi-Fi data use per process</td><td>Lists process names that used the network, including ones with no app</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/networkd/netusage.sqlite</code></td><td>Network use per process</td><td>Similar to DataUsage; spyware process names have shown up here</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/Biome/</code></td><td>Biome streams: app usage, screen state, notifications, intents</td><td>Main usage timeline since iOS 16; SEGB format needs dedicated parsers</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/CoreDuet/Knowledge/knowledgeC.db</code></td><td>KnowledgeC usage database</td><td>Rich on older versions; many streams moved to Biome</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/Caches/com.apple.routined/</code></td><td>Significant locations and visit history</td><td>Places the device over time; protected by the strongest Data Protection class</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/installd/Library/Logs/MobileInstallation/</code></td><td>App install, update and removal log</td><td>Shows when an app appeared, even after it was deleted</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/private/var/containers/Shared/SystemGroup/&lt;UUID&gt;/Library/BatteryLife/CurrentPowerlog.PLSQL</code></td><td>PowerLog: app and process activity with battery use</td><td>Timeline of foreground and background activity per process</td><td><span class="tag tag-medium">Medium</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="network-remote">
+<h2 class="panel-title">Network and Remote Access</h2>
+<p class="panel-lead">Wi-Fi, VPN and network configuration on the device.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/private/var/preferences/com.apple.networkextension.plist</code></td><td>VPN, DNS proxy, content filter and per app VPN configurations</td><td>A rogue VPN or DNS profile sees or redirects all traffic</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/preferences/com.apple.wifi.known-networks.plist</code></td><td>Known Wi-Fi networks with join times (passwords stay in the keychain)</td><td>Location history and networks that could be spoofed</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/private/var/preferences/SystemConfiguration/preferences.plist</code></td><td>Network services, device name, proxies</td><td>Global proxy settings redirect traffic</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/private/var/root/Library/Lockdown/</code></td><td>Device side pairing records and activation data</td><td>Shows which host computers are trusted; clear with Settings, Reset, Reset Location and Privacy</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/var/jb/etc/ssh/</code>, <code>/private/etc/ssh/</code></td><td>OpenSSH server installed by a jailbreak</td><td>Jailbroken phones with default credentials are reachable over Wi-Fi; never present on stock iOS</td><td><span class="tag tag-critical">Critical</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="user-data">
+<h2 class="panel-title">User Data and Browsers</h2>
+<p class="panel-lead">Messages, calls, photos, Safari and app containers. Most are also present in an encrypted backup.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/private/var/mobile/Library/SMS/sms.db</code></td><td>iMessage, SMS and RCS messages, attachments in <code>Attachments/</code></td><td>Zero-click exploits arrive here; MVT checks it for malicious links and senders</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/private/var/mobile/Containers/Data/Application/&lt;UUID&gt;/</code></td><td>App sandboxes: <code>Documents</code>, <code>Library</code>, <code>tmp</code></td><td>Per app databases and caches; map UUIDs with <code>.com.apple.mobile_container_manager.metadata.plist</code></td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/mobile/Containers/Shared/AppGroup/&lt;UUID&gt;/</code></td><td>Data shared between an app and its extensions</td><td>WhatsApp <code>ChatStorage.sqlite</code> and Notes <code>NoteStore.sqlite</code> live in app groups</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/CallHistoryDB/CallHistory.storedata</code></td><td>Phone, FaceTime and some VoIP call history</td><td>Contact timeline; only in encrypted backups</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/AddressBook/AddressBook.sqlitedb</code></td><td>Contacts</td><td>Identifies people and numbers seen in other artifacts</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/private/var/mobile/Media/DCIM/</code>, <code>/private/var/mobile/Media/PhotoData/Photos.sqlite</code></td><td>Photos and videos plus the Photos library database</td><td>EXIF location and capture times; Photos.sqlite records imports, edits and deletions</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/Safari/</code></td><td>Bookmarks and tabs; <code>History.db</code> here or in Safari's data container</td><td>MVT checks Safari history for exploit and spyware domains</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/Mail/</code></td><td>Mail.app accounts and cached messages</td><td>Email content and password reset links</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/Health/healthdb_secure.sqlite</code></td><td>Health and fitness data, workouts, steps with times</td><td>Shows when the phone was carried and moving; only in encrypted backups</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/Mobile Documents/</code></td><td>Local iCloud Drive files</td><td>Documents synced from other devices on the account</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/Keyboard/</code></td><td>Learned words and text replacements</td><td>Can reveal names, terms and typed phrases</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="system-config">
+<h2 class="panel-title">System Binaries and Configuration</h2>
+<p class="panel-lead">Volume layout and system level settings.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/System/</code>, <code>/usr/</code>, <code>/Applications/</code></td><td>Apple binaries and built-in apps on the signed system volume</td><td>Read-only and verified at boot; any change means a jailbreak</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/private/var/</code></td><td>Data volume: user data, apps, logs, preferences</td><td>Everything that changes lives here; it is what an extraction images</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/Preferences/</code></td><td>System and Apple app preferences for the mobile user</td><td>Settings changes, last used values and feature toggles</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/private/var/Managed Preferences/mobile/</code></td><td>Settings enforced by MDM</td><td>Shows restrictions the organization applied</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/var/jb/</code></td><td>Root of a rootless jailbreak (packages, tweaks, binaries)</td><td>Its existence alone proves a jailbreak</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/private/var/mobile/Library/Caches/</code>, <code>/private/var/tmp/</code></td><td>System and app caches, temporary files</td><td>Leftovers from apps and tools; cleaned automatically</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="triage-commands">
+<h2 class="panel-title">Triage Commands</h2>
+<p class="panel-lead">Host side tools for a connected iPhone: libimobiledevice, pymobiledevice3 and MVT. The phone must be unlocked and trust the computer.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Task</th><th>Command</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>List connected devices</td><td><code class="copy">idevice_id -l</code></td><td>Prints the UDID of each paired device</td></tr>
+<tr><td>Device info and iOS version</td><td><code class="copy">ideviceinfo -k ProductVersion</code></td><td>Drop <code>-k</code> for every lockdown value</td></tr>
+<tr><td>Pair with the device</td><td><code class="copy">idevicepair pair</code></td><td>Tap Trust on the phone and enter the passcode</td></tr>
+<tr><td>Turn on backup encryption</td><td><code class="copy">idevicebackup2 -i encryption on</code></td><td>Prompts for a backup password; required for keychain and call history</td></tr>
+<tr><td>Full local backup</td><td><code class="copy">idevicebackup2 backup --full ./backup</code></td><td>Same format as Finder and iTunes backups</td></tr>
+<tr><td>Backup with pymobiledevice3</td><td><code class="copy">pymobiledevice3 backup2 backup --full ./backup</code></td><td>Python alternative that tracks current iOS changes</td></tr>
+<tr><td>Live system log</td><td><code class="copy">pymobiledevice3 syslog live</code></td><td>Or <code>idevicesyslog</code></td></tr>
+<tr><td>Pull crash reports</td><td><code class="copy">idevicecrashreport -e ./crashes</code></td><td><code>-e</code> extracts reports instead of copying archives</td></tr>
+<tr><td>Collect logs from a Mac</td><td><code class="copy">sudo log collect --device --output ~/Desktop/iphone.logarchive</code></td><td>macOS only; open with <code>log show</code> or Console</td></tr>
+<tr><td>List installed apps</td><td><code class="copy">pymobiledevice3 apps list</code></td><td>Compare against what the user expects</td></tr>
+<tr><td>List configuration profiles</td><td><code class="copy">pymobiledevice3 profile list</code></td><td>On the phone: Settings, General, VPN and Device Management</td></tr>
+<tr><td>Update MVT indicators</td><td><code class="copy">mvt-ios download-iocs</code></td><td>Fetches public spyware indicators</td></tr>
+<tr><td>Decrypt a backup for MVT</td><td><code class="copy">mvt-ios decrypt-backup -p "BackupPassword" -d ./decrypted ./backup/&lt;UDID&gt;</code></td><td>Leave out <code>-p</code> to be prompted</td></tr>
+<tr><td>Check a backup for spyware</td><td><code class="copy">mvt-ios check-backup --output ./results ./decrypted</code></td><td>Detections go to <code>*_detected.json</code></td></tr>
+<tr><td>Check a file system dump</td><td><code class="copy">mvt-ios check-fs --output ./results ./filesystem</code></td><td>For full file system extractions</td></tr>
+<tr><td>Look up a file inside a backup</td><td><code class="copy">sqlite3 ./decrypted/Manifest.db "SELECT fileID, domain, relativePath FROM Files WHERE relativePath LIKE '%sms.db'"</code></td><td><code>fileID</code> is the file name under the two character folder</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="hardening">
+<h2 class="panel-title">Hardening Checklist</h2>
+<p class="panel-lead">Settings that block most real world attacks on iPhones.</p>
+<ul class="checklist">
+<li>Install updates as soon as they ship and turn on automatic updates and Background Security Improvements.</li>
+<li>Use a six digit or longer alphanumeric passcode with Face ID or Touch ID.</li>
+<li>Turn on Stolen Device Protection.</li>
+<li>Turn on Lockdown Mode for journalists, activists, executives and anyone at risk of mercenary spyware.</li>
+<li>Restart the phone regularly; it removes non persistent implants and returns data to the BFU state.</li>
+<li>Review Settings, General, VPN and Device Management and remove unknown profiles.</li>
+<li>Check Certificate Trust Settings for root certificates you did not add.</li>
+<li>Use Safety Check (Settings, Privacy and Security) to review shared access, locations and paired devices.</li>
+<li>Turn on Advanced Data Protection for iCloud where available, and keep a recovery key or contact.</li>
+<li>Encrypt local backups and delete old backups from shared or old computers.</li>
+<li>Use an Apple Account with two factor authentication and security keys.</li>
+<li>Do not jailbreak production devices; it disables code signing and sandbox protections.</li>
+<li>Save a sysdiagnose before major updates on high risk devices so logs are preserved for later checks.</li>
+</ul>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

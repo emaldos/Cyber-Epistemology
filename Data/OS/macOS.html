@@ -1,257 +1,282 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>macOS — System Files</title>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="32x32"/>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="192x192"/>
-<link rel="apple-touch-icon" href="../../Image/Logo.png"/>
-<meta name="theme-color" content="#111"/>
-<style>
-:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--line:rgba(255,255,255,.10);--blue:#2196f3}
-*{box-sizing:border-box}
-html,body{height:100%}
-html{scroll-behavior:smooth}
-body{margin:0;font:16px/1.55 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111}
-.bg{position:fixed;inset:0;background:url("../../Image/Logo.png") center/cover no-repeat;z-index:-2}
-.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.80) 100%);z-index:-1}
-.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
-.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
-.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
-.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
-.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
-.homepill span{font-weight:700;letter-spacing:.15px}
-.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
-.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);cursor:pointer;user-select:none;flex:0 0 auto}
-.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
-.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0;max-width:none}
-.tabs.overflow{overflow:auto}
-.tabs::-webkit-scrollbar{display:none}
-.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
-.tab:hover{opacity:1}
-.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
-.tab.active{color:var(--blue)}
-.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
-.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
-.shell .h,.shell .sub{text-align:center}
-.page{position:relative;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:96px 20px 28px}
-.shell{width:min(1200px,96%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
-.h{margin:0 0 2px;font-size:28px;font-weight:800;letter-spacing:.2px}
-.sub{margin:0 0 12px;color:var(--muted)}
-.quicknav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 18px}
-.qbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-weight:700}
-.qbtn:hover{background:rgba(255,255,255,.1)}
-.section{margin:22px 0 0;scroll-margin-top:90px}
-.section .title{margin:0 0 10px;font-size:20px;font-weight:800}
-.card{border:1px solid var(--tileBorder);background:var(--tile);border-radius:18px;box-shadow:0 12px 28px rgba(0,0,0,.3);overflow:hidden}
-.codewrap{padding:0;margin:0;border-top-left-radius:18px;border-top-right-radius:18px}
-pre{margin:0;max-height:480px;overflow:auto;padding:18px;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;background:rgba(0,0,0,.35);border-top-left-radius:18px;border-top-right-radius:18px;border-bottom:1px solid var(--line);white-space:pre}
-pre code{color:#e6eaff}
-.tablewrap{width:100%;overflow:auto}
-table{width:100%;border-collapse:separate;border-spacing:0}
-thead th{position:sticky;top:0;background:rgba(20,24,44,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);text-align:left;padding:12px 14px;font-size:14px}
-tbody td{border-bottom:1px solid var(--line);padding:12px 14px;vertical-align:top}
-tbody tr:hover{background:rgba(255,255,255,.04)}
-th:first-child,td:first-child{border-left:none}
-th:last-child,td:last-child{border-right:none}
-th,td{word-break:break-word;overflow-wrap:anywhere}
-caption{caption-side:bottom;color:var(--muted);padding:10px 4px 0}
-.kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.06);font:12px/1.2 ui-monospace,monospace}
-.bycat caption{caption-side:top;padding:10px 4px 6px;font-weight:800}
-.bycat .card+.card{margin-top:14px}
-.bycat thead th{background:linear-gradient(180deg,rgba(33,150,243,.18),rgba(33,150,243,.14));backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid rgba(33,150,243,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);color:var(--text)}
-.bycat table{table-layout:fixed;width:100%}
-.bycat th:nth-child(1),.bycat td:nth-child(1){width:220px}
-.bycat th:nth-child(2),.bycat td:nth-child(2){width:420px}
-.bycat th:nth-child(3),.bycat td:nth-child(3){width:auto}
-@media(max-width:900px){.bycat th:nth-child(1),.bycat td:nth-child(1){width:180px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:300px}}
-@media(max-width:640px){.tab{padding:6px 10px}.shell{width:98%}.bycat th:nth-child(1),.bycat td:nth-child(1){width:150px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:240px}}
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>macOS | Cyber Epistemology</title>
+<meta name="description" content="macOS Golden Gate and Tahoe security reference: Keychain, TCC, LaunchAgents, Background Task Management, unified log, FSEvents, Biome, Gatekeeper, XProtect, SIP, FileVault, triage commands and hardening.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../../Assets/Image/AppleTouchIcon.png">
+<link rel="stylesheet" href="../../Assets/Style/Site.css">
+<script src="../../Assets/Script/Site.js" defer></script>
 </head>
-<body>
-<div class="bg"></div>
-<nav class="topbar" id="topbar">
-  <div class="nav">
-    <a class="homepill" href="../../index.html" title="Home" aria-label="Home"><img src="../../Image/Home.png" alt="Home"/><span>Home</span></a>
-    <div class="tabswrap">
-      <button class="navbtn" id="leftbtn" aria-label="Prev"><span>&lt;</span></button>
-      <div class="tabs" id="tabs">
-        <a class="tab" href="../System_Files_Info.html"><img src="../../Image/Nav.png" alt="System Files"/>System Files</a>
-        <a class="tab" href="Kali_Linux.html"><img src="../../Image/KaliLinux.png" alt="Kali"/>Kali</a>
-        <a class="tab" href="Ubuntu_Server.html"><img src="../../Image/UbuntuServer.png" alt="Ubuntu Server"/>Ubuntu Server</a>
-        <a class="tab" href="Windows_11.html"><img src="../../Image/Win11.png" alt="Windows 11"/>Windows 11</a>
-        <a class="tab" href="Windows_Server.html"><img src="../../Image/WinServer.png" alt="Windows Server"/>Windows Server</a>
-        <a class="tab" href="macOS.html"><img src="../../Image/MacOS.png" alt="macOS"/>macOS</a>
-        <a class="tab" href="IOS.html"><img src="../../Image/IOS.png" alt="iOS"/>iOS</a>
-        <a class="tab" href="Android.html"><img src="../../Image/Android.png" alt="Android"/>Android</a>
-      </div>
-      <button class="navbtn" id="rightbtn" aria-label="Next"><span>&gt;</span></button>
-    </div>
-  </div>
-</nav>
-
-<div class="page">
-  <main class="shell">
-    <h1 class="h">macOS — System Files</h1>
-    <p class="sub">Click to navigate to a section</p>
-    <div class="quicknav">
-      <a class="qbtn" href="#fsmap">High-Value Paths</a>
-      <a class="qbtn" href="#bycat">Important Files</a>
-    </div>
-
-    <section class="section" id="fsmap">
-      <h2 class="title">Filesystem map and high-value paths for threats/defense</h2>
-
-      <h3 class="title">Critical paths</h3>
-      <div class="card"><div class="codewrap">
-<pre><code>/var/db/dslocal/nodes/Default/users/*.plist           # Local accounts; ShadowHashData (password hashes)
-/Library/Keychains/System.keychain                    # System keychain; machine secrets/certs
-~/Library/Keychains/login.keychain-db                 # User login keychain; saved creds/tokens
-/Library/Keychains/SystemRoots.keychain               # Trust store; rogue roots ⇒ interception
-/Library/LaunchDaemons/*.plist                        # System persistence (root); verify owners/paths
-/Library/LaunchAgents/*.plist                         # Global user-session persistence
-/etc/sudoers , /etc/sudoers.d/*                       # NOPASSWD/wildcards ⇒ instant root
-/etc/ssh/sshd_config                                  # Remote entry; weak auth/ciphers/backdoors
-/Library/Application Support/com.apple.TCC/TCC.db     # Privacy (TCC) DB; camera/mic/full disk grants
-</code></pre>
-      </div></div>
-
-      <h3 class="title">High-risk paths</h3>
-      <div class="card"><div class="codewrap">
-<pre><code>~/Library/LaunchAgents/*.plist                        # Per-user persistence at login
-/System/Library/LaunchDaemons/*.plist                 # Apple daemons (read-only, baseline only)
-/System/Library/LaunchAgents/*.plist                  # Apple agents (read-only, baseline only)
-/usr/lib/cron/tabs/*                                  # Per-user crontabs (legacy but present)
-/etc/periodic/daily|weekly|monthly/*                  # Periodic jobs; simple persistence
-/etc/pam.d/*                                          # Auth stack; lax modules ⇒ bypass
-/etc/pf.conf                                          # Packet filter rules; egress/ingress control
-/Library/Preferences/com.apple.alf.plist              # App firewall config (ALF); disabled ⇒ risk
-/Library/Preferences/SystemConfiguration/preferences.plist   # Network services, routes, DNS
-/Library/Preferences/SystemConfiguration/com.apple.airport.preferences.plist  # Known Wi-Fi
-~/Library/Application Support/com.apple.TCC/TCC.db    # Per-user TCC grants; stealth access
-~/Library/Application Support/com.apple.backgroundtaskmanagementagent/backgrounditems.btm  # Login Items
-~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2  # Gatekeeper quarantine DB
-~/.ssh/                                               # User SSH keys/configs; lateral movement
-</code></pre>
-      </div></div>
-
-      <h3 class="title">Medium-risk paths</h3>
-      <div class="card"><div class="codewrap">
-<pre><code>/var/log/* , /Library/Logs/*                          # Legacy logs (some still active); triage
-/var/db/diagnostics/*.tracev3                         # Unified logging store; requires log show
-/Applications/*                                       # Apps; unsigned/bundled tools
-/Library/Application Support/*                         # App data; tokens/configs
-~/Library/Application Support/*                        # Per-user app data; browser/Slack/Discord creds
-/Library/Extensions/*                                  # Third-party kexts (legacy); root code
-~/Library/Safari/ , ~/Library/WebKit/*                # Safari/WebKit data
-~/Library/Application Support/Google/Chrome/*         # Chrome profiles (Login Data, Cookies)
-~/Library/Application Support/Firefox/Profiles/*      # Firefox profiles (logins.json,key4.db)
-/System/Volumes/Data/*                                # Writable data volume (since Catalina)
-/private/tmp , /var/tmp                               # Staging; clean/monitor
-</code></pre>
-      </div></div>
-    </section>
-
-    <section class="section bycat" id="bycat">
-      <h2 class="title">Important files — by Category</h2>
-
-      <div class="card tablewrap"><table>
-        <caption>Accounts, Keys & Trust (Critical first)</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Local accounts</td><td><span class="kbd">/var/db/dslocal/nodes/Default/users/*.plist</span></td><td>ShadowHashData password hashes; local escalation target.</td></tr>
-          <tr><td>System keychain</td><td><span class="kbd">/Library/Keychains/System.keychain</span></td><td>Machine secrets/certs; decrypt service creds.</td></tr>
-          <tr><td>User keychain</td><td><span class="kbd">~/Library/Keychains/login.keychain-db</span></td><td>Saved app/web/VPN creds; DPAPI-like protection via Keychain.</td></tr>
-          <tr><td>Trust roots</td><td><span class="kbd">/Library/Keychains/SystemRoots.keychain</span></td><td>Added roots ⇒ TLS interception; audit additions.</td></tr>
-          <tr><td>SSH keys</td><td><span class="kbd">~/.ssh/*</span></td><td>Private/public keys; lateral movement.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Privacy Controls (TCC) & Gatekeeper</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>TCC (system)</td><td><span class="kbd">/Library/Application Support/com.apple.TCC/TCC.db</span></td><td>Global grants (e.g., Full Disk Access for daemons).</td></tr>
-          <tr><td>TCC (user)</td><td><span class="kbd">~/Library/Application Support/com.apple.TCC/TCC.db</span></td><td>Per-user camera/mic/files grants; audit changes.</td></tr>
-          <tr><td>Quarantine DB</td><td><span class="kbd">~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2</span></td><td>Gatekeeper download provenance; execution tracing.</td></tr>
-          <tr><td>Exec quarantine</td><td><span class="kbd">xattr com.apple.quarantine</span></td><td>Extended attribute on files; policy enforcement artifact.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Persistence & Startup</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>LaunchDaemons</td><td><span class="kbd">/Library/LaunchDaemons/*.plist</span></td><td>Root persistence; check ProgramArguments/RunAtLoad.</td></tr>
-          <tr><td>LaunchAgents (global)</td><td><span class="kbd">/Library/LaunchAgents/*.plist</span></td><td>User-session autostart for all users.</td></tr>
-          <tr><td>LaunchAgents (user)</td><td><span class="kbd">~/Library/LaunchAgents/*.plist</span></td><td>Per-user persistence at login.</td></tr>
-          <tr><td>Login Items</td><td><span class="kbd">~/Library/.../backgrounditems.btm</span></td><td>Modern login items DB; stealthy persistence.</td></tr>
-          <tr><td>Cron</td><td><span class="kbd">/usr/lib/cron/tabs/*</span></td><td>Per-user cron; legacy but effective.</td></tr>
-          <tr><td>Periodic</td><td><span class="kbd">/etc/periodic/*</span></td><td>Daily/weekly/monthly jobs.</td></tr>
-          <tr><td>sudoers</td><td><span class="kbd">/etc/sudoers ; /etc/sudoers.d/*</span></td><td>NOPASSWD/wildcards ⇒ instant root.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Network, Remote & Firewall</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>SSH server</td><td><span class="kbd">/etc/ssh/sshd_config</span></td><td>Remote access policy; weak ciphers/auth risk.</td></tr>
-          <tr><td>PF firewall</td><td><span class="kbd">/etc/pf.conf</span></td><td>Ingress/egress rules; tighten defaults.</td></tr>
-          <tr><td>App firewall</td><td><span class="kbd">/Library/Preferences/com.apple.alf.plist</span></td><td>ALF state; off or permissive = exposure.</td></tr>
-          <tr><td>Network services</td><td><span class="kbd">/Library/Preferences/SystemConfiguration/preferences.plist</span></td><td>Interfaces, proxies, DNS; tamper = redirection.</td></tr>
-          <tr><td>Known Wi-Fi</td><td><span class="kbd">/Library/Preferences/SystemConfiguration/com.apple.airport.preferences.plist</span></td><td>SSIDs & options; pivot to wireless.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Logs & Forensics</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Unified logs</td><td><span class="kbd">/var/db/diagnostics/*.tracev3</span></td><td>System/app telemetry; use <span class="kbd">log show</span>.</td></tr>
-          <tr><td>Legacy logs</td><td><span class="kbd">/var/log/*</span> ; <span class="kbd">/Library/Logs/*</span></td><td>Install/system/app logs.</td></tr>
-          <tr><td>Audit</td><td><span class="kbd">/var/audit/*</span> (if auditd enabled)</td><td>BSM audit trails; file/exec activity.</td></tr>
-          <tr><td>Kexts</td><td><span class="kbd">/Library/Extensions/*</span></td><td>Third-party kernel code; integrity/signing.</td></tr>
-          <tr><td>VSS-like</td><td><span class="kbd">Time Machine backups</span></td><td>Historical copies; recovery/tamper detection.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>Browsers & Apps</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Safari</td><td><span class="kbd">~/Library/Safari/</span> ; <span class="kbd">~/Library/WebKit/*</span></td><td>History, tabs, cookies; passwords in Keychain.</td></tr>
-          <tr><td>Chrome</td><td><span class="kbd">~/Library/Application Support/Google/Chrome/User Data/Default/</span></td><td>Login Data (SQLite), Cookies, Web Data.</td></tr>
-          <tr><td>Firefox</td><td><span class="kbd">~/Library/Application Support/Firefox/Profiles/*</span></td><td><span class="kbd">logins.json</span> + <span class="kbd">key4.db</span> for saved creds.</td></tr>
-          <tr><td>App Support</td><td><span class="kbd">/Library/Application Support/*</span> ; <span class="kbd">~/Library/Application Support/*</span></td><td>Tokens/configs/cache for apps.</td></tr>
-          <tr><td>Containers</td><td><span class="kbd">~/Library/Containers/*</span> ; <span class="kbd">~/Library/Group Containers/*</span></td><td>Sandboxed app data; interesting caches.</td></tr>
-        </tbody>
-      </table></div>
-
-      <div class="card tablewrap"><table>
-        <caption>System Layout Notes (Catalina+)</caption>
-        <thead><tr><th>Topic</th><th>Folder/location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Read-only System</td><td><span class="kbd">/System</span></td><td>Sealed/immutable; persistence must target writable Data volume.</td></tr>
-          <tr><td>Writable Data</td><td><span class="kbd">/System/Volumes/Data</span></td><td>User/apps/data live here; hunt for implants.</td></tr>
-          <tr><td>SIP</td><td><span class="kbd">csrutil status</span></td><td>System Integrity Protection; disabled ⇒ high-sev risk.</td></tr>
-        </tbody>
-      </table></div>
-
-    </section>
-  </main>
+<body class="is-content-page" data-root="../../" data-section="system-files">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><a href="../System_Files_Info.html">System Files</a><span class="breadcrumb-separator">/</span><span>macOS</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../../Assets/Icon/MacOs.png" alt="">
+<div>
+<p class="hero-eyebrow">System Files</p>
+<h1 class="hero-title">macOS Security Reference</h1>
 </div>
-
-<script>
-let lastY=scrollY,hidden=false;
-addEventListener('scroll',()=>{const y=scrollY,tb=document.getElementById('topbar');if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
-const p=location.pathname.replace(/\/+$/,'');document.querySelectorAll('.tabs .tab').forEach(a=>{const h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');if(p.endsWith(h))a.classList.add('active')});
-const tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
-function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
-function updateArrows(){const o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;tabs.classList.toggle('overflow',o);leftbtn.style.display=o&&s>0?'inline-flex':'none';rightbtn.style.display=o&&s<max-1?'inline-flex':'none'}
-function scrollByStep(d){const step=Math.max(120,Math.floor(tabs.clientWidth*.6));tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})}
-leftbtn.addEventListener('click',()=>scrollByStep(-1));rightbtn.addEventListener('click',()=>scrollByStep(1));
-tabs.addEventListener('scroll',updateArrows,{passive:true});new ResizeObserver(updateArrows).observe(tabs);
-addEventListener('resize',updateArrows);
-tabs.addEventListener('wheel',e=>{if(!hasOverflow())return;const dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}});
-updateArrows();
-</script>
-</body></html>
+</div>
+<p class="hero-lead">High value paths, persistence locations, privacy controls and forensic artifacts on current macOS, with the commands to check them. Most protected paths need root plus Full Disk Access for Terminal.</p>
+<div class="hero-meta"><span class="badge">macOS 27 Golden Gate</span><span class="badge">111 entries</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: keychain" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<nav class="sub-nav" aria-label="Operating systems">
+<a class="sub-nav-link" href="../System_Files_Info.html"><img src="../../Assets/Icon/Folder.png" alt="">All systems</a>
+<a class="sub-nav-link" href="Windows_11.html"><img src="../../Assets/Icon/Windows11.png" alt="">Windows 11</a>
+<a class="sub-nav-link" href="Windows_Server.html"><img src="../../Assets/Icon/WindowsServer.png" alt="">Windows Server</a>
+<a class="sub-nav-link is-active" href="macOS.html" aria-current="page"><img src="../../Assets/Icon/MacOs.png" alt="">macOS</a>
+<a class="sub-nav-link" href="IOS.html"><img src="../../Assets/Icon/Ios.png" alt="">iOS</a>
+<a class="sub-nav-link" href="Android.html"><img src="../../Assets/Icon/Android.png" alt="">Android</a>
+<a class="sub-nav-link" href="Ubuntu_Server.html"><img src="../../Assets/Icon/UbuntuServer.png" alt="">Ubuntu Server</a>
+<a class="sub-nav-link" href="Kali_Linux.html"><img src="../../Assets/Icon/KaliLinux.png" alt="">Kali Linux</a>
+</nav>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="overview">
+<h2 class="panel-title">Overview</h2>
+<p class="panel-lead">Key facts about the current release and where the security relevant data lives.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term">Current release</span><span class="definition-text">macOS Golden Gate 27.2.1 (November 2026). macOS 27 runs on Apple silicon only.</span></div>
+<div class="definition"><span class="definition-term">Support status</span><span class="definition-text">In practice Apple patches the current release and the two before it: Tahoe 26.7.3 and Sequoia 15.8.3 still get security updates. Tahoe 26 is the last release for Intel Macs.</span></div>
+<div class="definition"><span class="definition-term">File system</span><span class="definition-text">APFS. A signed, read-only system volume (SSV) mounted at <code>/</code> and a writable data volume at <code>/System/Volumes/Data</code>, joined by firmlinks.</span></div>
+<div class="definition"><span class="definition-term">Built-in security features</span><span class="definition-text">SIP, SSV, Gatekeeper and notarization, XProtect and XProtect Remediator, TCC privacy controls, FileVault, Secure Enclave, Lockdown Mode, Background Task Management alerts.</span></div>
+<div class="definition"><span class="definition-term">Where logs live</span><span class="definition-text">Unified log in <code>/private/var/db/diagnostics/</code> (read with <code>log show</code>), a few text logs in <code>/var/log/</code>, crash reports in <code>DiagnosticReports</code>.</span></div>
+<div class="definition"><span class="definition-term">Access model</span><span class="definition-text">Root is not enough for most artifacts: TCC also blocks Terminal until it has Full Disk Access in System Settings, Privacy and Security.</span></div>
+</div>
+<div class="callout callout-warning"><p><strong>Authorized use only:</strong> the offensive notes on this page are for Macs you own or have written permission to test.</p></div>
+</section>
+<section class="panel" id="credentials-secrets">
+<h2 class="panel-title">Credentials and Secrets</h2>
+<p class="panel-lead">Password hashes, keychains, keys and tokens that let an attacker log in or move to other systems.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/var/db/dslocal/nodes/Default/users/*.plist</code></td><td>Local account records with <code>ShadowHashData</code> (SALTED-SHA512-PBKDF2)</td><td>Root can extract hashes for offline cracking with hashcat mode 7100</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>~/Library/Keychains/login.keychain-db</code></td><td>User login keychain: app, web, Wi-Fi and VPN passwords, certificates</td><td>Unlocked with the login password; one cracked password opens every saved secret</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>~/Library/Keychains/&lt;UUID&gt;/keychain-2.db</code></td><td>Data protection keychain used by iCloud Keychain and the Passwords app</td><td>Holds synced website passwords, passkeys and app secrets</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/Library/Keychains/System.keychain</code></td><td>System keychain: Wi-Fi passwords, 802.1X, machine and MDM certificates</td><td>Machine identity and network credentials shared by all users</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/private/var/db/SystemKey</code></td><td>Key that unlocks the System keychain</td><td>With root, System keychain secrets can be decrypted offline</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/etc/kcpassword</code></td><td>Automatic login password, only XOR obfuscated</td><td>Present when auto login is on; trivially reversible to the user password</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>~/.ssh/</code></td><td>Private keys, <code>config</code>, <code>known_hosts</code></td><td>Lateral movement to servers and Git hosts; <code>known_hosts</code> maps targets</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/.aws/</code>, <code>~/.kube/config</code>, <code>~/.docker/config.json</code>, <code>~/.netrc</code></td><td>Cloud, cluster, registry and plain text service credentials</td><td>Developer Macs often hold cloud admin tokens in clear text</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/Library/Security/Trust Settings/Admin.plist</code></td><td>Admin level certificate trust overrides</td><td>An added root CA allows silent TLS interception; check with <code>security dump-trust-settings -d</code></td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/db/FileVaultPRK.dat</code></td><td>FileVault personal recovery key encrypted for MDM escrow</td><td>Exists only when escrow is configured; the MDM server can unlock the disk</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/System/Library/Keychains/SystemRootCertificates.keychain</code></td><td>Apple shipped root certificates on the sealed volume</td><td>Baseline only: cannot be modified without breaking the seal</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="persistence">
+<h2 class="panel-title">Persistence and Autostart</h2>
+<p class="panel-lead">Where code is set to run at boot, login or on a schedule. Since macOS 13 Background Task Management tracks most of these and alerts the user.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/Library/LaunchDaemons/</code></td><td>Third party launchd daemons that run as root at boot</td><td>Most common root persistence; check <code>ProgramArguments</code>, <code>RunAtLoad</code>, <code>KeepAlive</code> and file owner</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/Library/LaunchAgents/</code></td><td>Agents that start in every user session</td><td>Runs for all users at login; often abused by adware and remote access tools</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/Library/LaunchAgents/</code></td><td>Per user launch agents</td><td>No admin rights needed to plant; watch for <code>EnvironmentVariables</code> with <code>DYLD_INSERT_LIBRARIES</code></td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/db/com.apple.backgroundtaskmanagement/BackgroundItems-v*.btm</code></td><td>Background Task Management database of login items, agents and daemons (macOS 13 and later)</td><td>One place that lists what is allowed to run in the background; dump with <code>sfltool dumpbtm</code></td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/Applications/*.app/Contents/Library/LoginItems/</code></td><td>Helper apps registered through <code>SMAppService</code></td><td>Modern login items live inside app bundles, not in a global folder</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/Library/Security/SecurityAgentPlugins/</code></td><td>Authorization plugins loaded by the login window and authd</td><td>A malicious plugin sees every typed password and runs as root</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>~/.zshrc</code>, <code>~/.zprofile</code>, <code>/etc/zshrc</code>, <code>/etc/zprofile</code></td><td>Shell startup files (zsh is the default shell)</td><td>Runs on every Terminal session; used for aliases that steal sudo passwords</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/private/var/at/tabs/</code></td><td>Per user crontabs (<code>/usr/lib/cron/tabs</code> points here)</td><td>Still works and is easy to miss because launchd is the norm</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/etc/periodic/</code></td><td>Daily, weekly and monthly maintenance scripts</td><td>Scripts here run as root; any non Apple file is suspicious</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>~/Library/Preferences/ByHost/com.apple.loginwindow.*.plist</code></td><td>Apps to reopen at login</td><td>Low effort persistence that survives reboot</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/System/Library/LaunchDaemons/</code>, <code>/System/Library/LaunchAgents/</code></td><td>Apple launchd jobs on the sealed system volume</td><td>Baseline for comparison; cannot be changed while SIP and the seal are intact</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="security-controls">
+<h2 class="panel-title">Privacy and Security Controls</h2>
+<p class="panel-lead">TCC, Gatekeeper, XProtect, SIP and FileVault state, and where each one keeps its data.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/Library/Application Support/com.apple.TCC/TCC.db</code></td><td>System TCC database: Full Disk Access, Accessibility, Screen Recording grants</td><td>SIP protected; a write here grants an implant full access without prompts</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>~/Library/Application Support/com.apple.TCC/TCC.db</code></td><td>Per user grants: camera, microphone, Desktop, Documents, Downloads, automation</td><td>Shows which apps can spy on the user; on macOS 27 apps can no longer read it directly, use <code>tccutil list</code></td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/Library/Application Support/com.apple.TCC/MDMOverrides.plist</code></td><td>Privacy permissions pushed by MDM (PPPC profiles)</td><td>Explains grants that do not appear in the TCC databases</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/var/protected/xprotect/XProtect.bundle</code></td><td>Primary XProtect signatures, updated in the background from iCloud (macOS 15 and later)</td><td>Check its version with <code>xprotect version</code>; on macOS 27 manual updates no longer work</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/Library/Apple/System/Library/CoreServices/XProtect.bundle</code></td><td>Secondary XProtect copy maintained by Software Update</td><td>An old version on both copies means the Mac is not getting malware definitions</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/Library/Apple/System/Library/CoreServices/XProtect.app</code></td><td>XProtect Remediator, scans and removes known malware families on a schedule</td><td>Its findings appear in the unified log under the <code>com.apple.XProtectFramework.PluginAPI</code> subsystem</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>com.apple.quarantine</code> (extended attribute)</td><td>Quarantine flag added to downloaded files, read with <code>xattr -l</code></td><td>Triggers Gatekeeper checks; malware often strips it with <code>xattr -d</code></td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/var/db/SystemPolicyConfiguration/</code></td><td>Gatekeeper and system policy databases, including approved kernel and system extensions</td><td>Records what the user or MDM allowed to load or run</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td>SIP and FileVault state (no file, use <code>csrutil status</code> and <code>fdesetup status</code>)</td><td>Whether System Integrity Protection and full disk encryption are on</td><td>SIP off or FileVault off is a top severity finding on any managed Mac</td><td><span class="tag tag-critical">Critical</span></td></tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-tip"><p><strong>Gatekeeper on macOS 15 and later:</strong> Control-click Open no longer bypasses Gatekeeper. Users must approve blocked apps in System Settings, Privacy and Security, so phishing lures now walk victims through that screen or ask them to paste Terminal commands.</p></div>
+</section>
+<section class="panel" id="logs-artifacts">
+<h2 class="panel-title">Logs and Forensic Artifacts</h2>
+<p class="panel-lead">Timelines of execution, downloads, file activity and app usage.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/private/var/db/diagnostics/</code></td><td>Unified log <code>.tracev3</code> files (Persist, Special, Signpost, HighVolume)</td><td>Main event source: logins, sudo, process launches, XProtect, TCC prompts; read with <code>log show</code></td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/private/var/db/uuidtext/</code></td><td>Format strings referenced by the unified log</td><td>Collect it together with <code>diagnostics</code> or messages cannot be decoded</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2</code></td><td>SQLite history of downloaded files: URL, time, downloading app</td><td>Answers where a payload came from even after the file is deleted</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/System/Volumes/Data/.fseventsd/</code></td><td>FSEvents logs of file creation, rename and deletion</td><td>Shows file activity in the past weeks, including deleted tools</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/Library/Biome/</code>, <code>/private/var/db/biome/</code></td><td>Biome streams (SEGB protobuf): app usage, focus, notifications, device state</td><td>Since macOS 13 most usage data moved here from KnowledgeC; needs dedicated parsers</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/Library/Application Support/Knowledge/knowledgeC.db</code></td><td>KnowledgeC usage database (also <code>/private/var/db/CoreDuet/Knowledge/</code>)</td><td>Still present but holds fewer streams on macOS 13 and later; check both it and Biome</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>~/.zsh_history</code>, <code>~/.zsh_sessions/</code></td><td>Shell history and per window Terminal session history</td><td>Direct record of attacker or admin commands</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/var/log/install.log</code></td><td>Package installs and software updates</td><td>Shows when a <code>.pkg</code> dropper ran and what it installed</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/Library/Receipts/InstallHistory.plist</code></td><td>History of installed packages and updates</td><td>Quick install timeline that survives log rotation</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/Library/Logs/DiagnosticReports/</code>, <code>~/Library/Logs/DiagnosticReports/</code></td><td>Crash, hang and panic reports (<code>.ips</code>)</td><td>Crashing exploits and unstable implants leave reports here</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>~/Library/Application Support/com.apple.sharedfilelist/</code></td><td>Recent documents, apps and servers per user</td><td>Shows files and shares the user opened</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/System/Volumes/Data/.Spotlight-V100/</code></td><td>Spotlight index store</td><td>Can reveal metadata of files that no longer exist</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/private/var/audit/</code></td><td>OpenBSM audit trails</td><td>Deprecated and off by default; empty unless someone enabled it. Use Endpoint Security based tools instead</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="network-remote">
+<h2 class="panel-title">Network and Remote Access</h2>
+<p class="panel-lead">Remote login, screen sharing, firewall, DNS and VPN configuration.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>~/.ssh/authorized_keys</code></td><td>Public keys allowed to log in as this user</td><td>A planted key is silent persistent remote access when Remote Login is on</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/etc/ssh/sshd_config</code>, <code>/etc/ssh/sshd_config.d/</code></td><td>OpenSSH server policy</td><td>Password logins, root login or extra <code>AuthorizedKeysFile</code> entries widen access</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/Library/Preferences/com.apple.RemoteManagement.plist</code></td><td>Apple Remote Desktop and Screen Sharing settings</td><td>Remote Management on with all users allowed gives full GUI control</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/Library/Preferences/com.apple.networkextension.plist</code></td><td>VPN, DNS proxy, content filter and per app VPN configurations</td><td>A rogue network extension can see or redirect all traffic</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/etc/hosts</code>, <code>/etc/resolver/</code></td><td>Static name overrides and per domain DNS servers</td><td>Used to redirect update servers, security vendors or banking sites</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/Library/Preferences/SystemConfiguration/preferences.plist</code></td><td>Network services, DNS, proxies, computer name</td><td>Proxy or DNS changes here redirect traffic for every app</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/Library/Preferences/com.apple.wifi.known-networks.plist</code></td><td>Known Wi-Fi networks with join history (passwords stay in the System keychain)</td><td>Places the Mac at locations; replaced <code>com.apple.airport.preferences.plist</code> in macOS 12</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/etc/pf.conf</code>, <code>/etc/pf.anchors/</code></td><td>Packet filter rules</td><td>Custom anchors can open ports or block security tool traffic</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/usr/libexec/ApplicationFirewall/socketfilterfw</code></td><td>Application firewall control tool</td><td>Since macOS 15 the state is no longer in <code>com.apple.alf.plist</code>; query this tool instead</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/Library/Preferences/SystemConfiguration/com.apple.smb.server.plist</code></td><td>File Sharing (SMB) server settings</td><td>Open shares expose user folders to the local network</td><td><span class="tag tag-medium">Medium</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="user-data">
+<h2 class="panel-title">User Data and Browsers</h2>
+<p class="panel-lead">Browser profiles, messages, mail and app containers. Most need Full Disk Access to read.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>~/Library/Application Support/Google/Chrome/Default/</code></td><td><code>Login Data</code>, <code>Cookies</code>, <code>History</code>, <code>Web Data</code> (SQLite)</td><td>Values are encrypted with the <code>Chrome Safe Storage</code> key from the login keychain; stolen cookies bypass MFA</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>~/Library/Application Support/Microsoft Edge/Default/</code></td><td>Same Chromium layout as Chrome</td><td>Common on managed Macs; same theft techniques apply</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/Library/Application Support/Firefox/Profiles/</code></td><td><code>logins.json</code>, <code>key4.db</code>, <code>cookies.sqlite</code>, <code>places.sqlite</code></td><td>Saved passwords decrypt offline unless a primary password is set</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/Library/Safari/</code></td><td><code>History.db</code>, <code>Bookmarks.plist</code>, <code>Downloads.plist</code></td><td>Browsing and download timeline; Safari passwords live in the keychain</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/Library/Containers/com.apple.Safari/Data/Library/Cookies/Cookies.binarycookies</code></td><td>Safari cookies</td><td>Session tokens for web apps; binary format needs a parser</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/Library/Messages/chat.db</code></td><td>iMessage and SMS history, attachments in <code>Attachments/</code></td><td>Private conversations and one time codes synced from the iPhone</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/Library/Mail/</code></td><td>Mail.app mailboxes in a versioned folder such as <code>V10</code></td><td>Email content, attachments and password reset links</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/Library/Application Support/</code></td><td>Unsandboxed app data such as Slack, Discord, Teams, Zoom</td><td>Session tokens and local caches of chat history</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/Library/Containers/</code>, <code>~/Library/Group Containers/</code></td><td>Sandboxed app data and data shared between app groups</td><td>Notes, Office documents and app caches live here</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>~/Library/Mobile Documents/</code></td><td>Local copy of iCloud Drive</td><td>Synced documents from every device on the Apple Account</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>~/Library/Application Support/MobileSync/Backup/</code></td><td>iPhone and iPad backups made with Finder</td><td>Full logical copy of a phone; see the iOS page for analysis</td><td><span class="tag tag-high">High</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="system-config">
+<h2 class="panel-title">System Binaries and Configuration</h2>
+<p class="panel-lead">Volume layout, privilege configuration, extensions and management profiles.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/etc/sudoers</code>, <code>/etc/sudoers.d/</code></td><td>sudo rules</td><td><code>NOPASSWD</code> or wildcard rules give instant root</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/private/var/db/ConfigurationProfiles/</code></td><td>Installed configuration profiles and MDM enrollment</td><td>A rogue profile can add root CAs, proxies, VPNs and TCC grants</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/Library/Managed Preferences/</code></td><td>Settings enforced by MDM profiles</td><td>Shows which security settings are actually enforced</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/etc/pam.d/</code></td><td>PAM authentication stack for sudo, login and screensaver</td><td>Edits can allow passwordless sudo or log credentials; <code>sudo_local</code> is the supported place for Touch ID sudo</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/Library/SystemExtensions/</code></td><td>Installed system extensions (network, endpoint security, drivers)</td><td>User space replacements for kexts; list with <code>systemextensionsctl list</code></td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/Library/Extensions/</code></td><td>Third party kernel extensions (legacy)</td><td>Kernel code; on Apple silicon needs Reduced Security mode to load</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/etc/paths</code>, <code>/etc/paths.d/</code></td><td>Default <code>PATH</code> entries</td><td>A writable directory early in <code>PATH</code> allows binary hijacking</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/opt/homebrew/</code>, <code>/usr/local/</code></td><td>Homebrew on Apple silicon and Intel, other third party tools</td><td>User writable and early in <code>PATH</code>; a common place to trojan tools</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/Applications/</code></td><td>Installed apps</td><td>Check signatures with <code>codesign</code> and notarization with <code>spctl</code></td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/System/Volumes/Data/</code></td><td>Writable data volume: users, apps, <code>/private/var</code></td><td>Every implant must live here because the system volume is sealed</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/System/</code>, <code>/usr/bin/</code>, <code>/usr/libexec/</code></td><td>Apple binaries on the signed system volume</td><td>Read-only baseline; modification requires disabling SIP and the seal</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/private/tmp/</code>, <code>/private/var/tmp/</code>, <code>/Users/Shared/</code></td><td>World writable staging areas</td><td>Droppers and stealers stage payloads and archives here</td><td><span class="tag tag-medium">Medium</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="triage-commands">
+<h2 class="panel-title">Triage Commands</h2>
+<p class="panel-lead">Built-in commands for a first look at a Mac. Run Terminal with Full Disk Access for the protected ones.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Task</th><th>Command</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>OS version and build</td><td><code class="copy">sw_vers</code></td><td>Compare with the latest release on Apple security updates</td></tr>
+<tr><td>Hardware and software summary</td><td><code class="copy">system_profiler SPHardwareDataType SPSoftwareDataType</code></td><td>Serial, chip, boot volume, uptime</td></tr>
+<tr><td>SIP status</td><td><code class="copy">csrutil status</code></td><td>Must say enabled; changes only from Recovery</td></tr>
+<tr><td>FileVault status</td><td><code class="copy">fdesetup status</code></td><td>Add <code>sudo fdesetup list</code> to see enabled users</td></tr>
+<tr><td>Gatekeeper status</td><td><code class="copy">spctl --status</code></td><td>Expect <code>assessments enabled</code></td></tr>
+<tr><td>Check an app's signature and notarization</td><td><code class="copy">spctl --assess -vv /Applications/Example.app</code></td><td>Shows source: Notarized Developer ID, App Store or rejected</td></tr>
+<tr><td>Code signing details and entitlements</td><td><code class="copy">codesign -dvvv --entitlements - /Applications/Example.app</code></td><td>Team ID, hardened runtime, risky entitlements</td></tr>
+<tr><td>Quarantine attribute on a file</td><td><code class="copy">xattr -l ~/Downloads/file.dmg</code></td><td>Missing <code>com.apple.quarantine</code> on a download is a red flag</td></tr>
+<tr><td>Download history</td><td><code class="copy">sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV2 "SELECT datetime(LSQuarantineTimeStamp + 978307200, 'unixepoch'), LSQuarantineAgentName, LSQuarantineDataURLString FROM LSQuarantineEvent ORDER BY 1 DESC LIMIT 50"</code></td><td>Timestamps are Mac absolute time, hence the offset</td></tr>
+<tr><td>Background items (BTM)</td><td><code class="copy">sudo sfltool dumpbtm</code></td><td>All login items, agents and daemons with their developer</td></tr>
+<tr><td>Loaded launchd jobs</td><td><code class="copy">launchctl print gui/$(id -u)</code></td><td>Use <code>sudo launchctl print system</code> for daemons</td></tr>
+<tr><td>Third party launch files</td><td><code class="copy">ls -la /Library/LaunchDaemons /Library/LaunchAgents ~/Library/LaunchAgents</code></td><td>Then <code>plutil -p</code> each plist</td></tr>
+<tr><td>Privacy grants (macOS 27)</td><td><code class="copy">tccutil list</code></td><td>New in macOS 27; on older releases query <code>TCC.db</code> with sqlite3</td></tr>
+<tr><td>Privacy grants (older releases)</td><td><code class="copy">sqlite3 ~/Library/Application\ Support/com.apple.TCC/TCC.db "SELECT service, client, auth_value, datetime(last_modified, 'unixepoch') FROM access"</code></td><td><code>auth_value</code> 2 means allowed</td></tr>
+<tr><td>Unified log, last hour</td><td><code class="copy">log show --last 1h --info --style syslog</code></td><td>Add <code>--predicate</code> to filter</td></tr>
+<tr><td>sudo and SSH activity</td><td><code class="copy">log show --last 1d --predicate 'process == "sudo" OR process == "sshd"'</code></td><td>Privilege use and remote logins</td></tr>
+<tr><td>XProtect Remediator findings</td><td><code class="copy">log show --last 7d --predicate 'subsystem == "com.apple.XProtectFramework.PluginAPI"'</code></td><td>Scan results and remediations</td></tr>
+<tr><td>Collect logs for offline analysis</td><td><code class="copy">sudo log collect --last 1d --output ~/Desktop/triage.logarchive</code></td><td>Open later with <code>log show</code> or Console</td></tr>
+<tr><td>Full diagnostic bundle</td><td><code class="copy">sudo sysdiagnose</code></td><td>Logs, process list, network state; takes a few minutes</td></tr>
+<tr><td>XProtect version</td><td><code class="copy">xprotect version</code></td><td>macOS 15 and later; <code>xprotect check</code> and <code>update</code> fail on macOS 27</td></tr>
+<tr><td>Local users and admins</td><td><code class="copy">dscl . -read /Groups/admin GroupMembership</code></td><td>List all users with <code>dscl . -list /Users</code></td></tr>
+<tr><td>Recent logins</td><td><code class="copy">last -20</code></td><td>Console, SSH and reboots</td></tr>
+<tr><td>Running processes</td><td><code class="copy">ps -axo pid,ppid,user,command</code></td><td>Look for binaries in <code>/tmp</code>, <code>/Users/Shared</code> or hidden folders</td></tr>
+<tr><td>Listening ports</td><td><code class="copy">sudo lsof -nP -iTCP -sTCP:LISTEN</code></td><td>Shows the owning process</td></tr>
+<tr><td>Established connections</td><td><code class="copy">sudo lsof -nP -iTCP -sTCP:ESTABLISHED</code></td><td>Find unexpected outbound sessions</td></tr>
+<tr><td>Application firewall state</td><td><code class="copy">/usr/libexec/ApplicationFirewall/socketfilterfw --getglobalstate</code></td><td>Also <code>--getstealthmode</code></td></tr>
+<tr><td>Remote Login state</td><td><code class="copy">sudo systemsetup -getremotelogin</code></td><td>SSH server on or off</td></tr>
+<tr><td>DNS and proxy settings</td><td><code class="copy">scutil --dns; scutil --proxy</code></td><td>Unexpected resolvers or proxies indicate redirection</td></tr>
+<tr><td>Configuration profiles</td><td><code class="copy">sudo profiles show -all</code></td><td><code>profiles status -type enrollment</code> shows MDM enrollment</td></tr>
+<tr><td>System extensions</td><td><code class="copy">systemextensionsctl list</code></td><td>Network filters, endpoint security, drivers</td></tr>
+<tr><td>Loaded kernel extensions</td><td><code class="copy">kmutil showloaded --list-only</code></td><td>Anything not from Apple deserves a look</td></tr>
+<tr><td>Admin trusted certificates</td><td><code class="copy">security dump-trust-settings -d</code></td><td>Any entry is a root CA someone chose to trust</td></tr>
+<tr><td>Install history</td><td><code class="copy">system_profiler SPInstallHistoryDataType</code></td><td>Package and update timeline</td></tr>
+<tr><td>Time Machine snapshots</td><td><code class="copy">tmutil listlocalsnapshots /</code></td><td>Earlier file states for comparison; <code>tmutil listbackups</code> for the backup disk</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="hardening">
+<h2 class="panel-title">Hardening Checklist</h2>
+<p class="panel-lead">Baseline settings for personal and managed Macs.</p>
+<ul class="checklist">
+<li>Run a supported release and turn on automatic security updates. Plan to replace Intel Macs, which stop at Tahoe 26.</li>
+<li>Keep FileVault on and escrow the recovery key in MDM, not on paper next to the Mac.</li>
+<li>Leave SIP enabled and the system volume sealed. Never run day to day with Reduced Security.</li>
+<li>Keep Gatekeeper on and only install notarized apps from known developers or the App Store.</li>
+<li>Turn on the application firewall with stealth mode; add pf rules for servers.</li>
+<li>Turn off Remote Login, Screen Sharing, Remote Management and File Sharing unless needed. If SSH is needed, allow keys only.</li>
+<li>Review System Settings, General, Login Items and Extensions, and act on Background Task Management alerts.</li>
+<li>Review Full Disk Access, Accessibility, Screen Recording and Input Monitoring grants regularly.</li>
+<li>Use a standard account day to day and a separate admin account for changes.</li>
+<li>Disable automatic login so <code>/etc/kcpassword</code> never exists.</li>
+<li>Manage fleets with MDM using declarative device management; legacy MDM software update commands stopped working in the 27.0 releases.</li>
+<li>Deploy an EDR built on Endpoint Security and forward unified log events to your SIEM.</li>
+<li>Turn on Lockdown Mode for people at risk of targeted spyware.</li>
+<li>Encrypt Time Machine backups and keep one copy offline.</li>
+</ul>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

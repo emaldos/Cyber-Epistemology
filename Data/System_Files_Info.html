@@ -1,86 +1,92 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>System Files Info</title>
-<link rel="icon" href="../Image/Logo.png" type="image/png" sizes="32x32"/><link rel="icon" href="../Image/Logo.png" type="image/png" sizes="192x192"/><link rel="apple-touch-icon" href="../Image/Logo.png"/><meta name="theme-color" content="#111"/>
-<style>
-:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--blue:#2196f3}
-*{box-sizing:border-box}html,body{height:100%}
-body{margin:0;font:16px/1.5 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111;text-align:center}
-.bg{position:fixed;inset:0;background:url("../Image/Logo.png") center/cover no-repeat;z-index:-2}
-.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.78) 100%);z-index:-1}
-.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
-.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
-.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
-.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
-.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
-.homepill span{font-weight:700;letter-spacing:.15px}
-.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
-.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);cursor:pointer;user-select:none;flex:0 0 auto}
-.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
-.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0}
-.tabs.overflow{overflow:auto}
-.tabs::-webkit-scrollbar{display:none}
-.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
-.tab:hover{opacity:1}
-.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
-.tab.active{color:var(--blue)}
-.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
-.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
-.page{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:96px 28px 28px}
-.shell{width:min(1200px,94%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
-.h{margin:0 0 8px;font-size:28px;font-weight:800;letter-spacing:.2px}
-.p{margin:0 0 22px;color:var(--muted)}
-.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}
-.tile{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;padding:12px;height:200px;text-decoration:none;color:var(--text);background:var(--tile);border:1px solid var(--tileBorder);border-radius:18px;transition:transform .08s ease,box-shadow .18s ease,background .2s ease}
-.tile:hover{transform:translateY(-2px);box-shadow:0 16px 34px rgba(0,0,0,.35)}
-.imgbox{height:80%;width:100%;display:flex;align-items:center;justify-content:center}
-.imgbox img{max-height:100%;max-width:100%;object-fit:contain;filter:drop-shadow(0 6px 16px rgba(0,0,0,.35))}
-.tile span{display:flex;align-items:center;justify-content:center;height:20%;width:100%;font-weight:700;letter-spacing:.15px}
-@media(min-width:1100px){.grid{grid-template-columns:repeat(4,1fr)}}
-</style></head><body>
-<div class="bg"></div>
-<nav class="topbar" id="topbar">
-  <div class="nav">
-    <a class="homepill" href="../index.html" aria-label="Home"><img src="../Image/Home.png" alt="Home"/><span>Home</span></a>
-    <div class="tabswrap">
-      <button class="navbtn" id="leftbtn"><span>&lt;</span></button>
-      <div class="tabs" id="tabs">
-        <a class="tab active" href="System_Files_Info.html"><img src="../Image/Nav.png" alt="System Files"/>System Files</a>
-        <a class="tab" href="Commands.html"><img src="../Image/Command.png" alt="Commands"/>Commands</a>
-        <a class="tab" href="Kali_Tools.html"><img src="../Image/KaliLinux.png" alt="Kali Tools"/>Kali Tools</a>
-        <a class="tab" href="cyber_roadmap.html"><img src="../Image/roadmap.png" alt="RoadMap"/>RoadMap</a>
-        <a class="tab" href="Cyber_Websites.html"><img src="../Image/Awareness.png" alt="Websites"/>Cyber Websites</a>
-      </div>
-      <button class="navbtn" id="rightbtn"><span>&gt;</span></button>
-    </div>
-  </div>
-</nav>
-<div class="page">
-  <main class="shell">
-    <h1 class="h">System Files — Operating Systems</h1>
-    <p class="p">Choose a platform to open its important system files page.</p>
-    <section class="grid">
-      <a class="tile" href="OS/Kali_Linux.html"><div class="imgbox"><img src="../Image/KaliLinux.png" alt="Kali Linux icon"></div><span>Kali Linux</span></a>
-      <a class="tile" href="OS/Ubuntu_Server.html"><div class="imgbox"><img src="../Image/UbuntuServer.png" alt="Ubuntu Server icon"></div><span>Ubuntu Server</span></a>
-      <a class="tile" href="OS/Windows_11.html"><div class="imgbox"><img src="../Image/Win11.png" alt="Windows 11 icon"></div><span>Windows 11</span></a>
-      <a class="tile" href="OS/Windows_Server.html"><div class="imgbox"><img src="../Image/WinServer.png" alt="Windows Server icon"></div><span>Windows Server</span></a>
-      <a class="tile" href="OS/macOS.html"><div class="imgbox"><img src="../Image/MacOS.png" alt="macOS icon"></div><span>macOS</span></a>
-      <a class="tile" href="OS/IOS.html"><div class="imgbox"><img src="../Image/IOS.png" alt="iOS icon"></div><span>iOS</span></a>
-      <a class="tile" href="OS/Android.html"><div class="imgbox"><img src="../Image/Android.png" alt="Android icon"></div><span>Android</span></a>
-    </section>
-  </main>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>System Files | Cyber Epistemology</title>
+<meta name="description" content="High value file system paths for Windows 11, Windows Server, macOS, iOS, Android, Ubuntu Server and Kali Linux, with a cross platform quick map and risk levels.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../Assets/Image/AppleTouchIcon.png">
+<link rel="stylesheet" href="../Assets/Style/Site.css">
+<script src="../Assets/Script/Site.js" defer></script>
+</head>
+<body class="is-content-page" data-root="../" data-section="system-files">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../index.html">Home</a><span class="breadcrumb-separator">/</span><span>System Files</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../Assets/Icon/Folder.png" alt="">
+<div>
+<p class="hero-eyebrow">System Files</p>
+<h1 class="hero-title">Where Systems Keep What Matters</h1>
 </div>
-<script>
-(function(){
-  var tb=document.getElementById('topbar'),lastY=window.scrollY||0,hidden=false;
-  window.addEventListener('scroll',function(){if(!tb)return;var y=window.scrollY||0;if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
-  var p=location.pathname.replace(/\/+$/,'');document.querySelectorAll('.tabs .tab').forEach(function(a){var h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');if(p.endsWith(h))a.classList.add('active')});
-  var tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
-  function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
-  function updateArrows(){var o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;tabs.classList.toggle('overflow',o);leftbtn.style.display=o&&s>0?'inline-flex':'none';rightbtn.style.display=o&&s<max-1?'inline-flex':'none'}
-  function scrollByStep(d){var step=Math.max(120,Math.floor(tabs.clientWidth*.6));tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})}
-  leftbtn.addEventListener('click',function(){scrollByStep(-1)});rightbtn.addEventListener('click',function(){scrollByStep(1)});
-  tabs.addEventListener('scroll',updateArrows,{passive:true});new ResizeObserver(updateArrows).observe(tabs);window.addEventListener('resize',updateArrows);
-  tabs.addEventListener('wheel',function(e){if(!hasOverflow())return;var dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}});
-  updateArrows();
-})();
-</script>
-</body></html>
+</div>
+<p class="hero-lead">Credentials, persistence locations, logs and forensic artifacts for seven platforms. Each page explains what a path holds, why attackers and defenders care, and how risky it is when exposed.</p>
+<div class="hero-meta"><span class="badge">7 platforms</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: shadow" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="platforms">
+<h2 class="panel-title">Choose a Platform</h2>
+<p class="panel-lead">Every platform page follows the same layout, so you can compare them quickly.</p>
+<div class="card-grid">
+<a class="card" href="OS/Windows_11.html"><img class="card-icon" src="../Assets/Icon/Windows11.png" alt=""><span class="card-title">Windows 11</span><span class="card-text">Registry hives, DPAPI, autoruns, event logs, Prefetch, Amcache and SRUM.</span><span class="card-meta">Desktop</span></a>
+<a class="card" href="OS/Windows_Server.html"><img class="card-icon" src="../Assets/Icon/WindowsServer.png" alt=""><span class="card-title">Windows Server</span><span class="card-text">Everything in Windows 11 plus Active Directory, NTDS.dit, SYSVOL and server roles.</span><span class="card-meta">Server</span></a>
+<a class="card" href="OS/macOS.html"><img class="card-icon" src="../Assets/Icon/MacOs.png" alt=""><span class="card-title">macOS</span><span class="card-text">Keychain, TCC, launch agents and daemons, unified log and quarantine data.</span><span class="card-meta">Desktop</span></a>
+<a class="card" href="OS/IOS.html"><img class="card-icon" src="../Assets/Icon/Ios.png" alt=""><span class="card-title">iOS</span><span class="card-text">App sandboxes, backups, sysdiagnose and acquisition options for iPhone and iPad.</span><span class="card-meta">Mobile</span></a>
+<a class="card" href="OS/Android.html"><img class="card-icon" src="../Assets/Icon/Android.png" alt=""><span class="card-title">Android</span><span class="card-text">App data, system databases, adb, bug reports and modern privacy features.</span><span class="card-meta">Mobile</span></a>
+<a class="card" href="OS/Ubuntu_Server.html"><img class="card-icon" src="../Assets/Icon/UbuntuServer.png" alt=""><span class="card-title">Ubuntu Server</span><span class="card-text">shadow, sudoers, SSH, systemd, cron, journald, AppArmor and service configs.</span><span class="card-meta">Server</span></a>
+<a class="card" href="OS/Kali_Linux.html"><img class="card-icon" src="../Assets/Icon/KaliLinux.png" alt=""><span class="card-title">Kali Linux</span><span class="card-text">Wordlists, Metasploit data, tool configs, loot locations and keeping the box clean.</span><span class="card-meta">Assessment</span></a>
+</div>
+</section>
+<section class="panel" id="quick-map">
+<h2 class="panel-title">Cross Platform Quick Map</h2>
+<p class="panel-lead">The same kind of artifact on each desktop and server platform.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Artifact</th><th>Windows</th><th>macOS</th><th>Linux</th></tr></thead>
+<tbody>
+<tr><td>Local password hashes</td><td><code>C:\Windows\System32\config\SAM</code> (needs <code>SYSTEM</code> hive)</td><td><code>/var/db/dslocal/nodes/Default/users/&lt;user&gt;.plist</code></td><td><code>/etc/shadow</code></td></tr>
+<tr><td>Domain password hashes</td><td><code>C:\Windows\NTDS\ntds.dit</code> on domain controllers</td><td>Not applicable</td><td>FreeIPA or Samba AD databases when installed</td></tr>
+<tr><td>User credential store</td><td><code>%APPDATA%\Microsoft\Credentials\</code> (DPAPI)</td><td><code>~/Library/Keychains/</code></td><td><code>~/.local/share/keyrings/</code> (GNOME Keyring)</td></tr>
+<tr><td>Autostart</td><td><code>HKLM\Software\Microsoft\Windows\CurrentVersion\Run</code>, Startup folders, services</td><td><code>/Library/LaunchDaemons/</code>, <code>~/Library/LaunchAgents/</code></td><td><code>/etc/systemd/system/</code>, <code>~/.config/systemd/user/</code></td></tr>
+<tr><td>Scheduled jobs</td><td><code>C:\Windows\System32\Tasks\</code></td><td>launchd jobs (cron is rarely used)</td><td><code>/etc/crontab</code>, <code>/var/spool/cron/crontabs/</code>, systemd timers</td></tr>
+<tr><td>System logs</td><td><code>C:\Windows\System32\winevt\Logs\*.evtx</code></td><td><code>/var/db/diagnostics/</code> (read with <code>log show</code>)</td><td><code>/var/log/journal/</code>, <code>/var/log/auth.log</code></td></tr>
+<tr><td>Shell history</td><td><code>%APPDATA%\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt</code></td><td><code>~/.zsh_history</code></td><td><code>~/.bash_history</code></td></tr>
+<tr><td>SSH keys</td><td><code>C:\Users\&lt;user&gt;\.ssh\</code></td><td><code>~/.ssh/</code></td><td><code>~/.ssh/</code>, <code>/etc/ssh/</code></td></tr>
+<tr><td>Hosts file</td><td><code>C:\Windows\System32\drivers\etc\hosts</code></td><td><code>/etc/hosts</code></td><td><code>/etc/hosts</code></td></tr>
+<tr><td>Chrome profile</td><td><code>%LOCALAPPDATA%\Google\Chrome\User Data\Default\</code></td><td><code>~/Library/Application Support/Google/Chrome/Default/</code></td><td><code>~/.config/google-chrome/Default/</code></td></tr>
+<tr><td>Temporary files</td><td><code>%TEMP%</code>, <code>C:\Windows\Temp\</code></td><td><code>/private/tmp/</code>, <code>/private/var/folders/</code></td><td><code>/tmp/</code>, <code>/var/tmp/</code>, <code>/dev/shm/</code></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="risk-levels">
+<h2 class="panel-title">Risk Levels</h2>
+<p class="panel-lead">How the platform pages rate each path.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term"><span class="tag tag-critical">Critical</span></span><span class="definition-text">Exposure gives credentials, keys or full control of the system or domain.</span></div>
+<div class="definition"><span class="definition-term"><span class="tag tag-high">High</span></span><span class="definition-text">Common persistence or privilege escalation point, or data that enables lateral movement.</span></div>
+<div class="definition"><span class="definition-term"><span class="tag tag-medium">Medium</span></span><span class="definition-text">Valuable evidence or reconnaissance data. Attackers may tamper with it to hide activity.</span></div>
+<div class="definition"><span class="definition-term"><span class="tag tag-low">Low</span></span><span class="definition-text">Useful context for investigations, rarely sensitive on its own.</span></div>
+</div>
+</section>
+<section class="panel" id="using-these-pages">
+<h2 class="panel-title">Using These Pages</h2>
+<ul class="checklist">
+<li>Defenders: monitor the Critical and High paths for unexpected reads and writes, and collect the log and artifact paths during incident response.</li>
+<li>Investigators: work on a copy or a forensic image. Opening live files changes timestamps and can lock or corrupt them.</li>
+<li>Testers: only access these locations on systems you own or are authorized to assess, and handle any recovered secrets as sensitive data.</li>
+</ul>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>

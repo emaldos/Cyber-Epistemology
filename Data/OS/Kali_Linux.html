@@ -1,303 +1,291 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Kali Linux — System Files</title>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="32x32"/>
-<link rel="icon" href="../../Image/Logo.png" type="image/png" sizes="192x192"/>
-<link rel="apple-touch-icon" href="../../Image/Logo.png"/>
-<meta name="theme-color" content="#111"/>
-<style>
-:root{color-scheme:dark;--text:#eef2ff;--muted:#c7cbe6;--ring:rgba(255,255,255,.18);--glass:rgba(255,255,255,.08);--tile:rgba(255,255,255,.10);--tileBorder:rgba(255,255,255,.16);--line:rgba(255,255,255,.10);--blue:#2196f3}
-*{box-sizing:border-box}
-html,body{height:100%}
-html{scroll-behavior:smooth}
-body{margin:0;font:16px/1.55 Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:#111}
-.bg{position:fixed;inset:0;background:url("../../Image/Logo.png") center/cover no-repeat;z-index:-2}
-.bg::after{content:"";position:absolute;inset:0;background:radial-gradient(1200px 700px at 20% -10%,rgba(0,0,0,.45) 0%,rgba(0,0,0,.65) 55%,rgba(0,0,0,.80) 100%);z-index:-1}
-.topbar{position:fixed;top:0;left:0;right:0;height:64px;display:flex;align-items:center;justify-content:center;z-index:20;transform:translateY(0);transition:transform .22s ease}
-.topbar.scrolled .nav{background:rgba(17,17,17,.6);border-color:rgba(255,255,255,.22);box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.08)}
-.nav{pointer-events:auto;display:flex;gap:16px;align-items:center;justify-content:center;padding:10px 14px;border-radius:16px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(12px) saturate(140%);-webkit-backdrop-filter:blur(12px) saturate(140%);box-shadow:0 10px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);max-width:92vw}
-.homepill{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:12px;text-decoration:none;color:var(--text);border:1px solid var(--ring);background:rgba(255,255,255,.06);white-space:nowrap}
-.homepill img{width:22px;height:22px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.35))}
-.homepill span{font-weight:700;letter-spacing:.15px}
-.tabswrap{position:relative;display:flex;align-items:center;gap:8px;min-width:0;flex:1}
-.navbtn{display:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:10px;border:1px solid var(--ring);background:rgba(255,255,255,.06);cursor:pointer;user-select:none;flex:0 0 auto}
-.navbtn span{display:block;font-weight:800;line-height:1;font-size:14px}
-.tabs{display:flex;gap:6px;overflow:hidden;scrollbar-width:none;padding:0;flex:1 1 auto;min-width:0;max-width:none}
-.tabs.overflow{overflow:auto}
-.tabs::-webkit-scrollbar{display:none}
-.tab{position:relative;display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;color:var(--text);text-decoration:none;font-weight:600;letter-spacing:.2px;opacity:.9;white-space:nowrap}
-.tab:hover{opacity:1}
-.tab:focus-visible{outline:2px solid rgba(33,150,243,.7);outline-offset:2px;border-radius:12px}
-.tab.active{color:var(--blue)}
-.tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px;background:var(--blue)}
-.tab img{width:18px;height:18px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
-.shell .h,.shell .sub{text-align:center}
-.page{position:relative;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:96px 20px 28px}
-.shell{width:min(1200px,96%);padding:28px;border-radius:22px;background:var(--glass);border:1px solid var(--ring);backdrop-filter:blur(14px) saturate(140%);-webkit-backdrop-filter:blur(14px) saturate(140%);box-shadow:0 20px 60px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.08)}
-.h{margin:0 0 2px;font-size:28px;font-weight:800;letter-spacing:.2px}
-.sub{margin:0 0 12px;color:var(--muted)}
-.quicknav{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:6px 0 18px}
-.qbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--ring);background:rgba(255,255,255,.06);color:var(--text);text-decoration:none;font-weight:700}
-.qbtn:hover{background:rgba(255,255,255,.1)}
-.section{margin:22px 0 0;scroll-margin-top:90px}
-.section .title{margin:0 0 10px;font-size:20px;font-weight:800}
-.card{border:1px solid var(--tileBorder);background:var(--tile);border-radius:18px;box-shadow:0 12px 28px rgba(0,0,0,.3);overflow:hidden}
-.codewrap{padding:0;margin:0;border-top-left-radius:18px;border-top-right-radius:18px}
-pre{margin:0;max-height:480px;overflow:auto;padding:18px;font:13px/1.45 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;background:rgba(0,0,0,.35);border-top-left-radius:18px;border-top-right-radius:18px;border-bottom:1px solid var(--line);white-space:pre}
-pre code{color:#e6eaff}
-.tablewrap{width:100%;overflow:auto}
-table{width:100%;border-collapse:separate;border-spacing:0}
-thead th{position:sticky;top:0;background:rgba(20,24,44,.85);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line);text-align:left;padding:12px 14px;font-size:14px}
-tbody td{border-bottom:1px solid var(--line);padding:12px 14px;vertical-align:top}
-tbody tr:hover{background:rgba(255,255,255,.04)}
-th:first-child,td:first-child{border-left:none}
-th:last-child,td:last-child{border-right:none}
-th,td{word-break:break-word;overflow-wrap:anywhere}
-caption{caption-side:bottom;color:var(--muted);padding:10px 4px 0}
-.kbd{display:inline-block;padding:2px 6px;border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.06);font:12px/1.2 ui-monospace,monospace}
-hr{border:0;border-top:1px solid var(--line);margin:20px 0}
-.bycat caption{caption-side:top;padding:10px 4px 6px;font-weight:800}
-.bycat .card+.card{margin-top:14px}
-.bycat thead th{background:linear-gradient(180deg,rgba(33,150,243,.18),rgba(33,150,243,.14));backdrop-filter:blur(10px) saturate(140%);-webkit-backdrop-filter:blur(10px) saturate(140%);border-bottom:1px solid rgba(33,150,243,.35);box-shadow:inset 0 1px 0 rgba(255,255,255,.08);color:var(--text)}
-.bycat table{table-layout:fixed;width:100%}
-.bycat th:nth-child(1),.bycat td:nth-child(1){width:220px}
-.bycat th:nth-child(2),.bycat td:nth-child(2){width:420px}
-.bycat th:nth-child(3),.bycat td:nth-child(3){width:auto}
-@media(max-width:900px){.bycat th:nth-child(1),.bycat td:nth-child(1){width:180px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:300px}}
-@media(max-width:640px){.tab{padding:6px 10px}.shell{width:98%}.bycat th:nth-child(1),.bycat td:nth-child(1){width:150px}.bycat th:nth-child(2),.bycat td:nth-child(2){width:240px}}
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kali Linux | Cyber Epistemology</title>
+<meta name="description" content="Kali Linux 2026 file map for assessment boxes: default user model, tool data and loot locations, wordlists, apt sources and keyring, logs, triage commands and how to keep the box clean and secure.">
+<meta name="theme-color" content="#04070e">
+<link rel="icon" href="../../Assets/Image/Favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../../Assets/Image/AppleTouchIcon.png">
+<link rel="stylesheet" href="../../Assets/Style/Site.css">
+<script src="../../Assets/Script/Site.js" defer></script>
 </head>
-<body>
-<div class="bg"></div>
-<nav class="topbar" id="topbar">
-  <div class="nav">
-    <a class="homepill" href="../../index.html" title="Home" aria-label="Home"><img src="../../Image/Home.png" alt="Home"/><span>Home</span></a>
-    <div class="tabswrap">
-      <button class="navbtn" id="leftbtn" aria-label="Prev"><span>&lt;</span></button>
-      <div class="tabs" id="tabs">
-        <a class="tab" href="../System_Files_Info.html"><img src="../../Image/Nav.png" alt="System Files"/>System Files</a>
-        <a class="tab" href="Kali_Linux.html"><img src="../../Image/KaliLinux.png" alt="Kali"/>Kali</a>
-        <a class="tab" href="Ubuntu_Server.html"><img src="../../Image/UbuntuServer.png" alt="Ubuntu Server"/>Ubuntu Server</a>
-        <a class="tab" href="Windows_11.html"><img src="../../Image/Win11.png" alt="Windows 11"/>Windows 11</a>
-        <a class="tab" href="Windows_Server.html"><img src="../../Image/WinServer.png" alt="Windows Server"/>Windows Server</a>
-        <a class="tab" href="macOS.html"><img src="../../Image/MacOS.png" alt="macOS"/>macOS</a>
-        <a class="tab" href="IOS.html"><img src="../../Image/IOS.png" alt="iOS"/>iOS</a>
-        <a class="tab" href="Android.html"><img src="../../Image/Android.png" alt="Android"/>Android</a>
-      </div>
-      <button class="navbtn" id="rightbtn" aria-label="Next"><span>&gt;</span></button>
-    </div>
-  </div>
-</nav>
-<div class="page">
-  <main class="shell">
-    <h1 class="h">Kali Linux — System Files</h1>
-    <p class="sub">Click to navigate to a section</p>
-    <div class="quicknav">
-      <a class="qbtn" href="#fsmap">File System Map</a>
-      <a class="qbtn" href="#bycat">Important Files</a>
-    </div>
-    <section class="section" id="fsmap">
-      <h2 class="title">Filesystem map and high-value paths for threats/defense</h2>
-      <h3 class="title">Critical paths</h3>
-      <div class="card"><div class="codewrap">
-<pre><code>/etc/shadow                                  # Hashed local passwords; offline cracking ⇒ full host compromise
-/root/.ssh/                                  # Root private keys and trusts; immediate total control
-/var/run/docker.sock                         # Root-equivalent Docker control; container breakout ⇒ host root
-/etc/ld.so.preload                           # Force-load library into all processes; stealth persistence
-/etc/sudoers                                 # NOPASSWD/wildcards ⇒ instant root; audit carefully
-/etc/systemd/system/*.service                # Autostart root services; backdoor with Exec= payloads
-/var/www/**/.env                             # App secrets (DB/API keys) in prod; instant data access
-</code></pre>
-      </div></div>
-      <h3 class="title">High-risk paths</h3>
-      <div class="card"><div class="codewrap">
-<pre><code>/home/*/.ssh/                                # User SSH keys; lateral movement and trust pivot
-/etc/ssh/sshd_config                         # Weak auth/ciphers; brute-force and backdoor risk
-/etc/krb5.keytab                             # Kerberos service keys; AD lateral via SPN impersonation
-~/.aws/credentials                           # Cloud keys; tenant-wide impact
-~/.config/gcloud/*                           # GCP auth; project takeover
-~/.azure/*                                   # Azure tokens; subscription lateral
-/var/www/**/config.php                       # Hard-coded creds/salts; DB and admin panel pivot
-/srv/*/settings.py                           # Framework secrets; admin tokens
-/etc/ld.so.conf.d/*                          # Library path hijack opportunities
-find / -perm -4000 -type f                   # SUID binaries; misconfigs ⇒ privesc
-getcap -r /                                  # File capabilities; elevated syscalls without SUID
-</code></pre>
-      </div></div>
-      <h3 class="title">Medium-risk paths</h3>
-      <div class="card"><div class="codewrap">
-<pre><code>/var/log/auth.log                            # Logins/sudo traces; detect misuse and brute-force
-/var/log/syslog                              # System events; correlate execution times
-/var/log/audit/audit.log                     # Syscall traces; file/exec monitoring
-/var/log/journal/                            # Persistent systemd logs; tamper detection
-/usr/share/wordlists/                        # Known lists (rockyou); inventory and integrity
-~/.bash_history                              # Command trails; OPSEC leak, forensic value
-~/.zsh_history                               # Same as above for zsh
-/var/lib/dpkg/                               # What’s installed; identify suspicious packages
-/etc/NetworkManager/system-connections/*     # Saved Wi-Fi/802.1x creds; network pivot
-/etc/nftables.conf                           # Policy gaps enable ingress/exfil
-/var/www/html                                # Default docroot; common webshell target
-/tmp , /var/tmp                              # Staging for payloads; scan and clean
-</code></pre>
-      </div></div>
-    </section>
-    <section class="section bycat" id="bycat">
-      <h2 class="title">Important files — by Category</h2>
-      <div class="card tablewrap"><table>
-        <caption>Credentials & Accounts (Critical first)</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Credentials & Accounts</td><td><span class="kbd">/etc/shadow</span></td><td>Hashed local passwords; offline cracking and escalation.</td></tr>
-          <tr><td>Credentials & Accounts</td><td><span class="kbd">/etc/passwd</span></td><td>Usernames/UIDs/shells; map targets and service users.</td></tr>
-          <tr><td>Credentials & Accounts</td><td><span class="kbd">/etc/group</span></td><td>Group memberships; unintended privilege paths.</td></tr>
-          <tr><td>Credentials & Accounts</td><td><span class="kbd">/var/backups/*</span></td><td>Backup copies of passwd/shadow; weaker perms.</td></tr>
-        </tbody>
-      </table></div>
-      <div class="card tablewrap"><table>
-        <caption>SSH Keys</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>SSH Keys</td><td><span class="kbd">/root/.ssh/</span></td><td>Root keys; immediate full control if leaked.</td></tr>
-          <tr><td>SSH Keys</td><td><span class="kbd">/home/*/.ssh/</span></td><td>User keys and trusts; lateral movement.</td></tr>
-        </tbody>
-      </table></div>
-      <div class="card tablewrap"><table>
-        <caption>Sudo & Loader</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Sudo</td><td><span class="kbd">/etc/sudoers</span></td><td>NOPASSWD/wildcards enable instant root paths.</td></tr>
-          <tr><td>Sudo</td><td><span class="kbd">/etc/sudoers.d/*</span></td><td>Drop-ins; risky grants easier to hide.</td></tr>
-          <tr><td>Loader Hijack</td><td><span class="kbd">/etc/ld.so.preload</span></td><td>Force-load libs into all processes; high-sev persistence.</td></tr>
-          <tr><td>Loader Config</td><td><span class="kbd">/etc/ld.so.conf.d/*</span></td><td>Library path manipulation opportunities.</td></tr>
-        </tbody>
-      </table></div>
-      <div class="card tablewrap"><table>
-        <caption>Persistence & Startup</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Persistence (systemd)</td><td><span class="kbd">/etc/systemd/system/*.service</span></td><td>Autostart backdoors; monitor changes.</td></tr>
-          <tr><td>Persistence (user)</td><td><span class="kbd">~/.config/systemd/user/*.service</span></td><td>User-level persistence.</td></tr>
-          <tr><td>Legacy Startup</td><td><span class="kbd">/etc/rc.local</span></td><td>Simple root persistence if present.</td></tr>
-          <tr><td>Cron</td><td><span class="kbd">/etc/crontab</span></td><td>Timed execution; beacons/tools.</td></tr>
-          <tr><td>Cron</td><td><span class="kbd">/etc/cron.d/*</span></td><td>Drop-in scheduled tasks.</td></tr>
-          <tr><td>Cron</td><td><span class="kbd">/var/spool/cron/*</span></td><td>Per-user crontabs; root pivot.</td></tr>
-          <tr><td>Autostart (GUI)</td><td><span class="kbd">/etc/xdg/autostart/*.desktop</span></td><td>Login launch; malicious Exec lines.</td></tr>
-        </tbody>
-      </table></div>
-      <div class="card tablewrap"><table>
-        <caption>Cloud & Dev Tokens</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Cloud Creds</td><td><span class="kbd">~/.aws/credentials</span></td><td>AWS keys; cloud lateral/exfil.</td></tr>
-          <tr><td>Cloud Creds</td><td><span class="kbd">~/.config/gcloud/*</span></td><td>GCP auth; project takeover.</td></tr>
-          <tr><td>Cloud Creds</td><td><span class="kbd">~/.azure/*</span></td><td>Azure tokens; tenant lateral.</td></tr>
-          <tr><td>Dev/Tool Tokens</td><td><span class="kbd">~/.git-credentials</span></td><td>Plaintext git tokens; CI access.</td></tr>
-          <tr><td>Dev/Tool Tokens</td><td><span class="kbd">~/.npmrc</span></td><td>Registry tokens; supply-chain pivot.</td></tr>
-          <tr><td>Dev/Tool Tokens</td><td><span class="kbd">~/.pypirc</span></td><td>PyPI creds; package poison risk.</td></tr>
-        </tbody>
-      </table></div>
-      <div class="card tablewrap"><table>
-        <caption>App Secrets</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>App Secrets</td><td><span class="kbd">/var/www/**/.env</span></td><td>DB/API credentials; instant access.</td></tr>
-          <tr><td>App Secrets</td><td><span class="kbd">/var/www/**/config.php</span></td><td>Hard-coded creds and salts.</td></tr>
-          <tr><td>App Secrets</td><td><span class="kbd">/srv/*/settings.py</span></td><td>Framework secrets and admin keys.</td></tr>
-        </tbody>
-      </table></div>
-      <div class="card tablewrap"><table>
-        <caption>Containers</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Containers</td><td><span class="kbd">/var/run/docker.sock</span></td><td>Root-equivalent Docker control.</td></tr>
-          <tr><td>Containers</td><td><span class="kbd">/var/lib/docker/*</span></td><td>Images/volumes; harvest secrets.</td></tr>
-        </tbody>
-      </table></div>
-      <div class="card tablewrap"><table>
-        <caption>TLS/PKI</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>TLS/PKI</td><td><span class="kbd">/etc/ssl/*</span></td><td>Private keys and certs; impersonation risk.</td></tr>
-          <tr><td>TLS/PKI</td><td><span class="kbd">/usr/local/share/ca-certificates/*</span></td><td>Trust additions; interception abuse.</td></tr>
-        </tbody>
-      </table></div>
-      <div class="card tablewrap"><table>
-        <caption>Network & Firewall</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Network</td><td><span class="kbd">/etc/hosts</span></td><td>Name overrides; redirect or hide C2.</td></tr>
-          <tr><td>Network</td><td><span class="kbd">/etc/resolv.conf</span></td><td>DNS servers; tampering to rogue DNS.</td></tr>
-          <tr><td>Network</td><td><span class="kbd">/etc/NetworkManager/system-connections/*</span></td><td>Saved Wi-Fi/802.1x creds.</td></tr>
-          <tr><td>Firewall</td><td><span class="kbd">/etc/nftables.conf</span></td><td>Policy gaps enable ingress/exfil.</td></tr>
-        </tbody>
-      </table></div>
-      <div class="card tablewrap"><table>
-        <caption>Logs & Audit</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>System Logs</td><td><span class="kbd">/var/log/auth.log</span></td><td>Logins/sudo; detect misuse.</td></tr>
-          <tr><td>System Logs</td><td><span class="kbd">/var/log/syslog</span></td><td>System events; correlation.</td></tr>
-          <tr><td>Audit</td><td><span class="kbd">/var/log/audit/audit.log</span></td><td>Syscall-level traces.</td></tr>
-          <tr><td>Journal</td><td><span class="kbd">/var/log/journal/</span></td><td>Persistent systemd logs.</td></tr>
-          <tr><td>Web Logs</td><td><span class="kbd">/var/log/nginx/*</span></td><td>HTTP attack traces.</td></tr>
-          <tr><td>Web Logs</td><td><span class="kbd">/var/log/apache2/*</span></td><td>Apache traces.</td></tr>
-          <tr><td>Package State</td><td><span class="kbd">/var/log/apt/*</span></td><td>Install/removal history.</td></tr>
-        </tbody>
-      </table></div>
-      <div class="card tablewrap"><table>
-        <caption>Databases</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Databases</td><td><span class="kbd">/var/lib/mysql/*</span></td><td>MySQL data; creds and PII.</td></tr>
-          <tr><td>Databases</td><td><span class="kbd">/etc/mysql/*.cnf</span></td><td>DB creds/ports/bindings.</td></tr>
-          <tr><td>Databases</td><td><span class="kbd">/var/lib/postgresql/*</span></td><td>Postgres clusters; Metasploit DB.</td></tr>
-          <tr><td>Databases</td><td><span class="kbd">/etc/postgresql/*</span></td><td>Configs/pg_hba auth model.</td></tr>
-        </tbody>
-      </table></div>
-      <div class="card tablewrap"><table>
-        <caption>System Inspection</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>Live Recon</td><td><span class="kbd">/proc/*</span></td><td>Processes, nets, cmdlines.</td></tr>
-          <tr><td>Live Recon</td><td><span class="kbd">/sys/*</span></td><td>Kernel/devices/tunables.</td></tr>
-          <tr><td>Boot</td><td><span class="kbd">/boot/*</span></td><td>Kernel/GRUB; bootkits.</td></tr>
-          <tr><td>Swap</td><td><span class="kbd">/swapfile</span></td><td>Sensitive remnants.</td></tr>
-          <tr><td>Kali Wordlists</td><td><span class="kbd">/usr/share/wordlists/</span></td><td>Known lists; verify integrity.</td></tr>
-          <tr><td>Kali Tool Data</td><td><span class="kbd">/usr/share/&lt;tool&gt;/</span></td><td>Modules/scripts; baseline hashes.</td></tr>
-        </tbody>
-      </table></div>
-      <div class="card tablewrap"><table>
-        <caption>User & Apps</caption>
-        <thead><tr><th>Category</th><th>Folder location</th><th>Value</th></tr></thead>
-        <tbody>
-          <tr><td>User Data</td><td><span class="kbd">~/Documents</span> <span class="kbd">~/Desktop</span></td><td>Secrets, exports, VPN files.</td></tr>
-          <tr><td>Browsers</td><td><span class="kbd">~/.mozilla/firefox/*</span></td><td>Cookies/logins/histories.</td></tr>
-          <tr><td>Browsers</td><td><span class="kbd">~/.config/google-chrome/*</span></td><td>Chromium/Chrome profiles.</td></tr>
-          <tr><td>Keyrings</td><td><span class="kbd">~/.local/share/keyrings/*</span></td><td>Saved secrets.</td></tr>
-          <tr><td>GPG</td><td><span class="kbd">~/.gnupg/*</span></td><td>Private keys; sign/decrypt.</td></tr>
-          <tr><td>Backups & Dumps</td><td><span class="kbd">/var/backups/</span></td><td>DB/app/user backups.</td></tr>
-          <tr><td>Temp Paths</td><td><span class="kbd">/tmp</span>, <span class="kbd">/var/tmp</span></td><td>Payload staging.</td></tr>
-          <tr><td>Custom Apps</td><td><span class="kbd">/opt/*</span></td><td>In-house tools and env files.</td></tr>
-          <tr><td>Services Data</td><td><span class="kbd">/srv/*</span></td><td>Service roots and data.</td></tr>
-          <tr><td>Web Roots</td><td><span class="kbd">/var/www/html</span></td><td>Default docroot; webshell target.</td></tr>
-          <tr><td>VPN</td><td><span class="kbd">/etc/openvpn/*.conf</span></td><td>VPN creds/certs.</td></tr>
-        </tbody>
-      </table></div>
-    </section>
-  </main>
+<body class="is-content-page" data-root="../../" data-section="system-files">
+<a class="skip-link" href="#main-content">Skip to content</a>
+<header id="site-topbar"></header>
+<main class="page" id="main-content">
+<nav class="breadcrumb" aria-label="Breadcrumb"><a href="../../index.html">Home</a><span class="breadcrumb-separator">/</span><a href="../System_Files_Info.html">System Files</a><span class="breadcrumb-separator">/</span><span>Kali Linux</span></nav>
+<section class="hero">
+<div class="hero-header">
+<img class="hero-icon" src="../../Assets/Icon/KaliLinux.png" alt="">
+<div>
+<p class="hero-eyebrow">System Files</p>
+<h1 class="hero-title">Kali Linux</h1>
 </div>
-<script>
-let lastY=scrollY,hidden=false;
-addEventListener('scroll',()=>{const y=scrollY,tb=document.getElementById('topbar');if(y>lastY+4&&!hidden){tb.style.transform='translateY(-100%)';hidden=true}else if(y<lastY-4&&hidden){tb.style.transform='translateY(0)';hidden=false}tb.classList.toggle('scrolled',y>6);lastY=y});
-const p=location.pathname.replace(/\/+$/,'');document.querySelectorAll('.tabs .tab').forEach(a=>{const h=new URL(a.href,location.href).pathname.replace(/\/+$/,'');if(p.endsWith(h))a.classList.add('active')});
-const tabs=document.getElementById('tabs'),leftbtn=document.getElementById('leftbtn'),rightbtn=document.getElementById('rightbtn');
-function hasOverflow(){return Math.ceil(tabs.scrollWidth)-Math.floor(tabs.clientWidth)>1}
-function updateArrows(){const o=hasOverflow(),s=tabs.scrollLeft,max=tabs.scrollWidth-tabs.clientWidth;tabs.classList.toggle('overflow',o);leftbtn.style.display=o&&s>0?'inline-flex':'none';rightbtn.style.display=o&&s<max-1?'inline-flex':'none'}
-function scrollByStep(d){const step=Math.max(120,Math.floor(tabs.clientWidth*.6));tabs.scrollTo({left:tabs.scrollLeft+(d*step),behavior:'smooth'})}
-leftbtn.addEventListener('click',()=>scrollByStep(-1));rightbtn.addEventListener('click',()=>scrollByStep(1));
-tabs.addEventListener('scroll',updateArrows,{passive:true});new ResizeObserver(updateArrows).observe(tabs);
-addEventListener('resize',updateArrows);
-tabs.addEventListener('wheel',e=>{if(!hasOverflow())return;const dx=Math.abs(e.deltaX),dy=Math.abs(e.deltaY);if(dy>dx){tabs.scrollLeft+=e.deltaY;updateArrows()}});
-updateArrows();
-</script>
-</body></html>
+</div>
+<p class="hero-lead">Kali is an assessment box, so the most sensitive data on it is usually your client's: captured hashes, cracked passwords, dumps and traffic. This page maps where Kali and its tools keep that data, how the system is set up, and how to keep the box clean and secure.</p>
+<div class="hero-meta"><span class="badge">101 paths and commands</span><span class="badge">Kali 2026.3</span><span class="badge">Reviewed November 2026</span></div>
+<label class="page-filter"><img src="../../Assets/Icon/Search.svg" alt=""><input type="search" placeholder="Filter this page, for example: responder" data-page-filter aria-label="Filter this page"><span class="page-filter-count" data-page-filter-count></span></label>
+</section>
+<nav class="sub-nav" aria-label="Operating systems">
+<a class="sub-nav-link" href="../System_Files_Info.html"><img src="../../Assets/Icon/Folder.png" alt="">All systems</a>
+<a class="sub-nav-link" href="Windows_11.html"><img src="../../Assets/Icon/Windows11.png" alt="">Windows 11</a>
+<a class="sub-nav-link" href="Windows_Server.html"><img src="../../Assets/Icon/WindowsServer.png" alt="">Windows Server</a>
+<a class="sub-nav-link" href="macOS.html"><img src="../../Assets/Icon/MacOs.png" alt="">macOS</a>
+<a class="sub-nav-link" href="IOS.html"><img src="../../Assets/Icon/Ios.png" alt="">iOS</a>
+<a class="sub-nav-link" href="Android.html"><img src="../../Assets/Icon/Android.png" alt="">Android</a>
+<a class="sub-nav-link" href="Ubuntu_Server.html"><img src="../../Assets/Icon/UbuntuServer.png" alt="">Ubuntu Server</a>
+<a class="sub-nav-link is-active" href="Kali_Linux.html" aria-current="page"><img src="../../Assets/Icon/KaliLinux.png" alt="">Kali Linux</a>
+</nav>
+<div class="layout">
+<aside data-toc></aside>
+<div class="content">
+<section class="panel" id="overview">
+<h2 class="panel-title">Overview</h2>
+<p class="panel-lead">Key facts about the current Kali release and how it differs from a general purpose distribution.</p>
+<div class="definition-grid">
+<div class="definition"><span class="definition-term">Current release</span><span class="definition-text">Kali 2026.3, released 26 October 2026, with Linux 7.1 and Xfce as the default desktop (GNOME and KDE Plasma 6.7 optional). Based on Debian testing.</span></div>
+<div class="definition"><span class="definition-term">Support status</span><span class="definition-text">Rolling distribution on the <code>kali-rolling</code> branch. Quarterly releases are snapshots, and only an up to date system is supported. Upgrade with <code>apt full-upgrade</code>, no reinstall needed.</span></div>
+<div class="definition"><span class="definition-term">Default user model</span><span class="definition-text">Non-root user since 2020.1. The installer asks for a user. Prebuilt VM, cloud and live images use <code>kali</code> / <code>kali</code>. Root has no password and is reached with <code>sudo</code>. Default shell is zsh.</span></div>
+<div class="definition"><span class="definition-term">File system</span><span class="definition-text">ext4 by default. The installer offers LVM with LUKS full disk encryption. Live USB images support encrypted persistence with LUKS.</span></div>
+<div class="definition"><span class="definition-term">Built-in security features</span><span class="definition-text">Network services such as SSH, PostgreSQL and Apache are installed but disabled by default. Signed repository (archive key rotated in April 2025). <code>kali-tweaks</code> for hardening and protocol compatibility settings.</span></div>
+<div class="definition"><span class="definition-term">Where logs live</span><span class="definition-text">systemd journal (<code>journalctl</code>, stored in <code>/var/log/journal/</code>). Text files such as <code>/var/log/auth.log</code> only exist when rsyslog is installed. Tool output lands in your home folder, tool folders under <code>/usr/share/</code> and the current working directory.</span></div>
+</div>
+<div class="callout callout-warning"><p><strong>Warning:</strong> Only use Kali tools against systems you own or have written permission to test. Treat everything the tools collect as confidential client data.</p></div>
+</section>
+<section class="panel" id="credentials-secrets">
+<h2 class="panel-title">Credentials and Secrets</h2>
+<p class="panel-lead">Secrets that protect the Kali box itself and the access it holds into client and lab networks.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/etc/shadow</code></td><td>Password hash of the <code>kali</code> user and any other accounts</td><td>On prebuilt images the password is the public default <code>kali</code>. Change it on first boot</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/etc/sudoers.d/</code></td><td>Sudo rules, including <code>kali-grant-root</code> when passwordless root has been enabled</td><td>Passwordless sudo turns any code execution as your user into root on a box full of client data</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>~/.ssh/</code></td><td>Your private keys, <code>known_hosts</code> and <code>config</code> with jump hosts</td><td>Keys often reach client jump boxes, VPS redirectors and lab hosts</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/etc/NetworkManager/system-connections/</code></td><td>Saved Wi-Fi, 802.1X and VPN profiles (<code>*.nmconnection</code>, root only)</td><td>Client network credentials stay here long after the engagement</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/*.ovpn</code>, <code>/etc/openvpn/</code>, <code>/etc/wireguard/</code></td><td>Lab and client VPN configs with certificates and keys</td><td>Anyone with the file can connect into the client or lab network as you</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/.aws/</code>, <code>~/.azure/</code>, <code>~/.config/gcloud/</code></td><td>Cloud CLI credentials used during cloud assessments</td><td>Often long lived keys with broad read access to the client tenant</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>*.ccache</code>, <code>/tmp/krb5cc_*</code></td><td>Kerberos tickets from <code>impacket-getTGT</code> or <code>kinit</code>, used through <code>KRB5CCNAME</code></td><td>Valid tickets are usable by anyone who copies them until they expire</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/.local/share/keyrings/</code>, <code>~/.local/share/kwalletd/</code></td><td>Desktop keyring (Xfce and GNOME) or KWallet (KDE)</td><td>Browser and app passwords saved through the desktop</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>~/.gnupg/</code></td><td>GPG keys used to encrypt reports and loot archives</td><td>Losing the private key means losing access to encrypted evidence</td><td><span class="tag tag-high">High</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="tool-data">
+<h2 class="panel-title">Tool Data and Loot</h2>
+<p class="panel-lead">Where common tools store captured hashes, credentials, dumps and session data.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>~/.msf4/</code></td><td>Metasploit user folder: <code>history</code>, <code>logs/framework.log</code>, <code>local/</code>, custom <code>modules/</code> and <code>plugins/</code></td><td>Console history lists targets, options and passwords typed into <code>set</code> commands</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/.msf4/loot/</code></td><td>Files collected by post modules: hash dumps, configs, screenshots</td><td>Raw client data, saved with the target IP in the file name</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/usr/share/metasploit-framework/config/database.yml</code></td><td>Database connection written by <code>msfdb init</code></td><td>Holds the PostgreSQL user and password for the Metasploit database</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/var/lib/postgresql/</code></td><td>PostgreSQL clusters that store Metasploit workspaces (hosts, services, creds, loot records)</td><td>Survives <code>msfconsole</code> restarts and keeps every workspace until you delete it</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/usr/share/responder/logs/</code></td><td>Captured NTLMv1 and NTLMv2 hashes per protocol and client (<code>SMB-NTLMv2-SSP-&lt;ip&gt;.txt</code>), <code>Responder-Session.log</code></td><td>Crackable or relayable domain credentials. Written as root into a system folder, so it is easy to forget</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/usr/share/responder/Responder.db</code></td><td>SQLite database of every captured hash</td><td>Keeps hashes after the log files are deleted. Also why Responder stops showing a hash it has seen before</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/etc/responder/Responder.conf</code></td><td>Which poisoners and rogue servers are on, challenge, exclusions</td><td>Check it before every run so you only answer for hosts in scope</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>~/.nxc/workspaces/&lt;name&gt;/</code></td><td>NetExec SQLite databases per protocol (<code>smb.db</code>, <code>ldap.db</code> and others) with hosts, shares and credentials</td><td>Every valid credential NetExec has seen. Browse with <code>nxcdb</code></td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>~/.nxc/logs/</code></td><td>NetExec output files, including SAM, LSA and NTDS dumps from <code>--sam</code>, <code>--lsa</code> and <code>--ntds</code></td><td>Domain wide password hashes in plain text files</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>~/.nxc/nxc.conf</code></td><td>NetExec settings: active workspace, audit mode, log options</td><td>Set a new workspace per engagement so data does not mix</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>*.ntds</code>, <code>*.sam</code>, <code>*.secrets</code></td><td>Output of <code>impacket-secretsdump -outputfile</code>, written to the current directory</td><td>Hashes for every domain account, often left in whatever folder you were in</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/etc/bhapi/bhapi.json</code></td><td>BloodHound CE API config, including the Neo4j password</td><td>Change the default Neo4j and BloodHound admin passwords during <code>bloodhound-setup</code></td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/etc/neo4j/data/</code></td><td>Neo4j graph data for BloodHound CE (with PostgreSQL for app data)</td><td>A full map of the client's Active Directory, users, groups and attack paths</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>*_bloodhound.zip</code>, <code>*.json</code></td><td>Collector output from <code>bloodhound-ce-python</code> or SharpHound, saved in the current directory</td><td>Same AD data as the database, in a file that is easy to copy by mistake</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/.local/share/hashcat/hashcat.potfile</code></td><td>Every hash hashcat has cracked with its plain text (older installs use <code>~/.hashcat/</code>)</td><td>Cracked client passwords from all past jobs in one file</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>~/.john/john.pot</code></td><td>John the Ripper cracked passwords</td><td>Same as the hashcat potfile. <code>john --show</code> reads it</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>~/.local/share/sqlmap/output/</code></td><td>sqlmap per target folders: <code>log</code>, <code>session.sqlite</code>, <code>dump/</code> CSV files</td><td>Dumped database tables, often with customer data and password hashes</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>~/.BurpSuite/</code>, <code>*.burp</code></td><td>Burp settings, extensions and project files</td><td>Projects hold the full HTTP history, including session cookies and tokens</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/.ZAP/</code></td><td>OWASP ZAP home folder, sessions and add-ons</td><td>Saved sessions contain the same kind of traffic as Burp projects</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>~/.sliver/</code>, <code>~/.sliver-client/configs/</code></td><td>Sliver C2 server data (database, certificates, generated implants) and operator configs</td><td>Operator configs connect to your C2. Implants and certificates identify your infrastructure</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>*.pcap</code>, <code>*.pcapng</code></td><td>Wireshark and tcpdump captures</td><td>Cleartext credentials, cookies and internal traffic from the client network</td><td><span class="tag tag-high">High</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="wordlists">
+<h2 class="panel-title">Wordlists</h2>
+<p class="panel-lead">Where Kali keeps password and discovery lists. Run <code>wordlists</code> to print the index.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/usr/share/wordlists/</code></td><td>Index folder from the <code>wordlists</code> package, mostly symlinks into tool folders</td><td>One place to point tools at. Links break when the tool package is removed</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/usr/share/wordlists/rockyou.txt.gz</code></td><td>RockYou leak list, about 14 million passwords, shipped compressed</td><td>Decompress once with <code>sudo gunzip</code>. The standard first pass for password cracking</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/usr/share/seclists/</code></td><td>SecLists (<code>seclists</code> package): <code>Discovery/Web-Content</code>, <code>Discovery/DNS</code>, <code>Passwords</code>, <code>Usernames</code>, <code>Fuzzing</code></td><td>The main source for content discovery and fuzzing lists. Not part of every image, install it if missing</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/usr/share/wordlists/dirb/</code>, <code>/usr/share/wordlists/dirbuster/</code></td><td>Links to <code>/usr/share/dirb/wordlists</code> and <code>/usr/share/dirbuster/wordlists</code></td><td>Classic web directory lists such as <code>common.txt</code> and <code>directory-list-2.3-medium.txt</code></td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/usr/share/wordlists/metasploit/</code></td><td>Link to <code>/usr/share/metasploit-framework/data/wordlists</code></td><td>Default user and password lists for services, SNMP communities and more</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/usr/share/wordlists/fasttrack.txt</code>, <code>john.lst</code>, <code>nmap.lst</code></td><td>Short password lists from SET, John the Ripper and Nmap</td><td>Small and fast for online attacks where lockout is a concern</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/usr/share/wordlists/wfuzz/</code>, <code>sqlmap.txt</code></td><td>Links to wfuzz and sqlmap bundled lists</td><td>Payload and parameter lists used by those tools by default</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/usr/share/hashcat/rules/</code></td><td>Hashcat rule files such as <code>best64.rule</code> and <code>rockyou-30000.rule</code></td><td>Rules multiply a wordlist into likely variations</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="persistence">
+<h2 class="panel-title">Persistence and Autostart</h2>
+<p class="panel-lead">Places that start code on the Kali box. Assessment machines are targets too, so check them after installing third party tools.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/etc/ld.so.preload</code></td><td>Libraries injected into every process</td><td>Should not exist. Its presence means a rootkit or a tool you should not trust</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>~/.ssh/authorized_keys</code></td><td>Keys allowed to log in as you</td><td>Only matters once SSH is enabled, but then one added key is full access</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/etc/systemd/system/</code>, <code>~/.config/systemd/user/</code></td><td>System and user units, including services you enabled such as <code>ssh</code>, <code>postgresql</code> or <code>bloodhound</code></td><td>Kali ships network services disabled. Anything enabled here should be something you turned on</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/.zshrc</code>, <code>~/.zprofile</code>, <code>~/.bashrc</code>, <code>~/.profile</code></td><td>Shell startup files (zsh is the default shell)</td><td>Install scripts from GitHub often append lines here. Review after every manual install</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/etc/crontab</code>, <code>/etc/cron.d/</code>, <code>/var/spool/cron/crontabs/</code></td><td>Scheduled jobs</td><td>Normally almost empty on Kali, so new entries stand out</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>~/.config/autostart/</code>, <code>/etc/xdg/autostart/</code></td><td>Desktop session autostart entries (<code>*.desktop</code>)</td><td><code>Exec=</code> lines run at every graphical login</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>~/.msf4/msfconsole.rc</code></td><td>Resource script run on every <code>msfconsole</code> start</td><td>Handy for setup, but also a place where commands run without you noticing</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/etc/apt/apt.conf.d/</code></td><td>APT settings and <code>Pre-Invoke</code> or <code>Post-Invoke</code> hooks</td><td>Hooks run as root on every update</td><td><span class="tag tag-medium">Medium</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="logs-artifacts">
+<h2 class="panel-title">Logs and Forensic Artifacts</h2>
+<p class="panel-lead">Records of what you did on the box. Useful for reports and timelines, and sensitive in their own right.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>~/.zsh_history</code>, <code>~/.bash_history</code></td><td>Shell history with timestamps in zsh</td><td>Lists targets and often passwords passed with <code>-p</code>. Great for building the report timeline</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/var/log/journal/</code></td><td>systemd journal for services, logins and sudo</td><td>Shows which services ran and when. Read with <code>journalctl</code></td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/var/log/auth.log</code>, <code>/var/log/syslog</code></td><td>Text logs, only when rsyslog is installed and running</td><td>Recent installs may not have them. The journal holds the same events either way</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/var/log/apt/history.log</code>, <code>/var/log/dpkg.log</code></td><td>Package changes with timestamps</td><td>Shows which tools were installed or upgraded before an engagement</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/var/log/postgresql/</code></td><td>PostgreSQL server logs</td><td>Explains <code>msfdb</code> and BloodHound database start failures</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/tmp</code>, <code>/dev/shm</code></td><td>Payloads, staged files, tool temp data</td><td>Generated payloads and downloaded client files collect here until reboot</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>~/.local/share/recently-used.xbel</code></td><td>Files recently opened in desktop apps</td><td>Shows which client documents were opened on the box</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>~/.local/share/Trash/</code></td><td>Files deleted from the file manager</td><td>Not really deleted. Empty it during clean up</td><td><span class="tag tag-medium">Medium</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="network-remote">
+<h2 class="panel-title">Network and Remote Access</h2>
+<p class="panel-lead">SSH, DNS, proxies and firewall settings that change how the box behaves on a client network.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/etc/ssh/sshd_config</code>, <code>/etc/ssh/sshd_config.d/</code></td><td>SSH server settings. SSH is installed but disabled by default</td><td>If you enable it on a client network, use keys only and a non default user password</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/etc/ssh/ssh_host_*_key</code></td><td>SSH host keys</td><td>Regenerate them on cloned VMs before enabling SSH so each box has unique keys</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/etc/proxychains4.conf</code></td><td>Proxy chain used by <code>proxychains4</code> for pivoting</td><td>A stale entry sends traffic through the wrong pivot or straight out of your own network</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/etc/resolv.conf</code></td><td>DNS servers, usually set by NetworkManager</td><td>Pointing it at a client DC is common for AD work. Lookups for your own sites then go to the client</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/etc/hosts</code></td><td>Static names added for targets such as <code>dc01.corp.local</code></td><td>Kerberos and web vhost testing need it. Clean it between engagements</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/etc/krb5.conf</code></td><td>Kerberos realm and KDC settings</td><td>Needed for ticket based tools. Leftover realms cause confusing failures</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/etc/nftables.conf</code></td><td>Firewall ruleset. No firewall is active by default</td><td>On hostile or shared networks, allow only the listeners you need (Responder, handlers)</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/etc/NetworkManager/conf.d/</code></td><td>NetworkManager options such as MAC address randomisation</td><td>Controls whether your real MAC address shows up in client DHCP logs</td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="user-data">
+<h2 class="panel-title">User Data and Browsers</h2>
+<p class="panel-lead">Home folder content and browser profiles that pick up client data during testing.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>~/.mozilla/firefox/*.default-esr/</code></td><td>Firefox ESR profile: <code>logins.json</code>, <code>key4.db</code>, <code>cookies.sqlite</code>, <code>places.sqlite</code></td><td>Sessions into client web apps and admin panels stay valid after the test</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/.config/chromium/</code></td><td>Chromium profile when installed</td><td>Same exposure as Firefox, often used for a second test identity</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>~/Downloads/</code>, <code>~/Documents/</code>, <code>~/Desktop/</code></td><td>Downloaded client files, notes, report drafts</td><td>Scoping documents and findings are confidential</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/Pictures/</code></td><td>Default save folder for screenshot tools</td><td>Evidence screenshots often show credentials and personal data</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/root/</code></td><td>Root home folder</td><td>Tools run with <code>sudo</code> can write output here instead of your home folder</td><td><span class="tag tag-medium">Medium</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="system-config">
+<h2 class="panel-title">System Binaries and Configuration</h2>
+<p class="panel-lead">Where tools live, how they get installed and the settings that shape the desktop.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/etc/os-release</code></td><td>Release name, <code>VERSION="2026.3"</code> and <code>VERSION_CODENAME=kali-rolling</code></td><td>Quick check of which snapshot the box started from</td><td><span class="tag tag-low">Low</span></td></tr>
+<tr><td><code>/usr/share/&lt;tool&gt;/</code></td><td>Code and data of packaged tools (<code>metasploit-framework</code>, <code>responder</code>, <code>sqlmap</code>, <code>nmap</code>)</td><td>Some tools write output here as root. Package updates may replace edited files</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/opt/</code>, <code>~/tools/</code></td><td>Tools cloned from GitHub outside the package manager</td><td>Unreviewed code that often runs with <code>sudo</code>. Pin commits and read install scripts</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>~/.local/bin/</code>, <code>~/.local/share/pipx/venvs/</code></td><td>Tools installed with <code>pipx</code></td><td>Comes before system paths in <code>PATH</code>, so a tool here can shadow the packaged one</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/usr/lib/python3/dist-packages/</code></td><td>System Python libraries such as Impacket</td><td>Installing over them with <code>sudo pip</code> breaks packaged tools. Use <code>pipx</code> or a venv</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/run/docker.sock</code></td><td>Docker socket when <code>docker.io</code> is installed</td><td>Membership in the <code>docker</code> group is root</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/etc/lightdm/lightdm.conf</code></td><td>Display manager settings, including <code>autologin-user</code></td><td>Autologin skips the password on a laptop full of client data</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/usr/bin/</code></td><td>System and tool binaries, plus SUID programs</td><td>Verify with <code>dpkg --verify</code> if you suspect tampering</td><td><span class="tag tag-medium">Medium</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="package-sources">
+<h2 class="panel-title">Package Sources and Keyring</h2>
+<p class="panel-lead">The repository setup decides what code runs as root on every update.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Path</th><th>Contents</th><th>Why it matters</th><th>Risk</th></tr></thead>
+<tbody>
+<tr><td><code>/etc/apt/sources.list.d/kali.sources</code>, <code>/etc/apt/sources.list</code></td><td>Kali repository in deb822 format, or the older one line form: <code>deb http://http.kali.org/kali kali-rolling main contrib non-free non-free-firmware</code></td><td>Should point only to <code>http.kali.org</code> (or an official mirror) on the <code>kali-rolling</code> branch</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>/usr/share/keyrings/kali-archive-keyring.gpg</code></td><td>Repository signing key. Current key <code>ED65462EC8D5E4C5</code>, introduced in April 2025</td><td>Old installs without the new key fail with a missing key error. A foreign key here would trust a malicious repo</td><td><span class="tag tag-critical">Critical</span></td></tr>
+<tr><td><code>kali-rolling</code>, <code>kali-last-snapshot</code>, <code>kali-experimental</code>, <code>kali-bleeding-edge</code></td><td>Branches: rolling default, frozen point release, test packages, packages built straight from upstream</td><td>Stay on <code>kali-rolling</code> or <code>kali-last-snapshot</code> for engagement boxes</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/etc/apt/sources.list.d/</code></td><td>Third party repositories (Docker, VS Code and similar)</td><td>Adding Debian or Ubuntu repositories mixes packages and breaks Kali. Each extra repo can push root code</td><td><span class="tag tag-high">High</span></td></tr>
+<tr><td><code>/etc/apt/preferences.d/</code></td><td>APT pinning rules</td><td>A pin can hold back security updates or pull packages from an unexpected branch</td><td><span class="tag tag-medium">Medium</span></td></tr>
+<tr><td><code>/var/cache/apt/archives/</code></td><td>Downloaded <code>.deb</code> files</td><td>Takes space quickly on a rolling distro. Clear with <code>apt clean</code></td><td><span class="tag tag-low">Low</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="triage-commands">
+<h2 class="panel-title">Triage Commands</h2>
+<p class="panel-lead">Checks before, during and after an engagement.</p>
+<div class="table-wrap">
+<table class="data-table">
+<thead><tr><th>Task</th><th>Command</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>Release and kernel</td><td><code class="copy">cat /etc/os-release; uname -r</code></td><td>Kernel names end in <code>+kali-amd64</code> on 64 bit PCs</td></tr>
+<tr><td>Update everything</td><td><code class="copy">sudo apt update &amp;&amp; sudo apt full-upgrade -y</code></td><td>Use <code>full-upgrade</code>, not <code>upgrade</code>, on a rolling distro</td></tr>
+<tr><td>Check repository config</td><td><code class="copy">cat /etc/apt/sources.list.d/kali.sources /etc/apt/sources.list 2&gt;/dev/null</code></td><td>Only Kali entries should appear</td></tr>
+<tr><td>Check the signing key</td><td><code class="copy">gpg --show-keys /usr/share/keyrings/kali-archive-keyring.gpg</code></td><td>Fingerprint should end in <code>ED65462EC8D5E4C5</code></td></tr>
+<tr><td>Refresh the keyring</td><td><code class="copy">sudo wget https://archive.kali.org/archive-keyring.gpg -O /usr/share/keyrings/kali-archive-keyring.gpg</code></td><td>Fix for <code>apt update</code> missing key errors on old installs</td></tr>
+<tr><td>Change the default password</td><td><code class="copy">passwd</code></td><td>First thing on any prebuilt image</td></tr>
+<tr><td>Hardening and settings menu</td><td><code class="copy">kali-tweaks</code></td><td>Shell, repositories, metapackages, hardening and legacy protocol settings</td></tr>
+<tr><td>Install the default tool set</td><td><code class="copy">sudo apt install -y kali-linux-default</code></td><td>Use <code>kali-linux-large</code> or <code>kali-linux-everything</code> for more</td></tr>
+<tr><td>Listening services</td><td><code class="copy">sudo ss -tulpn</code></td><td>Nothing should listen that you did not start</td></tr>
+<tr><td>Enabled services</td><td><code class="copy">systemctl list-unit-files --state=enabled</code></td><td>Disable what you no longer need with <code>systemctl disable --now</code></td></tr>
+<tr><td>Set up the Metasploit database</td><td><code class="copy">sudo msfdb init</code></td><td>Then <code>sudo msfdb status</code>. In the console use <code>workspace -a &lt;client&gt;</code></td></tr>
+<tr><td>Set up BloodHound CE</td><td><code class="copy">sudo bloodhound-setup</code></td><td>Then <code>bloodhound-start</code> and <code>bloodhound-stop</code>. The old <code>bloodhound</code> command is deprecated</td></tr>
+<tr><td>NetExec workspace per engagement</td><td><code class="copy">nxcdb</code></td><td>Inside, <code>workspace create &lt;client&gt;</code> then <code>workspace &lt;client&gt;</code></td></tr>
+<tr><td>Prepare rockyou</td><td><code class="copy">sudo gunzip /usr/share/wordlists/rockyou.txt.gz</code></td><td>Needed once on a new install</td></tr>
+<tr><td>List wordlists</td><td><code class="copy">wordlists</code></td><td>Shows the folder tree with link targets</td></tr>
+<tr><td>Listen without poisoning</td><td><code class="copy">sudo responder -I eth0 -A</code></td><td>Analyze mode: see which hosts send LLMNR, NBT-NS and mDNS before you poison anything</td></tr>
+<tr><td>Size of collected loot</td><td><code class="copy">sudo du -sh ~/.msf4 ~/.nxc ~/.local/share/sqlmap /usr/share/responder/logs 2&gt;/dev/null</code></td><td>A quick inventory of what needs archiving or wiping</td></tr>
+<tr><td>Find stray dump files</td><td><code class="copy">find ~ /tmp \( -name '*.ccache' -o -name '*.ntds' -o -name '*.pcap*' -o -name '*_bloodhound.zip' \) 2&gt;/dev/null</code></td><td>Files that tools leave in the working directory</td></tr>
+<tr><td>Changed package files</td><td><code class="copy">sudo dpkg --verify</code></td><td>Any changed binary outside <code>/etc</code> needs explaining</td></tr>
+<tr><td>Hide the Kali look in public</td><td><code class="copy">kali-undercover</code></td><td>Switches the desktop to a Windows style theme. Run again to switch back</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+<section class="panel" id="hardening">
+<h2 class="panel-title">Hardening Checklist</h2>
+<p class="panel-lead">How to keep an assessment box secure during the job and clean after it.</p>
+<ul class="checklist">
+<li>Verify the ISO or image checksum against the signed <code>SHA256SUMS</code> from kali.org before installing.</li>
+<li>Change the <code>kali</code> password on prebuilt images, and do not enable passwordless root with <code>kali-grant-root</code> on engagement machines.</li>
+<li>Use full disk encryption (LUKS) for installs and encrypted persistence for live USB. Encrypt VM disks on the host.</li>
+<li>Update with <code>sudo apt update &amp;&amp; sudo apt full-upgrade</code> before every engagement. Keep only Kali repositories and never add Debian or Ubuntu sources.</li>
+<li>Keep network services off. Enable SSH, PostgreSQL, Neo4j or web servers only when needed, bind them to localhost where possible, and stop them afterwards.</li>
+<li>Change the default Neo4j and BloodHound admin passwords during setup.</li>
+<li>Run a host firewall on client and public networks and allow only the listeners you need for the test.</li>
+<li>Prefer packaged tools. Review GitHub tools before running them, keep them in <code>/opt</code> or a venv, install Python tools with <code>pipx</code> and avoid <code>sudo pip</code>.</li>
+<li>Use one VM snapshot, one Metasploit workspace, one NetExec workspace and one project folder per client.</li>
+<li>Keep your own activity log (for example the <code>script</code> command or tmux logging) with UTC timestamps for the report.</li>
+<li>After the job, archive the evidence encrypted, then wipe <code>~/.msf4/loot</code>, <code>~/.nxc</code>, Responder logs and <code>Responder.db</code>, sqlmap output, potfiles, tickets, captures, browser profiles and history, or revert the VM to a clean snapshot.</li>
+<li>Do not reuse the same box across clients without that clean up. Data from one client must not reach another.</li>
+</ul>
+</section>
+</div>
+</div>
+</main>
+<footer id="site-footer"></footer>
+</body>
+</html>
